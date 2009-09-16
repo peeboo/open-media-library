@@ -14,23 +14,20 @@ namespace Library
     /// </summary>
     public class VideoPlayer : IPlayMovie
     {
-        MediaSource _source;
-
-        public VideoPlayer(MediaSource source)
+        public VideoPlayer(MovieItem title)
         {
-            _source = source;
+            _title = title;
         }
 
         public bool PlayMovie()
         {
-            if (AddInHost.Current.MediaCenterEnvironment.PlayMedia(MediaType.Video, _source.MediaPath, false))
+            if (AddInHost.Current.MediaCenterEnvironment.PlayMedia(MediaType.Video, _title.SelectedDisk.Path, false))
             {
                 if (AddInHost.Current.MediaCenterEnvironment.MediaExperience != null)
                 {
-                    Utilities.DebugLine("VideoPlayer.PlayMovie: movie {0} Playing", _source);
-                    OMLApplication.Current.NowPlayingMovieName = _source.Name;
+                    Utilities.DebugLine("VideoPlayer.PlayMovie: movie {0} Playing", _title.Name);
+                    OMLApplication.Current.NowPlayingMovieName = _title.Name;
                     OMLApplication.Current.NowPlayingStatus = PlayState.Playing;
-                    AddInHost.Current.MediaCenterEnvironment.MediaExperience.Transport.PropertyChanged -= MoviePlayerFactory.Transport_PropertyChanged;
                     AddInHost.Current.MediaCenterEnvironment.MediaExperience.Transport.PropertyChanged += MoviePlayerFactory.Transport_PropertyChanged;
                     AddInHost.Current.MediaCenterEnvironment.MediaExperience.GoToFullScreen();
                 }
@@ -41,5 +38,7 @@ namespace Library
                 return false;
             }
         }
+
+        MovieItem _title;
     }
 }

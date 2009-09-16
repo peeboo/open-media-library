@@ -11,14 +11,16 @@ namespace Library
     {
         int _currentItem = 0;
         WindowsPlayListManager _wplm;
-        MediaSource _mItem;
+        MovieItem _mItem;
 
-        public MoviePlayerWPL(MediaSource source)
+        public MoviePlayerWPL(MovieItem mItem)
         {
-            _mItem = source;            
+            _mItem = mItem;
+            AddInHost.Current.MediaCenterEnvironment.MediaExperience.Transport.PropertyChanged += MoviePlayerFactory.Transport_PropertyChanged;
+            AddInHost.Current.MediaCenterEnvironment.MediaExperience.Transport.PropertyChanged += Transport_PropertyChanged;
 
-            OMLApplication.DebugLine("[MoviePlayerWPL] Loading for playlist: " + _mItem.MediaPath);
-            _wplm = new WindowsPlayListManager(_mItem.MediaPath);
+            OMLApplication.DebugLine("[MoviePlayerWPL] Loading for playlist: " + _mItem.SelectedDisk.Path);
+            _wplm = new WindowsPlayListManager(_mItem.SelectedDisk.Path);
             _currentItem = 0;
         }
 
@@ -34,20 +36,12 @@ namespace Library
                     PlayListItem item = (PlayListItem)_wplm.PlayListItems[_currentItem];
                     if (item != null)
                     {
-                        _mItem.MediaPath = item.FileLocation;
-                        _mItem.Format = VideoFormat.WMV;
-                        Utilities.DebugLine("[MoviePlayerWPL] Playing now: " + _mItem.MediaPath);
+                        _mItem.SelectedDisk.Path = item.FileLocation;
+                        _mItem.TitleObject.SelectedDisk.Format = VideoFormat.WMV;
+                        Utilities.DebugLine("[MoviePlayerWPL] Playing now: " + _mItem.SelectedDisk.Path);
                         IPlayMovie player = MoviePlayerFactory.CreateMoviePlayer(_mItem);
                         if (player != null)
-                        {
                             player.PlayMovie();
-
-                            // the MediaExperience object isn't loaded until a media file is playing
-                            AddInHost.Current.MediaCenterEnvironment.MediaExperience.Transport.PropertyChanged -= MoviePlayerFactory.Transport_PropertyChanged;
-                            AddInHost.Current.MediaCenterEnvironment.MediaExperience.Transport.PropertyChanged += MoviePlayerFactory.Transport_PropertyChanged;
-                            AddInHost.Current.MediaCenterEnvironment.MediaExperience.Transport.PropertyChanged -= Transport_PropertyChanged;
-                            AddInHost.Current.MediaCenterEnvironment.MediaExperience.Transport.PropertyChanged += Transport_PropertyChanged;
-                        }
 
                         _currentItem++;
                     }
@@ -67,21 +61,18 @@ namespace Library
 
         public void Transport_PropertyChanged(IPropertyObject sender, string property)
         {
-            OMLApplication.ExecuteSafe(delegate
+            MediaTransport t = (MediaTransport)sender;
+            //Utilities.DebugLine("MoviePlayerWPL.Transport_PropertyChanged: movie {0} property {1} playrate {2} state {3} pos {4}", OMLApplication.Current.NowPlayingMovieName, property, t.PlayRate, t.PlayState.ToString(), t.Position.ToString());
+            if (property == "PlayState")
             {
-                MediaTransport t = (MediaTransport)sender;
-                //Utilities.DebugLine("MoviePlayerWPL.Transport_PropertyChanged: movie {0} property {1} playrate {2} state {3} pos {4}", OMLApplication.Current.NowPlayingMovieName, property, t.PlayRate, t.PlayState.ToString(), t.Position.ToString());
-                if (property == "PlayState")
+                if (t.PlayState == PlayState.Finished || t.PlayState == PlayState.Stopped)
                 {
-                    if (t.PlayState == PlayState.Finished || t.PlayState == PlayState.Stopped)
-                    {
-                        //Utilities.DebugLine("MoviePlayerWPL.Transport_PropertyChanged: movie {0} Finished", OMLApplication.Current.NowPlayingMovieName);
-                        OMLApplication.Current.NowPlayingStatus = PlayState.Finished;
-                        if (t.Position.Seconds == 0)
-                            PlayMovie();
-                    }
+                    //Utilities.DebugLine("MoviePlayerWPL.Transport_PropertyChanged: movie {0} Finished", OMLApplication.Current.NowPlayingMovieName);
+                    OMLApplication.Current.NowPlayingStatus = PlayState.Finished;
+                    if (t.Position.Seconds == 0)
+                    PlayMovie();
                 }
-            });
+            }
         }
     }
 }

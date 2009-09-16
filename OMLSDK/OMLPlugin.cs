@@ -1,31 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
-
 using OMLEngine;
 
 namespace OMLSDK
 {
-    public class OMLPlugin : IOMLPlugin
+    public class OMLPlugin :IOMLPlugin
     {
         List<Title> titles;
-        private int totalRowsAdded = 0;        
-        public static string MyMoviesXslTransform =
-            Path.Combine(FileSystemWalker.PluginsDirectory, @"MyMoviesToOML.xsl");
-        List<string> errors;
+        private int totalRowsAdded = 0;
+        private Boolean _copyImages = false;
 
         public enum PluginTypes { ImportPlugin, MetadataPlugin };
         #region Properties
-        public string[] GetErrors
+        /// <summary>
+        /// 
+        /// </summary>
+        public Boolean CanCopyImages
         {
-            get { return errors.ToArray(); }
+            get { return GetCanCopyImages(); }
         }
-        public void AddError(string errStr, params object[] paramArray)
-        {
-            errors.Add(string.Format(errStr, paramArray));
-        }        
 
         /// <summary>
         /// 
@@ -49,7 +46,16 @@ namespace OMLSDK
         public Boolean CanProcessFile
         {
             get { return GetProcessFile(); }
-        }        
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public Boolean CopyImages
+        {
+            get { return GetCopyImages(); }
+            set { _copyImages = value; }
+        }
 
         /// <summary>
         /// 
@@ -88,7 +94,7 @@ namespace OMLSDK
         /// </summary>
         public string Menu
         {
-            get { return GetMenu(); }
+            get { return GetMenu();  }
         }
 
         /// <summary>
@@ -283,7 +289,7 @@ namespace OMLSDK
         /// <returns></returns>
         public virtual bool Load(string filename)
         {
-            return Load(filename);
+            return Load(filename, CopyImages);
         }
 
         /// <summary>
@@ -366,7 +372,18 @@ namespace OMLSDK
         protected virtual double GetVersionMinor()
         {
             return 0.0;
-        }        
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <param name="ShouldCopyImages"></param>
+        /// <returns></returns>
+        public virtual bool Load(string filename, bool ShouldCopyImages)
+        {
+            throw new Exception(@"You must implement this method in your class.");
+        }
 
         /// <summary>
         /// 
@@ -397,7 +414,19 @@ namespace OMLSDK
 
         #endregion
 
-        #region Overridable Stubs for readonly properties             
+        #region Overridable Stubs for readonly properties
+
+        /// <summary>
+        /// Returns a boolean if the plugin can copy images
+        /// </summary>
+        /// <returns>Default: false</returns>
+        protected virtual Boolean GetCanCopyImages() { return false; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        protected virtual Boolean GetCopyImages() { return _copyImages; }
 
         /// <summary>
         /// 
@@ -462,7 +491,6 @@ namespace OMLSDK
         public OMLPlugin()
         {
             titles = new List<Title>();
-            errors = new List<string>();
         }
 
         /// <summary>
@@ -492,11 +520,8 @@ namespace OMLSDK
                 newTitle.DateAdded = DateTime.Now;
             }
 
-            if( !String.IsNullOrEmpty(newTitle.Name.Trim()) )
-            {
-                titles.Add(newTitle);
-                totalRowsAdded++;
-            }
+            titles.Add(newTitle);
+            totalRowsAdded++;
         }
 
         /// <summary>
@@ -520,7 +545,39 @@ namespace OMLSDK
                     return true;
             }
             return false;
-        }        
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="t"></param>
+        public static void BuildResizedMenuImage(Title t)
+        {
+            try
+            {
+                if (t.FrontCoverPath.Length > 0)
+                {
+                    using (Image coverArtImage = Image.FromFile(t.FrontCoverPath))
+                    {
+
+                        if (coverArtImage != null)
+                        {
+                            using (Image menuCoverArtImage = Utilities.ScaleImageByHeight(coverArtImage, 200))
+                            {
+                                string img_path = FileSystemWalker.ImageDirectory +
+                                              @"\MF" + t.InternalItemID + ".jpg";
+                                menuCoverArtImage.Save(img_path, System.Drawing.Imaging.ImageFormat.Jpeg);
+                                t.FrontCoverMenuPath = img_path;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Utilities.DebugLine("[OMLPlugin] Exception: " + ex.Message);
+            }
+        }
 
         /*
         public void SetAspectRatio(Title t)
@@ -547,7 +604,40 @@ namespace OMLSDK
             }
              
         }
-        */        
+        */
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="from_location"></param>
+        /// <param name="to_location"></param>
+        /// <returns></returns>
+        public static string CopyImage(string from_location, string to_location)
+        {
+            FileInfo fi = new FileInfo(from_location);
+            fi.CopyTo(to_location, true);
+            return fi.Name;
+        }
+        public void SetFrontCoverImage(ref Title newTitle, string imagePath)
+        {
+            if (!File.Exists(imagePath)) return;
+
+            FileInfo fi;
+            try {
+                fi = new FileInfo(imagePath);
+                string new_full_name = OMLEngine.FileSystemWalker.ImageDirectory +
+                                                   "\\F" + newTitle.InternalItemID +
+                                                   fi.Extension;
+                if (CopyImages)
+                {
+                    CopyImage(imagePath, new_full_name);
+                    imagePath = new_full_name;
+                }
+
+                newTitle.FrontCoverPath = imagePath;
+            }
+            catch (Exception e) { Utilities.DebugLine("[OMLPlugin] " + e.Message); }
+        }
     }
 
     public class PlugInFileEventArgs : System.EventArgs

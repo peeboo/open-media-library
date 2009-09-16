@@ -1,11 +1,12 @@
 using System;
+using OMLSDK;
+using OMLEngine;
 using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-
-using OMLEngine;
-using OMLSDK;
-
+using System.Linq;
+using System.Text;
 using Toub.MediaCenter.Dvrms.Metadata;
 
 namespace DVRMSPlugin
@@ -28,7 +29,12 @@ namespace DVRMSPlugin
         public override bool IsSingleFileImporter()
         {
             return false;
-        }        
+        }
+
+        protected override bool GetCopyImages()
+        {
+            return false;
+        }
 
         protected override double GetVersionMajor()
         {
@@ -71,7 +77,7 @@ namespace DVRMSPlugin
             return true;
         }
 
-        public override bool Load(string filename)
+        public override bool Load(string filename, bool ShouldCopyImages)
         {
             string fPath = System.IO.Path.GetDirectoryName(filename);
             ProcessDir(fPath);
@@ -127,7 +133,7 @@ namespace DVRMSPlugin
                         Utilities.DebugLine("[DVRMSPlugin] Adding file: " + Path.GetFullPath(file));
                         disk.Path = Path.GetFullPath(file);
                         disk.Name = @"Disk 1";
-                        newTitle.AddDisk(disk);
+                        newTitle.Disks.Add(disk);
                         //newTitle.FileLocation = file;
                         if (!String.IsNullOrEmpty(newTitle.AspectRatio))
                         {
@@ -139,7 +145,7 @@ namespace DVRMSPlugin
                         if (File.Exists(cover))
                         {
                             Utilities.DebugLine("[DVRMSPlugin] Setting CoverArt: " + Path.GetFullPath(cover));
-                            newTitle.FrontCoverPath = Path.GetFullPath(cover);
+                            SetFrontCoverImage(ref newTitle, Path.GetFullPath(cover));
                             //newTitle.FrontCoverPath = cover;
                         }
                         else
@@ -192,7 +198,7 @@ namespace DVRMSPlugin
                         string[] cast = credits[0].Split('/');
                         foreach (string nm in cast)
                         {
-                            if (!String.IsNullOrEmpty(nm)) newTitle.AddActingRole(nm, "");
+                            if (!String.IsNullOrEmpty(nm)) newTitle.AddActor(new Person(nm));
                         }
                         string[] dirs = credits[1].Split('/');
                         if (dirs.Length > 0)
@@ -228,7 +234,7 @@ namespace DVRMSPlugin
                         string ext = Path.GetExtension(file).Substring(1).Replace(@"-", @"");
                         //newTitle.VideoFormat = (VideoFormat)Enum.Parse(typeof(VideoFormat), ext, true);
                         disk.Format = (VideoFormat)Enum.Parse(typeof(VideoFormat), ext, true);
-                        newTitle.AddDisk(disk);
+                        newTitle.Disks.Add(disk);
                         string cover = fPath + @"\" + Path.GetFileNameWithoutExtension(file) + @".jpg";
                         if (File.Exists(Path.GetFullPath(cover)))
                         {

@@ -1,6 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Text;
 using OMLEngine;
-using OMLEngine.FileSystem;
 using Microsoft.MediaCenter.Hosting;
 using Microsoft.MediaCenter;
 using Microsoft.MediaCenter.UI;
@@ -13,96 +14,35 @@ namespace Library
     /// </summary>
     public class DVDPlayer : IPlayMovie
     {
-        MediaSource _source;
-        string _mediaPath;
-
-        public DVDPlayer(MediaSource source, string path)
+        public DVDPlayer(MovieItem title)
         {
-            _source = source;
-            _mediaPath = path;
+            _title = title;
         }
 
-        private bool PlayMovie(string playString)
-        {            
-            if (AddInHost.Current.MediaCenterEnvironment.PlayMedia(MediaType.Dvd, playString, false))
+        public bool PlayMovie()
+        {
+            string media = "DVD://" + _title.SelectedDisk.Path;
+            media.Replace('\\', '/');
+            if (AddInHost.Current.MediaCenterEnvironment.PlayMedia(MediaType.Dvd, media, false))
             {
                 if (AddInHost.Current.MediaCenterEnvironment.MediaExperience != null)
                 {
-                    OMLApplication.Current.NowPlayingMovieName = _source.Name;
+                    Utilities.DebugLine("DVDPlayer.PlayMovie: movie {0} Playing", _title.Name);
+                    OMLApplication.Current.NowPlayingMovieName = _title.Name;
                     OMLApplication.Current.NowPlayingStatus = PlayState.Playing;
-                    AddInHost.Current.MediaCenterEnvironment.MediaExperience.Transport.PropertyChanged -= MoviePlayerFactory.Transport_PropertyChanged;
                     AddInHost.Current.MediaCenterEnvironment.MediaExperience.Transport.PropertyChanged += MoviePlayerFactory.Transport_PropertyChanged;
                     AddInHost.Current.MediaCenterEnvironment.MediaExperience.GoToFullScreen();
                 }
                 return true;
             }
-            return false;            
-        }
-
-        public bool PlayMovie()
-        {
-            if (FileScanner.IsDVD(_mediaPath))
+            else
             {
-                bool isUNC = false;
-                string path = FileScanner.GetPlayStringForPath(_mediaPath);
-
-                // the unc path requires that it start with // so remove \\ if it exists
-                //http://discuss.mediacentersandbox.com/forums/thread/9307.aspx
-                if (path.StartsWith("\\\\"))
-                {
-                    path = path.Substring(2);
-                    isUNC = true;
-                }
-
-                path = path.Replace("\\", "/");
-
-                if(OMLApplication.IsWindows7 && isUNC)
-                    path = string.Format("//{0}", path);
-                else
-                    path = string.Format("DVD://{0}", path);
-
-                OMLApplication.DebugLine("[MoviePlayerDVD] Actual play string being passed to PlayMovie: {0}", path);
-                return PlayMovie(path);
+                return false;
             }
-            return false;
+
         }
 
-        public bool PlayMovie(int titleNumber, int chapterNumber, DateTime startTime)
-        {
-            return FileScanner.IsDVD(_source.MediaPath) == false;
-        }
-
-        public static string GeneratePlayString(string path, int titleNumber, int chapterNumber)
-        {
-            string playString = string.Empty;
-            playString = string.Format("DVD://{0}", FileScanner.GetPlayStringForPath(path));
-            playString = playString.Replace("\\", "/");
-
-            if (titleNumber > 0)
-            {
-                if (chapterNumber > 0)
-                    playString += string.Format("?{0}/{1}", titleNumber, chapterNumber);
-                else
-                    playString += string.Format("?{0}", titleNumber);
-            }
-            return playString;
-        }
-
-        public static string GeneratePlayString(string path, int titleNumber, DateTime startTime)
-        {
-            string playString = string.Empty;
-            playString = string.Format("DVD://{0}", FileScanner.GetPlayStringForPath(path));
-            playString = playString.Replace("\\", "/");
-
-            if (titleNumber < 1)
-                titleNumber = 1;
-
-            playString += string.Format("?{0}/{1}:{2}:{3}",
-                                        titleNumber, startTime.Hour,
-                                        startTime.Minute, startTime.Second);
-
-            return playString;
-        }
+        MovieItem _title;
     }
 
 }

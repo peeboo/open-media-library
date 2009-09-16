@@ -1,9 +1,15 @@
 ﻿using System;
+using System.Data;
+using System.Collections;
 using System.Collections.Generic;
-using System.IO;
-
+using System.Text;
 using OMLEngine;
 using OMLSDK;
+using System.IO;
+using System.Diagnostics;
+using System.Xml;
+using System.Xml.XPath;
+using System.Text.RegularExpressions;
 
 namespace OMLXMLPlugin
 {
@@ -67,6 +73,7 @@ namespace OMLXMLPlugin
             GetMovies(thework[0]);
         }
 
+
         public void GetMovies(string startFolder)
         {
             try
@@ -88,7 +95,7 @@ namespace OMLXMLPlugin
                     string[] fileNames = null;
                     try
                     {
-                        fileNames = Directory.GetFiles(currentFolder, "*.xml");
+                        fileNames = Directory.GetFiles(currentFolder, "*.oml.xml");
                     }
                     catch
                     {
@@ -97,14 +104,12 @@ namespace OMLXMLPlugin
 
                     if (fileNames != null)
                     {
-                        foreach (string filename in fileNames)
+                        foreach (string omlxml in fileNames)
                         {
-                            if (filename.ToLower().EndsWith(@"oml.xml"))
+                            Title t = Title.CreateFromXML(omlxml);
+                            if (t != null)
                             {
-                                Utilities.DebugLine("[OMLXMLPlugin] oml.xml found, loading title");
-                                Title t = Title.CreateFromXML(filename);
-                                if (t != null)
-                                    AddTitle(t);
+                                AddTitle(t);
                             }
                         }
                     }

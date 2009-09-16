@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{CE1D8B75-3C30-43A1-AD65-BDA43AD459AC}</ProjectGuid>
     <OutputType>Exe</OutputType>
@@ -12,7 +12,6 @@
     <AssemblyName>OMLTestSuite</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <StartupObject>OMLTestSuite.Program</StartupObject>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -32,65 +31,30 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.MediaCenter, Version=6.0.6000.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Windows\ehome\Microsoft.MediaCenter.dll</HintPath>
+    <Reference Include="nunit.framework, Version=2.4.7.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <HintPath>..\..\Development\NUnit\bin\nunit.framework.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.MediaCenter.UI, Version=6.0.6000.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Windows\ehome\Microsoft.MediaCenter.UI.dll</HintPath>
-    </Reference>
-    <Reference Include="nunit.framework, Version=2.4.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
     <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Runtime.Serialization">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.ServiceModel">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CreateTestTitles.cs" />
-    <Compile Include="DiskInfoTest.cs" />
-    <Compile Include="DVDLibraryImporterTest.cs" />
-    <Compile Include="DVDProfilerTest.cs" />
-    <Compile Include="FileDownloaderTest.cs" />
-    <Compile Include="MEncoderCommandBuilderTest.cs" />
-    <Compile Include="MovieCollectorzTest.cs" />
-    <Compile Include="MoviePlayerDVDTest.cs" />
     <Compile Include="MyMoviesPluginTest.cs" />
-    <Compile Include="NetFlixMetadataTest.cs" />
-    <Compile Include="NetworkPathFix.cs" />
-    <Compile Include="OMLFileWatcherTest.cs" />
-    <Compile Include="OMLXMLImporterTest.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestBase.cs" />
-    <Compile Include="TitleCollectionManagerTest.cs" />
-    <Compile Include="TheMovieDbMetadataPluginTest.cs" />
     <Compile Include="TitleCollectionTest.cs" />
     <Compile Include="TitleTest.cs" />
-    <Compile Include="TranscodeTest.cs" />
-    <Compile Include="TVDBMetaDataTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DVDProfilerPlugin\DVDProfilerPlugin.csproj">
       <Project>{8D8056BC-5D9B-4FAD-AD05-CB11D059B511}</Project>
       <Name>DVDProfilerPlugin</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\FileDownloader\FileDownloader.csproj">
-      <Project>{5F09659F-9F40-4A9A-BD66-FF3B4A2D8176}</Project>
-      <Name>FileDownloader</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Library\Library.csproj">
-      <Project>{2D747049-9A5C-4FFB-919F-1FD47BC18B3D}</Project>
-      <Name>Library</Name>
     </ProjectReference>
     <ProjectReference Include="..\MovieCollectorz\MovieCollectorzPlugin.csproj">
       <Project>{5228D6B1-AB63-4DE9-B7AB-8A60F56A3570}</Project>
@@ -100,45 +64,14 @@
       <Project>{1B77B50C-5951-4844-9AC7-A210C1E7D2C3}</Project>
       <Name>MyMoviesPlugin</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NetFlixMetadata\NetFlixMetadata.csproj">
-      <Project>{11275660-18A4-4B39-BA5D-0451E1B5DBCE}</Project>
-      <Name>NetFlixMetadata</Name>
-    </ProjectReference>
     <ProjectReference Include="..\OMLEngine\OMLEngine.csproj">
       <Project>{047E39DC-BB9E-42CD-9AB2-CFA4D4387F6C}</Project>
       <Name>OMLEngine</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\OMLFileWatcher\OMLFileWatcher.csproj">
-      <Project>{94FD8015-16D8-442E-8BD8-C2A63D1232D4}</Project>
-      <Name>OMLFileWatcher</Name>
     </ProjectReference>
     <ProjectReference Include="..\OMLSDK\OMLSDK.csproj">
       <Project>{84BDBB4C-50AA-4D92-9DD3-8CDFD7DFD7D4}</Project>
       <Name>OMLSDK</Name>
     </ProjectReference>
-    <ProjectReference Include="..\OMLTranscoder\OMLTranscoder.csproj">
-      <Project>{A924F59C-1AF8-4B18-B3E4-E0EECB4CE225}</Project>
-      <Name>OMLTranscoder</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\OMLXMLImporter\OMLXMLImporter.csproj">
-      <Project>{3F757A9F-BA85-4B16-AD94-334D332F3DEB}</Project>
-      <Name>OMLXMLImporter</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TheMovieDbMetadata\TheMovieDbMetadata.csproj">
-      <Project>{BD6F6DBB-B6D8-4EC3-939A-62BC58CC19B1}</Project>
-      <Name>TheMovieDbMetadata</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TVDBMetadata\TVDBMetadata.csproj">
-      <Project>{BFA91F9C-ED29-4B10-A9EA-23139553E2BD}</Project>
-      <Name>TVDBMetadata</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\VMCDVDLibraryPlugin\VMCDVDLibraryPlugin.csproj">
-      <Project>{CEEBFC5A-9CAB-40D1-A453-8C30A13F0CD4}</Project>
-      <Name>VMCDVDLibraryPlugin</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

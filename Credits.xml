@@ -1,42 +1,35 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Credits>
-  <Developers>
-    <Person>KingManon - Project Manager</Person>
-    <Person>Translucent - Senior Developer</Person>
-    <Person>Thom 'Bermuda' Lamb - Developer</Person>
-    <Person>TheSeeker - Developer</Person>
-    <Person>Solomon - Developer</Person>
-    <Person>mikem2te - Developer</Person>
-    <Person>MSBob - UI Developer</Person>
-  </Developers>
-  <Contributors>
-    <Person>Warren</Person>
-    <Person>docmattman</Person>
-    <Person>Taranu</Person>
-    <Person>eck brian 'dbldown768' - Creator</Person>
-    <Person>Gahvey - Technical Writer</Person>
-    <Person>Invelos Software (License of DVD Profiler)</Person>
-    <Person>Collectorz.com (License of Movie Collectorz)</Person>
-    <Person>Code|Aero Technologies (License of Movie Label 2K9)</Person>
-    <Person>Stephen Toub (Kick Ass DVR-MS metadata editor)</Person>
-    <Person>Microsoft Corporation (Kick Ass Media Center)</Person>
-    <Person>Niveus Media, Inc (Initial Look and Feel Idea)</Person>
-    <Person>andy vt (for usage of DSSnap)</Person>
-  </Contributors>
-  <Special>
-    <Person>sanix</Person>
-    <Person>mikinho</Person>
-    <Person>jusbo</Person>
-    <Person>jafterdark</Person>
-    <Person>Eddiem74</Person>
-    <Person>ppitkin</Person>
-    <Person>mjw</Person>
-    <Person>fonager</Person>
-    <Person>Olcay Buyan and Jas Manghera for their MCML Samples</Person>
-    <Person>MostlyHarmless</Person>
-    <Person>fonager</Person>
-    <Person>MSBob's wife for putting up with OML</Person>
-    <Person>The wives and children of all the OML staff for their often inability to watch tv</Person>
-  </Special>
-  <ReleaseNotes></ReleaseNotes>
+    <Developers>
+        <Person>KingManon - Project Manager</Person>
+        <Person>Translucent - Senior Developer</Person>
+        <Person>Taranu - Senior Developer</Person>
+        <Person>eck brian 'dbldown768' - Creator</Person>
+        <Person>Thom 'Bermuda' Lamb - Developer</Person>
+        <Person>docmattman - Developer</Person>
+        <Person>ntlord - Developer</Person>
+        <Person>poweredbyporkers - Developer</Person>
+        <Person>PeteT - Developer</Person>
+        <Person>STReNT - Developer</Person>
+        <Person>Warren - Slacker</Person>
+    </Developers>
+    <Contributors>
+        <Person>Invelos Software (License of DVD Profiler)</Person>
+        <Person>Collectorz.com (License of Movie Collectorz)</Person>
+        <Person>Code|Aero Technologies (License of Movie Label 2K9)</Person>
+        <Person>Stephen Toub (Kick Ass DVR-MS metadata editor)</Person>
+        <Person>Microsoft Corporation (Kick Ass Media Center)</Person>
+        <Person>Niveus Media, Inc (Initial Look and Feel Idea)</Person>
+    </Contributors>
+    <Special>
+        <Person>mikinho</Person>
+        <Person>jusbo</Person>
+        <Person>jafterdark</Person>
+        <Person>ppitkin</Person>
+        <Person>mjw</Person>
+        <Person>fonager</Person>
+        <Person>Olcay Buyan and Jas Manghera for their MCML Samples</Person>
+	<Person>MostlyHarmless</Person>
+        <Person>fonager</Person>
+    </Special>
 </Credits>

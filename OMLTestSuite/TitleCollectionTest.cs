@@ -1,13 +1,12 @@
 ﻿using System;
-
-using NUnit.Framework;
-
+using System.Data;
 using OMLEngine;
+using NUnit.Framework;
 
 namespace OMLTestSuite
 {
-    /*[TestFixture]
-    public class TitleCollectionTest : TestBase
+    [TestFixture]
+    public class TitleCollectionTest
     {
         [Test]
         public void TEST_BASE_CASE()
@@ -21,10 +20,10 @@ namespace OMLTestSuite
             tc.Add(title1);
             tc.Add(title2);
 
-            Assert.AreEqual(2, tc.Source.Count);
+            Assert.AreEqual(2, tc.Count);
 
-            //tc.Sort();
-            //Assert.AreEqual("A Movie", ((Title)tc[0]).Name);
+            tc.Sort();
+            Assert.AreEqual("A Movie", ((Title)tc[0]).Name);
         }
 
         [Test]
@@ -50,8 +49,8 @@ namespace OMLTestSuite
             tc.Add(t3);
             tc.Add(t4);
 
-            Title t = tc.GetTitleById(t1.Id);
+            Title t = tc.GetTitleById(t1.InternalItemID);
             Assert.AreEqual(t1, t);
         }
-    }*/
+    }
 }

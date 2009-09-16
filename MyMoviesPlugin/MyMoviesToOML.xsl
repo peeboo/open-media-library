@@ -2,7 +2,7 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	<xsl:output method="xml" indent="yes"/>
 	<xsl:template match="/">
-		<xsl:element name="OMLTitle">
+		<xsl:element name="OML">
 			<xsl:for-each select="//Title">
 				<xsl:element name="Movie">
 					<xsl:attribute name="IsUpdated"></xsl:attribute>

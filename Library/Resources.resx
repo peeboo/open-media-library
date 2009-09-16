@@ -118,901 +118,325 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="DetailsPage" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Markup\DetailsPage.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Menu" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\menu.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Setup" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\setup.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="nocover" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\nocover.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Focus_Outline" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>images\focus_outline.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ButtonFocus" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\buttonfocus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ButtonNonFocus" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\buttonnonfocus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="CheckBoxFocus" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\checkboxfocus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="CheckBoxNonFocus" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\checkboxnonfocus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Container" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Container.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="EditBoxFocus" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\editboxfocus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="EditBoxNonFocus" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\editboxnonfocus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Styles" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\styles.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="CoreControls" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\corecontrols.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Button" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\button.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="FilterList" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\filterlist.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="MovieGallery" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\moviegallery.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="nodirector" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\nocover1.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Application" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\application.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ButtonDisabled" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\buttondisabled.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ButtonDormant" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\buttondormant.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ButtonLeftFocus" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\buttonleftfocus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ButtonLeftFocusOverlay" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\buttonleftfocusoverlay.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ButtonNoFocus" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\buttonnofocus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ButtonPressedAfterGlow" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\buttonpressedafterglow.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ButtonPressedHighlight" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\buttonpressedhighlight.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ButtonRadioButtonBullet" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\buttonradiobuttonbullet.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ButtonRadioButtonBulletFocus" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\buttonradiobuttonbulletfocus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ButtonRadioButtonBulletNoFocus" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\buttonradiobuttonbulletnofocus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ButtonRadioButtonOutlineFocus" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\buttonradiobuttonoutlinefocus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ButtonRadioButtonOutlineNoFocus" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\buttonradiobuttonoutlinenofocus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FirstRunCheckBoxCheckedDisabled" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\firstruncheckboxcheckeddisabled.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FirstRunCheckBoxCheckedFocus" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\firstruncheckboxcheckedfocus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FirstRunCheckBoxCheckedNoFocus" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\firstruncheckboxcheckednofocus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FirstRunCheckBoxCheckedPressed" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\firstruncheckboxcheckedpressed.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FirstRunCheckBoxUncheckedDisabled" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\firstruncheckboxuncheckeddisabled.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FirstRunCheckBoxUncheckedFocus" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\firstruncheckboxuncheckedfocus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FirstRunCheckBoxUncheckedNoFocus" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\firstruncheckboxuncheckednofocus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FirstRunCheckBoxUncheckedPressed" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\firstruncheckboxuncheckedpressed.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ListboxNoFocus" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\listboxnofocus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SelectDirectoriesToScan" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\selectdirectoriestoscan.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="SelectFilesToImport" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\selectfilestoimport.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="SelectImporter" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\selectimporter.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="SelectionList" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\selectionlist.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="SpinnerArrowBackDormant" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\spinnerarrowbackdormant.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SpinnerArrowBackFocus" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\spinnerarrowbackfocus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SpinnerArrowBackNoFocus" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\spinnerarrowbacknofocus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SpinnerArrowForwardDormant" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\spinnerarrowforwarddormant.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SpinnerArrowForwardFocus" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\spinnerarrowforwardfocus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SpinnerArrowForwardNoFocus" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\spinnerarrowforwardnofocus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Error" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>sounds\error.wav;System.IO.MemoryStream, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Focus" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>sounds\focus.wav;System.IO.MemoryStream, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="MiniSelect" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>sounds\miniselect.wav;System.IO.MemoryStream, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="PageTransition" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>sounds\pagetransition.wav;System.IO.MemoryStream, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Select" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>sounds\select.wav;System.IO.MemoryStream, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="RadioButtonGroup" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\radiobuttongroup.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="SimpleRadioButton" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\simpleradiobutton.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Animations" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\base\animations.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Base" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\base\base.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Colors" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\base\colors.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="FontNames" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\base\fontnames.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Sounds" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\base\sounds.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="PivotArrowLeftNoFocus" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\PivotArrowLeftNoFocus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="PivotArrowRightNoFocus" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\PivotArrowRightNoFocus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ButtonRightFocus" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\buttonrightfocus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ButtonRightFocusOverlay" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\buttonrightfocusoverlay.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FindEditbox" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\findeditbox.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FindEditboxNoFocus" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\findeditboxnofocus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="OverlaysButtonNoFocus" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\overlaysbuttonnofocus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="PivotArrowLeft" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\PivotArrowLeft.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="PivotArrowRight" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\PivotArrowRight.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SpinnerArrowBackDisabled" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\spinnerarrowbackdisabled.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SpinnerArrowBackFocusoverlay" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\spinnerarrowbackfocusoverlay.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SpinnerArrowForwardDisabled" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\spinnerarrowforwarddisabled.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="spinnerarrowforwardfocus1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\spinnerarrowforwardfocus1.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SpinnerArrowForwardFocusoverlay" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\spinnerarrowforwardfocusoverlay.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SpinnerBluebarLargeDormant" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\spinnerbluebarlargedormant.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SpinnerBluebarLargeFocus" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\spinnerbluebarlargefocus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SpinnerBluebarLargeNoFocus" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\spinnerbluebarlargenofocus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Controls" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\control\controls.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Pivot" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\control\pivot.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="PivotItem" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\control\pivotitem.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="SimpleButton" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\control\simplebutton.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="HeaderText" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\control\headertext.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="BusyBack" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\busyback.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="BusyFront" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\busyfront.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="WaitCursor" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\control\waitcursor.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Settings" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\settings.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="AppIcon1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\AppIcon1.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="buttondisabled2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\buttondisabled2.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="buttonpressedhighlight2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\buttonpressedhighlight2.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="buttonradiobuttonbulletnofocus2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\buttonradiobuttonbulletnofocus2.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="buttonrightfocusoverlay1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\buttonrightfocusoverlay1.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ExplandCollapseButton" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\control\explandcollapsebutton.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="findeditbox2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\findeditbox2.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="findeditboxnofocus2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\findeditboxnofocus2.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="firstruncheckboxcheckeddisabled2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\firstruncheckboxcheckeddisabled2.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SimpleCheckbox" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\control\simplecheckbox.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="SimpleEditbox" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\control\simpleeditbox.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="SimpleRadioButtonGroup" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\control\simpleradiobuttongroup.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="SimpleSpinner" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\control\simplespinner.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="spinnerarrowforwardfocus2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\spinnerarrowforwardfocus2.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="spinnerarrowforwardfocusoverlay1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\spinnerarrowforwardfocusoverlay1.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Images" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>markup\base\images.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="buttonnonfocus1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\buttonnonfocus1.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="About" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Markup\About.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="Application" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Images\Application.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Application2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Images\Application2.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Background_Animated" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Markup\V3\Controls\Background\Images\V3.Controls.Background.Animated.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Background_Layer1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Markup\V3\Controls\Background\Images\V3.Controls.Background.Layer1.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Background_Layer2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Markup\V3\Controls\Background\Images\V3.Controls.Background.Layer2.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Background_Layer3" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Markup\V3\Controls\Background\Images\V3.Controls.Background.Layer3.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_BrowseGalleryItem_GalleryItemShadow" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Markup\V3\Controls\BrowseGalleryItem\Images\V3.Controls.BrowseGalleryItem.GalleryItemShadow.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_BrowseGalleryItem_InsertCD" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Markup\V3\Controls\BrowseGalleryItem\Images\V3.Controls.BrowseGalleryItem.InsertCD.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_BrowseGalleryItem_InsertCDFocus" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Markup\V3\Controls\BrowseGalleryItem\Images\V3.Controls.BrowseGalleryItem.InsertCDFocus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_BrowseGalleryItem_NoImage1Row4x3" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Markup\V3\Controls\BrowseGalleryItem\Images\V3.Controls.BrowseGalleryItem.NoImage1Row4x3.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_BrowseGalleryItem_NoImage1RowPoster" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Markup\V3\Controls\BrowseGalleryItem\Images\V3.Controls.BrowseGalleryItem.NoImage1RowPoster.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_BrowseGalleryItem_NoImage1RowSquare" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Markup\V3\Controls\BrowseGalleryItem\Images\V3.Controls.BrowseGalleryItem.NoImage1RowSquare.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_BrowseGalleryItem_NoImage2RowPoster" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Markup\V3\Controls\BrowseGalleryItem\Images\V3.Controls.BrowseGalleryItem.NoImage2RowPoster.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_BrowseGalleryItem_NoImage3Row4x3" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Markup\V3\Controls\BrowseGalleryItem\Images\V3.Controls.BrowseGalleryItem.NoImage3Row4x3.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_BrowseGalleryItem_NoImage5Row4x3" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Markup\V3\Controls\BrowseGalleryItem\Images\V3.Controls.BrowseGalleryItem.NoImage5Row4x3.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_BrowseGalleryItem_NoImage5RowSquare" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Markup\V3\Controls\BrowseGalleryItem\Images\V3.Controls.BrowseGalleryItem.NoImage5RowSquare.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Focus_a" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Markup\V3\Controls\Common\Sounds\V3.Controls.Common.Focus_a.wav;System.IO.MemoryStream, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_Controls_Common_Select_a" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Markup\V3\Controls\Common\Sounds\V3.Controls.Common.Select_a.wav;System.IO.MemoryStream, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_Controls_Background" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\background\background.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_Controls_Background_Static" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\background\images\v3.controls.background.static.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_BrowseAnimations" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\browseanimations.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_Controls_BrowseCommandOLD" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\browsecommand.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_Controls_BrowseDetails" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\browsedetails.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_Controls_BrowseGallery" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\browsegallery\browsegallery.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_Controls_BrowseGalleryItem" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\browsegalleryitem\browsegalleryitem.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_Controls_BrowseGroupedGallery" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\browsegroupedgallery.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_Controls_BrowseJumpControl" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\browsejumpcontrol.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_Controls_BrowsePivotsOLD" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\browsepivots.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_Controls_Common_Animations" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\animations.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_Controls_Common_BrowseCmd_Settings" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.browsecmd.settings.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_BrowseCmd_Settings_Dormant" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.browsecmd.settings.dormant.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_BrowseCmd_Settings_Focus" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.browsecmd.settings.focus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Colors" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\colors.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_Controls_Common_Constants" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\constants.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_Controls_Common_FontNames" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\fontnames.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_Controls_Common_Fonts" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\fonts.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_Controls_FocusAnimation" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\focusanimation.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_Controls_StaticText" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\statictext.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_GalleryPage" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\gallerypage.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_Globals" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\globals.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_Controls_BrowseGallery_ListViewStrip" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\browsegallery\images\v3.controls.browsegallery.listviewstrip.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_BrowseGallery_ListViewStripTop" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\browsegallery\images\v3.controls.browsegallery.listviewstriptop.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Browse_Cmd_FocusLoop_Blue" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.browse.cmd.focusloop.blue.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Browse_Cmd_FocusLoop_Small" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.browse.cmd.focusloop.small.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Browse_Cmd_FocusLoop_TopLeft" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.browse.cmd.focusloop.topleft.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Browse_Selector" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.browse.selector.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Browse_TitleShadow" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.browse.titleshadow.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Browse_TitleShadowListView" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.browse.titleshadowlistview.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Button_Full_Focus" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.button.full.focus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Button_Full_FocusOverlay" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.button.full.focusoverlay.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Button_Full_PressedHighlight" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.button.full.pressedhighlight.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Button_Left_Focus" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.button.left.focus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Button_Left_Focus_Overlay" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.button.left.focus.overlay.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Button_Pressed_Highlight" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.button.pressed.highlight.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Epg_Results_Cell_Background" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.epg.results.cell.background.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_MiniSelect_a" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\sounds\v3.controls.common.miniselect_a.wav;System.IO.MemoryStream, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_Controls_Common_Pivot_Arrow_Left" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.pivot.arrow.left.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Pivot_Arrow_Left_Dim" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.pivot.arrow.left.dim.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Pivot_Arrow_Left_Dormant" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.pivot.arrow.left.dormant.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Pivot_Arrow_Left_Nofocus" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.pivot.arrow.left.nofocus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Pivot_Arrow_Right" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.pivot.arrow.right.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Pivot_Arrow_Right_Dim" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.pivot.arrow.right.dim.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Pivot_Arrow_Right_Dormant" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.pivot.arrow.right.dormant.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Pivot_Arrow_Right_Nofocus" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.pivot.arrow.right.nofocus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Scroll_Down_Disabled" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.scroll.down.disabled.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Scroll_Down_Focus" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.scroll.down.focus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Scroll_Down_NoFocus" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.scroll.down.nofocus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Scroll_Down_Pressed" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.scroll.down.pressed.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Scroll_Up_Disabled" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.scroll.up.disabled.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Scroll_Up_Focus" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.scroll.up.focus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Scroll_Up_NoFocus" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.scroll.up.nofocus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Scroll_Up_Pressed" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.scroll.up.pressed.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Selector_FocusLoop_Glow_BottomLeft" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.selector.focusloop.glow.bottomleft.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Selector_FocusLoop_Glow_Glass" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.selector.focusloop.glow.glass.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Selector_FocusLoop_Glow_TopLeft" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.selector.focusloop.glow.topleft.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Selector_FocusLoop_Glow_TopRight" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.selector.focusloop.glow.topright.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Selector_FocusLoop_HotSpot_Horizontal" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.selector.focusloop.hotspot.horizontal.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Selector_FocusLoop_HotSpot_Vertical" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.selector.focusloop.hotspot.vertical.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Stars_0" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.stars.0.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Stars_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.stars.1.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Stars_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.stars.2.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Stars_3" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.stars.3.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Stars_4" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.stars.4.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Stars_5" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.stars.5.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Stars_6" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.stars.6.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Stars_7" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.stars.7.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Stars_8" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.stars.8.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Styles" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\styles.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_Controls_BrowseListViewItem" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\browselistviewitem.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_Controls_BrowsePivotItem" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\browsepivotitem.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_Controls_BrowsePivots" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\browsepivots2.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_Controls" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\controls.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_Controls_AccessibleText" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\accessibletext.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_Controls_BreadCrumb" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\breadcrumb.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_Controls_BrowseCommand" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\browsecommand.rev2.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_Controls_Button" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\button.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_Controls_CheckBox" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\checkbox.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_Controls_Common_AudioLogo" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.audiologo.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Browse_Cmd_Play" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.browse.cmd.play.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Browse_Cmd_Play_Dormant" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.browse.cmd.play.dormant.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Browse_Cmd_Play_Focus" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.browse.cmd.play.focus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Browse_Cmd_Remove" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.browse.cmd.remove.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Browse_Cmd_Remove_Dormant" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.browse.cmd.remove.dormant.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Browse_Cmd_Remove_Focus" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.browse.cmd.remove.focus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Button_RadioButtonBullet" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.button.radiobuttonbullet.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Button_RadioButtonBullet_Focus" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.button.radiobuttonbullet.focus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Button_RadioButtonBullet_NoFocus" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.button.radiobuttonbullet.nofocus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Button_RadioButtonOutline_Focus" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.button.radiobuttonoutline.focus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Button_RadioButtonOutline_NoFocus" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.button.radiobuttonoutline.nofocus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_ContextMenu_Button_NoFocus" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.contextmenu.button.nofocus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Edit_Caret" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.edit.caret.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Edit_Mirror_Caret" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.edit.mirror.caret.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Find_EditBox" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.find.editbox.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Find_EditBox_NoFocus" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.find.editbox.nofocus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_GlobalSettings_RadioButton_Disabled" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.globalsettings.radiobutton.disabled.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_GlobalSettings_RadioButton_Dormant" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.globalsettings.radiobutton.dormant.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_GlobalSettings_RadioButton_Focus" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.globalsettings.radiobutton.focus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_GlobalSettings_RadioButton_FocusOverlay" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.globalsettings.radiobutton.focusoverlay.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_GlobalSettings_RadioButton_NoFocus" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.globalsettings.radiobutton.nofocus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_GlobalSettings_RadioButton_Select_Disabled" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.globalsettings.radiobutton.select.disabled.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_GlobalSettings_RadioButton_Select_Dormant" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.globalsettings.radiobutton.select.dormant.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_GlobalSettings_RadioButton_Select_Focus" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.globalsettings.radiobutton.select.focus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_GlobalSettings_RadioButton_Select_FocusOverlay" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.globalsettings.radiobutton.select.focusoverlay.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_GlobalSettings_RadioButton_Select_NoFocus" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.globalsettings.radiobutton.select.nofocus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_GlobalSettings_Tile_Disabled" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.globalsettings.tile.disabled.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_GlobalSettings_Tile_Focus" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.globalsettings.tile.focus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_GlobalSettings_Tile_FocusOverlay" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.globalsettings.tile.focusoverlay.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_GlobalSettings_Tile_NoFocus" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.globalsettings.tile.nofocus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_GlobalSettings_Tile_Select_Disabled" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.globalsettings.tile.select.disabled.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_GlobalSettings_Tile_Select_Focus" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.globalsettings.tile.select.focus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_GlobalSettings_Tile_Select_NoFocus" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.globalsettings.tile.select.nofocus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_MetaData_HDTV" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.metadata.hdtv.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_MetaData_Interactive" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.metadata.interactive.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_NowPlayingPIP_BackgroundMask" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.nowplayingpip.backgroundmask.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Overlays_Background_Dark" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.overlays.background.dark.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Slide_Background_Commands" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.slide.background.commands.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Slide_Background_Stripe" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.slide.background.stripe.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Slide_BreadCrumb" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.slide.breadcrumb.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Slide_BreadCrumb_Selected" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.slide.breadcrumb.selected.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Slide_Chevron_Left" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.slide.chevron.left.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Slide_Chevron_Right" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.slide.chevron.right.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Slide_Reflection_Bottom" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.slide.reflection.bottom.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Slide_Reflection_Top" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.slide.reflection.top.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Slide_Shadow_Left" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.slide.shadow.left.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Slide_Shadow_Right" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.slide.shadow.right.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Spinner_Arrow_Back_Disabled" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.spinner.arrow.back.disabled.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Spinner_Arrow_Back_Dormant" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.spinner.arrow.back.dormant.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Spinner_Arrow_Back_Focus" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.spinner.arrow.back.focus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Spinner_Arrow_Back_FocusOverlay" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.spinner.arrow.back.focusoverlay.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Spinner_Arrow_Back_NoFocus" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.spinner.arrow.back.nofocus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Spinner_Arrow_Forward_Disabled" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.spinner.arrow.forward.disabled.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Spinner_Arrow_Forward_Dormant" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.spinner.arrow.forward.dormant.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Spinner_Arrow_Forward_Focus" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.spinner.arrow.forward.focus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Spinner_Arrow_Forward_FocusOverlay" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.spinner.arrow.forward.focusoverlay.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Spinner_Arrow_Forward_NoFocus" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.spinner.arrow.forward.nofocus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Edit" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\edit.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_Controls_GroupedListView" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\groupedlistview.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_Controls_MenuRadioButton" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\menuradiobutton.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_Controls_Movie_Icon_Default" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.movie.icon.default.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_NavPanel" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\navpanel.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_Controls_RadioButton" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\radiobutton.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_Controls_RadioGroup" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\radiogroup.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_Controls_ScrollControl" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\scrollcontrol.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_Controls_Slide" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\slide.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_Controls_SlideAnimations" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\slideanimations.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_Controls_SlideDeck" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\slidedeck.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_Controls_Spinner" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\spinner.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_Controls_StaticGraphic" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\staticgraphic.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_SlideDeck_Details" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\details\slide\slidedeck.details.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_SlideDeck_Movie_Details" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\details\slide\slidedeck.movie.details.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_Slide_Details" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\details\slide\slide.details.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_Slide_Movie_Details" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\details\slide\slide.movie.details.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_Slide_Movie_Details_Actions" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\details\slide\slide.movie.details.actions.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_Slide_Movie_Details_Cast" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\details\slide\slide.movie.details.cast.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_Slide_Movie_Details_Extras" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\details\slide\slide.movie.details.extras.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_Slide_Movie_Details_SimilarMovies" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\details\slide\slide.movie.details.similarmovies.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_Slide_Movie_Details_Synopsis" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\details\slide\slide.movie.details.synopsis.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_Controls_Common_Overlays_Background_Bottom_Dark" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.overlays.background.bottom.dark.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Overlays_Background_Bottom_Light" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.overlays.background.bottom.light.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Overlays_Background_Top_Dark" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.overlays.background.top.dark.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Overlays_Background_Top_Light" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.overlays.background.top.light.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Overlays_Divider_Horizontal" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.overlays.divider.horizontal.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Overlays_Outline" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.overlays.outline.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Overlays_Shadow" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.overlays.shadow.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_ContextMenu" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\contextmenu.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_Controls_Background_Overlay" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\background\images\v3.controls.background.overlay.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Background_Overlay2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\background\images\v3.controls.background.overlay2.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_DetailsPage" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\details\detailspage.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_Controls_Common_MetaData_BluRay" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.metadata.bluray.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_MetaData_DVD" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.metadata.dvd.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Overlays_GalleryItem_Background" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.overlays.galleryitem.background.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Browse_Cmd_Search" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.browse.cmd.search.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Browse_Cmd_Search_Dormant" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.browse.cmd.search.dormant.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Browse_Cmd_Search_Focus" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.browse.cmd.search.focus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_MoviesSearchPage" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\search\moviessearchpage.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="Genre_Sample_actionadventure" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\genreimages\genre_sample_actionadventure.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Genre_Sample_comedy" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\genreimages\genre_sample_comedy.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Genre_Sample_documentary" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\genreimages\genre_sample_documentary.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Genre_Sample_drama" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\genreimages\genre_sample_drama.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Genre_Sample_kidsfamily" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\genreimages\genre_sample_kidsfamily.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Genre_Sample_musical" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\genreimages\genre_sample_musical.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Genre_Sample_mystery" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\genreimages\genre_sample_mystery.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Genre_Sample_noimagegenre" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\genreimages\genre_sample_noimagegenre.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Genre_Sample_other" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\genreimages\genre_sample_other.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Genre_Sample_romance" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\genreimages\genre_sample_romance.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Genre_Sample_sciencefiction" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\genreimages\genre_sample_sciencefiction.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Genre_Sample_western" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\genreimages\genre_sample_western.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_DetailsPageCastCrew" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\details\detailspagecastcrew.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_Controls_Busy_Back" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.busy.back.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Busy_Front" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.busy.front.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_ChangerEject_Tile_Disabled" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.changereject.tile.disabled.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_ChangerEject_Tile_Dormant" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.changereject.tile.dormant.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_ChangerEject_Tile_Focus" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.changereject.tile.focus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_ChangerEject_Tile_FocusOverlay" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.changereject.tile.focusoverlay.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_ChangerEject_Tile_NoFocus" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.changereject.tile.nofocus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Button_FirstRun_Dormant_Full" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.button.firstrun.dormant.full.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Button_FirstRun_NoFocus" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.button.firstrun.nofocus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Button_NoFocus_Full" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.button.nofocus.full.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Radio_DividerLine" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.radio.dividerline.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_WaitCursor" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\waitcursor.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_MediaChangerManagerPage" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\settings\mediachangermanagerpage.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_MediaChangerManagerSettings" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\settings\mediachangermanagersettings.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_FanArtDetailsPage" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\details\fanart\fanartdetailspage.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_FanArtDetails_BackSplash" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\details\fanart\images\v3.fanartdetails.backsplash.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Settings_FilterSettings" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\settings\filtersettings.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_Settings_SettingsManager" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\settings\settingsmanager.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_ExtenderSettings" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\settings\extendersettings.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_ExtenderSettingsImpersonation" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\settings\extendersettingsimpersonation.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_ExtenderSettingsTranscode" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\settings\extendersettingstranscode.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_ImageMountingSettings" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\settings\imagemountingsettings.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_LanguageSettings" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\settings\languagesettings.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_OptimizationSettings" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\settings\optimizationsettings.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_TrailersSettings" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\settings\trailerssettings.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_Controls_AutoScrollRegion" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\autoscrollregion.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_Controls_AutoScroll_Chevron_Bottom" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.autoscroll.chevron.bottom.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_AutoScroll_Chevron_Bottom_Pressed" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.autoscroll.chevron.bottom.pressed.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_AutoScroll_Chevron_Bottom_Reset" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.autoscroll.chevron.bottom.reset.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_AutoScroll_Chevron_Left" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.autoscroll.chevron.left.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_AutoScroll_Chevron_Left_Pressed" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.autoscroll.chevron.left.pressed.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_AutoScroll_Chevron_Left_Rest" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.autoscroll.chevron.left.rest.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_AutoScroll_Chevron_Right" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.autoscroll.chevron.right.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_AutoScroll_Chevron_Right_Pressed" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.autoscroll.chevron.right.pressed.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_AutoScroll_Chevron_Right_Rest" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.autoscroll.chevron.right.rest.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_AutoScroll_Chevron_Top" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.autoscroll.chevron.top.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_AutoScroll_Chevron_Top_Pressed" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.autoscroll.chevron.top.pressed.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_AutoScroll_Chevron_Top_Rest" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.autoscroll.chevron.top.rest.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Loader" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\loader.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_GeneralSettings" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\settings\generalsettings.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_BackgroundSettings" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\settings\backgroundsettings.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_GallerySettings" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\settings\gallerysettings.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_AdditionalSettings" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\settings\additionalsettings.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_Controls_BrowseGalleryItem_New" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\browsegalleryitem\images\v3.controls.browsegalleryitem.new.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Remove_Disabled" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.remove.disabled.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Remove_Dormant" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.remove.dormant.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Remove_Focus" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.remove.focus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Remove_FocusOverlay" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.remove.focusoverlay.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Remove_NoFocus" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.remove.nofocus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_FavoritesSettings" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\settings\favoritessettings.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_ImageMountingSettingsAdvanced" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\settings\imagemountingsettingsadvanced.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_StartMenuItemSettings" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\settings\startmenuitemsettings.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_StartMenuSettings" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\settings\startmenusettings.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_Controls_Arrow_Down_Disabled" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.arrow.down.disabled.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Arrow_Down_Dormant" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.arrow.down.dormant.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Arrow_Down_Focus" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.arrow.down.focus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Arrow_Down_FocusOverlay" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.arrow.down.focusoverlay.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Arrow_Down_NoFocus" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.arrow.down.nofocus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Arrow_Up_Disabled" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.arrow.up.disabled.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Arrow_Up_Dormant" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.arrow.up.dormant.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Arrow_Up_Focus" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.arrow.up.focus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Arrow_Up_FocusOverlay" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.arrow.up.focusoverlay.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Arrow_Up_NoFocus" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.arrow.up.nofocus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_FavoritesItemSettings" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\settings\favoritesitemsettings.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_ExternalPlayerSettings" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\settings\externalplayersettings.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_EpisodeDetailsPage" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\details\episodedetailspage.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_FirstRunBackground" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\firstrun\firstrunbackground.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_FirstRunButton" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\firstrunbutton.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_FirstRun_BG_Banner_Bottom" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\firstrun\images\v3.firstrun.bg.banner.bottom.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_FirstRun_BG_Banner_Top" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\firstrun\images\v3.firstrun.bg.banner.top.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_FirstRun_BG_Spotlight" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\firstrun\images\v3.firstrun.bg.spotlight.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_FirstRun_BigArrow" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\firstrun\images\v3.firstrun.bigarrow.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_FirstRun_BigCheckmark" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\firstrun\images\v3.firstrun.bigcheckmark.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_FirstRun_SmallRadioButton_Disabled" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\firstrun\images\v3.firstrun.smallradiobutton.disabled.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_FirstRun_SmallRadioButton_Disabled_Selected" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\firstrun\images\v3.firstrun.smallradiobutton.disabled.selected.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_FirstRun_SmallRadioButton_Focus" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\firstrun\images\v3.firstrun.smallradiobutton.focus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_FirstRun_SmallRadioButton_Focus_Selected" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\firstrun\images\v3.firstrun.smallradiobutton.focus.selected.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_FirstRun_SmallRadioButton_NoFocus" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\firstrun\images\v3.firstrun.smallradiobutton.nofocus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_FirstRun_SmallRadioButton_NoFocus_Selected" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\firstrun\images\v3.firstrun.smallradiobutton.nofocus.selected.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_FirstRun_SmallRadioButton_Pressed" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\firstrun\images\v3.firstrun.smallradiobutton.pressed.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_FirstRun_SmallRadioButton_Pressed_Selected" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\firstrun\images\v3.firstrun.smallradiobutton.pressed.selected.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_SeasonDetailsPage" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\details\seasondetailspage.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="V3_Controls_Background_Shard1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\background\images\v3.controls.background.shard1.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Spinner_BlueBarLarge_Dormant" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.spinner.bluebarlarge.dormant.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Spinner_BlueBarLarge_Focus" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.spinner.bluebarlarge.focus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_Controls_Common_Spinner_BlueBarLarge_NoFocus" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.controls.common.spinner.bluebarlarge.nofocus.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_SampleBackDrop" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\controls\common\images\v3.samplebackdrop.jpg;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="V3_AboutSettings" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\settings\aboutsettings.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="Credits" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\Credits.xml;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="V3_UpdaterSettings" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>markup\v3\settings\updatersettings.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="VeronicasRadio" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Markup\VeronicasRadio.mcml;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>

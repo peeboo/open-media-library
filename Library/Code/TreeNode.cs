@@ -4,7 +4,7 @@ using Microsoft.MediaCenter.UI;
 
 namespace Library
 {
-    public class TreeNode : BaseModelItem
+    public class TreeNode : ModelItem
     {
         private string _fullPath = string.Empty;
         private string _title = string.Empty;
@@ -80,15 +80,12 @@ namespace Library
         {
             Title = title;
             FullPath = fullPath;
-            Checked.ChosenChanged += delegate(object sender, EventArgs e)
+            Checked.ChosenChanged += new EventHandler(delegate(object sender, EventArgs e)
             {
-                OMLApplication.ExecuteSafe(delegate
-                {
-                    // this is the one that works
-                    OMLApplication.DebugLine("Changed: " + this.GetType().ToString());
-                    Setup.Current.AddCheckedNode(this);
-                });
-            };
+                // this is the one that works
+                OMLApplication.DebugLine("Changed: " + this.GetType().ToString());
+                Setup.Current.AddCheckedNode(this);
+            });
         }
 
         public virtual void OnCollapsed()

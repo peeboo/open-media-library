@@ -2,8 +2,12 @@
 // stoub@microsoft.com
 
 using System;
-using System.Collections;
+using System.IO;
+using System.Data;
 using System.Text;
+using System.Collections;
+using System.Runtime.InteropServices;
+using Toub.MediaCenter.Dvrms.Conversion;
 
 namespace Toub.MediaCenter.Dvrms.Metadata
 {
