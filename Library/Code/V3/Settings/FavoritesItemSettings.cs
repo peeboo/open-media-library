@@ -72,8 +72,6 @@ namespace Library.Code.V3
         /// <returns></returns>
         public bool IsDirty()
         {
-            if (this.Name.Value != this.filter.Name)
-                return true;
             return false;
         }
 
@@ -92,26 +90,16 @@ namespace Library.Code.V3
                     newFilters[i] = oldFilters[i];
                 }
 
+                //OMLEngine.TitleFilter[] newFilter = new OMLEngine.TitleFilter[this.filter.Filters.Count];
+                //for (int i = 0; i < this.filter.Filters.Count; i++)
+                //{
+                //    newFilter[i] = this.filter.Filters[i];
+                //}
+
                 UserFilter filter = new UserFilter(this.name.Value, this.filter.Filters);
 
                 newFilters[oldFilters.Count] = filter;
                 OMLSettings.UserFilters = newFilters;
-            }
-            else
-            {
-                //update the only prop we are currently modifying - name
-                UserFilter newFilter = new UserFilter(this.name.Value, this.filter.Filters);
-                IList<UserFilter> oldFilters = OMLSettings.UserFilters;
-                //deal with the existing userfilters
-                for (int i = 0; i < oldFilters.Count; i++)
-                {
-                    if (this.filter.Name == oldFilters[i].Name && this.filter.Filters==oldFilters[i].Filters)
-                    {
-                        oldFilters[i] = newFilter;
-                    }
-                }
-
-                OMLSettings.UserFilters = oldFilters;
             }
 
         }

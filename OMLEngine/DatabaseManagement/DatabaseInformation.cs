@@ -41,8 +41,6 @@ namespace OMLEngine.DatabaseManagement
             _OMLUserAcct = xmlsettings.OMLUserAcct;
             _OMLUserPassword = xmlsettings.OMLUserPassword;
             ConfigFileExists = xmlsettings.ConfigFileExists;
-            OMLEngine.Utilities.DebugLine("[OMLEngine] Does settings.xml exist : " + ConfigFileExists.ToString());
-
         }
 
         public static void SaveSettings()
@@ -86,7 +84,7 @@ namespace OMLEngine.DatabaseManagement
         {
             get
             {
-                return (_SAPassword ?? "R3WztB4#9");
+                return (_SAPassword ?? "omladmin");
             }
             set
             {

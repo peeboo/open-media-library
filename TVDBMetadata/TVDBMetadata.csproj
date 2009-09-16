@@ -68,7 +68,6 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>copy $(TargetPath) "C:\Program Files\OpenMediaLibrary\Plugins"</PostBuildEvent>
   </PropertyGroup>
 </Project>

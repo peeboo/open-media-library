@@ -32,29 +32,19 @@ namespace OMLDatabaseEditor
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.xtraTabControl1 = new DevExpress.XtraTab.XtraTabControl();
             this.tpOptions = new DevExpress.XtraTab.XtraTabPage();
-            this.ceStSanaAlwaysCreateMovieFolder = new DevExpress.XtraEditors.CheckEdit();
-            this.ceStSanaCreateTLFolder = new DevExpress.XtraEditors.CheckEdit();
+            this.labelControl1 = new DevExpress.XtraEditors.LabelControl();
+            this.seMetadataLookupResultsQty = new DevExpress.XtraEditors.SpinEdit();
+            this.ceScanDiskRollInfoToTitle = new DevExpress.XtraEditors.CheckEdit();
+            this.ceAutoScanDiskOnAdd = new DevExpress.XtraEditors.CheckEdit();
             this.labelControl3 = new DevExpress.XtraEditors.LabelControl();
             this.beTitledFanArtPath = new DevExpress.XtraEditors.ButtonEdit();
             this.ceTitledFanArtFolder = new DevExpress.XtraEditors.CheckEdit();
+            this.cmbDefaultMetadataPlugin = new DevExpress.XtraEditors.ComboBoxEdit();
+            this.labelControl2 = new DevExpress.XtraEditors.LabelControl();
             this.cePrependParentFolder = new DevExpress.XtraEditors.CheckEdit();
             this.ceUseGenreList = new DevExpress.XtraEditors.CheckEdit();
             this.ceUseMPAAList = new DevExpress.XtraEditors.CheckEdit();
             this.ceFoldersAsTitles = new DevExpress.XtraEditors.CheckEdit();
-            this.tpMetadata = new DevExpress.XtraTab.XtraTabPage();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.ceUpdateTitleNameTV = new DevExpress.XtraEditors.CheckEdit();
-            this.ceUpdateMissingDataOnlyTV = new DevExpress.XtraEditors.CheckEdit();
-            this.cmbDefaultMetadataPluginTV = new DevExpress.XtraEditors.ComboBoxEdit();
-            this.labelControl8 = new DevExpress.XtraEditors.LabelControl();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.ceUpdateTitleNameMovies = new DevExpress.XtraEditors.CheckEdit();
-            this.ceUpdateMissingDataOnlyMovies = new DevExpress.XtraEditors.CheckEdit();
-            this.cmbDefaultMetadataPlugin = new DevExpress.XtraEditors.ComboBoxEdit();
-            this.labelControl2 = new DevExpress.XtraEditors.LabelControl();
-            this.ceDBEStSanaAutoLookupMeta = new DevExpress.XtraEditors.CheckEdit();
-            this.labelControl1 = new DevExpress.XtraEditors.LabelControl();
-            this.seMetadataLookupResultsQty = new DevExpress.XtraEditors.SpinEdit();
             this.tpSkins = new DevExpress.XtraTab.XtraTabPage();
             this.lbcSkins = new DevExpress.XtraEditors.ListBoxControl();
             this.tpMPAAList = new DevExpress.XtraTab.XtraTabPage();
@@ -76,29 +66,21 @@ namespace OMLDatabaseEditor
             this.sbCancel = new DevExpress.XtraEditors.SimpleButton();
             this.sbOK = new DevExpress.XtraEditors.SimpleButton();
             this.cmGenreMappings = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.ceStSanaCreateTLFolder = new DevExpress.XtraEditors.CheckEdit();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).BeginInit();
             this.xtraTabControl1.SuspendLayout();
             this.tpOptions.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.ceStSanaAlwaysCreateMovieFolder.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ceStSanaCreateTLFolder.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.seMetadataLookupResultsQty.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ceScanDiskRollInfoToTitle.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ceAutoScanDiskOnAdd.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.beTitledFanArtPath.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ceTitledFanArtFolder.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.cmbDefaultMetadataPlugin.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cePrependParentFolder.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ceUseGenreList.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ceUseMPAAList.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ceFoldersAsTitles.Properties)).BeginInit();
-            this.tpMetadata.SuspendLayout();
-            this.groupBox2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.ceUpdateTitleNameTV.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ceUpdateMissingDataOnlyTV.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.cmbDefaultMetadataPluginTV.Properties)).BeginInit();
-            this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.ceUpdateTitleNameMovies.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ceUpdateMissingDataOnlyMovies.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.cmbDefaultMetadataPlugin.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ceDBEStSanaAutoLookupMeta.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.seMetadataLookupResultsQty.Properties)).BeginInit();
             this.tpSkins.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.lbcSkins)).BeginInit();
             this.tpMPAAList.SuspendLayout();
@@ -112,6 +94,7 @@ namespace OMLDatabaseEditor
             ((System.ComponentModel.ISupportInitialize)(this.cmbMntToolVDrive.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cmbMntToolScan.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.rgMountingTool.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ceStSanaCreateTLFolder.Properties)).BeginInit();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -129,7 +112,7 @@ namespace OMLDatabaseEditor
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(372, 339);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(361, 336);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // xtraTabControl1
@@ -139,11 +122,10 @@ namespace OMLDatabaseEditor
             this.xtraTabControl1.Location = new System.Drawing.Point(3, 3);
             this.xtraTabControl1.Name = "xtraTabControl1";
             this.xtraTabControl1.SelectedTabPage = this.tpOptions;
-            this.xtraTabControl1.Size = new System.Drawing.Size(366, 304);
+            this.xtraTabControl1.Size = new System.Drawing.Size(355, 301);
             this.xtraTabControl1.TabIndex = 0;
             this.xtraTabControl1.TabPages.AddRange(new DevExpress.XtraTab.XtraTabPage[] {
             this.tpOptions,
-            this.tpMetadata,
             this.tpSkins,
             this.tpMPAAList,
             this.tpTags,
@@ -151,34 +133,69 @@ namespace OMLDatabaseEditor
             // 
             // tpOptions
             // 
-            this.tpOptions.Controls.Add(this.ceStSanaAlwaysCreateMovieFolder);
             this.tpOptions.Controls.Add(this.ceStSanaCreateTLFolder);
+            this.tpOptions.Controls.Add(this.labelControl1);
+            this.tpOptions.Controls.Add(this.seMetadataLookupResultsQty);
+            this.tpOptions.Controls.Add(this.ceScanDiskRollInfoToTitle);
+            this.tpOptions.Controls.Add(this.ceAutoScanDiskOnAdd);
             this.tpOptions.Controls.Add(this.labelControl3);
             this.tpOptions.Controls.Add(this.beTitledFanArtPath);
             this.tpOptions.Controls.Add(this.ceTitledFanArtFolder);
+            this.tpOptions.Controls.Add(this.cmbDefaultMetadataPlugin);
+            this.tpOptions.Controls.Add(this.labelControl2);
             this.tpOptions.Controls.Add(this.cePrependParentFolder);
             this.tpOptions.Controls.Add(this.ceUseGenreList);
             this.tpOptions.Controls.Add(this.ceUseMPAAList);
             this.tpOptions.Controls.Add(this.ceFoldersAsTitles);
             this.tpOptions.Name = "tpOptions";
-            this.tpOptions.Size = new System.Drawing.Size(357, 273);
+            this.tpOptions.Size = new System.Drawing.Size(346, 270);
             this.tpOptions.Text = "Options";
             // 
-            // ceStSanaAlwaysCreateMovieFolder
+            // labelControl1
             // 
-            this.ceStSanaAlwaysCreateMovieFolder.Location = new System.Drawing.Point(7, 128);
-            this.ceStSanaAlwaysCreateMovieFolder.Name = "ceStSanaAlwaysCreateMovieFolder";
-            this.ceStSanaAlwaysCreateMovieFolder.Properties.Caption = "Always Create a movie folder (St Sana Drag and Drop)";
-            this.ceStSanaAlwaysCreateMovieFolder.Size = new System.Drawing.Size(325, 19);
-            this.ceStSanaAlwaysCreateMovieFolder.TabIndex = 15;
+            this.labelControl1.Location = new System.Drawing.Point(9, 131);
+            this.labelControl1.Name = "labelControl1";
+            this.labelControl1.Size = new System.Drawing.Size(142, 13);
+            this.labelControl1.TabIndex = 13;
+            this.labelControl1.Text = "Metadata Lookup Results Qty";
             // 
-            // ceStSanaCreateTLFolder
+            // seMetadataLookupResultsQty
             // 
-            this.ceStSanaCreateTLFolder.Location = new System.Drawing.Point(7, 102);
-            this.ceStSanaCreateTLFolder.Name = "ceStSanaCreateTLFolder";
-            this.ceStSanaCreateTLFolder.Properties.Caption = "Create top level folder (St Sana Drag and Drop)";
-            this.ceStSanaCreateTLFolder.Size = new System.Drawing.Size(325, 19);
-            this.ceStSanaCreateTLFolder.TabIndex = 14;
+            this.seMetadataLookupResultsQty.AllowDrop = true;
+            this.seMetadataLookupResultsQty.EditValue = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.seMetadataLookupResultsQty.Location = new System.Drawing.Point(161, 128);
+            this.seMetadataLookupResultsQty.Name = "seMetadataLookupResultsQty";
+            this.seMetadataLookupResultsQty.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton()});
+            this.seMetadataLookupResultsQty.Properties.IsFloatValue = false;
+            this.seMetadataLookupResultsQty.Properties.Mask.EditMask = "N00";
+            this.seMetadataLookupResultsQty.Properties.MaxValue = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            this.seMetadataLookupResultsQty.Size = new System.Drawing.Size(158, 20);
+            this.seMetadataLookupResultsQty.TabIndex = 12;
+            // 
+            // ceScanDiskRollInfoToTitle
+            // 
+            this.ceScanDiskRollInfoToTitle.Location = new System.Drawing.Point(7, 179);
+            this.ceScanDiskRollInfoToTitle.Name = "ceScanDiskRollInfoToTitle";
+            this.ceScanDiskRollInfoToTitle.Properties.Caption = "Roll scan disk info into title";
+            this.ceScanDiskRollInfoToTitle.Size = new System.Drawing.Size(259, 19);
+            this.ceScanDiskRollInfoToTitle.TabIndex = 10;
+            // 
+            // ceAutoScanDiskOnAdd
+            // 
+            this.ceAutoScanDiskOnAdd.Location = new System.Drawing.Point(7, 155);
+            this.ceAutoScanDiskOnAdd.Name = "ceAutoScanDiskOnAdd";
+            this.ceAutoScanDiskOnAdd.Properties.Caption = "Auto scan disk when adding new disks";
+            this.ceAutoScanDiskOnAdd.Size = new System.Drawing.Size(259, 19);
+            this.ceAutoScanDiskOnAdd.TabIndex = 9;
             // 
             // labelControl3
             // 
@@ -210,6 +227,26 @@ namespace OMLDatabaseEditor
             this.ceTitledFanArtFolder.TabIndex = 6;
             this.ceTitledFanArtFolder.Visible = false;
             this.ceTitledFanArtFolder.CheckStateChanged += new System.EventHandler(this.ceTitledFanArtFolder_CheckStateChanged);
+            // 
+            // cmbDefaultMetadataPlugin
+            // 
+            this.cmbDefaultMetadataPlugin.Location = new System.Drawing.Point(161, 101);
+            this.cmbDefaultMetadataPlugin.Name = "cmbDefaultMetadataPlugin";
+            this.cmbDefaultMetadataPlugin.Properties.AllowNullInput = DevExpress.Utils.DefaultBoolean.True;
+            this.cmbDefaultMetadataPlugin.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.cmbDefaultMetadataPlugin.Properties.NullText = "Not Specified";
+            this.cmbDefaultMetadataPlugin.Properties.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.DisableTextEditor;
+            this.cmbDefaultMetadataPlugin.Size = new System.Drawing.Size(158, 20);
+            this.cmbDefaultMetadataPlugin.TabIndex = 5;
+            // 
+            // labelControl2
+            // 
+            this.labelControl2.Location = new System.Drawing.Point(9, 104);
+            this.labelControl2.Name = "labelControl2";
+            this.labelControl2.Size = new System.Drawing.Size(119, 13);
+            this.labelControl2.TabIndex = 4;
+            this.labelControl2.Text = "Default Metadata Plugin:";
             // 
             // cePrependParentFolder
             // 
@@ -244,158 +281,11 @@ namespace OMLDatabaseEditor
             this.ceFoldersAsTitles.TabIndex = 2;
             this.ceFoldersAsTitles.CheckStateChanged += new System.EventHandler(this.ceFoldersAsTitles_CheckStateChanged);
             // 
-            // tpMetadata
-            // 
-            this.tpMetadata.Controls.Add(this.groupBox2);
-            this.tpMetadata.Controls.Add(this.groupBox1);
-            this.tpMetadata.Controls.Add(this.ceDBEStSanaAutoLookupMeta);
-            this.tpMetadata.Controls.Add(this.labelControl1);
-            this.tpMetadata.Controls.Add(this.seMetadataLookupResultsQty);
-            this.tpMetadata.Name = "tpMetadata";
-            this.tpMetadata.Size = new System.Drawing.Size(357, 273);
-            this.tpMetadata.Text = "Metadata";
-            // 
-            // groupBox2
-            // 
-            this.groupBox2.Controls.Add(this.ceUpdateTitleNameTV);
-            this.groupBox2.Controls.Add(this.ceUpdateMissingDataOnlyTV);
-            this.groupBox2.Controls.Add(this.cmbDefaultMetadataPluginTV);
-            this.groupBox2.Controls.Add(this.labelControl8);
-            this.groupBox2.Location = new System.Drawing.Point(3, 112);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(351, 97);
-            this.groupBox2.TabIndex = 18;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Preferred settings for TV";
-            // 
-            // ceUpdateTitleNameTV
-            // 
-            this.ceUpdateTitleNameTV.Location = new System.Drawing.Point(6, 70);
-            this.ceUpdateTitleNameTV.Name = "ceUpdateTitleNameTV";
-            this.ceUpdateTitleNameTV.Properties.Caption = "Update Title Name";
-            this.ceUpdateTitleNameTV.Size = new System.Drawing.Size(323, 19);
-            this.ceUpdateTitleNameTV.TabIndex = 19;
-            // 
-            // ceUpdateMissingDataOnlyTV
-            // 
-            this.ceUpdateMissingDataOnlyTV.Location = new System.Drawing.Point(6, 46);
-            this.ceUpdateMissingDataOnlyTV.Name = "ceUpdateMissingDataOnlyTV";
-            this.ceUpdateMissingDataOnlyTV.Properties.Caption = "Update Missing Data Only";
-            this.ceUpdateMissingDataOnlyTV.Size = new System.Drawing.Size(323, 19);
-            this.ceUpdateMissingDataOnlyTV.TabIndex = 18;
-            // 
-            // cmbDefaultMetadataPluginTV
-            // 
-            this.cmbDefaultMetadataPluginTV.Location = new System.Drawing.Point(166, 20);
-            this.cmbDefaultMetadataPluginTV.Name = "cmbDefaultMetadataPluginTV";
-            this.cmbDefaultMetadataPluginTV.Properties.AllowNullInput = DevExpress.Utils.DefaultBoolean.True;
-            this.cmbDefaultMetadataPluginTV.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.cmbDefaultMetadataPluginTV.Properties.NullText = "Not Specified";
-            this.cmbDefaultMetadataPluginTV.Properties.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.DisableTextEditor;
-            this.cmbDefaultMetadataPluginTV.Size = new System.Drawing.Size(158, 20);
-            this.cmbDefaultMetadataPluginTV.TabIndex = 15;
-            // 
-            // labelControl8
-            // 
-            this.labelControl8.Location = new System.Drawing.Point(8, 23);
-            this.labelControl8.Name = "labelControl8";
-            this.labelControl8.Size = new System.Drawing.Size(119, 13);
-            this.labelControl8.TabIndex = 14;
-            this.labelControl8.Text = "Default Metadata Plugin:";
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.ceUpdateTitleNameMovies);
-            this.groupBox1.Controls.Add(this.ceUpdateMissingDataOnlyMovies);
-            this.groupBox1.Controls.Add(this.cmbDefaultMetadataPlugin);
-            this.groupBox1.Controls.Add(this.labelControl2);
-            this.groupBox1.Location = new System.Drawing.Point(3, 3);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(351, 97);
-            this.groupBox1.TabIndex = 17;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Preferred settings for Movies";
-            // 
-            // ceUpdateTitleNameMovies
-            // 
-            this.ceUpdateTitleNameMovies.Location = new System.Drawing.Point(6, 70);
-            this.ceUpdateTitleNameMovies.Name = "ceUpdateTitleNameMovies";
-            this.ceUpdateTitleNameMovies.Properties.Caption = "Update Title Name";
-            this.ceUpdateTitleNameMovies.Size = new System.Drawing.Size(323, 19);
-            this.ceUpdateTitleNameMovies.TabIndex = 17;
-            // 
-            // ceUpdateMissingDataOnlyMovies
-            // 
-            this.ceUpdateMissingDataOnlyMovies.Location = new System.Drawing.Point(6, 46);
-            this.ceUpdateMissingDataOnlyMovies.Name = "ceUpdateMissingDataOnlyMovies";
-            this.ceUpdateMissingDataOnlyMovies.Properties.Caption = "Update Missing Data Only";
-            this.ceUpdateMissingDataOnlyMovies.Size = new System.Drawing.Size(323, 19);
-            this.ceUpdateMissingDataOnlyMovies.TabIndex = 17;
-            // 
-            // cmbDefaultMetadataPlugin
-            // 
-            this.cmbDefaultMetadataPlugin.Location = new System.Drawing.Point(166, 20);
-            this.cmbDefaultMetadataPlugin.Name = "cmbDefaultMetadataPlugin";
-            this.cmbDefaultMetadataPlugin.Properties.AllowNullInput = DevExpress.Utils.DefaultBoolean.True;
-            this.cmbDefaultMetadataPlugin.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.cmbDefaultMetadataPlugin.Properties.NullText = "Not Specified";
-            this.cmbDefaultMetadataPlugin.Properties.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.DisableTextEditor;
-            this.cmbDefaultMetadataPlugin.Size = new System.Drawing.Size(158, 20);
-            this.cmbDefaultMetadataPlugin.TabIndex = 5;
-            // 
-            // labelControl2
-            // 
-            this.labelControl2.Location = new System.Drawing.Point(8, 23);
-            this.labelControl2.Name = "labelControl2";
-            this.labelControl2.Size = new System.Drawing.Size(119, 13);
-            this.labelControl2.TabIndex = 4;
-            this.labelControl2.Text = "Default Metadata Plugin:";
-            // 
-            // ceDBEStSanaAutoLookupMeta
-            // 
-            this.ceDBEStSanaAutoLookupMeta.Location = new System.Drawing.Point(7, 248);
-            this.ceDBEStSanaAutoLookupMeta.Name = "ceDBEStSanaAutoLookupMeta";
-            this.ceDBEStSanaAutoLookupMeta.Properties.Caption = "Lookup metadata when dragging folders into the editor";
-            this.ceDBEStSanaAutoLookupMeta.Size = new System.Drawing.Size(323, 19);
-            this.ceDBEStSanaAutoLookupMeta.TabIndex = 16;
-            // 
-            // labelControl1
-            // 
-            this.labelControl1.Location = new System.Drawing.Point(14, 229);
-            this.labelControl1.Name = "labelControl1";
-            this.labelControl1.Size = new System.Drawing.Size(146, 13);
-            this.labelControl1.TabIndex = 13;
-            this.labelControl1.Text = "Metadata Lookup Results Qty:";
-            // 
-            // seMetadataLookupResultsQty
-            // 
-            this.seMetadataLookupResultsQty.AllowDrop = true;
-            this.seMetadataLookupResultsQty.EditValue = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.seMetadataLookupResultsQty.Location = new System.Drawing.Point(172, 226);
-            this.seMetadataLookupResultsQty.Name = "seMetadataLookupResultsQty";
-            this.seMetadataLookupResultsQty.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton()});
-            this.seMetadataLookupResultsQty.Properties.IsFloatValue = false;
-            this.seMetadataLookupResultsQty.Properties.Mask.EditMask = "N00";
-            this.seMetadataLookupResultsQty.Properties.MaxValue = new decimal(new int[] {
-            100,
-            0,
-            0,
-            0});
-            this.seMetadataLookupResultsQty.Size = new System.Drawing.Size(158, 20);
-            this.seMetadataLookupResultsQty.TabIndex = 12;
-            // 
             // tpSkins
             // 
             this.tpSkins.Controls.Add(this.lbcSkins);
             this.tpSkins.Name = "tpSkins";
-            this.tpSkins.Size = new System.Drawing.Size(357, 273);
+            this.tpSkins.Size = new System.Drawing.Size(346, 270);
             this.tpSkins.Text = "Skins";
             // 
             // lbcSkins
@@ -403,7 +293,7 @@ namespace OMLDatabaseEditor
             this.lbcSkins.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lbcSkins.Location = new System.Drawing.Point(0, 0);
             this.lbcSkins.Name = "lbcSkins";
-            this.lbcSkins.Size = new System.Drawing.Size(357, 273);
+            this.lbcSkins.Size = new System.Drawing.Size(346, 270);
             this.lbcSkins.TabIndex = 0;
             this.lbcSkins.SelectedValueChanged += new System.EventHandler(this.lbcSkins_SelectedValueChanged);
             // 
@@ -412,7 +302,7 @@ namespace OMLDatabaseEditor
             this.tpMPAAList.Controls.Add(this.lbcMPAA);
             this.tpMPAAList.Controls.Add(this.beMPAA);
             this.tpMPAAList.Name = "tpMPAAList";
-            this.tpMPAAList.Size = new System.Drawing.Size(357, 273);
+            this.tpMPAAList.Size = new System.Drawing.Size(346, 270);
             this.tpMPAAList.Text = "MPAA";
             // 
             // lbcMPAA
@@ -424,7 +314,7 @@ namespace OMLDatabaseEditor
             this.lbcMPAA.Name = "lbcMPAA";
             this.lbcMPAA.Padding = new System.Windows.Forms.Padding(2);
             this.lbcMPAA.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.lbcMPAA.Size = new System.Drawing.Size(357, 248);
+            this.lbcMPAA.Size = new System.Drawing.Size(346, 245);
             this.lbcMPAA.TabIndex = 1;
             this.lbcMPAA.KeyDown += new System.Windows.Forms.KeyEventHandler(this.lbcMPAA_KeyDown);
             // 
@@ -432,12 +322,12 @@ namespace OMLDatabaseEditor
             // 
             this.beMPAA.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.beMPAA.Location = new System.Drawing.Point(0, 254);
+            this.beMPAA.Location = new System.Drawing.Point(0, 251);
             this.beMPAA.Name = "beMPAA";
             this.beMPAA.Padding = new System.Windows.Forms.Padding(2);
             this.beMPAA.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Plus)});
-            this.beMPAA.Size = new System.Drawing.Size(357, 20);
+            this.beMPAA.Size = new System.Drawing.Size(346, 20);
             this.beMPAA.TabIndex = 0;
             this.beMPAA.ButtonClick += new DevExpress.XtraEditors.Controls.ButtonPressedEventHandler(this.beOptions_ButtonClick);
             // 
@@ -447,7 +337,7 @@ namespace OMLDatabaseEditor
             this.tpTags.Controls.Add(this.beTags);
             this.tpTags.Name = "tpTags";
             this.tpTags.PageVisible = false;
-            this.tpTags.Size = new System.Drawing.Size(357, 273);
+            this.tpTags.Size = new System.Drawing.Size(346, 270);
             this.tpTags.Text = "Tags";
             // 
             // lbcTags
@@ -459,19 +349,19 @@ namespace OMLDatabaseEditor
             this.lbcTags.Name = "lbcTags";
             this.lbcTags.Padding = new System.Windows.Forms.Padding(2);
             this.lbcTags.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.lbcTags.Size = new System.Drawing.Size(357, 248);
+            this.lbcTags.Size = new System.Drawing.Size(346, 245);
             this.lbcTags.TabIndex = 3;
             // 
             // beTags
             // 
             this.beTags.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.beTags.Location = new System.Drawing.Point(0, 254);
+            this.beTags.Location = new System.Drawing.Point(0, 251);
             this.beTags.Name = "beTags";
             this.beTags.Padding = new System.Windows.Forms.Padding(2);
             this.beTags.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Plus)});
-            this.beTags.Size = new System.Drawing.Size(357, 20);
+            this.beTags.Size = new System.Drawing.Size(346, 20);
             this.beTags.TabIndex = 2;
             // 
             // tpMountTools
@@ -486,7 +376,7 @@ namespace OMLDatabaseEditor
             this.tpMountTools.Controls.Add(this.simpleButtonScanMntTool);
             this.tpMountTools.Controls.Add(this.rgMountingTool);
             this.tpMountTools.Name = "tpMountTools";
-            this.tpMountTools.Size = new System.Drawing.Size(357, 273);
+            this.tpMountTools.Size = new System.Drawing.Size(346, 270);
             this.tpMountTools.Text = "Mounting Tools";
             // 
             // labelControl7
@@ -616,7 +506,7 @@ namespace OMLDatabaseEditor
             // 
             this.sbCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.sbCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.sbCancel.Location = new System.Drawing.Point(294, 313);
+            this.sbCancel.Location = new System.Drawing.Point(283, 310);
             this.sbCancel.Name = "sbCancel";
             this.sbCancel.Size = new System.Drawing.Size(75, 23);
             this.sbCancel.TabIndex = 1;
@@ -627,7 +517,7 @@ namespace OMLDatabaseEditor
             // 
             this.sbOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.sbOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.sbOK.Location = new System.Drawing.Point(213, 313);
+            this.sbOK.Location = new System.Drawing.Point(202, 310);
             this.sbOK.Name = "sbOK";
             this.sbOK.Size = new System.Drawing.Size(75, 23);
             this.sbOK.TabIndex = 2;
@@ -639,11 +529,19 @@ namespace OMLDatabaseEditor
             this.cmGenreMappings.Name = "cmGenreMappings";
             this.cmGenreMappings.Size = new System.Drawing.Size(61, 4);
             // 
+            // ceStSanaCreateTLFolder
+            // 
+            this.ceStSanaCreateTLFolder.Location = new System.Drawing.Point(7, 204);
+            this.ceStSanaCreateTLFolder.Name = "ceStSanaCreateTLFolder";
+            this.ceStSanaCreateTLFolder.Properties.Caption = "Create top level folder when dragging folders into the editor";
+            this.ceStSanaCreateTLFolder.Size = new System.Drawing.Size(325, 19);
+            this.ceStSanaCreateTLFolder.TabIndex = 14;
+            // 
             // Options
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(372, 339);
+            this.ClientSize = new System.Drawing.Size(361, 336);
             this.Controls.Add(this.tableLayoutPanel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.Name = "Options";
@@ -655,28 +553,16 @@ namespace OMLDatabaseEditor
             this.xtraTabControl1.ResumeLayout(false);
             this.tpOptions.ResumeLayout(false);
             this.tpOptions.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.ceStSanaAlwaysCreateMovieFolder.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ceStSanaCreateTLFolder.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.seMetadataLookupResultsQty.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ceScanDiskRollInfoToTitle.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ceAutoScanDiskOnAdd.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.beTitledFanArtPath.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ceTitledFanArtFolder.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.cmbDefaultMetadataPlugin.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.cePrependParentFolder.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ceUseGenreList.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ceUseMPAAList.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ceFoldersAsTitles.Properties)).EndInit();
-            this.tpMetadata.ResumeLayout(false);
-            this.tpMetadata.PerformLayout();
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.ceUpdateTitleNameTV.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ceUpdateMissingDataOnlyTV.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.cmbDefaultMetadataPluginTV.Properties)).EndInit();
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.ceUpdateTitleNameMovies.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ceUpdateMissingDataOnlyMovies.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.cmbDefaultMetadataPlugin.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ceDBEStSanaAutoLookupMeta.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.seMetadataLookupResultsQty.Properties)).EndInit();
             this.tpSkins.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.lbcSkins)).EndInit();
             this.tpMPAAList.ResumeLayout(false);
@@ -691,6 +577,7 @@ namespace OMLDatabaseEditor
             ((System.ComponentModel.ISupportInitialize)(this.cmbMntToolVDrive.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.cmbMntToolScan.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.rgMountingTool.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ceStSanaCreateTLFolder.Properties)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -703,6 +590,8 @@ namespace OMLDatabaseEditor
         private System.Windows.Forms.ContextMenuStrip cmGenreMappings;
         private DevExpress.XtraTab.XtraTabControl xtraTabControl1;
         private DevExpress.XtraTab.XtraTabPage tpOptions;
+        private DevExpress.XtraEditors.CheckEdit ceScanDiskRollInfoToTitle;
+        private DevExpress.XtraEditors.CheckEdit ceAutoScanDiskOnAdd;
         private DevExpress.XtraEditors.LabelControl labelControl3;
         private DevExpress.XtraEditors.ButtonEdit beTitledFanArtPath;
         private DevExpress.XtraEditors.CheckEdit ceTitledFanArtFolder;
@@ -733,16 +622,5 @@ namespace OMLDatabaseEditor
         private DevExpress.XtraEditors.LabelControl labelControl1;
         private DevExpress.XtraEditors.SpinEdit seMetadataLookupResultsQty;
         private DevExpress.XtraEditors.CheckEdit ceStSanaCreateTLFolder;
-        private DevExpress.XtraTab.XtraTabPage tpMetadata;
-        private DevExpress.XtraEditors.CheckEdit ceDBEStSanaAutoLookupMeta;
-        private DevExpress.XtraEditors.ComboBoxEdit cmbDefaultMetadataPluginTV;
-        private DevExpress.XtraEditors.LabelControl labelControl8;
-        private DevExpress.XtraEditors.CheckEdit ceStSanaAlwaysCreateMovieFolder;
-        private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.GroupBox groupBox1;
-        private DevExpress.XtraEditors.CheckEdit ceUpdateMissingDataOnlyMovies;
-        private DevExpress.XtraEditors.CheckEdit ceUpdateTitleNameMovies;
-        private DevExpress.XtraEditors.CheckEdit ceUpdateTitleNameTV;
-        private DevExpress.XtraEditors.CheckEdit ceUpdateMissingDataOnlyTV;
     }
 }

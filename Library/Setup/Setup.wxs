@@ -155,8 +155,6 @@
             <File Name="OMLEngineService.exe.config"
                   Source="..\..\OMLEngineService\bin\$(var.BuildType)\OMLEngineService.exe.config" Checksum="no"/>
             <ServiceControl Id="OMLEngineServiceControl" Name="OMLEngineService" Stop="both" Remove="uninstall"/>
-            <!--ServiceControl Id="StartOMLEngineService" Name="OMLEngineService" Start="install" Wait="no" />
-            <ServiceControl Id="StopOMLEngineService" Name="OMLEngineService" Stop="both" Wait="yes" Remove="uninstall" /-->
             <ServiceInstall Id="OMLEngineService" Name="OMLEngineService" DisplayName="OMLEngineService"
                             Type="ownProcess" Interactive="no" Start="auto" Vital="yes"
                             ErrorControl="normal">
@@ -166,8 +164,8 @@
               <util:ServiceConfig ServiceName="OMLEngineService" FirstFailureActionType="restart" SecondFailureActionType="restart"
                                   ThirdFailureActionType="restart" ResetPeriodInDays="7" RestartServiceDelayInSeconds="60"/>
             </ServiceInstall>
-            <!--ServiceControl Id="OMLEngineServiceControl" Name="OMLEngineService"
-                                        Start="install" Stop="install" Wait="yes" Remove="uninstall"/-->
+            <!--<ServiceControl Id="OMLEngineServiceControl" Name="OMLEngineService"
+                                        Start="install" Stop="both" Wait="yes" Remove="uninstall"/>-->
           </Component>
 
           <Component Id="OMLFWService.exe" Guid="8F57190C-0489-40b4-9C46-5E9B09EC0DEC" DiskId="1">
@@ -476,6 +474,13 @@
     <CustomAction Id="CA_RegisterMceApp_Register" BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="check" Impersonate="no"/>
     <CustomAction Id="CA_RegisterMceApp_Rollback" BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="rollback" Return="ignore" Impersonate="no"/>
 
+    <CustomAction Id="ActivateNetTcpPortSharing"
+                  Directory="TARGETDIR"
+                  ExeCommand="sc.exe config NetTcpPortSharing start= boot"
+                  Execute="deferred"
+                  Impersonate="no"
+                  Return="ignore" />
+
     <!-- The InstallExecuteSequence table describes the order that actions will be executed during       -->
     <!-- installation, repair and uninstall of this product.                                             -->
     <InstallExecuteSequence>
@@ -483,7 +488,6 @@
         <![CDATA[NEWERVERSIONDETECTED]]>
       </Custom>
       <RemoveExistingProducts After="InstallInitialize" />
-      <!--Custom Action="LaunchApplication" After="InstallFinalize" /-->
       <LaunchConditions After="AppSearch"/>
 
       <!-- This custom action searches for Windows version 6.0, the Windows Media Center Ident registry  -->
@@ -525,6 +529,7 @@
       <Custom Action="CA_RegisterMceApp_Register" After="CA_RegisterMceApp_Unregister_Install">
         <![CDATA[NOT REMOVE AND (&CLIENTFEATUREUI=3)]]>
       </Custom>
+      <Custom Action="ActivateNetTcpPortSharing" Before="InstallFinalize">Not Installed</Custom>
       <!--<ScheduleReboot After="InstallFinalize"/>-->
     </InstallExecuteSequence>
 
@@ -588,28 +593,6 @@
     <WixVariable Id="WixUILicenseRtf" Value="License.rtf" />
 
     <PropertyRef Id="NETFRAMEWORK35"/>
-
-    <!-- OML Custom Managed Actions -->
-    <CustomAction Id="ReserveTrailersUrlAction"
-                  BinaryKey="OMLCALib"
-                  DllEntry="ReserveTrailersUrl"
-                  Execute="deferred"
-                  Impersonate="no"
-                  Return="check" />
-
-      <CustomAction Id="StartOMLEngineServiceAction"
-                  BinaryKey="OMLCALib"
-                  DllEntry="StartOMLEngineService"
-                  Return="ignore" />
-    
-      <CustomAction Id="ActivateNetTcpPortSharing"
-                  BinaryKey="OMLCALib"
-                  DllEntry="ActivateNetTcpPortSharing"
-                  Execute="deferred"
-                  Return="check" />
-
-    <Binary Id="OMLCALib"
-            SourceFile="..\..\OMLCustomWiXAction\bin\$(var.BuildType)\OMLWiXActionsCAsPackage.dll" />
 
   </Fragment>
 </Wix>

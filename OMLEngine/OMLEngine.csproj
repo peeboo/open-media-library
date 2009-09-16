@@ -66,10 +66,6 @@
     <Compile Include="BackgroundProcessor.cs" />
     <Compile Include="BioData.cs" />
     <Compile Include="DatabaseManagement\DatabaseIntegrityChecks.cs" />
-    <Compile Include="TrailersProxyService.cs" />
-    <Compile Include="OMLWebClient.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="WVXManager.cs" />
     <Compile Include="Settings\StartMenuHelper.cs" />
     <Compile Include="Settings\StartMenuItem.cs" />
@@ -117,6 +113,7 @@
     <Compile Include="GenreMetaData.cs" />
     <Compile Include="MediaScanner\IFOUtilities.cs" />
     <Compile Include="ITranscodingService.cs" />
+    <Compile Include="MediaInfo.cs" />
     <Compile Include="MediaScanner\MediaInfoLib.cs" />
     <Compile Include="MediaLanguage.cs" />
     <Compile Include="MediaSource.cs" />

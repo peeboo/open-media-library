@@ -9,7 +9,6 @@ using System.Windows.Forms;
 using System.IO;
 using System.Management;
 using System.Diagnostics;
-using System.ServiceProcess;
 using OMLEngine;
 
 namespace PostInstallerWizard
@@ -68,12 +67,6 @@ namespace PostInstallerWizard
                 ServerInstall = true;
             }
 
-            if ((File.Exists("C:\\Program Files\\OpenMediaLibrary\\SQLInstaller\\SQLEXPR_x86_ENU.exe")) ||
-                (File.Exists("C:\\Program Files\\OpenMediaLibrary\\SQLInstaller\\SQLEXPR_x64_ENU.exe")))
-            {
-                ServerInstall = true;
-            }
-
             // Check the command line for the 'client' override
             if (Environment.GetCommandLineArgs().Length > 1)
             {
@@ -101,7 +94,7 @@ namespace PostInstallerWizard
             CurrentPage = null;
 
             // Default database info
-            sapassword = "R3WztB4#9";
+            sapassword = "omladmin";
             instancename = "oml";
             servername = "localhost";
 
@@ -138,8 +131,6 @@ namespace PostInstallerWizard
             {
                 if (OMLEngine.DatabaseManagement.DatabaseInformation.ConfigFileExists)
                 {
-                    OMLEngine.Utilities.DebugLine("[PostInstallerWizard] settings.xml file exists, assume SQL is allready setup");
-
                     // Good news, this must be an upgrade. Just need to check  
                     // we can connect and check the schema version
                     (WizStart as Wiz_Start).lMessage1.Text = "This wizard has detected an existing installation of OML!";
@@ -153,7 +144,6 @@ namespace PostInstallerWizard
                 }
                 else
                 {
-                    OMLEngine.Utilities.DebugLine("[PostInstallerWizard] settings.xml does not exist, install SQL");
                     // This must be a new install. Is it a server install
                     if (ServerInstall)
                     {
@@ -420,44 +410,18 @@ namespace PostInstallerWizard
         private bool CheckSQLExists()
         {
             const string instance = "MSSQL$OML";
-            //const string instance = "MSSQLSERVER";
 
             try
             {
-                // Enumerate all SQL instances on system
-                ManagementObjectSearcher getAllSQLInstances =
+                ManagementObjectSearcher getSqlExpress =
                     new ManagementObjectSearcher("root\\Microsoft\\SqlServer\\ComputerManagement10",
-                    "select * from SqlServiceAdvancedProperty where SQLServiceType = 1 " +
-                    " and (PropertyName = 'SKUNAME' or PropertyName = 'SPLEVEL')");
-
-                ManagementObjectCollection resultsAll = getAllSQLInstances.Get();
-                
-                foreach (ManagementObject service in resultsAll)
-                {
-                    OMLEngine.Utilities.DebugLine("[PostInstallerWizard] Emumerating SQL Server Instance : " + service.ToString());
-                }
-
-
-                // Enumerate OML Names instance
-
-                ManagementObjectSearcher getOMLInstance =
-                   new ManagementObjectSearcher("root\\Microsoft\\SqlServer\\ComputerManagement10",
-                   "select * from SqlServiceAdvancedProperty where SQLServiceType = 1 " +
-                   " and ServiceName = '" + instance + "'" +
-                   " and (PropertyName = 'SKUNAME' or PropertyName = 'SPLEVEL')");
-
-                ManagementObjectCollection resultsOML = getOMLInstance.Get();
+                    "select * from SqlServiceAdvancedProperty where SQLServiceType = 1 and ServiceName = '" 
+                    + instance + "' and (PropertyName = 'SKUNAME' or PropertyName = 'SPLEVEL')");
 
                 // If nothing is returned, SQL isn't installed.
-                if (resultsOML.Count == 0)
+                if (getSqlExpress.Get().Count==0)
                 {
-                    OMLEngine.Utilities.DebugLine("[PostInstallerWizard] No OML SQL Servers Not Found");
                     return false;
-                }
-
-                foreach (ManagementObject service in resultsOML)
-                {
-                    OMLEngine.Utilities.DebugLine("[PostInstallerWizard] Found OML SQL Server Instance : " + service.ToString());
                 }
 
                 return true;

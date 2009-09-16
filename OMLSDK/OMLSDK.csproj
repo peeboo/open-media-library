@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{84BDBB4C-50AA-4D92-9DD3-8CDFD7DFD7D4}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -54,7 +54,6 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="TitleMetadataManagement.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\OMLEngine\OMLEngine.csproj">

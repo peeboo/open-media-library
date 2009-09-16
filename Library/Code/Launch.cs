@@ -20,11 +20,8 @@ namespace Library
             if (entryPointInfo.ContainsKey("Context"))
                 _id = (string)entryPointInfo["Context"];
 
-            OMLApplication.DebugLine("[Launch] Initialize() id: {0}", _id);
-
-            StartOMLEngineService();
-
             OMLEngine.Utilities.RawSetup();
+            OMLApplication.DebugLine("[Launch] Initialize()");
         }
 
         ~MyAddIn()
@@ -207,17 +204,6 @@ namespace Library
                 }
                 catch (Exception) { } // we don't really care, just delete it if you find it
             }
-        }
-
-        private void StartOMLEngineService() {
-            try {
-                ServiceController omlengineController = new ServiceController(@"OMLEngineService");
-                if (omlengineController.Status != ServiceControllerStatus.Running) {
-                    TimeSpan timeout = TimeSpan.FromSeconds(20);
-                    omlengineController.Start();
-                    omlengineController.Close();
-                }
-            } catch (Exception) { }
         }
     }
 }

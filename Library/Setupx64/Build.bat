@@ -52,8 +52,8 @@ GOTO EXIT
 :BUILDSERVER
 REM Build the MSI for the server package
 echo Building Server installer
-"%WIX_BUILD_LOCATION%\candle.exe" -ext WiXNetFxExtension -ext WiXUtilExtension setupserver.wxs -ext WiXFirewallExtension setup.wxs -dBuildType=%BUILD_TYPE% -out %APP_INTERMEDIATE_PATH%\
-"%WIX_BUILD_LOCATION%\light.exe" -ext WiXNetFxExtension -ext WixUIExtension -ext WiXUtilExtension -ext WiXFirewallExtension "%APP_INTERMEDIATE_PATH%\setupserver.wixobj" "%APP_INTERMEDIATE_PATH%\setup.wixobj" -cultures:en-US -loc setup-en-us.wxl -out "%OUTPUTNAMESERVER%"
+"%WIX_BUILD_LOCATION%\candle.exe" -ext WiXNetFxExtension -ext WiXUtilExtension setupserver.wxs setup.wxs -dBuildType=%BUILD_TYPE% -out %APP_INTERMEDIATE_PATH%\
+"%WIX_BUILD_LOCATION%\light.exe" -ext WiXNetFxExtension -ext WixUIExtension -ext WiXUtilExtension "%APP_INTERMEDIATE_PATH%\setupserver.wixobj" "%APP_INTERMEDIATE_PATH%\setup.wixobj" -cultures:en-US -loc setup-en-us.wxl -out "%OUTPUTNAMESERVER%"
 
 echo Copying "%OUTPUTNAMESERVER%" to the Builds folder
 copy "%OUTPUTNAMESERVER%" ..\..\Builds\X64\

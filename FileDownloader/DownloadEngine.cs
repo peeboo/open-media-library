@@ -12,11 +12,6 @@ namespace FileDownloader {
                 Log(msg);
         }
 
-        public string UserAgent {
-            get;
-            set;
-        }
-
         public void FireEvent(int msg) {
             FireEvent(Convert.ToString(msg));
         }
@@ -49,12 +44,8 @@ namespace FileDownloader {
             WebResponse res = null;
 
             try {
-                HttpWebRequest req = (HttpWebRequest)WebRequest.Create(Url);
-
+                WebRequest req = WebRequest.Create(Url);
                 if (req != null) {
-                    if (!string.IsNullOrEmpty(UserAgent))
-                        req.UserAgent = UserAgent;
-
                     res = req.GetResponse();
                     if (res != null) {
                         TotalBytes = res.ContentLength;
@@ -69,6 +60,7 @@ namespace FileDownloader {
                             bytesRead = readStream.Read(buffer, 0, buffer.Length);
                             writeStream.Write(buffer, 0, bytesRead);
                             bytesDone += bytesRead;
+                            FireEvent(bytesDone);
                             //int pct = Convert.ToInt32((Convert.ToDouble(bytesDone) / Convert.ToDouble(TotalBytes)) * 100);
                             FireEvent(bytesDone);
                         } while (bytesRead > 0);

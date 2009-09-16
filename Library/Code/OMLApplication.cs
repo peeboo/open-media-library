@@ -349,9 +349,8 @@ namespace Library
             //should we update?
             if (OMLSettings.EnableAutomaticUpdates)
             {
-                bool enableBetaUpdates = OMLSettings.EnableAutomaticUpdatesDailyBuilds;
                 OMLUpdater updater = new OMLUpdater();
-                ThreadPool.QueueUserWorkItem(new WaitCallback(updater.checkUpdate), enableBetaUpdates);
+                ThreadPool.QueueUserWorkItem(new WaitCallback(updater.checkUpdate));
             }
 
 #if LAYOUT_V3

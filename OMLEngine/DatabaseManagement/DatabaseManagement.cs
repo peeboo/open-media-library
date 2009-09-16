@@ -6,7 +6,6 @@ using System.Data.SqlClient;
 using System.Threading;
 using System.Diagnostics;
 using System.IO;
-using System.Reflection;
 
 namespace OMLEngine.DatabaseManagement
 {
@@ -21,8 +20,8 @@ namespace OMLEngine.DatabaseManagement
             DatabaseInformation.SQLState dbstatus = CheckOMLDatabase();
 
             if ((dbstatus == DatabaseInformation.SQLState.OMLDBVersionCodeOlderThanSchema) ||
-                (dbstatus == DatabaseInformation.SQLState.OMLDBVersionUpgradeRequired)) // ||
-                //(dbstatus == DatabaseInformation.SQLState.OMLDBVersionNotFound))
+                (dbstatus == DatabaseInformation.SQLState.OMLDBVersionUpgradeRequired) ||
+                (dbstatus == DatabaseInformation.SQLState.OMLDBVersionNotFound))
             {
                 // Return to the ui / editor to deal with
                 return dbstatus;
@@ -58,17 +57,8 @@ namespace OMLEngine.DatabaseManagement
                 return DatabaseInformation.SQLState.LoginFailure;
             }
 
-            // Test 2. Ensure the database is in multiuser mode - could be a result of a bad restore
-            // -------------------------------------------------------------------------------------
-            string sql = "ALTER DATABASE [" + DatabaseInformation.DatabaseName + "] SET MULTI_USER";
-            if (!ExecuteNonQuery(sqlConn, sql))
-            {
-                sqlConn.Close();
-                sqlConn.Dispose();
-                return DatabaseInformation.SQLState.UnknownState;
-            }
 
-            // Test 3. Get the schema version number for later comparison
+            // Test 2. Get the schema version number for later comparison
             // ----------------------------------------------------------
             // Schema versioning disabled for now
             int ReqMajor;
@@ -80,7 +70,7 @@ namespace OMLEngine.DatabaseManagement
 
             GetRequiredSchemaVersion(out ReqMajor, out ReqMinor);
 
-            if (GetSchemaVersion(sqlConn, out CurrentMajor, out CurrentMinor))
+            if (GetSchemaVersion(out CurrentMajor, out CurrentMinor))
             {
                 if (ReqMajor > CurrentMajor) sqlstate = DatabaseInformation.SQLState.OMLDBVersionUpgradeRequired;
                 if (ReqMajor < CurrentMajor) sqlstate = DatabaseInformation.SQLState.OMLDBVersionCodeOlderThanSchema;
@@ -157,6 +147,7 @@ namespace OMLEngine.DatabaseManagement
                 return DatabaseInformation.SQLState.OMLUserNotFound;
             }
 
+
             // Test 4. Check user account exists in oml database
             // -------------------------------------------------
             sqlConn.ChangeDatabase(DatabaseInformation.DatabaseName);
@@ -210,79 +201,6 @@ namespace OMLEngine.DatabaseManagement
             return true;
         }
 
-        public class DatabaseFile
-        {
-            public string Name;
-            public int Size;
-            public string SizeString;
-            public int MaxSize;
-            public string MaxSizeString;
-            public int Growth;
-            public string GrowthString;
-        }
-
-        public List<DatabaseFile> GetDatabaseFileInfo()
-        {
-            List<DatabaseFile> DBFS = new List<DatabaseFile>(); 
-            
-            // Create database connection to OML and open it
-            SqlConnection sqlConn = OpenDatabase(DatabaseInformation.MasterDatabaseConnectionString);
-
-            SqlDataReader reader;
-
-            if (!ExecuteReader(sqlConn, "select * from oml.dbo.sysfiles", out reader))
-            {
-                return null;
-            }
-
-            while (reader.Read())
-            {
-                DatabaseFile DBF = new DatabaseFile();
-                DBF.Name = (string)reader["name"];
-                DBF.Size = (int)reader["size"] / 128;
-                DBF.SizeString = ((int)reader["size"] / 128).ToString() + "MB";
-
-                if ((int)reader["maxsize"] > 0)
-                {
-                    DBF.MaxSize = (int)reader["maxsize"] / 128;
-                    DBF.MaxSizeString = ((int)reader["maxsize"] / 128).ToString() + "MB";
-                }
-                else 
-                {
-                    DBF.MaxSize = 0;
-                    if ((int)reader["maxsize"] == 0)
-                        DBF.MaxSizeString = "No Growth";
-                    else
-                        DBF.MaxSizeString = "Unlimited Growth";
-                }
-
-                
-                if ((int)reader["growth"] == 0)
-                {
-                    DBF.Growth = 0;
-                    DBF.GrowthString = "No Growth";
-
-                }
-                else
-                {
-                    if (((int)reader["status"] & 0x100000) != 0)
-                    {
-                        // Percentage growth
-                        DBF.Growth = (int)reader["growth"];
-                        DBF.GrowthString = (int)reader["growth"] + "%";
-                    }
-                    else
-                    {
-                        DBF.Growth = (int)reader["growth"] / 128;
-                        DBF.GrowthString = ((int)reader["growth"] / 128).ToString() + "MB";
-
-                    }
-                }
-
-                DBFS.Add(DBF);
-            }
-            return DBFS;
-        }
         #region Database Maintenance
         public bool BackupDatabase(string path)
         {
@@ -313,38 +231,25 @@ namespace OMLEngine.DatabaseManagement
 
             if (sqlConn != null)
             {
-                // This method used to work in earlier versions of SQL ???
                 // Kill all users connected to OML
-                /*string sql = "DECLARE @SQL varchar(max) " +
+                string sql = "DECLARE @SQL varchar(max) " +
                     "SET @SQL = '' " +
                     "SELECT @SQL = @SQL + 'Kill ' + Convert(varchar, SPId) + ';' " +
                     "FROM MASTER..SysProcesses " +
                     "WHERE DBId = DB_ID('" + DatabaseInformation.DatabaseName + "') " +
-                    "EXEC(@SQL)";*/ 
+                    "EXEC(@SQL)";
 
-
-                // Put the database into single user mode
-                string sql = "ALTER DATABASE [" + DatabaseInformation.DatabaseName + "] SET SINGLE_USER WITH ROLLBACK IMMEDIATE";
-
-                if (ExecuteNonQuery(sqlConn, sql, 1200))
+                if (!ExecuteNonQuery(sqlConn, sql, 1200))
                 {
-                    // Succeeded - Database should now be in single user mode
+                    retval = false;
+                }
+                else
+                {
                     // Launch backup job
-                    sql = "RESTORE DATABASE [" + DatabaseInformation.DatabaseName + "] FROM DISK = '" + path + "' WITH REPLACE";
-
+                    sql = "RESTORE DATABASE [" + DatabaseInformation.DatabaseName + "] FROM DISK = '" + path + "'";
                     if (ExecuteNonQuery(sqlConn, sql, 1200))
                     {
-                        // Database should now be restored
                         retval = true;
-                    }
-
-                    // Put database backinto multiuser mode    
-                    sql = "ALTER DATABASE [" + DatabaseInformation.DatabaseName + "] SET MULTI_USER";
-
-                    if (!ExecuteNonQuery(sqlConn, sql, 1200))
-                    {
-                        // If this fails set the retval to false
-                        retval = false;
                     }
                 }
             }
@@ -493,28 +398,6 @@ namespace OMLEngine.DatabaseManagement
             RunSQLScript(ScriptsPath + "\\Title Database.sql");
             CreateOMLUser();
         }
-
-        public void CreateSchema()
-        {      
-            // Run schema creation script
-            RunSQLScript(GetScriptsPath + "\\Title Database.sql");
-        }
-
-        public string GetScriptsPath
-        {
-            get
-            {
-                string location = System.Reflection.Assembly.GetEntryAssembly().Location;
-
-                // Find the script path. Also include hack to find scripts if running from VS rather than c:\program files....
-                string ScriptsPath = Path.GetDirectoryName(location) + "\\SQLInstaller";
-                if (Directory.Exists(Path.GetDirectoryName(location) + "\\..\\..\\..\\SQL Scripts"))
-                {
-                    ScriptsPath = Path.GetDirectoryName(location) + "\\..\\..\\..\\SQL Scripts";
-                }
-                return ScriptsPath;
-            }
-        }
         #endregion
 
 
@@ -559,9 +442,9 @@ namespace OMLEngine.DatabaseManagement
 
             if (sqlConn != null)
             {
-                return GetSchemaVersion(sqlConn, out Major, out Minor);
+                GetSchemaVersion(sqlConn, out Major, out Minor);
             }
-            return false;
+            return true;
         }
 
 

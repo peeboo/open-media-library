@@ -212,36 +212,7 @@
   <UI Name="DetailsPane">
     <Properties>
       <shl:ExtenderSettings Name="Page" ExtenderSettings="$Required"/>
-      <Color Name="ButtonNoFocusColor" Color="color://core:OffWhite"/>
     </Properties>
-    <Locals>
-      <Inset Name="Margins43" Inset="20,34,5,0"/>
-      <Inset Name="Margins169" Inset="176,34,205,0"/>
-      <Inset Name="ContentMargins43" Inset="45,85,25,0"/>
-      <Inset Name="ContentMargins169" Inset="205,85,205,0"/>
-      <Environment Name="Environment" />
-    </Locals>
-    <Rules>
-      <Rule>
-        <Conditions>
-          <Equality Source="[Environment.IsWidescreen]" Value="true" />
-        </Conditions>
-        <Actions>
-          <Set Target="[MainPanel.Margins]" Value="[Margins169]" />
-          <Set Target="[ContentPanel.Margins]" Value="[ContentMargins169]" />
-        </Actions>
-      </Rule>
-
-      <Rule>
-        <Conditions>
-          <Equality Source="[Environment.IsWidescreen]" Value="false" />
-        </Conditions>
-        <Actions>
-          <Set Target="[MainPanel.Margins]" Value="[Margins43]" />
-          <Set Target="[ContentPanel.Margins]" Value="[ContentMargins43]" />
-        </Actions>
-      </Rule>
-    </Rules>
     <Content>
       <Panel>
         <Animations>
@@ -262,7 +233,7 @@
           </Animation>
         </Animations>
         <Children>
-          <Panel Name="MainPanel" Margins="176,34,205,0">
+          <Panel Margins="176,34,205,0">
             <Children>
               <Clip FadeSize="25" MaximumSize="500,70" NearOffset="-40" Orientation="Vertical">
                 <Children>
@@ -273,7 +244,7 @@
             </Children>
           </Panel>
           <!-- main layout panel -->
-          <Panel Name="ContentPanel" Margins="205,85,205,0">
+          <Panel Margins="205,85,205,0">
             <Layout>
               <FlowLayout Orientation="Horizontal"/>
             </Layout>
@@ -322,8 +293,8 @@
                           <AnchorLayoutInput Left="Parent,0, 60" Top="Parent,0, 70"/>
                         </LayoutInput>
                         <Children>
-                          <ctl:Button Model="[Page.GoToImpersonation]" TileSize="590,51" Margins="10,0,0,0" NoFocusColor="[ButtonNoFocusColor]"/>
-                          <ctl:Button Model="[Page.GoToTranscode]" TileSize="590,51" Margins="10,0,0,0" NoFocusColor="[ButtonNoFocusColor]"/>
+                          <ctl:Button Model="[Page.GoToImpersonation]" TileSize="590,51" Margins="10,0,0,0"/>
+                          <ctl:Button Model="[Page.GoToTranscode]" TileSize="590,51" Margins="10,0,0,0"/>
                         </Children>
                       </Panel>
                     </Children>

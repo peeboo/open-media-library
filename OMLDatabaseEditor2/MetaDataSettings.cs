@@ -34,8 +34,6 @@ namespace OMLDatabaseEditor
         {
             if (lbMetadataPlugins.SelectedItem != null)
             {
-                grdOptions.EditingControlShowing += new DataGridViewEditingControlShowingEventHandler(grdOptions_EditingControlShowing);
-
                 grdOptions.Rows.Clear();
                 MetaDataPluginDescriptor plugin = lbMetadataPlugins.SelectedItem as MetaDataPluginDescriptor;
                 _selectdPlugin = plugin;
@@ -51,9 +49,10 @@ namespace OMLDatabaseEditor
                         // Create the combo box
                         DataGridViewComboBoxCell cbcell = new DataGridViewComboBoxCell();
 
-                        //if (!option.AllowOnlyPossibleValues)
-                        //else
-                        //    grdOptions.EditingControlShowing -= new DataGridViewEditingControlShowingEventHandler(grdOptions_EditingControlShowing);
+                        if (!option.AllowOnlyPossibleValues)
+                            grdOptions.EditingControlShowing += new DataGridViewEditingControlShowingEventHandler(grdOptions_EditingControlShowing);
+                        else
+                            grdOptions.EditingControlShowing -= new DataGridViewEditingControlShowingEventHandler(grdOptions_EditingControlShowing);
 
 
                         // Add possible values to the combo
@@ -92,8 +91,6 @@ namespace OMLDatabaseEditor
 
                         // Create the row
                         row.Cells.Add(b);
-                        b.ReadOnly = true;
-
                         row.Cells.Add(cbcell);
                         row.Tag = option;
                         grdOptions.Rows.Add(row);
@@ -139,20 +136,7 @@ namespace OMLDatabaseEditor
 
         private void grdOptions_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
         {
-            foreach (DataGridViewRow row in grdOptions.SelectedRows)
-            {
-                OMLMetadataOption option = row.Tag as OMLMetadataOption;
-                if (!option.AllowOnlyPossibleValues)
-                {
-                    DataGridViewComboBoxEditingControl comboControl = e.Control as DataGridViewComboBoxEditingControl;
-                    if (comboControl != null)
-                    {
-                        comboControl.DropDownStyle = ComboBoxStyle.DropDown;
-                    }
-                }
-            }
-
-           /* DataGridViewComboBoxEditingControl comboControl
+            DataGridViewComboBoxEditingControl comboControl
                 = e.Control as DataGridViewComboBoxEditingControl;
             if (comboControl != null)
             {
@@ -161,7 +145,7 @@ namespace OMLDatabaseEditor
                 {
                     comboControl.DropDownStyle = ComboBoxStyle.DropDown;
                 }
-            }*/
+            }
 
         }
 

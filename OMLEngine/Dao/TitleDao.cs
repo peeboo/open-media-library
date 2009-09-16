@@ -35,8 +35,6 @@ namespace OMLEngine.Dao
                     // if it doesn't exist create a new one                    
                     metaData = new GenreMetaData();
                     metaData.Name = genre;
-                    context.GenreMetaDatas.InsertOnSubmit(metaData);
-                    context.SubmitChanges();
                 }
 
                 // setup the genre
@@ -79,7 +77,7 @@ namespace OMLEngine.Dao
             // add the actors
             foreach (Role actor in title.DaoTitle.UpdatedActors)
             {
-                Person person = CreatePerson(context, actor.PersonName, actor.RoleName, PeopleRole.Actor, existingPeople);
+                Person person = CreatePerson(actor.PersonName, actor.RoleName, PeopleRole.Actor, existingPeople);
 
                 // maintain the order
                 person.Sort = (short)(actorIndex++);
@@ -91,26 +89,19 @@ namespace OMLEngine.Dao
             // add the directors
             foreach (OMLEngine.Person director in title.DaoTitle.UpdatedDirectors)
             {
-                Person person = CreatePerson(context, director.full_name, null, PeopleRole.Director, existingPeople);
+                Person person = CreatePerson(director.full_name, null, PeopleRole.Director, existingPeople);
 
                 // maintain the order
                 person.Sort = (short)(actorIndex++);
 
                 // add them to the title
-                var e = (from p in daoTitle.People
-                         where p.MetaData.Id == person.MetaData.Id
-                         select p);
-
-                if (e.Count() == 0)
-                {
-                    daoTitle.People.Add(person);
-                }
+                daoTitle.People.Add(person);
             }
 
             // add the writers
             foreach (OMLEngine.Person writer in title.DaoTitle.UpdatedWriters)
             {
-                Person person = CreatePerson(context, writer.full_name, null, PeopleRole.Writer, existingPeople);
+                Person person = CreatePerson(writer.full_name, null, PeopleRole.Writer, existingPeople);
 
                 // maintain the order
                 person.Sort = (short)(actorIndex++);
@@ -122,7 +113,7 @@ namespace OMLEngine.Dao
             // add the producers
             foreach (OMLEngine.Person name in title.DaoTitle.UpdatedProducers)
             {
-                Person person = CreatePerson(context, name.full_name, null, PeopleRole.Producers, existingPeople);
+                Person person = CreatePerson(name.full_name, null, PeopleRole.Producers, existingPeople);
 
                 // maintain the order
                 person.Sort = (short)(actorIndex++);
@@ -130,16 +121,6 @@ namespace OMLEngine.Dao
                 // add them to the title
                 daoTitle.People.Add(person);
             }
-
-            // Debugging code
-            var b = (from p in daoTitle.People
-                     select p);
-            foreach (Person pr in b)
-            {
-                System.Diagnostics.Trace.WriteLine("Adding " + pr.Role + " - " + pr.MetaData.FullName + " as " + pr.CharacterName + " [" + pr.MetaData.Id +"]");
-            }
-
-
 
             // ignore the rest for now 
 
@@ -413,8 +394,6 @@ namespace OMLEngine.Dao
 
             Dictionary<string, BioData> existingPeople = new Dictionary<string, BioData>();
 
-            System.Diagnostics.Trace.WriteLine("Actors in current Context - " + actors.Count().ToString());
-            
             foreach (BioData data in actors)
                 if (!existingPeople.ContainsKey(data.FullName))
                     existingPeople.Add(data.FullName, data);
@@ -428,35 +407,21 @@ namespace OMLEngine.Dao
         /// <param name="name"></param>
         /// <param name="role"></param>
         /// <returns></returns>
-        public static Person CreatePerson(OMLDataDataContext context, string name, string characterName, PeopleRole role, Dictionary<string, BioData> existingPeople)
+        public static Person CreatePerson(string name, string characterName, PeopleRole role, Dictionary<string, BioData> existingPeople)
         {            
             BioData metaData = null;
 
-            // see if the actor exists already in the in memory cache
+            // see if the actor exists already
             existingPeople.TryGetValue(name, out metaData);
 
             if (metaData == null)
             {
-                // Ok, we may not have allready created but first check if sql thinks it has
-                // SQL thinks 'æ' and 'ae' are so lets double check the database
-                metaData = Dao.TitleCollectionDao.GetPersonBioDataByName(context, name);
-            }
-
-            if (metaData == null)
-            {
-                System.Diagnostics.Trace.WriteLine("Adding Bio for - " + name);
                 // if it doesn't exist create a new one
                 metaData = new BioData();
                 metaData.FullName = name;
-                context.BioDatas.InsertOnSubmit(metaData);
-                context.SubmitChanges();
 
                 // add the new metaData we added to the dictionary so we don't add it again
                 existingPeople.Add(name, metaData);
-            }
-            else
-            {
-                System.Diagnostics.Trace.WriteLine("Found Bio for - " + name + " : Fullname - " + metaData.FullName);
             }
 
             // setup the person

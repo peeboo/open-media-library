@@ -134,7 +134,7 @@ namespace AmazonMetaData2
             return GetTitle(0);
         }
 
-        public bool SearchForTVSeries(string SeriesName, string EpisodeName, int? SeriesNo, int? EpisodeNo, int maxResults, bool SearchTVShowOnly)
+        public bool SearchForTVSeries(string SeriesName, string EpisodeName, int? SeriesNo, int? EpisodeNo, int maxResults)
         {
             return false;
         }

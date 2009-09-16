@@ -475,6 +475,13 @@
     <CustomAction Id="CA_RegisterMceApp_Register" BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="check" Impersonate="no"/>
     <CustomAction Id="CA_RegisterMceApp_Rollback" BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="rollback" Return="ignore" Impersonate="no"/>
 
+    <CustomAction Id="ActivateNetTcpPortSharing"
+                  Directory="TARGETDIR"
+                  ExeCommand="sc.exe config NetTcpPortSharing start= boot"
+                  Execute="deferred"
+                  Impersonate="no"
+                  Return="ignore" />
+
     <!-- The InstallExecuteSequence table describes the order that actions will be executed during       -->
     <!-- installation, repair and uninstall of this product.                                             -->
     <InstallExecuteSequence>
@@ -482,7 +489,6 @@
         <![CDATA[NEWERVERSIONDETECTED]]>
       </Custom>
       <RemoveExistingProducts After="InstallInitialize" />
-      <!--<Custom Action="LaunchApplication" After="InstallFinalize" />-->
       <LaunchConditions After="AppSearch"/>
 
       <!-- This custom action searches for Windows version 6.0, the Windows Media Center Ident registry  -->
@@ -524,6 +530,7 @@
       <Custom Action="CA_RegisterMceApp_Register" After="CA_RegisterMceApp_Unregister_Install">
         <![CDATA[NOT REMOVE AND (&CLIENTFEATUREUI=3)]]>
       </Custom>
+      <Custom Action="ActivateNetTcpPortSharing" Before="InstallFinalize">Not Installed</Custom>
       <!--<ScheduleReboot After="InstallFinalize"/>-->
     </InstallExecuteSequence>
 
@@ -587,28 +594,6 @@
     <WixVariable Id="WixUILicenseRtf" Value="License.rtf" />
 
     <PropertyRef Id="NETFRAMEWORK35"/>
-
-    <!-- OML Custom Managed Actions -->
-    <CustomAction Id="ReserveTrailersUrlAction"
-                  BinaryKey="OMLCALib"
-                  DllEntry="ReserveTrailersUrl"
-                  Execute="deferred"
-                  Impersonate="no"
-                  Return="check" />
-
-    <CustomAction Id="StartOMLEngineServiceAction"
-                BinaryKey="OMLCALib"
-                DllEntry="StartOMLEngineService"
-                Return="ignore" />
-
-    <CustomAction Id="ActivateNetTcpPortSharing"
-                BinaryKey="OMLCALib"
-                DllEntry="ActivateNetTcpPortSharing"
-                Execute="deferred"
-                Return="check" />
-
-    <Binary Id="OMLCALib"
-            SourceFile="..\..\OMLCustomWiXAction\bin\$(var.BuildType)\OMLWiXActionsCAsPackage.dll" />
 
   </Fragment>
 </Wix>

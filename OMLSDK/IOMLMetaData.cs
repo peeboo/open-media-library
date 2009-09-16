@@ -28,8 +28,7 @@ using OMLEngine;
 // Step 13: compile and make sure you copy the plugin to the OML plugins directory.
 
 namespace OMLSDK
-{
-
+{    
     public enum MetadataPluginCapabilities : int
     {
         SupportsBackDrops = 0x0001,
@@ -65,7 +64,7 @@ namespace OMLSDK
 
 
         // TV Metadata support
-        bool SearchForTVSeries(string SeriesName, string EpisodeName, int? SeriesNo, int? EpisodeNo, int maxResults, bool SearchTVShowOnly);
+        bool SearchForTVSeries(string SeriesName, string EpisodeName, int? SeriesNo, int? EpisodeNo, int maxResults);
         bool SearchForTVDrillDown(int id, string EpisodeName, int? SeriesNo, int? EpisodeNo, int maxResults);
 
         // these methods are to be called after the 2 methods above

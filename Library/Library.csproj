@@ -112,7 +112,6 @@
     <Compile Include="Code\V3\GenreItem.cs" />
     <Compile Include="Code\V3\GenrePivot.cs" />
     <Compile Include="Code\V3\EpisodeItem.cs" />
-    <Compile Include="Code\MoviePlayerUrl.cs" />
     <Compile Include="Code\V3\Settings\AboutSettings.cs" />
     <Compile Include="Code\V3\Settings\UpdaterSettings.cs" />
     <Compile Include="Code\V3\Settings\FavoritesItemSettings.cs" />

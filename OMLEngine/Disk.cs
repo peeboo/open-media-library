@@ -103,41 +103,6 @@ namespace OMLEngine
             return VideoFormat.UNKNOWN;            
         }
 
-        public string GetDiskFolder
-        {
-            get
-            {
-                if (File.Exists(Path))
-                {
-                    // Disk if a movie file
-                    return System.IO.Path.GetDirectoryName(Path);
-                }
-                if (Directory.Exists(Path))
-                {
-                    // Disk is a movie folder (DVD etc)
-                    return Path;
-                }
-                return "";
-            }
-        }
-
-        public string GetDiskFile
-        {
-            get
-            {
-                if (File.Exists(Path))
-                {
-                    // Disk if a movie file
-                    return System.IO.Path.GetFileName(Path);
-                }
-                else
-                {
-                    // Disk is a movie folder (DVD etc)
-                    return "";
-                }
-            }
-        }
-
         #region -- DVD Members --
         [NonSerialized]
         DVDDiskInfo _dvdDiskInfo;
@@ -232,12 +197,6 @@ namespace OMLEngine
 
         public void GetObjectData(SerializationInfo info, StreamingContext ctxt)
         {
-            if (info == null)
-                throw new System.ArgumentNullException("info");
-            info.AddValue("name", this.Name);
-            info.AddValue("path", this.Path);
-            if(!string.IsNullOrEmpty(this.ExtraOptions))
-                info.AddValue("extraOptions", this.ExtraOptions);
         }
 
         public Disk(SerializationInfo info, StreamingContext ctxt)

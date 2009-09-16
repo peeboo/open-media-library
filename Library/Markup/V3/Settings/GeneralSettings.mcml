@@ -205,7 +205,7 @@
     <Locals>
       <Inset Name="Margins43" Inset="20,34,5,0"/>
       <Inset Name="Margins169" Inset="176,34,205,0"/>
-      <Inset Name="ContentMargins43" Inset="45,85,25,0"/>
+      <Inset Name="ContentMargins43" Inset="55,85,25,0"/>
       <Inset Name="ContentMargins169" Inset="205,85,205,0"/>
       <Environment Name="Environment" />
     </Locals>

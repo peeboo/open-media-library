@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Config>
   <!-- Primary Beta OML Version -->
-  <Beta url="http://open-media-library.googlecode.com/files/omlsetup-0.21b-x64-01122009.msi" version="4.1.0.1795" type="Full"/>
+  <Beta url="http://open-media-library.googlecode.com/files/omlsetup-0.21b-x64-01122009.msi" version="2.1.1.1" type="Full"/>
   <!-- Primary Official OML Version -->
   <Release url="http://open-media-library.googlecode.com/files/omlsetupx86.msi" version="1.0.0.0" type="Full"/>
   <!-- Generic libs used by multiple apps -->

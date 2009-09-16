@@ -209,7 +209,7 @@ namespace OMLDatabaseEditor
                     return false;
 
                 case OMLEngine.DatabaseManagement.DatabaseInformation.SQLState.OMLDBVersionNotFound:
-                    return false;
+                    return true;
 
                 case OMLEngine.DatabaseManagement.DatabaseInformation.SQLState.LoginFailure:
                     if (XtraMessageBox.Show("This could be caused by the OML Server computer being unavailable. Do you want to specify the server used?", "Problem accessing database!", MessageBoxButtons.YesNo) == DialogResult.Yes)
@@ -262,7 +262,7 @@ namespace OMLDatabaseEditor
                 miMetadataMulti.DropDownItems.Add(metadataItem);*/
             }
 
-            if (String.IsNullOrEmpty(OMLEngine.Settings.OMLSettings.DefaultMetadataPluginMovies))
+            if (String.IsNullOrEmpty(OMLEngine.Settings.OMLSettings.DefaultMetadataPlugin))
                 fromPreferredSourcesToolStripMenuItem1.Visible = false;
         }
 
@@ -356,7 +356,7 @@ namespace OMLDatabaseEditor
                             foreach (OMLMetadataOption option in provider.PluginDLL.GetOptions())
                             {
                                 string setting = OMLEngine.Settings.SettingsManager.GetSettingByName(option.Name, "PLG-" + provider.DataProviderName);
-                                if (setting != null)
+                                if (!string.IsNullOrEmpty(setting))
                                 {
                                     provider.PluginDLL.SetOptionValue(option.Name, setting);
                                 }
@@ -626,12 +626,8 @@ namespace OMLDatabaseEditor
                         LoadMetadataPlugins(PluginTypes.MetadataPlugin, _metadataPlugins);
                         MetaDataPluginSelect selectPlugin = new MetaDataPluginSelect(_metadataPlugins);
                         selectPlugin.ShowDialog();
-                        MetaDataPluginDescriptor plugin = null;
-
-                        if (selectPlugin.SelectedPlugin(out plugin))
-                        {
-                            StartMetadataImport(editedTitle, plugin, false);
-                        }
+                        MetaDataPluginDescriptor plugin = selectPlugin.SelectedPlugin();
+                        StartMetadataImport(plugin, false);
                     }
                     else
                     {
@@ -701,29 +697,27 @@ namespace OMLDatabaseEditor
 
 
         #region MetaData Import
-        private bool StartMetadataImport(Title title, MetaDataPluginDescriptor plugin, bool coverArtOnly)
+        private bool StartMetadataImport(MetaDataPluginDescriptor plugin, bool coverArtOnly)
         {
             int? SeasonNo = null;
             int? EpisodeNo = null;
 
-            if (((title.TitleType & TitleTypes.Episode) != 0) ||
-            ((title.TitleType & TitleTypes.Season) != 0) ||
-            ((title.TitleType & TitleTypes.TVShow) != 0))
+            if ((titleEditor.EditedTitle.TitleType & TitleTypes.Episode) != 0)
             {
                 // TV Search
-                if (title.SeasonNumber != null) SeasonNo = title.SeasonNumber.Value;
-                if (title.EpisodeNumber != null) EpisodeNo = title.EpisodeNumber.Value;
+                if (titleEditor.EditedTitle.SeasonNumber != null) SeasonNo = titleEditor.EditedTitle.SeasonNumber.Value;
+                if (titleEditor.EditedTitle.EpisodeNumber != null) EpisodeNo = titleEditor.EditedTitle.EpisodeNumber.Value;
                 string Showname = null;
 
+                Title t = titleEditor.EditedTitle;
                 // Try to find show name be looking up the folder structure.
-                Title parenttitle = title;
-                while ((title.TitleType & TitleTypes.Root) == 0)
+                while ((t.TitleType & TitleTypes.Root) == 0)
                 {
                     // Get parent
-                    parenttitle = parenttitle.ParentTitle;
-                    if ((parenttitle.TitleType & TitleTypes.TVShow) != 0)
+                    t = t.ParentTitle;
+                    if ((t.TitleType & TitleTypes.TVShow) != 0)
                     {
-                        Showname = parenttitle.Name;
+                        Showname = t.Name;
                         break;
                     }
                 }
@@ -731,30 +725,30 @@ namespace OMLDatabaseEditor
                 if (string.IsNullOrEmpty(Showname))
                 {
                     // Cannot find a show name in the folder structure
-                    return StartMetadataImport(title, plugin, coverArtOnly, title.Name, "", SeasonNo, EpisodeNo);
+                    return StartMetadataImport(plugin, coverArtOnly, titleEditor.EditedTitle.Name, "", SeasonNo, EpisodeNo);
                 }
                 else
                 {
-                    return StartMetadataImport(title, plugin, coverArtOnly, Showname, title.Name, SeasonNo, EpisodeNo);
+                    return StartMetadataImport(plugin, coverArtOnly, Showname, titleEditor.EditedTitle.Name, SeasonNo, EpisodeNo);
                 }
             }
             else
             {
                 // Movie Search
-                return StartMetadataImport(title, plugin, coverArtOnly, title.Name, "", SeasonNo, EpisodeNo);
+                return StartMetadataImport(plugin, coverArtOnly, titleEditor.EditedTitle.Name, "", SeasonNo, EpisodeNo);
             }
         }
 
-        internal bool StartMetadataImport(Title title, string pluginName, bool coverArtOnly, string titleNameSearch, string EpisodeName, int SeasonNo, int EpisodeNo)
+        internal bool StartMetadataImport(string pluginName, bool coverArtOnly, string titleNameSearch, string EpisodeName, int SeasonNo, int EpisodeNo)
         {
             foreach (MetaDataPluginDescriptor plugin in _metadataPlugins)
             {
-                if (plugin.DataProviderName == pluginName) return StartMetadataImport(title, plugin, coverArtOnly, titleNameSearch, EpisodeName, SeasonNo, EpisodeNo); 
+                if (plugin.DataProviderName == pluginName) return StartMetadataImport(plugin, coverArtOnly, titleNameSearch, EpisodeName, SeasonNo, EpisodeNo); 
             }
             return false;
         }
 
-        internal bool StartMetadataImport(Title title, MetaDataPluginDescriptor plugin, bool coverArtOnly, string titleNameSearch, string EpisodeName, int? SeasonNo, int? EpisodeNo)
+        internal bool StartMetadataImport(MetaDataPluginDescriptor plugin, bool coverArtOnly, string titleNameSearch, string EpisodeName, int ? SeasonNo, int ? EpisodeNo)
         {
             try
             {
@@ -766,50 +760,35 @@ namespace OMLDatabaseEditor
 
                         if ((plugin.DataProviderCapabilities & MetadataPluginCapabilities.SupportsTVSearch) != 0)
                         {
-                            // TV Search
-                            if (((title.TitleType & TitleTypes.Season) != 0) ||
-                                ((title.TitleType & TitleTypes.TVShow) != 0))
-                            {
-                                // Only searching for the Show / season
-                                searchResultForm = new frmSearchResult(plugin, titleNameSearch, "", 0, 0, true, true);
-                            }
-                            else
-                            {
-                                // Searching for an episode
-                                searchResultForm = new frmSearchResult(plugin, titleNameSearch, EpisodeName, SeasonNo, EpisodeNo, true, false);
-                            }
+                            searchResultForm = new frmSearchResult(plugin, titleNameSearch, EpisodeName, SeasonNo, EpisodeNo, true);
                         }
                         else
                         {
-                            searchResultForm = new frmSearchResult(plugin, titleNameSearch, EpisodeName, SeasonNo, EpisodeNo, false, false);
+                            searchResultForm = new frmSearchResult(plugin, titleNameSearch, EpisodeName, SeasonNo, EpisodeNo, false);
                         }
 
                         DialogResult result = searchResultForm.ShowDialog(); // ShowResults(plugin.GetAvailableTitles());
                         if (result == DialogResult.OK)
                         {
                             Cursor = Cursors.WaitCursor;
-                            Title searchresult = plugin.PluginDLL.GetTitle(searchResultForm.SelectedTitleIndex);
-                            title.MetadataSourceName = plugin.DataProviderName;
+                            Title t = plugin.PluginDLL.GetTitle(searchResultForm.SelectedTitleIndex);
+                            t.MetadataSourceName = plugin.DataProviderName;
 
-                            if (searchresult != null)
+                            if (t != null)
                             {
+                                LoadFanartFromPlugin(plugin, t);
+
                                 if (coverArtOnly)
                                 {
-                                    title.FrontCoverPath = searchresult.FrontCoverPath;
-                                    title.FrontCoverPath = searchresult.BackCoverPath;
+                                    titleEditor.EditedTitle.FrontCoverPath = t.FrontCoverPath;
+                                    titleEditor.EditedTitle.FrontCoverPath = t.BackCoverPath;
                                 }
                                 else
                                 {
-                                    title.CopyMetadata(searchresult,
-                                        OMLEngine.Settings.OMLSettings.MetadataLookupOverwriteExistingDataManual,
-                                        OMLEngine.Settings.OMLSettings.MetadataLookupUpdateNameManual,
-                                        OMLEngine.Settings.OMLSettings.MetadataLookupOverwriteExistingDataManual);
+                                    titleEditor.EditedTitle.CopyMetadata(t, searchResultForm.OverwriteMetadata);
                                 }
-
-                                LoadFanartFromPlugin(plugin, title);
-
                             }
-                            CheckGenresAgainstSupported(title);
+                            CheckGenresAgainstSupported(titleEditor.EditedTitle);
                             titleEditor.RefreshEditor(); 
                             Cursor = Cursors.Default;
 
@@ -820,43 +799,79 @@ namespace OMLDatabaseEditor
                     }
                     else
                     {
-                        // Preferred lookup. Offload the search to the MetadataSearchManagement class
-                        Title searchresult = null;
+                        // Import metadata based on field mappings and configured default plugin
+                        Dictionary<string, List<string>> mappings = OMLEngine.Settings.SettingsManager.MetaDataMap_PropertiesByPlugin();
+                        // Loop through configured mappings
+                        Type tTitle = typeof(Title);
+                        MetaDataPluginDescriptor metadata;
+                        Title title;
+                        bool loadedfanart = false;
 
-                        MetadataSearchManagement mds = new MetadataSearchManagement(_metadataPlugins);
-
-                        bool retval = mds.MetadataSearchUsingPreferred(title.TitleType, coverArtOnly, titleNameSearch, EpisodeName, SeasonNo, EpisodeNo, out searchresult);
-
-                        if (retval)
-                        {    
-                            // Successful lookup, process
-
-                            if (((title.TitleType & TitleTypes.Season) != 0) ||
-                                ((title.TitleType & TitleTypes.TVShow) != 0) ||
-                                ((title.TitleType & TitleTypes.Episode) != 0))
+                        foreach (KeyValuePair<string, List<string>> map in mappings)
+                        {
+                            try
                             {
-                                // Use the preferred overwrite settings for TV
-                                title.CopyMetadata(searchresult, OMLEngine.Settings.OMLSettings.MetadataLookupOverwriteExistingDataPrefTV,
-                                    OMLEngine.Settings.OMLSettings.MetadataLookupUpdateNamePrefTV,
-                                    OMLEngine.Settings.OMLSettings.MetadataLookupOverwriteExistingDataPrefTV);
+                                if (map.Key == OMLEngine.Settings.OMLSettings.DefaultMetadataPlugin) continue;
+                                metadata = _metadataPlugins.First(p => p.DataProviderName == map.Key);
+                                if ((metadata.DataProviderCapabilities & MetadataPluginCapabilities.SupportsMovieSearch) != 0)
+                                {
+                                    metadata.PluginDLL.SearchForMovie(titleNameSearch,1);
+                                    title = metadata.PluginDLL.GetBestMatch();
+                                    if (title != null)
+                                    {
+                                        Utilities.DebugLine("[OMLDatabaseEditor] Found movie " + titleNameSearch + " using plugin " + map.Key);
+                                        foreach (string property in map.Value)
+                                        {
+                                            switch (property)
+                                            {
+                                                case "FanArt":
+                                                    loadedfanart = true;
+                                                    LoadFanartFromPlugin(metadata, title);
+                                                    break;
+                                                case "Genres":
+                                                    titleEditor.EditedTitle.Genres.Clear();
+                                                    //titleEditor.EditedTitle.Genres.AddRange(title.Genres.ToArray<string>());
+                                                    foreach (string genre in title.Genres.ToArray<string>())
+                                                        titleEditor.EditedTitle.AddGenre(genre);
+                                                    break;
+                                                default:
+                                                    Utilities.DebugLine("[OMLDatabaseEditor] Using value for " + property + " from plugin " + map.Key);
+                                                    System.Reflection.PropertyInfo prop = tTitle.GetProperty(property);
+                                                    prop.SetValue(titleEditor.EditedTitle, prop.GetValue(title, null), null);
+                                                    break;
+                                            }
+                                        }
+                                    }
+                                }
                             }
-                            else
-                            { 
-                                // Use the preferred overwrite settings for Movies
-                                title.CopyMetadata(searchresult, OMLEngine.Settings.OMLSettings.MetadataLookupOverwriteExistingDataPrefMovies,
-                                    OMLEngine.Settings.OMLSettings.MetadataLookupUpdateNamePrefMovies,
-                                    OMLEngine.Settings.OMLSettings.MetadataLookupOverwriteExistingDataPrefMovies);
+                            catch (Exception ex)
+                            {
+                                Utilities.DebugLine("[OMLDatabaseEditor] Processing date from {0} Caused an Exception {1}", map.Key, ex);
+
                             }
-
-                            LoadFanart(mds.FanArt, title); 
-
-                            //CheckGenresAgainstSupported(titleEditor.EditedTitle);
-                           
-                            titleEditor.RefreshEditor();
-                            Cursor = Cursors.Default;
-
-                            return true;
                         }
+                        // Use default plugin for remaining fields
+                        metadata = _metadataPlugins.First(p => p.DataProviderName == OMLEngine.Settings.OMLSettings.DefaultMetadataPlugin);
+
+                        if ((metadata.DataProviderCapabilities & MetadataPluginCapabilities.SupportsMovieSearch) != 0)
+                        {
+                            metadata.PluginDLL.SearchForMovie(titleNameSearch,1);
+                            title = metadata.PluginDLL.GetBestMatch();
+                            title.MetadataSourceName = metadata.DataProviderName;
+
+                            if (title != null)
+                            {
+                                if (!loadedfanart) { LoadFanartFromPlugin(metadata, title); }
+
+                                Utilities.DebugLine("[OMLDatabaseEditor] Found movie " + titleNameSearch + " using default plugin " + metadata.DataProviderName);
+                                titleEditor.EditedTitle.CopyMetadata(title, false);
+                            }
+                        }
+
+                        Cursor = Cursors.Default;
+                        CheckGenresAgainstSupported(titleEditor.EditedTitle);
+                        titleEditor.RefreshEditor();
+                        return true;
                     }
                 }
                 Cursor = Cursors.Default;
@@ -871,37 +886,33 @@ namespace OMLDatabaseEditor
             }
         }
 
-
         private void LoadFanartFromPlugin(MetaDataPluginDescriptor metadata, Title title)
         {
             if ((metadata.DataProviderCapabilities & MetadataPluginCapabilities.SupportsBackDrops) != 0)
             {
-                List<string> _images = metadata.PluginDLL.GetBackDropUrlsForTitle();
-                if (_images != null)
+                List<string> images = new List<string>();
+
+                foreach (string image in metadata.PluginDLL.GetBackDropUrlsForTitle())
                 {
-                    LoadFanart(metadata.PluginDLL.GetBackDropUrlsForTitle(), title);
+                    if (!ImageManager.CheckImageOriginalNameTitleThreadSafe(titleEditor.EditedTitle.Id, image))
+                    {
+                        images.Add(image);
+                    }
                 }
-            }
-        }
 
-        private void LoadFanart(List<string> _images, Title title)
-        {
-            List<string> images = new List<string>();
-
-            foreach (string image in _images)
-            {
-                if (!ImageManager.CheckImageOriginalNameTitleThreadSafe(title.Id, image))
+                if (images.Count > 0)
                 {
-                    images.Add(image);
+                    DownloadingBackDropsForm dbdForm =
+                        new DownloadingBackDropsForm(titleEditor.EditedTitle, images);
+
+                    dbdForm.ShowDialog();
                 }
-            }
+                //metadata.PluginDLL.DownloadBackDropsForTitle(titleEditor.EditedTitle, 0);
+                //List<string> images = metadata.PluginDLL.GetBackDropUrlsForTitle();
 
-            if (images.Count > 0)
-            {
-                DownloadingBackDropsForm dbdForm =
-                    new DownloadingBackDropsForm(title, images);
 
-                dbdForm.ShowDialog();
+                //dbdForm.Hide();
+                //dbdForm.Dispose();                
             }
         }
 
@@ -1001,7 +1012,7 @@ namespace OMLDatabaseEditor
                     if (options.OptionsDirty)
                     {
                         this.titleEditor.SetMRULists();
-                        fromPreferredSourcesToolStripMenuItem1.Visible = !String.IsNullOrEmpty(OMLEngine.Settings.OMLSettings.DefaultMetadataPluginMovies);
+                        fromPreferredSourcesToolStripMenuItem1.Visible = !String.IsNullOrEmpty(OMLEngine.Settings.OMLSettings.DefaultMetadataPlugin);
                     }
                     PopulateMovieListV2(SelectedTreeRoot);
                 }
@@ -1155,7 +1166,7 @@ namespace OMLDatabaseEditor
                 TitleCollectionManager.AddTitle(newTitle);
 
                 titleEditor.LoadDVD(newTitle);*/
-                StartMetadataImport(titleEditor.EditedTitle, plugin, false);
+                StartMetadataImport(plugin, false);
                 this.Text = APP_TITLE + " - " + titleEditor.EditedTitle.Name + "*";
                 ToggleSaveState(true);
             }
@@ -1201,7 +1212,7 @@ namespace OMLDatabaseEditor
                 this.Text = APP_TITLE + " - " + title.Name;
                 ToggleSaveState(false);
 
-                if (StartMetadataImport(title, plugin, false))
+                if (StartMetadataImport(plugin, false))
                 {
                     //_titleCollection.Replace(titleEditor.EditedTitle);
                     //_titleCollection.saveTitleCollection();
@@ -1237,7 +1248,7 @@ namespace OMLDatabaseEditor
                 this.Text = APP_TITLE + " - " + title.Name;
                 ToggleSaveState(false);
 
-                if (StartMetadataImport(title, null, false))
+                if (StartMetadataImport(null, false))
                 {
                     //_titleCollection.Replace(titleEditor.EditedTitle);
                     TitleCollectionManager.SaveTitleUpdates();
@@ -1328,7 +1339,7 @@ namespace OMLDatabaseEditor
             MetaDataPluginDescriptor metadata = lbMetadata.SelectedItem as MetaDataPluginDescriptor;
             if (metadata != null)
             {
-                StartMetadataImport(titleEditor.EditedTitle, metadata, false);
+                StartMetadataImport(metadata, false);
                 lbMetadata.SelectedItem = null;
                 lbMetadata.SelectedIndex = -1;
             }
@@ -2346,9 +2357,6 @@ namespace OMLDatabaseEditor
 
                     Title title = _movieList[Convert.ToInt32(item.Text)];
                     if ((title.TitleType & TitleTypes.Episode) != 0) EpisodeSelected = true;
-                    if ((title.TitleType & TitleTypes.Season) != 0) EpisodeSelected = true;
-                    if ((title.TitleType & TitleTypes.TVShow) != 0) EpisodeSelected = true;
-
                     if ((title.TitleType & TitleTypes.Movie) != 0) MovieSelected = true;
                     if ((title.TitleType & TitleTypes.Video) != 0) MovieSelected = true;
                     if ((title.TitleType & TitleTypes.MusicVideo) != 0) MusicVideoSelected = true;
@@ -2362,8 +2370,7 @@ namespace OMLDatabaseEditor
                 cms.Items.Add(metadata);
 
                 // Preferred sources
-                if (((MovieSelected) && (!String.IsNullOrEmpty(OMLEngine.Settings.OMLSettings.DefaultMetadataPluginMovies))) ||
-                    ((EpisodeSelected) && (!String.IsNullOrEmpty(OMLEngine.Settings.OMLSettings.DefaultMetadataPluginTV))))
+                if (!String.IsNullOrEmpty(OMLEngine.Settings.OMLSettings.DefaultMetadataPlugin))
                 {
                     ToolStripMenuItem metadataItem = new ToolStripMenuItem("From Preferred Sources");
                     metadataItem.Click += new System.EventHandler(this.fromPreferredSourcesToolStripMenuItem_Click);
@@ -3604,26 +3611,7 @@ namespace OMLDatabaseEditor
 
             return newTitle.Id;
         }
-
-        private int CreateFolder(int? parentid, string Name, TitleTypes titletype, short? seriesNumber, bool RefreshUI) {
-            if (parentid == null) {
-                return CreateTitle(null, Name, titletype, null, RefreshUI);
-            } else {
-                if ((titletype & TitleTypes.Unknown) != 0) {
-                    // Title type is unknown. Attempt to find title type by looking at parent
-                    if (((_movieList[(int)parentid].TitleType & TitleTypes.TVShow) != 0) ||
-                    (((_movieList[(int)parentid].TitleType & TitleTypes.Season) != 0))) {
-                        titletype = TitleTypes.Season;
-                    }
-
-                    if ((_movieList[(int)parentid].TitleType & TitleTypes.Collection) != 0) {
-                        titletype = TitleTypes.Collection;
-                    }
-                }
-                return CreateTitle(parentid, Name, titletype, seriesNumber, null, null, RefreshUI);
-            }
-        }
-
+        
         private int CreateFolder(int? parentid, string Name, TitleTypes titletype, bool RefreshUI)
         {
             if (parentid == null)
@@ -3702,9 +3690,9 @@ namespace OMLDatabaseEditor
 
                         int? a_parent;
 
-                        if (OMLEngine.Settings.OMLSettings.StSanaCreateTLFolder)
+                        if (OMLEngine.Settings.OMLSettings.DBEStSanaCreateTLFolder)
                         {
-                            a_parent = CreateFolderNonDuplicate(parentid, Path.GetFileName(file), TitleTypes.Collection, null, false);
+                            a_parent = CreateFolderNonDuplicate(parentid, Path.GetFileName(file), TitleTypes.Collection, false);
                         }
                         else
                         {
@@ -3722,17 +3710,10 @@ namespace OMLDatabaseEditor
                                     {
                                         case Serf.EntityType.COLLECTION:
                                         case Serf.EntityType.MOVIE:
-                                            if ((e.Series.Count() > 1) || (OMLEngine.Settings.OMLSettings.StSanaAlwaysCreateMovieFolder))
-                                            {
-                                                e_parent = CreateFolderNonDuplicate(a_parent, e.Name, TitleTypes.Collection, null, false);
-                                            }
-                                            else
-                                            {
-                                                e_parent = a_parent;
-                                            }
+                                            e_parent = CreateFolderNonDuplicate(a_parent, e.Name, TitleTypes.Collection, false);
                                             break;
                                         case Serf.EntityType.TV_SHOW:
-                                            e_parent = CreateFolderNonDuplicate(a_parent, e.Name, TitleTypes.TVShow, null, false);
+                                            e_parent = CreateFolderNonDuplicate(a_parent, e.Name, TitleTypes.TVShow, false);
                                             break;
                                     }
                                 }
@@ -3751,17 +3732,10 @@ namespace OMLDatabaseEditor
                                             {
                                                 case Serf.EntityType.COLLECTION:
                                                 case Serf.EntityType.MOVIE:
-                                                    if ((e_parent == a_parent) || (OMLEngine.Settings.OMLSettings.StSanaAlwaysCreateMovieFolder))
-                                                    {
-                                                        s_parent = CreateFolderNonDuplicate(e_parent, s.Name, TitleTypes.Collection, null, false);
-                                                    }
-                                                    else
-                                                    {
-                                                        s_parent = e_parent;
-                                                    }
+                                                    s_parent = CreateFolderNonDuplicate(e_parent, s.Name, TitleTypes.Collection, false);
                                                     break;
                                                 case Serf.EntityType.TV_SHOW:
-                                                    s_parent = CreateFolderNonDuplicate(e_parent, s.Name, TitleTypes.Season, (short)s.Number, false);
+                                                    s_parent = CreateFolderNonDuplicate(e_parent, s.Name, TitleTypes.Season, false);
                                                     break;
                                             }
                                         }
@@ -3784,14 +3758,21 @@ namespace OMLDatabaseEditor
                                             // Collection or movie mode. Create one title per folder with multiple disks
                                             foreach (string f in v.Files)
                                             {
+                                                string pathWithNoFile = Path.GetDirectoryName(f);
+                                                string pathWithNoExtension = Path.GetDirectoryName(f) + "\\" + Path.GetFileNameWithoutExtension(f);
+                                                string fileExtension = Path.GetExtension(f).ToUpper().Replace(".", "");
+
+                                                fileExtension = fileExtension.Replace("-", "");
+
                                                 if (!TitleCollectionManager.ContainsDisks(OMLEngine.FileSystem.NetworkScanner.FixPath(f)))
                                                 {
-                                                    Disk disk = new Disk();
-                                                    disk.Path = f;
-                                                    disk.Format = disk.GetFormatFromPath(f); // (VideoFormat)Enum.Parse(typeof(VideoFormat), fileExtension.ToUpperInvariant());
-                                                    disk.Name = string.Format("Disk {0}", 0);
-                                                    if (disk.Format != VideoFormat.UNKNOWN)
+                                                    if (Enum.IsDefined(typeof(VideoFormat), fileExtension.ToUpperInvariant()))
                                                     {
+                                                        Disk disk = new Disk();
+                                                        disk.Path = f;
+                                                        disk.Format = (VideoFormat)Enum.Parse(typeof(VideoFormat), fileExtension.ToUpperInvariant());
+                                                        disk.Name = string.Format("Disk {0}", 0);
+
                                                         disks.Add(disk);
                                                     }
                                                 }
@@ -3804,11 +3785,7 @@ namespace OMLDatabaseEditor
                                                     disks.ToArray(),
                                                     false);
 
-                                                // Reload title from db, lookup metadata and find images
-                                                Title newTitle = TitleCollectionManager.GetTitle(newTitleID);
-                                                LookupPreferredMetaData(newTitle);
-                                                CheckDiskPathForImages(newTitle, disks[0]);
-                                                TitleCollectionManager.SaveTitleUpdates();
+                                                CheckPathForImages(newTitleID, disks[0].Path);
                                             }
                                         }
                                         else
@@ -3816,14 +3793,21 @@ namespace OMLDatabaseEditor
                                             // TV mode. Create one title per file, each with single disks
                                             foreach (string f in v.Files)
                                             {
+                                                string pathWithNoFile = Path.GetDirectoryName(f);
+                                                string pathWithNoExtension = Path.GetDirectoryName(f) + "\\" + Path.GetFileNameWithoutExtension(f);
+                                                string fileExtension = Path.GetExtension(f).ToUpper().Replace(".", "");
+
+                                                fileExtension = fileExtension.Replace("-", "");
+
                                                 if (!TitleCollectionManager.ContainsDisks(OMLEngine.FileSystem.NetworkScanner.FixPath(f)))
                                                 {
-                                                    Disk disk = new Disk();
-                                                    disk.Path = f;
-                                                    disk.Format = disk.GetFormatFromPath(f); //(VideoFormat)Enum.Parse(typeof(VideoFormat), fileExtension.ToUpperInvariant());
-                                                    disk.Name = string.Format("Disk {0}", 0);
-                                                    if (disk.Format != VideoFormat.UNKNOWN)
+                                                    if (Enum.IsDefined(typeof(VideoFormat), fileExtension.ToUpperInvariant()))
                                                     {
+                                                        Disk disk = new Disk();
+                                                        disk.Path = f;
+                                                        disk.Format = (VideoFormat)Enum.Parse(typeof(VideoFormat), fileExtension.ToUpperInvariant());
+                                                        disk.Name = string.Format("Disk {0}", 0);
+
                                                         disks.Add(disk);
                                                     }
                                                 }
@@ -3840,12 +3824,7 @@ namespace OMLDatabaseEditor
                                                         disks.ToArray(),
                                                         false);
 
-                                                    // Reload title from db, lookup metadata and find images
-                                                    Title newTitle = TitleCollectionManager.GetTitle(newTitleID);
-                                                    LookupPreferredMetaData(newTitle);
-                                                    CheckDiskPathForImages(newTitle, disks[0]);
-                                                    TitleCollectionManager.SaveTitleUpdates();
-
+                                                    CheckPathForImages(newTitleID, disks[0].Path);
                                                 }
                                             }
                                         }
@@ -3861,24 +3840,21 @@ namespace OMLDatabaseEditor
                         string extension = Path.GetExtension(file).ToUpper().Replace(".", "");
                         extension = extension.Replace("-", "");
 
-                        Disk disk = new Disk();
-                        disk.Path = file;
-                        disk.Format = disk.GetFormatFromPath(file); // (VideoFormat)Enum.Parse(typeof(VideoFormat), extension.ToUpperInvariant());
-                        disk.Name = string.Format("Disk {0}", 0);
-
-                        if (disk.Format != VideoFormat.UNKNOWN)
+                        if (Enum.IsDefined(typeof(VideoFormat), extension.ToUpperInvariant()))
                         {
+                            Disk disk = new Disk();
+                            disk.Path = file;
+                            disk.Format = (VideoFormat)Enum.Parse(typeof(VideoFormat), extension.ToUpperInvariant());
+                            disk.Name = string.Format("Disk {0}", 0);
+
+                            //List<
                             int newTitleID = CreateTitle(parentid,
                                 Path.GetFileNameWithoutExtension(file),
                                 TitleTypes.Unknown,
                                 new Disk[1] { disk },
                                 false);
-                            
-                            // Reload title from db, lookup metadata and find images
-                            Title newTitle = TitleCollectionManager.GetTitle(newTitleID);
-                            LookupPreferredMetaData(newTitle);
-                            CheckDiskPathForImages(newTitle, disk);
-                            TitleCollectionManager.SaveTitleUpdates();
+
+                            CheckPathForImages(newTitleID, file);
                         }
                     }
                 }
@@ -3900,109 +3876,45 @@ namespace OMLDatabaseEditor
             StSanaEvents.UpdateStatus(message);
         }
 
-        private void CheckDiskPathForImages(Title title, Disk disk)
+        private void CheckPathForImages(int TitleID, string path)
         {
-            if ((disk == null) || (string.IsNullOrEmpty(disk.Path))) return;
+            if ((TitleID == null) || (string.IsNullOrEmpty(path))) return;
 
-            string diskFolder = disk.GetDiskFolder;
-            string diskPathWithExtension = null;
-            string diskPathWithoutExtension = null;
-
-            if (!string.IsNullOrEmpty(disk.GetDiskFile))
-            {
-                diskPathWithExtension = disk.Path;
-                diskPathWithoutExtension = disk.GetDiskFolder + "\\" + Path.GetFileNameWithoutExtension(disk.GetDiskFile);
-            }
+            string pathWithNoFile = Path.GetDirectoryName(path);
+            string pathWithNoExtension = Path.GetDirectoryName(path) + "\\" + Path.GetFileNameWithoutExtension(path);
+            //string fileExtension = Path.GetExtension(path).ToUpper().Replace(".", "");
 
             string image = null;
-
-            // If the Disk is a media file, look for an image in the disk 
-            // folder with the same name as the media file.
-            if (!string.IsNullOrEmpty(diskPathWithExtension))
+            if (File.Exists(pathWithNoExtension + ".jpg"))
             {
-                if (File.Exists(diskPathWithExtension + ".jpg"))
-                {
-                    image = diskPathWithExtension + ".jpg";
-                }
-                else if (File.Exists(diskPathWithExtension + ".png"))
-                {
-                    image = diskPathWithExtension + ".png";
-                }
-                else if (File.Exists(diskPathWithoutExtension + ".jpg"))
-                {
-                    image = diskPathWithoutExtension + ".jpg";
-                }
-                else if (File.Exists(diskPathWithoutExtension + ".png"))
-                {
-                    image = diskPathWithoutExtension + ".png";
-                }
+                image = pathWithNoExtension + ".jpg";
             }
-
-            // Look for a generic folder.xxx image
-            if (string.IsNullOrEmpty(image))
+            else if (File.Exists(pathWithNoExtension + ".png"))
             {
-                if (File.Exists(Path.Combine(diskFolder, "folder.jpg")))
-                {
-                    image = Path.Combine(diskFolder, "folder.jpg");
-                }
-                else if (File.Exists(Path.Combine(diskFolder, "folder.png")))
-                {
-                    image = Path.Combine(diskFolder, "folder.png");
-                }
-            } 
-            
-            // Look for any jpg image
-            if (string.IsNullOrEmpty(image))
-            {
-                string[] imagefiles = Directory.GetFiles(diskFolder, "*.jpg");
-                if (imagefiles.Count() > 0)
-                {
-                    image = imagefiles[0];
-                }
+                image = pathWithNoExtension + ".png";
             }
-
-            // Look for any jpg image
-            if (string.IsNullOrEmpty(image))
+            else if (File.Exists(path + ".jpg"))
             {
-                string[] imagefiles = Directory.GetFiles(diskFolder, "*.png");
-                if (imagefiles.Count() > 0)
-                {
-                    image = imagefiles[0];
-                }
+                image = path + ".jpg";
             }
-
+            else if (File.Exists(path + ".png"))
+            {
+                image = path = ".png";
+            }
+            else if (File.Exists(Path.Combine(pathWithNoFile, "folder.jpg")))
+            {
+                image = Path.Combine(pathWithNoFile, "\\folder.jpg");
+            }
+            else if (File.Exists(Path.Combine(pathWithNoFile, "folder.png")))
+            {
+                image = Path.Combine(pathWithNoFile, "\\folder.png");
+            }
 
             if (!string.IsNullOrEmpty(image))
             {
-                title.FrontCoverPath = image;
-            }
-
-            // Check for fanart
-            string fanartfolder = Path.Combine(diskFolder, "Fanart");
-            if (Directory.Exists(fanartfolder))
-            {
-                foreach (string imagefile in Directory.GetFiles(fanartfolder))
-                {
-                    string extension = Path.GetExtension(imagefile);
-                    if (!string.IsNullOrEmpty(extension))
-                    {
-                        if ((string.Compare(extension, ".jpg", true) == 0) ||
-                            (string.Compare(extension, ".png", true) == 0) ||
-                            (string.Compare(extension, ".bmp", true) == 0))
-                        {
-                            title.AddFanArtImage(imagefile);
-                        }
-                    }
-                }
-            }
-        }
-
-        private void LookupPreferredMetaData(Title title)
-        {
-            if (OMLEngine.Settings.OMLSettings.StSanaAutoLookupMeta)
-            {
-                if ((title == null) || (string.IsNullOrEmpty(OMLEngine.Settings.OMLSettings.DefaultMetadataPluginMovies))) return;
-                StartMetadataImport(title, null, false);
+                Title newTitle = TitleCollectionManager.GetTitle(TitleID);
+                newTitle.FrontCoverPath = image;
+                TitleCollectionManager.SaveTitleUpdates();
             }
         }
 
@@ -4014,7 +3926,7 @@ namespace OMLDatabaseEditor
         /// <param name="Name"></param>
         /// <param name="titletype"></param>
         /// <param name="RefreshUI"></param>
-        private int CreateFolderNonDuplicate(int? parentid, string Name, TitleTypes titletype, short? seriesNumber, bool RefreshUI)
+        private int CreateFolderNonDuplicate(int? parentid, string Name, TitleTypes titletype, bool RefreshUI)
         {
             int titleid;
 
@@ -4024,19 +3936,14 @@ namespace OMLDatabaseEditor
             List<TitleFilter> tf = new List<TitleFilter>();
             tf.Add(tf1);
             tf.Add(tf2);
-            List<Title> existingTitle = (from t in TitleCollectionManager.GetFilteredTitles(tf)
-                                         where t.Name == Name
-                                         select t).ToList();
-
-
-
-            if (existingTitle.Count() > 0)
+            List<Title> existingTitle = TitleCollectionManager.GetFilteredTitles(tf).ToList();
+            if (existingTitle.Count > 0)
             {
                 titleid = existingTitle[0].Id;
             }
             else
             {
-                titleid = CreateFolder(parentid, Name, titletype, seriesNumber, RefreshUI);
+                titleid = CreateFolder(parentid, Name, titletype, RefreshUI);
             }
             return titleid;
         }

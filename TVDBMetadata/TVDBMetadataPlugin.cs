@@ -9,6 +9,7 @@ using System.Xml;
 using System.Globalization;
 using System.Linq;
 
+
 namespace TVDBMetadata
 {
     public class TheTVDBDbResult
@@ -27,32 +28,13 @@ namespace TVDBMetadata
         }
     }
 
-    public class TheTVDBSeries {
-        public int Id { get; set; }
-        public string ContentRating { get; set; }
-        public string Genre { get; set; }
-        public string IMDBId { get; set; }
-        public string network { get; set; }
-        public int Runtime { get; set; }
-        public int SeriesId { get; set; }
-        public string SeriesName { get; set; }
-        public string BannerUrl { get; set; }
-        public string FanartUrl { get; set; }
-        public string PosterUrl { get; set; }
-        public string Zap2ItId { get; set; }
-    }
-
-    public class TheTVDBSeason {
-    }
 
     public class TVDBMetadataPlugin : IOMLMetadataPlugin
     {
         private const string DEFAULT_API_KEY = "FC18699D6C4514F7";
         private string API_KEY;
-        private const string API_KEY_HIDDEN_TEXT = "[Enter your API key here to override the OML key]";
 
-        private bool FanartEnabled = false;
-        private List<string> BackDrops = null;
+        public List<string> BackDrops = null;
 
         List<string> xmlmirrors;
         List<string> bannermirrors;
@@ -146,11 +128,11 @@ namespace TVDBMetadata
         {
             List<OMLMetadataOption> options = new List<OMLMetadataOption>();
 
-            // API Key option
             OMLMetadataOption apikey = null;
+
             if (API_KEY == DEFAULT_API_KEY)
             {
-                apikey = new OMLMetadataOption("API Key", API_KEY_HIDDEN_TEXT, null, false);
+                apikey = new OMLMetadataOption("API Key", "[Enter your API key here to override the OML key]", null, false);
             }
             else
             {
@@ -158,22 +140,6 @@ namespace TVDBMetadata
             }
 
             options.Add(apikey);
-            
-            // Fan Art enabled option
-            Dictionary<string,string> YesNo = new Dictionary<string,string>();
-            YesNo["Yes"] = "Yes";
-            YesNo["No"] = "No";
-            OMLMetadataOption fanart = null;
-            if (FanartEnabled)
-            {
-                 fanart = new OMLMetadataOption("Fanart Enabled", "Yes", YesNo, true);
-            }
-            else
-            {
-                fanart = new OMLMetadataOption("Fanart Enabled", "No", YesNo, true);
-            }
-            options.Add(fanart);
-
 
             return options;
         }
@@ -182,26 +148,13 @@ namespace TVDBMetadata
         {
             if (string.Compare(option, "API Key", true) == 0)
             {
-                API_KEY = DEFAULT_API_KEY;
-
-                if (!string.IsNullOrEmpty(value))
+                if (string.IsNullOrEmpty(value))
                 {
-                    if (value != API_KEY_HIDDEN_TEXT)
-                    {
-                        API_KEY = value;
-                    }
+                    API_KEY = DEFAULT_API_KEY;
                 }
-            }
-
-            if (string.Compare(option, "Fanart Enabled", true) == 0)
-            {
-                FanartEnabled = false;
-                if (!string.IsNullOrEmpty(value))
+                else
                 {
-                    if (string.Compare(value, "yes", true) == 0)
-                    {
-                        FanartEnabled = true;
-                    }
+                    API_KEY = value;
                 }
             }
             return true;
@@ -276,14 +229,7 @@ namespace TVDBMetadata
 
         public List<string> GetBackDropUrlsForTitle()
         {
-            if (FanartEnabled)
-            {
-                return BackDrops;
-            }
-            else
-            {
-                return null;
-            }
+            return BackDrops;
         }
 
 
@@ -302,7 +248,7 @@ namespace TVDBMetadata
         /// <param name="SeriesNo"></param>
         /// <param name="EpisodeNo"></param>
         /// <returns>Boolean to indicate a drill down is required</returns>
-        public bool SearchForTVSeries(string SeriesName, string EpisodeName, int? SeasonNo, int? EpisodeNo, int maxResults, bool SearchTVShowOnly)
+        public bool SearchForTVSeries(string SeriesName, string EpisodeName, int? SeasonNo, int? EpisodeNo, int maxResults)
         {
             // Store the search criteria for later
             /*SeriesName = pSeriesName;
@@ -324,93 +270,24 @@ namespace TVDBMetadata
 
             if (results.Count <= 0) return false;
 
-            if (SearchTVShowOnly)
+            if (results.Count > 1)
             {
-                // Only searching for the show
+                // Found more than one possible show. Present the list to the user
+                // but first load up all the titles with images
                 foreach (TheTVDBDbResult title in results)
                 {
                     title.Title.FrontCoverPath = "http://images.thetvdb.com/banners/" + title.ImageUrl;
                     //DownloadImage(title.Title, "http://images.thetvdb.com/banners/" + title.ImageUrl);
                 }
-                return false;
+                return true;
             }
             else
             {
-                if (results.Count > 1)
-                {
-                    // Found more than one possible show. Present the list to the user
-                    // but first load up all the titles with images
-                    foreach (TheTVDBDbResult title in results)
-                    {
-                        title.Title.FrontCoverPath = "http://images.thetvdb.com/banners/" + title.ImageUrl;
-                        //DownloadImage(title.Title, "http://images.thetvdb.com/banners/" + title.ImageUrl);
-                    }
-                    return true;
-                }
-                else
-                {
-                    // We have a single match on the series. Try to load the episodes
-                    SeriesID = results[0].Id;
-                    SearchForEpisode(EpisodeName, SeasonNo, EpisodeNo, maxResults);
-                    return false;
-                }
+                // We have a single match on the series. Try to load the episodes
+                SeriesID = results[0].Id;
+                SearchForEpisode(EpisodeName, SeasonNo, EpisodeNo, maxResults);
+                return false;
             }
-        }
-
-        private TheTVDBSeries GetFullSeriesData(int seriesId) {
-            //http://www.thetvdb.com/api/FC18699D6C4514F7/series/79488/all/en.zip
-            UriBuilder builder = new UriBuilder(string.Format("http://www.thetvdb.com/api/{0}/series/{1}/", API_KEY, seriesId));
-
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(builder.Uri);
-
-            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse()) {
-                using (Stream resStream = response.GetResponseStream()) {
-                    XmlDocument xDoc = new XmlDocument();
-                    xDoc.Load(resStream);
-
-                    XmlNodeList seriesNodes = xDoc.SelectNodes("//Data/Series");
-                    foreach (XmlNode seriesNode in seriesNodes) {
-                        XmlNode idNode = seriesNode.SelectSingleNode("id");
-                        if (seriesId == Int32.Parse(idNode.ChildNodes[0].Value)) {
-                            TheTVDBSeries series = new TheTVDBSeries();
-                            series.Id = seriesId;
-
-                            XmlNode contentRatingNode = seriesNode.SelectSingleNode("ContentRating");
-                            series.ContentRating = contentRatingNode.ChildNodes[0].Value;
-
-                            XmlNode genreNode = seriesNode.SelectSingleNode("Genre");
-                            series.Genre = genreNode.ChildNodes[0].Value;
-
-                            XmlNode imdbidNode = seriesNode.SelectSingleNode("IMDB_ID");
-                            series.IMDBId = imdbidNode.ChildNodes[0].Value;
-
-                            XmlNode networkNode = seriesNode.SelectSingleNode("Network");
-                            series.network = networkNode.ChildNodes[0].Value;
-
-                            XmlNode runtimeNode = seriesNode.SelectSingleNode("Runtime");
-                            series.Runtime = Int16.Parse(runtimeNode.ChildNodes[0].Value);
-
-                            XmlNode seriesNameNode = seriesNode.SelectSingleNode("SeriesName");
-                            series.SeriesName = seriesNameNode.ChildNodes[0].Value;
-
-                            XmlNode bannerNode = seriesNode.SelectSingleNode("banner");
-                            series.BannerUrl = "http://images.thetvdb.com/banners/" + bannerNode.ChildNodes[0].Value;
-
-                            XmlNode fanartNode = seriesNode.SelectSingleNode("fanart");
-                            series.FanartUrl = "http://images.thetvdb.com/banners/" + fanartNode.ChildNodes[0].Value;
-
-                            XmlNode posterNode = seriesNode.SelectSingleNode("poster");
-                            series.PosterUrl = posterNode.ChildNodes[0].Value;
-
-                            XmlNode zap2itNode = seriesNode.SelectSingleNode("zap2it_id");
-                            series.Zap2ItId = zap2itNode.ChildNodes[0].Value;
-
-                            return series;
-                        }
-                    }
-                }
-            }
-            return null;
         }
 
         public bool SearchForTVDrillDown(int id, string EpisodeName, int? SeasonNo, int? EpisodeNo, int maxResults)
@@ -478,9 +355,7 @@ namespace TVDBMetadata
                                                 result.Title.Name = GetElementValue(reader);
                                                 break;
                                             case "banner":
-                                                TheTVDBSeries seriesObj = GetFullSeriesData(result.Id);
-                                                if (seriesObj != null)
-                                                    result.ImageUrl = seriesObj.PosterUrl;
+                                                result.ImageUrl = GetElementValue(reader);
                                                 break;
                                             case "overview":
                                                 result.Title.Synopsis = GetElementValue(reader);
@@ -526,15 +401,6 @@ namespace TVDBMetadata
         private void SearchForEpisode(string EpisodeName, int? SeasonNo, int? EpisodeNo, int maxResults)
         {
             UriBuilder uri = new UriBuilder("http://thetvdb.com/api/" + API_KEY + "/series/" + SeriesID.ToString() + "/all/");
-            
-            if (BackDrops == null)
-            {
-                BackDrops = new List<string>();
-            }
-            else
-            {
-                BackDrops.Clear();
-            }
 
             string actors = "";
             string genres = "";
@@ -585,9 +451,11 @@ namespace TVDBMetadata
                                                 //runtime = int.Parse(GetElementValue(reader));
                                                 break;
                                             case "fanart":
+                                                if (BackDrops == null) BackDrops = new List<string>();
                                                 BackDrops.Add("http://images.thetvdb.com/banners/" + GetElementValue(reader));
                                                 break;
                                             case "poster":
+                                                if (BackDrops == null) BackDrops = new List<string>();
                                                 BackDrops.Add("http://images.thetvdb.com/banners/" + GetElementValue(reader));
                                                 break;
                                             case "contentrating":

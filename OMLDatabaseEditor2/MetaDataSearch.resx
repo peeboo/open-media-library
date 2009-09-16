@@ -234,7 +234,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;grdTitles.ZOrder" xml:space="preserve">
-    <value>14</value>
+    <value>11</value>
   </data>
   <data name="btnSelectMovie.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Bottom</value>
@@ -261,7 +261,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;btnSelectMovie.ZOrder" xml:space="preserve">
-    <value>13</value>
+    <value>10</value>
   </data>
   <data name="btnCancel.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Bottom</value>
@@ -288,7 +288,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;btnCancel.ZOrder" xml:space="preserve">
-    <value>12</value>
+    <value>9</value>
   </data>
   <data name="chkUpdateMissingDataOnly.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Bottom</value>
@@ -297,7 +297,7 @@
     <value>True</value>
   </data>
   <data name="chkUpdateMissingDataOnly.Location" type="System.Drawing.Point, System.Drawing">
-    <value>335, 531</value>
+    <value>335, 533</value>
   </data>
   <data name="chkUpdateMissingDataOnly.Size" type="System.Drawing.Size, System.Drawing">
     <value>149, 17</value>
@@ -318,7 +318,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;chkUpdateMissingDataOnly.ZOrder" xml:space="preserve">
-    <value>11</value>
+    <value>8</value>
   </data>
   <data name="reSearchAdjustTitleLabel.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -348,13 +348,13 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;reSearchAdjustTitleLabel.ZOrder" xml:space="preserve">
-    <value>8</value>
+    <value>5</value>
   </data>
   <data name="reSearchSubmitButton.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
   <data name="reSearchSubmitButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>743, 3</value>
+    <value>735, 3</value>
   </data>
   <data name="reSearchSubmitButton.Size" type="System.Drawing.Size, System.Drawing">
     <value>75, 23</value>
@@ -375,7 +375,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;reSearchSubmitButton.ZOrder" xml:space="preserve">
-    <value>9</value>
+    <value>6</value>
   </data>
   <data name="reSearchTitle.AccessibleName" xml:space="preserve">
     <value />
@@ -399,7 +399,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;reSearchTitle.ZOrder" xml:space="preserve">
-    <value>10</value>
+    <value>7</value>
   </data>
   <data name="lcProviderMessage.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Bottom, Left</value>
@@ -430,13 +430,13 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;lcProviderMessage.ZOrder" xml:space="preserve">
-    <value>7</value>
+    <value>4</value>
   </data>
   <data name="teEpisodeName.AccessibleName" xml:space="preserve">
     <value />
   </data>
   <data name="teEpisodeName.Location" type="System.Drawing.Point, System.Drawing">
-    <value>407, 4</value>
+    <value>502, 4</value>
   </data>
   <data name="teEpisodeName.Size" type="System.Drawing.Size, System.Drawing">
     <value>85, 20</value>
@@ -454,13 +454,13 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;teEpisodeName.ZOrder" xml:space="preserve">
-    <value>6</value>
+    <value>3</value>
   </data>
   <data name="seSeasonNo.EditValue" type="System.Decimal, mscorlib">
     <value>0</value>
   </data>
   <data name="seSeasonNo.Location" type="System.Drawing.Point, System.Drawing">
-    <value>566, 4</value>
+    <value>593, 4</value>
   </data>
   <data name="seSeasonNo.Properties.Mask.EditMask" xml:space="preserve">
     <value>N00</value>
@@ -481,13 +481,13 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;seSeasonNo.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>2</value>
   </data>
   <data name="seEpisodeNo.EditValue" type="System.Decimal, mscorlib">
     <value>0</value>
   </data>
   <data name="seEpisodeNo.Location" type="System.Drawing.Point, System.Drawing">
-    <value>681, 4</value>
+    <value>639, 4</value>
   </data>
   <data name="seEpisodeNo.Properties.Mask.EditMask" xml:space="preserve">
     <value>N00</value>
@@ -508,19 +508,19 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;seEpisodeNo.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>1</value>
   </data>
   <data name="lcEpisodeLabel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>327, 8</value>
+    <value>329, 8</value>
   </data>
   <data name="lcEpisodeLabel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>74, 13</value>
+    <value>162, 13</value>
   </data>
   <data name="lcEpisodeLabel.TabIndex" type="System.Int32, mscorlib">
     <value>14</value>
   </data>
   <data name="lcEpisodeLabel.Text" xml:space="preserve">
-    <value>Episode Name :</value>
+    <value>Episode Name/Season/episode no</value>
   </data>
   <data name="&gt;&gt;lcEpisodeLabel.Name" xml:space="preserve">
     <value>lcEpisodeLabel</value>
@@ -532,87 +532,6 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;lcEpisodeLabel.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="lcSeasonNoLabel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>503, 7</value>
-  </data>
-  <data name="lcSeasonNoLabel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>57, 13</value>
-  </data>
-  <data name="lcSeasonNoLabel.TabIndex" type="System.Int32, mscorlib">
-    <value>15</value>
-  </data>
-  <data name="lcSeasonNoLabel.Text" xml:space="preserve">
-    <value>Season no :</value>
-  </data>
-  <data name="&gt;&gt;lcSeasonNoLabel.Name" xml:space="preserve">
-    <value>lcSeasonNoLabel</value>
-  </data>
-  <data name="&gt;&gt;lcSeasonNoLabel.Type" xml:space="preserve">
-    <value>DevExpress.XtraEditors.LabelControl, DevExpress.XtraEditors.v8.2, Version=8.2.6.0, Culture=neutral, PublicKeyToken=9b171c9fd64da1d1</value>
-  </data>
-  <data name="&gt;&gt;lcSeasonNoLabel.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;lcSeasonNoLabel.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="lcEpisodeNoLabel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>616, 8</value>
-  </data>
-  <data name="lcEpisodeNoLabel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>59, 13</value>
-  </data>
-  <data name="lcEpisodeNoLabel.TabIndex" type="System.Int32, mscorlib">
-    <value>16</value>
-  </data>
-  <data name="lcEpisodeNoLabel.Text" xml:space="preserve">
-    <value>Episode no :</value>
-  </data>
-  <data name="&gt;&gt;lcEpisodeNoLabel.Name" xml:space="preserve">
-    <value>lcEpisodeNoLabel</value>
-  </data>
-  <data name="&gt;&gt;lcEpisodeNoLabel.Type" xml:space="preserve">
-    <value>DevExpress.XtraEditors.LabelControl, DevExpress.XtraEditors.v8.2, Version=8.2.6.0, Culture=neutral, PublicKeyToken=9b171c9fd64da1d1</value>
-  </data>
-  <data name="&gt;&gt;lcEpisodeNoLabel.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;lcEpisodeNoLabel.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="chkUpdateTitleName.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Bottom</value>
-  </data>
-  <data name="chkUpdateTitleName.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="chkUpdateTitleName.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="chkUpdateTitleName.Location" type="System.Drawing.Point, System.Drawing">
-    <value>503, 531</value>
-  </data>
-  <data name="chkUpdateTitleName.Size" type="System.Drawing.Size, System.Drawing">
-    <value>115, 17</value>
-  </data>
-  <data name="chkUpdateTitleName.TabIndex" type="System.Int32, mscorlib">
-    <value>17</value>
-  </data>
-  <data name="chkUpdateTitleName.Text" xml:space="preserve">
-    <value>Update Title Name</value>
-  </data>
-  <data name="&gt;&gt;chkUpdateTitleName.Name" xml:space="preserve">
-    <value>chkUpdateTitleName</value>
-  </data>
-  <data name="&gt;&gt;chkUpdateTitleName.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;chkUpdateTitleName.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;chkUpdateTitleName.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">

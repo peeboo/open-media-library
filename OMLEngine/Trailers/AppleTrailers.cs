@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Xml;
 using System.IO;
 using System.Globalization;
+using System.Net;
 using System.Linq;
 using System.Collections;
 
@@ -16,7 +18,6 @@ namespace OMLEngine.Trailers
 
     public class AppleTrailers
     {
-        static public string QUICKTIME_USER_AGENT_STRING = @"QuickTime/7.6.2";
         private const string LoFiUrl = @"http://www.apple.com/trailers/home/xml/current.xml";
         private const string HiFiUrl = @"http://www.apple.com/trailers/home/xml/current_720p.xml";
 
@@ -57,9 +58,8 @@ namespace OMLEngine.Trailers
             try
             {
                 // load the xml
-                using (OMLWebClient client = new OMLWebClient())
+                using (WebClient client = new WebClient())
                 {
-                    client.UserAgent = AppleTrailers.QUICKTIME_USER_AGENT_STRING;
                     using (Stream stream = client.OpenRead(url))
                     {
                         XmlTextReader reader = new XmlTextReader(stream);

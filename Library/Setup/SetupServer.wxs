@@ -2,15 +2,14 @@
 
 <!-- These variables define the Windows Installer product version, product code and upgrade code. They   -->
 <!-- will be used later on in this file.                                                                 -->
-<?define Property_ProductVersion = "4.2.0.1798" ?>
-<?define Property_ProductCode = "BF9BEE1B-5B7B-442E-8FBF-D2E0A9484D77" ?>
+<?define Property_ProductVersion = "4.0.0.1669" ?>
+<?define Property_ProductCode = "63586C2D-203A-449A-B285-119C8A8FA770" ?>
 <?define Property_UpgradeCode = "0921ec75-fddc-46f8-bdf4-a5d697351567" ?>
 
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
      xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension"
      xmlns:sql="http://schemas.microsoft.com/wix/SqlExtension"
-     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension"
-     xmlns:fire="http://schemas.microsoft.com/wix/FirewallExtension">
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
   <Product Id="$(var.Property_ProductCode)"
 	         UpgradeCode="$(var.Property_UpgradeCode)"
 	         Name="!(loc.Property_ProductName)"
@@ -20,8 +19,7 @@
 
     <Package Description="!(loc.Package_Description)"
 		         Comments="!(loc.Package_Comments)"
-		         InstallerVersion="405"
-             InstallPrivileges="elevated"
+		         InstallerVersion="200"
 		         Compressed="yes" />
 
     <!--<Binary Id="OMLDB" SourceFile="..\..\SQL Scripts\Title Database.sql" />-->
@@ -47,20 +45,11 @@
           <File Name="SQLEXPR_x86_ENU.exe"
                             Source="..\..\PostInstallerWizard\SQLInstallers\SQLEXPR_x86_ENU.exe" Checksum="no" />
         </Component>
-        <Component Id="SQLFIREWALLEXCEPTION" Guid="8245A624-243C-4CEB-A663-C98D96AF7E86" DiskId="1">
-          <fire:FirewallException Name="TCPNORMALPORT" Id="TCPNORMALPORT" Port="1433" Protocol="tcp" IgnoreFailure="yes" Scope="localSubnet"/>
-          <fire:FirewallException Name="UDPNORMALPORT" Id="UDPNORMALPORT" Port="1433" Protocol="udp" IgnoreFailure="yes" Scope="localSubnet"/>
-          <fire:FirewallException Name="TCPALTERNATEPORT" Id="TCPALTERNATEPORT" Port="1434" Protocol="tcp" IgnoreFailure="yes" Scope="localSubnet"/>
-          <fire:FirewallException Name="UDPALTERNATEPORT" Id="UDPALTERNATEPORT" Port="1434" Protocol="udp" IgnoreFailure="yes" Scope="localSubnet"/>
-          <CreateFolder/>
-        </Component>
       </Directory>
     </DirectoryRef>
 
-
     <ComponentGroup Id="ServerGroup">
       <ComponentRef Id ="SQLEXPR_x86_ENU.exe"/>
-      <ComponentRef Id="SQLFIREWALLEXCEPTION"/>
     </ComponentGroup>
 
     <Feature Id="APPLICATIONROOTFEATURE" Title="Open Media Library" Level="1" AllowAdvertise="no" Absent="disallow">
@@ -79,37 +68,19 @@
     <!-- described in more detail in the WiX documentation.                                              -->
     <UI>
       <UIRef Id="WixUI_FeatureTree" />
-      <!--<Publish Dialog="ExitDialog"
+      <Publish Dialog="ExitDialog"
                Control="Finish"
                Event="DoAction"
-               Value="LaunchApplication">1</Publish>-->
-
-      <ProgressText Action="ReserveTrailersUrlAction">Reserving Url for Trailers Proxy Server</ProgressText>
-      <ProgressText Action="ActivateNetTcpPortSharing">Activating NetTcpPortSharing for Transcoding Services</ProgressText>
-      <ProgressText Action="StartOMLEngineServiceAction">Starting up OMLEngineService</ProgressText>
+               Value="LaunchApplication">1</Publish>
     </UI>
 
     <Property Id="WixShellExecTarget" Value="[#PostInstallerWizard.exe]" />
+
     <CustomAction Id="LaunchApplication"
-                  BinaryKey="WixCA"
-                  DllEntry="WixShellExec"
-                  Impersonate="yes"/>
-
-    <InstallExecuteSequence>
-      <Custom Action="ActivateNetTcpPortSharing" Before="ReserveTrailersUrlAction">
-        <![CDATA[NOT REMOVE]]>
-      </Custom>
-      <Custom Action='ReserveTrailersUrlAction' Before='InstallFinalize'>
-        <![CDATA[NOT REMOVE]]>
-      </Custom>
-      <Custom Action='StartOMLEngineServiceAction' After='InstallFinalize'>
-        <![CDATA[NOT REMOVE]]>
-      </Custom>
-      <Custom Action='LaunchApplication' After='StartOMLEngineServiceAction'>
-        <![CDATA[NOT REMOVE]]>
-      </Custom>
-    </InstallExecuteSequence>
-
+        BinaryKey="WixCA"
+        DllEntry="WixShellExec"
+        Impersonate="yes" />
+    
   </Product>
 </Wix>
 

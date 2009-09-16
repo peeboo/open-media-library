@@ -405,6 +405,24 @@ namespace OMLEngine.Settings
 
         #endregion
 
+        #region Auto Disk Scanning
+
+        public static bool AutoScanDiskOnAdding
+        {
+            // Only applies to DBEditor
+            get { return SettingsManager.GetSettingByNameBool("AutoScanDiskOnAdding", InstanceName) ?? false; }
+            set { SettingsManager.SaveSettingByName("AutoScanDiskOnAdding", value.ToString(), InstanceName); }
+        }
+
+        public static bool ScanDiskRollInfoToTitle
+        {
+            // On scanning disk file to get res, aspect ratio etc, roll these up into the title record
+            get { return SettingsManager.GetSettingByNameBool("ScanDiskRollInfoToTitle", InstanceName) ?? false; }
+            set { SettingsManager.SaveSettingByName("ScanDiskRollInfoToTitle", value.ToString(), InstanceName); }
+        }
+
+        #endregion
+
         #region Scanner
         public static bool ScannerEnabled
         {
@@ -480,6 +498,7 @@ namespace OMLEngine.Settings
 
 
         #region DBEditor
+
         public static string DBEditorSkin
         {
             get { return SettingsManager.GetSettingByName("DBEditorSkin", InstanceName) ?? "Blue"; }
@@ -510,6 +529,19 @@ namespace OMLEngine.Settings
         {
             get { return SettingsManager.GetSettingByNameBool("UseGenreList", InstanceName) ?? true; }
             set { SettingsManager.SaveSettingByName("UseGenreList", value.ToString(), InstanceName); }
+        }
+
+        public static string DefaultMetadataPlugin
+        {
+            get { return SettingsManager.GetSettingByName("DefaultMetadataPlugin", InstanceName) ?? ""; }
+            set { SettingsManager.SaveSettingByName("DefaultMetadataPlugin", value, InstanceName); }
+        }
+
+        public static int MetadataLookupResultsQty
+        {
+            get { return SettingsManager.GetSettingByNameInt("MetadataLookupResultsQty", InstanceName) ?? 10; }
+            set { SettingsManager.SaveSettingByName("MetadataLookupResultsQty", value.ToString(), InstanceName); }
+
         }
 
         public static bool TitledFanArtFolder
@@ -547,91 +579,17 @@ namespace OMLEngine.Settings
             get { return SettingsManager.GetSettingByNameBool("DBEAlwaysShowTitleList", InstanceName) ?? false; }
             set { SettingsManager.SaveSettingByName("DBEAlwaysShowTitleList", value.ToString(), InstanceName); }
         }
-        #endregion
-
-
-        #region MetaData
-        public static string DefaultMetadataPluginMovies
-        {
-            get { return SettingsManager.GetSettingByName("DefaultMetadataPluginMovies", InstanceName) ?? "themoviedb.org"; }
-            set { SettingsManager.SaveSettingByName("DefaultMetadataPluginMovies", value, InstanceName); }
-        }
-
-        public static string DefaultMetadataPluginTV
-        {
-            get { return SettingsManager.GetSettingByName("DefaultMetadataPluginTV", InstanceName) ?? "thetvdb.com"; }
-            set { SettingsManager.SaveSettingByName("DefaultMetadataPluginTV", value, InstanceName); }
-        }
-
-        public static int MetadataLookupResultsQty
-        {
-            get { return SettingsManager.GetSettingByNameInt("MetadataLookupResultsQty", InstanceName) ?? 10; }
-            set { SettingsManager.SaveSettingByName("MetadataLookupResultsQty", value.ToString(), InstanceName); }
-        }
-
-        // Overwrite settings for a manual search
-        public static bool MetadataLookupOverwriteExistingDataManual
-        {
-            get { return SettingsManager.GetSettingByNameBool("MetadataLookupOverwriteExistingDataManual", InstanceName) ?? false; }
-            set { SettingsManager.SaveSettingByName("MetadataLookupOverwriteExistingDataManual", value.ToString(), InstanceName); }
-        }
-
-        public static bool MetadataLookupUpdateNameManual
-        {
-            get { return SettingsManager.GetSettingByNameBool("MetadataLookupUpdateNameManual", InstanceName) ?? false; }
-            set { SettingsManager.SaveSettingByName("MetadataLookupUpdateNameManual", value.ToString(), InstanceName); }
-        }
-
-        // Overwrite settings for a preferred search for TV shows
-        public static bool MetadataLookupOverwriteExistingDataPrefTV
-        {
-            get { return SettingsManager.GetSettingByNameBool("MetadataLookupOverwriteExistingDataPrefTV", InstanceName) ?? false; }
-            set { SettingsManager.SaveSettingByName("MetadataLookupOverwriteExistingDataPrefTV", value.ToString(), InstanceName); }
-        }
-
-        public static bool MetadataLookupUpdateNamePrefTV
-        {
-            get { return SettingsManager.GetSettingByNameBool("MetadataLookupUpdateNamePrefTV", InstanceName) ?? false; }
-            set { SettingsManager.SaveSettingByName("MetadataLookupUpdateNamePrefTV", value.ToString(), InstanceName); }
-        }
-
-        // Overwrite settings for a preferred search for Movies
-        public static bool MetadataLookupOverwriteExistingDataPrefMovies
-        {
-            get { return SettingsManager.GetSettingByNameBool("MetadataLookupOverwriteExistingDataPrefMovies", InstanceName) ?? false; }
-            set { SettingsManager.SaveSettingByName("MetadataLookupOverwriteExistingDataPrefMovies", value.ToString(), InstanceName); }
-        }
-
-        public static bool MetadataLookupUpdateNamePrefMovies
-        {
-            get { return SettingsManager.GetSettingByNameBool("MetadataLookupUpdateNamePrefMovies", InstanceName) ?? false; }
-            set { SettingsManager.SaveSettingByName("MetadataLookupUpdateNamePrefMovies", value.ToString(), InstanceName); }
-        } 
-        #endregion
-
 
         /// <summary>
         /// Create top level folder when dragging in a folder structure from Windows Explorer
-        /// into the editor. Also applies to watched folders using StSana (When implemented)
+        /// into the editor
         /// </summary>
-        public static bool StSanaCreateTLFolder
+        public static bool DBEStSanaCreateTLFolder
         {
-            get { return SettingsManager.GetSettingByNameBool("StSanaCreateTLFolder", InstanceName) ?? false; }
-            set { SettingsManager.SaveSettingByName("StSanaCreateTLFolder", value.ToString(), InstanceName); }
+            get { return SettingsManager.GetSettingByNameBool("DBEStSanaCreateTLFolder", InstanceName) ?? false; }
+            set { SettingsManager.SaveSettingByName("DBEStSanaCreateTLFolder", value.ToString(), InstanceName); }
         }
-
-        public static bool StSanaAlwaysCreateMovieFolder
-        {
-            get { return SettingsManager.GetSettingByNameBool("StSanaAlwaysCreateMovieFolder", InstanceName) ?? false; }
-            set { SettingsManager.SaveSettingByName("StSanaAlwaysCreateMovieFolder", value.ToString(), InstanceName); }
-        }
-
-        public static bool StSanaAutoLookupMeta
-        {
-            get { return SettingsManager.GetSettingByNameBool("StSanaAutoLookupMeta", InstanceName) ?? false; }
-            set { SettingsManager.SaveSettingByName("StSanaAutoLookupMeta", value.ToString(), InstanceName); }
-        }
-
+        #endregion
 
         public static string MPAARatings
         {

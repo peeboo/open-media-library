@@ -32,8 +32,6 @@ namespace NetFlixMetadata
         private const string DEFAULT_SHARED_SECRET = @"udYADAm3W2";
         private string API_KEY;
         private string SHARED_SECRET;
-        private const string API_KEY_HIDDEN_TEXT = "[Enter your API key here to override the OML key]";
-        private const string SHARED_SECRET_HIDDEN_TEXT = "[Enter your API key here to override the OML secret]";
 
         private const string HTML_TAG_PATTERN = @"<(.|\n)*?>";
 
@@ -121,7 +119,7 @@ namespace NetFlixMetadata
 
             if (API_KEY == DEFAULT_API_KEY)
             {
-                apikey = new OMLMetadataOption("API Key", API_KEY_HIDDEN_TEXT, null, false);
+                apikey = new OMLMetadataOption("API Key", "[Enter your API key here to override the OML key]", null, false);
             }
             else
             {
@@ -130,7 +128,7 @@ namespace NetFlixMetadata
 
             if (SHARED_SECRET == DEFAULT_SHARED_SECRET)
             {
-                sharedsecret = new OMLMetadataOption("Shared Secret", SHARED_SECRET_HIDDEN_TEXT, null, false);
+                sharedsecret = new OMLMetadataOption("Shared Secret", "[Enter your Secret here to override the OML secret]", null, false);
             }
             else
             {
@@ -146,28 +144,26 @@ namespace NetFlixMetadata
         public bool SetOptionValue(string option, string value)
         {
             if (string.Compare(option, "API Key", true) == 0)
-            {  
-                API_KEY = DEFAULT_API_KEY;
-
-                if (!string.IsNullOrEmpty(value))
+            {     
+                if (string.IsNullOrEmpty(value))
                 {
-                    if (value != API_KEY_HIDDEN_TEXT)
-                    {
-                        API_KEY = value;
-                    }
+                    API_KEY = DEFAULT_API_KEY;
+                }
+                else
+                {
+                    API_KEY = value;
                 }
             }
 
             if (string.Compare(option, "Shared Secret", true) == 0)
             {
-                SHARED_SECRET = DEFAULT_SHARED_SECRET;
-
-                if (!string.IsNullOrEmpty(value))
+                if (string.IsNullOrEmpty(value))
                 {
-                    if (value != SHARED_SECRET_HIDDEN_TEXT)
-                    {
-                        SHARED_SECRET = value;
-                    }
+                    SHARED_SECRET = DEFAULT_SHARED_SECRET;
+                }
+                else
+                {
+                    SHARED_SECRET = value;
                 }
             }
             return true;
@@ -517,7 +513,7 @@ namespace NetFlixMetadata
         }
 
 
-        public bool SearchForTVSeries(string SeriesName, string EpisodeName, int? SeriesNo, int? EpisodeNo, int maxResults, bool SearchTVShowOnly)
+        public bool SearchForTVSeries(string SeriesName, string EpisodeName, int? SeriesNo, int? EpisodeNo, int maxResults)
         {
             return false;
         }

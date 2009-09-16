@@ -58,9 +58,6 @@
             this.seSeasonNo = new DevExpress.XtraEditors.SpinEdit();
             this.seEpisodeNo = new DevExpress.XtraEditors.SpinEdit();
             this.lcEpisodeLabel = new DevExpress.XtraEditors.LabelControl();
-            this.lcSeasonNoLabel = new DevExpress.XtraEditors.LabelControl();
-            this.lcEpisodeNoLabel = new DevExpress.XtraEditors.LabelControl();
-            this.chkUpdateTitleName = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.grdTitles)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.seSeasonNo.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.seEpisodeNo.Properties)).BeginInit();
@@ -248,31 +245,10 @@
             resources.ApplyResources(this.lcEpisodeLabel, "lcEpisodeLabel");
             this.lcEpisodeLabel.Name = "lcEpisodeLabel";
             // 
-            // lcSeasonNoLabel
-            // 
-            resources.ApplyResources(this.lcSeasonNoLabel, "lcSeasonNoLabel");
-            this.lcSeasonNoLabel.Name = "lcSeasonNoLabel";
-            // 
-            // lcEpisodeNoLabel
-            // 
-            resources.ApplyResources(this.lcEpisodeNoLabel, "lcEpisodeNoLabel");
-            this.lcEpisodeNoLabel.Name = "lcEpisodeNoLabel";
-            // 
-            // chkUpdateTitleName
-            // 
-            resources.ApplyResources(this.chkUpdateTitleName, "chkUpdateTitleName");
-            this.chkUpdateTitleName.Checked = true;
-            this.chkUpdateTitleName.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkUpdateTitleName.Name = "chkUpdateTitleName";
-            this.chkUpdateTitleName.UseVisualStyleBackColor = true;
-            // 
             // frmSearchResult
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.chkUpdateTitleName);
-            this.Controls.Add(this.lcEpisodeNoLabel);
-            this.Controls.Add(this.lcSeasonNoLabel);
             this.Controls.Add(this.lcEpisodeLabel);
             this.Controls.Add(this.seEpisodeNo);
             this.Controls.Add(this.seSeasonNo);
@@ -319,8 +295,5 @@
         private DevExpress.XtraEditors.SpinEdit seSeasonNo;
         private DevExpress.XtraEditors.SpinEdit seEpisodeNo;
         private DevExpress.XtraEditors.LabelControl lcEpisodeLabel;
-        private DevExpress.XtraEditors.LabelControl lcSeasonNoLabel;
-        private DevExpress.XtraEditors.LabelControl lcEpisodeNoLabel;
-        private System.Windows.Forms.CheckBox chkUpdateTitleName;
     }
 }
