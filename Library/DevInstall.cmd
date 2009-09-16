@@ -37,7 +37,7 @@ goto unregister
     ECHO.
 
     ECHO.Remove the DLL from the Global Assembly cache
-    "gacutil.exe" /u "%AssemblyName%"
+    "%ProgramFilesPath%\Microsoft Visual Studio 8\SDK\v2.0\Bin\gacutil.exe" /u "%AssemblyName%"
     ECHO.
 
     ECHO.Delete the folder containing the DLLs and supporting files (silent if successful)
@@ -88,7 +88,7 @@ goto unregister
     ECHO.
 
     ECHO.Register the DLL with the global assembly cache
-    "gacutil.exe" /if "%ProgramFilesPath%\%CompanyName%\%AssemblyName%.dll"
+    "%ProgramFilesPath%\Microsoft Visual Studio 8\SDK\v2.0\Bin\gacutil.exe" /if "%ProgramFilesPath%\%CompanyName%\%AssemblyName%.dll"
     ECHO.
 
     ECHO.Register the application with Windows Media Center

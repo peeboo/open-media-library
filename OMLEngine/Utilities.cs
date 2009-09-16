@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text;
 using System.IO;
 using System.Diagnostics;
 using System.Data;
@@ -11,9 +10,6 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Drawing.Drawing2D;
 using System.Runtime.InteropServices;
-using System.Security.Principal;
-using System.ComponentModel;
-using OMLEngine.Settings;
 
 namespace OMLEngine
 {
@@ -36,7 +32,54 @@ namespace OMLEngine
         MyMovies,
         DVDProfiler,
         MovieCollectorz
-    };   
+    };
+
+    /// <summary>
+    /// Enumerator for Video Fromats
+    /// </summary>
+    public enum VideoFormat
+    {
+        ASF, // WMV style
+        AVC, // AVC H264
+        AVI, // DivX, Xvid, etc
+        B5T, // BlindWrite image
+        B6T, // BlindWrite image
+        BIN, // using an image loader lib and load/play this as a DVD
+        BLURAY, // detect which drive supports this and request the disc
+        BWT, // BlindWrite image
+        CCD, // CloneCD image
+        CDI, // DiscJuggler Image
+        CUE, // cue sheet
+        DVD, // detect which drive supports this and request the disc
+        DVRMS, // MPG
+        H264, // AVC OR MP4
+        HDDVD, // detect which drive supports this and request the disc
+        IFO, // Online DVD
+        IMG, // using an image loader lib and load/play this as a DVD
+        ISO, // Standard ISO image
+        ISZ, // Compressed ISO image
+        MDF, // using an image loader lib and load/play this as a DVD
+        MDS, // Media Descriptor file
+        MKV, // Likely h264
+        MOV, // Quicktime
+        MPG,
+        MPEG,
+        MP4, // DivX, AVC, or H264
+        NRG, // Nero image
+        OFFLINEBLURAY, // detect which drive supports this and request the disc
+        OFFLINEDVD, // detect which drive supports this and request the disc
+        OFFLINEHDDVD, // detect which drive supports this and request the disc
+        OGM, // Similar to MKV
+        PDI, // Instant CD/DVD image
+        TS, // MPEG2
+        UIF,
+        WMV,
+        VOB, // MPEG2
+        WVX, // wtf is this?
+        ASX, // wtf is this?
+        WPL, // playlist file?
+        WTV // new dvr format in vista (introduced in the tv pack 2008)
+    };
 
     /// <summary>
     /// Enumerator for various TitleCollection errors
@@ -124,12 +167,11 @@ namespace OMLEngine
             return plugins;
         }
 
-        /*public static string FileSearchPattern()
+        public static string FileSearchPattern()
         {
             return "*.asf,*.avc,*.avi,*.bin,*.cue,*.dvr-ms,*.h264,*.img,*.iso,*.mdf,*.mkv" +
                    "*.mov,*.mpg,*.mpeg,*.mp4,*.ogm,*.ts,*.wmv,*.vob,video_ts,*.wtv";
-        }*/
-         
+        }
         /// <summary>
         /// Loads all valid plugins into memory
         /// </summary>
@@ -194,24 +236,11 @@ namespace OMLEngine
         /// <returns>True on success</returns>
         public static bool RawSetup()
         {
-            try
-            {
-                if (!FileSystemWalker.RootDirExists)
-                    FileSystemWalker.createRootDirectory();
-            }
-            catch (Exception ex)
-            {
-                Utilities.DebugLine("[Utilities] Setup Error in createRootDirectory: " + ex.Message);
-            }
-            /*try
-            {
-                if (!FileSystemWalker.PluginsDirExists)
-                    FileSystemWalker.createPluginsDirectory();
-            }
-            catch (Exception ex)
-            {
-                Utilities.DebugLine("[Utilities] Setup Error in createPluginsDirectory: " + ex.Message);
-            }*/
+            if (!FileSystemWalker.RootDirExists)
+                FileSystemWalker.createRootDirectory();
+
+            if (!FileSystemWalker.PluginsDirExists)
+                FileSystemWalker.createPluginsDirectory();
 
             if (!FileSystemWalker.PublicRootDirExists)
                 FileSystemWalker.createPublicRootDirectory();
@@ -219,29 +248,8 @@ namespace OMLEngine
             if (!FileSystemWalker.ImageDirExists)
                 FileSystemWalker.createImageDirectory();
 
-            if (!FileSystemWalker.ImageDownloadDirExists)
-                FileSystemWalker.createImageDownloadDirectory();
-
             if (!FileSystemWalker.LogDirExists)
                 FileSystemWalker.createLogDirectory();
-
-            if (!FileSystemWalker.TranscodeBufferDirExists)
-                FileSystemWalker.createTranscodeBufferDirectory();
-
-            if (!FileSystemWalker.TempPlayListDirExists)
-                FileSystemWalker.createTempPlayListDirectory();
-
-            if (!FileSystemWalker.MainBackDropDirExists)
-                FileSystemWalker.createMainBackDropDirectory();
-
-            if (!FileSystemWalker.FanArtDirectoryExists)
-                FileSystemWalker.createFanArtDirectory();
-
-            if (!FileSystemWalker.DBBackupDirectoryExists)
-                FileSystemWalker.createDBBackupDirectory();
-
-            if (!FileSystemWalker.ExtenderCacheDirectoryExists)
-                FileSystemWalker.CreateExtenderCacheDirectory();
 
             return true;
         }
@@ -264,6 +272,44 @@ namespace OMLEngine
             return false;
         }
 
+        public static bool IsTranscode360LibraryAvailable()
+        {
+            FileInfo fi;
+            try
+            {
+                fi = new FileInfo(@"c:\\program files\\transcode360\\Transcode360.Interface.dll");
+                return true;
+            }
+            catch (Exception)
+            {
+                Utilities.DebugLine("[Utilities] Transcode360.Interface.dll not found");
+                return false;
+            }
+        }
+
+        public static Type LoadTranscode360Assembly(string path_to_transcode360_dll)
+        {
+            Assembly asm = null;
+
+            try
+            {
+                asm = Assembly.LoadFile(path_to_transcode360_dll);
+                AppDomain.CurrentDomain.Load(asm.GetName());
+
+                Type ITranscode360 = asm.GetType("Transcode360.Interface.ITranscode360");
+
+                if (ITranscode360 != null)
+                    return ITranscode360;
+
+                return null;
+            }
+            catch (Exception e)
+            {
+                Utilities.DebugLine("[Utilities] Error loading Transcode360: " + e.Message);
+                return null;
+            }
+        }
+
         public static int NewRandomNumber()
         {
             if (Utilities.random == null)
@@ -277,6 +323,48 @@ namespace OMLEngine
             return rand_num;
         }
 
+        public static bool HasDaemonTools()
+        {
+            string daemontools_path = OMLEngine.Properties.Settings.Default.DaemonTools;
+            if (daemontools_path != null && daemontools_path.Length > 0)
+                return true;
+
+            return false;
+        }
+
+        public static DriveInfo DriveInfoForDrive(string VirtualDiscDrive)
+        {
+            if (VirtualDiscDrive == null || VirtualDiscDrive.Length < 1)
+                return null;
+
+            DriveInfo[] drives = DriveInfo.GetDrives();
+            foreach (DriveInfo drive in drives)
+            {
+                string driveName = drive.Name.Substring(0, 1);
+                if (driveName.ToUpper().Substring(0, 1).CompareTo(VirtualDiscDrive.ToUpper()) == 0)
+                {
+                    return drive;
+                }
+            }
+            return null;
+        }
+
+        public static void UnmountVirtualDrive(int VirtualDiscDriveNumber)
+        {
+            string mount_util_path = OMLEngine.Properties.Settings.Default.DaemonTools;
+
+            Process cmd = new Process();
+            cmd.StartInfo.FileName = "\"" + mount_util_path + "\"";
+            cmd.StartInfo.Arguments = @"-unmount " + VirtualDiscDriveNumber.ToString();
+            cmd.StartInfo.CreateNoWindow = true;
+            cmd.StartInfo.RedirectStandardError = true;
+            cmd.StartInfo.RedirectStandardOutput = true;
+            cmd.StartInfo.UseShellExecute = false;
+
+            cmd.Start();
+            Thread.Sleep(10);
+        }
+
         public static void DebugLine(string msg, params object[] paramArray)
         {
             try
@@ -285,28 +373,122 @@ namespace OMLEngine
                 {
                     try
                     {
-                        string file = Path.Combine(OMLEngine.FileSystemWalker.LogDirectory, string.Format("{0}-debug.txt", Path.GetFileNameWithoutExtension(Process.GetCurrentProcess().MainModule.FileName)));
-                        if (Directory.Exists(OMLEngine.FileSystemWalker.LogDirectory) == false)
-                            Directory.CreateDirectory(OMLEngine.FileSystemWalker.LogDirectory);
+                        if (File.Exists(OMLEngine.FileSystemWalker.LogDirectory + "\\debug.txt"))
+                            Log = new FileStream(OMLEngine.FileSystemWalker.LogDirectory + "\\debug.txt", FileMode.Append);
+                        else
+                            Log = new FileStream(OMLEngine.FileSystemWalker.LogDirectory + "\\debug.txt", FileMode.OpenOrCreate);
 
-                        bool tooLarge = ( File.Exists(file) && (new FileInfo(file)).Length > 1000000);
-
-                        Log = new FileStream(file, File.Exists(file) && !tooLarge ? FileMode.Append : FileMode.Create);
-                        Trace.Listeners.Add(new TextWriterTraceListener(Log, "debug.txt"));
-                        Trace.AutoFlush = true;
-                        Trace.WriteLine(new string('=', 80));
-                        Trace.TraceInformation(DateTime.Now.ToString() + " OML Version: 0.4b ({0}, PID:{1})", File.GetLastWriteTime(typeof(Utilities).Assembly.Location), Process.GetCurrentProcess().Id);
+                        Trace.Listeners.Add(new TextWriterTraceListener(Log));
                     }
-                    catch
+                    catch (Exception e)
                     { }
                 }
-                string prefix = string.Format("{0} [{1}#{2}], ", DateTime.Now, Thread.CurrentThread.ManagedThreadId, Thread.CurrentThread.Name);
-                Trace.TraceInformation(prefix + msg, paramArray);
+                Trace.TraceInformation(DateTime.Now.ToString() + " " + msg, paramArray);
             }
-            catch
+            catch (Exception e)
             {
             }
         }
+
+        // Image resizing methods taken from a public post on forums.msdn.microsoft.com
+        // Written by user: PeacError on Wed. Nov 1st, 2006
+        // Link: http://forums.msdn.microsoft.com/en-US/csharpgeneral/thread/33d0acc4-bf4c-475b-9b43-0fa1093c1e19/
+        public static Image ScaleImageByPercentage(Image img, double percent)
+        {
+            double fractionalPercentage = (percent / 100.0);
+            int outputWidth = (int)(img.Width * fractionalPercentage);
+            int outputHeight = (int)(img.Height * fractionalPercentage);
+
+            return ScaleImage(img, outputWidth, outputHeight);
+        }
+
+        public static Image ScaleImage(Image img, int outputWidth, int outputHeight)
+        {
+            Bitmap outputImage = new Bitmap(outputWidth, outputHeight, img.PixelFormat);
+            outputImage.SetResolution(img.HorizontalResolution, img.VerticalResolution);
+
+            using (Graphics graphics = Graphics.FromImage(outputImage))
+            {
+                graphics.CompositingQuality = CompositingQuality.Default;
+                graphics.InterpolationMode = InterpolationMode.High;
+                graphics.SmoothingMode = SmoothingMode.Default;
+                graphics.DrawImage(img,
+                                   new Rectangle(0, 0, outputWidth, outputHeight),
+                                   new Rectangle(0, 0, img.Width, img.Height),
+                                   GraphicsUnit.Pixel);
+
+                graphics.Dispose();
+            }
+
+            return outputImage;
+        }
+
+        public static Image ScaleImageByHeight(Image img, int height)
+        {
+            double fractionalPercentage = ((double)height / (double)img.Height);
+            int outputWidth = (int)(img.Width * fractionalPercentage);
+            int outputHeight = height;
+
+            return ScaleImage(img, outputWidth, outputHeight);
+        }
+
+        public static Image ScaleImageByWidth(Image img, int width)
+        {
+            double fractionalPercentage = ((double)width / (double)img.Width);
+            int outputWidth = width;
+            int outputHeight = (int)(img.Height * fractionalPercentage);
+
+            return ScaleImage(img, outputWidth, outputHeight);
+        }
+
+        public static Image ScaleImageDownTillFits(Image img, Size size)
+        {
+            Image ret = img;
+            bool bFound = false;
+
+            if ((img.Width > size.Width) || (img.Height > size.Height))
+            {
+                for (double percent = 100; percent > 0; percent--)
+                {
+                    double fractionalPercentage = (percent / 100.0);
+                    int outputWidth = (int)(img.Width * fractionalPercentage);
+                    int outputHeight = (int)(img.Height * fractionalPercentage);
+
+                    if ((outputWidth < size.Width) && (outputHeight < size.Height))
+                    {
+                        bFound = true;
+                        ret = ScaleImage(img, outputWidth, outputHeight);
+                        break;
+                    }
+                }
+
+                if (!bFound)
+                {
+                    ret = ScaleImage(img, size.Width, size.Height);
+                }
+            }
+            return ret;
+        }
+
+        /*
+        public static Size ResolutionOfVideoFile(string fileName)
+        {
+            Size size = new Size(0, 0);
+            Utilities.DebugLine("Determining Resolution of: " + fileName);
+            Microsoft.DirectX.AudioVideoPlayback.Video video;
+
+            if (File.Exists(fileName))
+            {
+                video = Microsoft.DirectX.AudioVideoPlayback.Video.FromFile(fileName);
+                if (video != null)
+                {
+                    Utilities.DebugLine("Resolution found: " + video.DefaultSize.Width + "x" + video.DefaultSize.Height);
+                    size = video.DefaultSize;
+                }
+            }
+            return size;
+        }
+        */
 
         [DllImport("shell32.dll", EntryPoint = "#680", CharSet = CharSet.Unicode)]
         public static extern bool IsUserAnAdmin();
@@ -315,104 +497,5 @@ namespace OMLEngine
         {
             return !IsUserAnAdmin();
         }
-
-        public static Image ReadImageFromFile(string fileName)
-        {
-            try
-            {
-                if (File.Exists(fileName))
-                {
-                    using (FileStream fs = new FileStream(fileName, FileMode.Open))
-                    {
-                        byte[] buffer = new byte[fs.Length];
-                        fs.Read(buffer, 0, (int)fs.Length);
-                        using (MemoryStream ms = new MemoryStream(buffer))
-                        {
-                            Bitmap bmp1 = new Bitmap(ms);
-                            Bitmap bmp2 = new Bitmap(bmp1.Width, bmp1.Height, bmp1.PixelFormat);
-                            Graphics g = Graphics.FromImage(bmp2);
-                            GraphicsUnit pageUnit = new GraphicsUnit();
-                            g.DrawImage(bmp1, bmp2.GetBounds(ref pageUnit));
-
-
-                            return bmp2;
-                        }
-                    }
-                }
-            }
-            catch
-            {
-            }
-
-            return null;
-        }
-
-        public delegate void WorkImpersonatedDelegate();
-
-        public static bool DoWorkImpersonated(WorkImpersonatedDelegate StuffToDo)
-        {
-            // Call LogonUser to get a token for the user
-            IntPtr _Token = IntPtr.Zero;
-            string username = OMLSettings.ImpersonationUsername;
-            string password = OMLSettings.ImpersonationPassword;
-            bool loggedOn = LogonUser(
-                username,
-                System.Environment.UserDomainName,
-                password,
-                LOGON32_LOGON_NETWORK,
-                LOGON32_PROVIDER_DEFAULT,
-                ref _Token);
-            if (!loggedOn)
-                throw new Win32Exception(Marshal.GetLastWin32Error());
-
-            // Begin impersonating the user
-            WindowsImpersonationContext impersonationContext = null;
-            try
-            {
-                WindowsIdentity.Impersonate(_Token);
-                StuffToDo();
-            }
-            finally
-            {
-                // Clean up
-                CloseHandle(_Token);
-                if (impersonationContext != null)
-                    impersonationContext.Undo();
-            }
-            return false;
-        }
-
-        public enum SECURITY_IMPERSONATION_LEVEL : int
-        {
-            SecurityAnonymous = 0,
-            SecurityIdentification = 1,
-            SecurityImpersonation = 2,
-            SecurityDelegation = 3
-        }
-
-        private const int LOGON32_LOGON_INTERACTIVE = 2,
-                          LOGON32_LOGON_NETWORK = 3,
-                          LOGON32_PROVIDER_WINNT50 = 3,
-                          LOGON32_PROVIDER_DEFAULT = 0,
-                          LOGON32_LOGON_BATCH = 4,
-                          LOGON32_LOGON_SERVICE = 5;
-
-        [DllImport("advapi32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        public static extern bool LogonUser(string pszUsername, string pszDomain, string pszPassword,
-        int dwLogonType, int dwLogonProvider, ref IntPtr phToken);
-
-        [DllImport("advapi32.dll", SetLastError = true)]
-        public static extern bool ImpersonateLoggedOnUser(IntPtr phToken);
-
-        [DllImport("advapi32.dll", SetLastError = true)]
-        public static extern bool RevertToSelf();
-
-        [DllImport("kernel32.dll")]
-        private static extern bool CloseHandle(IntPtr hObject);
-
-        [DllImport("advapi32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        public static extern bool DuplicateToken(IntPtr ExistingTokenHandle,
-
-        int SECURITY_IMPERSONATION_LEVEL, ref IntPtr DuplicateTokenHandle);
     }
 }

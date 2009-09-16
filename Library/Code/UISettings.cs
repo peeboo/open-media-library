@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using Microsoft.MediaCenter.UI;
 using System.Diagnostics;
 using OMLEngine;
-using OMLEngine.Settings;
 
 namespace Library
 {
@@ -111,29 +110,14 @@ namespace Library
 
     public class GallerySettings
     {
-        public Size HeightOfBrowser
-        {
-            get
-            {
-                if (OMLSettings.ShowMovieDetails)
-                    return new Size(0, Properties.Settings.Default.BrowserHeightWhenShowingDetails);
-                else
-                    return new Size(0, Properties.Settings.Default.BrowserHeightWhenNotShowingDetails);
-            }
-        }
         public int CoverArtRows
         {
-            get { return OMLSettings.GalleryCoverArtRows; }
-        }
-
-        public int CarouselRows
-        {
-            get { return Properties.Settings.Default.CarouselRows; }
+            get { return Properties.Settings.Default.GalleryCoverArtRows; }
         }
 
         public int ListRows
         {
-            get { return OMLSettings.GalleryListRows; }
+            get { return Properties.Settings.Default.GalleryListRows; }
         }
 
         public Size CoverArtSize
@@ -141,11 +125,11 @@ namespace Library
             //TODO: get the 600 out of here into a setting. just experimenting for now
             get
             {
-                int rows = OMLSettings.GalleryCoverArtRows;
-                int height = (520 - rows * 2 * Properties.Settings.Default.CoverArtSpacingVertical) / rows;
+                int rows = Properties.Settings.Default.GalleryCoverArtRows;
+                int height = (600 - rows * 2 * Properties.Settings.Default.CoverArtSpacingVertical) / rows;
                 int width = (int)(height * 0.705);
 
-                Properties.Settings.Default.FocusCoverArtScale = 1.3f - 0.16f * (3-rows);
+                Properties.Settings.Default.FocusCoverArtScale = 1.4f - 0.16f * (3-rows);
 
                 return new Size(width, height);
             }
@@ -155,11 +139,6 @@ namespace Library
         public Size ListItemSize
         {
             get { return new Size(Properties.Settings.Default.ListItemWidth, Properties.Settings.Default.ListItemHeight); }
-        }
-
-        public Size CarouselArtSize
-        {
-            get { return new Size(Properties.Settings.Default.CarouselItemWidth, Properties.Settings.Default.CarouselItemHeight); }
         }
 
         public Size CoverArtSpacing
@@ -172,14 +151,10 @@ namespace Library
             get { return new Size(Properties.Settings.Default.ListSpacingHorizontal, Properties.Settings.Default.ListSpacingVertical); }
         }
 
-        public Size CarouselArtSpacing
-        {
-            get { return new Size(Properties.Settings.Default.CarouselItemSpacingHorizontal, Properties.Settings.Default.CarouselItemSpacingVertical); }
-        }
 
         public Single CoverArtAlpha
         {
-            get { if (OMLSettings.DimUnselectedCovers) return 0.5F; else return 1F; }
+            get { if (Properties.Settings.Default.DimUnselectedCovers) return 0.5F; else return 1F; }
         }
 
         public Single ScrollingLockPosition
@@ -194,12 +169,12 @@ namespace Library
 
         public bool ShowMovieDetails
         {
-            get { return OMLSettings.ShowMovieDetails; }
+            get { return Properties.Settings.Default.ShowMovieDetails; }
         }
-   
+
         public bool DimUnselectedCovers
         {
-            get { return OMLSettings.DimUnselectedCovers; }
+            get { return Properties.Settings.Default.DimUnselectedCovers; }
         }
 
         public Vector3 FocusCoverArtScale
@@ -207,34 +182,10 @@ namespace Library
             get { return new Vector3(Properties.Settings.Default.FocusCoverArtScale, Properties.Settings.Default.FocusCoverArtScale, Properties.Settings.Default.FocusCoverArtScale); }
         }
 
-        public Vector3 FocusCarouselScale
-        {
-            get { return new Vector3(Properties.Settings.Default.FocusCarouselScale, Properties.Settings.Default.FocusCarouselScale, Properties.Settings.Default.FocusCarouselScale); }
-        }
-
         public Vector3 FocusListScale
         {
             get { return new Vector3(Properties.Settings.Default.FocusListScale, Properties.Settings.Default.FocusListScale, Properties.Settings.Default.FocusListScale); }
         }
 
-        public bool UseOnScreenAlphaFiltering
-        {
-            get { return OMLSettings.UseOnScreenAlphaJumper; }
-        }
-
-        public float MainPageBackDropAlpha
-        {
-            get { return Properties.Settings.Default.MainPageBackDropAlpha; }
-        }
-
-        public int MainPageBackDropInterval
-        {
-            get { return Properties.Settings.Default.MainPageBackDropRotationInSeconds; }
-        }
-
-        public float DetailsPageBackDropAlpha
-        {
-            get { return OMLSettings.DetailsPageBackDropAlphaValue; }
-        }
     }
 }

@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using OMLSDK;
 using OMLEngine;
 using NUnit.Framework;
-using System.Linq;
 
 namespace OMLTestSuite
 {
     [TestFixture]
-    public class TitleTest : TestBase
+    public class TitleTest
     {
         [Test]
         public void TEST_BASE_CASE()
@@ -39,15 +37,15 @@ namespace OMLTestSuite
             t.UPC = "123ABC";
             t.UserStarRating = 5;
             t.VideoStandard = "NTSC";
-            t.AddActingRole("Translucent", "Actor");
-            t.AddActingRole("taranu", "Actor");
+            t.AddActor(new Person("Translucent"));
+            t.AddActor(new Person("taranu"));
             t.AddNonActingRole("KingManon", "crew");
             t.AddNonActingRole("Chris", "crew");
             t.AddDirector(new Person("Tim"));
             t.AddGenre("Comedy");
-            t.AddAudioTrack("English");
-            t.AddAudioTrack("French");
-            t.AddProducer(new Person("Sony"));
+            t.AddLanguageFormat("English");
+            t.AddLanguageFormat("French");
+            t.AddProducer("Sony");
             t.AddWriter(new Person("Timothy"));
 
             Assert.AreEqual("Widescreen", t.AspectRatio);
@@ -71,10 +69,9 @@ namespace OMLTestSuite
             Assert.AreEqual(5, t.UserStarRating);
             Assert.AreEqual(VideoFormat.WPL, t.Disks[0].Format);
             Assert.AreEqual("NTSC", t.VideoStandard);
-            Assert.AreEqual(2, t.ActingRoles.Count);
-            IEnumerable<string> actors = t.ActingRoles.Select(a => a.PersonName);
-            Assert.That(actors.Contains("Translucent"));
-            Assert.That(actors.Contains("taranu"));
+            Assert.AreEqual(2, t.Actors.Count);
+            Assert.AreEqual("Translucent", ((Person)t.Actors[0]).full_name);
+            Assert.AreEqual("taranu", ((Person)t.Actors[1]).full_name);
             //Assert.AreEqual("KingManon", ((Person)t.Crew[0]).full_name);
             //Assert.AreEqual("Chris", ((Person)t.Crew[1]).full_name);
             Assert.AreEqual(1, t.Directors.Count);
@@ -88,18 +85,6 @@ namespace OMLTestSuite
             Assert.AreEqual("Sony", t.Producers[0]);
             Assert.AreEqual(1, t.Writers.Count);
             Assert.AreEqual("Timothy", ((Person)t.Writers[0]).full_name);
-        }
-
-        [Test]
-        public void TEST_LOAD_FROM_XML()
-        {
-            string xml_file = @"..\..\..\Sample Files\sample-oml.xml";
-
-            Title t = Title.CreateFromXML(xml_file);
-
-            Assert.IsInstanceOfType(typeof(Title), t);
-            Assert.AreEqual("GoldenEye", t.OriginalName);
-            Assert.AreEqual(1, t.Disks.Count);
         }
     }
 }

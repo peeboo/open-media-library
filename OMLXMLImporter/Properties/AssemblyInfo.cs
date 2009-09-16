@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("OMLXMLImporter")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("OpenMediaLibrary Development Team")]
+[assembly: AssemblyCompany("Microsoft")]
 [assembly: AssemblyProduct("OMLXMLImporter")]
-[assembly: AssemblyCopyright("Copyright © OpenMediaLibrary 2008")]
+[assembly: AssemblyCopyright("Copyright © Microsoft 2008")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

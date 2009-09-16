@@ -1,25 +1,20 @@
 ﻿using System;
+using System.Data;
+using System.Collections;
 using System.Collections.Generic;
-using System.IO;
-using System.Text.RegularExpressions;
-using System.Xml;
-
+using System.Text;
 using OMLEngine;
 using OMLSDK;
+using System.IO;
+using System.Diagnostics;
+using System.Xml;
+using System.Xml.XPath;
+using System.Text.RegularExpressions;
 
 namespace VMCDVDLibraryPlugin
 {
     public class DVDLibraryImporter : OMLPlugin, IOMLPlugin
     {
-        private enum DirectoryType
-        {
-            HDDvd,
-            BluRay,
-            DVD_Ripped,
-            DVD_Flat,
-            Normal
-        }
-
         public DVDLibraryImporter()
             : base()
         {
@@ -41,7 +36,7 @@ namespace VMCDVDLibraryPlugin
             return true;
         }
         private static double MajorVersion = 0.9;
-        private static double MinorVersion = 0.3;
+        private static double MinorVersion = 0.1;
         protected override double GetVersionMajor()
         {
             return MajorVersion;
@@ -83,9 +78,6 @@ namespace VMCDVDLibraryPlugin
         {
             try
             {
-                List<string> moviePaths = new List<string>();
-
-
                 List<string> dirList = new List<string>();
                 List<string> fileList = new List<string>();
                 GetSubFolders(startFolder, dirList);
@@ -99,152 +91,76 @@ namespace VMCDVDLibraryPlugin
                 foreach (string currentFolder in dirList)
                 {
                     Utilities.DebugLine("DVDImporter: folder " + currentFolder);
-                    if (currentFolder.ToUpperInvariant().Contains("fanart".ToUpperInvariant()))
-                        Utilities.DebugLine("[DVDImporter] Skipping fanart directory");
+                    if (currentFolder.Contains("MSDVR"))
+                    {
+                        bool b = true;
+                    }
+                    Title dvd = GetDVDMetaData(currentFolder);
+                    string[] fileNames = null;
+                    try
+                    {
+                        fileNames = Directory.GetFiles(currentFolder);
+                    }
+                    catch
+                    {
+                        fileNames = null;
+                    }
+
+                    if (dvd != null)
+                    {
+                        // if any video files are found in the DVD folder assume they are trailers
+                        if (fileNames != null)
+                        {
+                            foreach (string video in fileNames)
+                            {
+                                string extension = Path.GetExtension(video).ToUpper();
+                                if (SupportedVideoExtensions.Contains(extension))
+                                {
+                                    dvd.Trailers.Add(video);
+                                }
+                            }
+                        }
+                        AddTitle(dvd);
+                    }// found dvd
                     else
                     {
-                        Title dvd = GetDVDMetaData(currentFolder);
-                        string[] fileNames = null;
-                        try
+                        if( fileNames != null )
                         {
-                            fileNames = Directory.GetFiles(currentFolder);
-                        }
-                        catch
-                        {
-                            fileNames = null;
-                        }
-
-                        if (dvd != null)
-                        {
-                            // if any video files are found in the DVD folder assume they are trailers
-                            if (fileNames != null)
+                            foreach (string video in fileNames)
                             {
-                                foreach (string video in fileNames)
-                                {
-                                    string extension = Path.GetExtension(video).ToUpper();
-                                    if (Enum.IsDefined(typeof(VideoFormat), extension.ToUpperInvariant()))
-                                    {
-                                        foreach (VideoFormat format in Enum.GetValues(typeof(VideoFormat)))
-                                        {
-                                            if (Enum.GetName(typeof(VideoFormat), format).ToLowerInvariant() == extension)
-                                            {
-                                                dvd.AddTrailer(video);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            AddTitle(dvd);
-                        }// found dvd
-                        else
-                        {
-                            if (fileNames != null && fileNames.Length > 0)
-                            {
-                                if (OMLEngine.Settings.OMLSettings.TreatFoldersAsTitles)
+                                string extension = Path.GetExtension(video).ToUpper().Substring(1);
+                                extension = extension.Replace("-", "");
+                                if (SupportedVideoExtensions.Contains(extension))
                                 {
                                     Title newVideo = new Title();
+                                    newVideo.Name = GetSuggestedMovieName(Path.GetFileNameWithoutExtension(video));
+                                    Disk disk = new Disk();
+                                    disk.Path = video;
+                                    disk.Name = "Disk 1";
+                                    disk.Format = (VideoFormat)Enum.Parse(typeof(VideoFormat), extension, true);
 
-                                    // Create the title name
-                                    DirectoryInfo di = new DirectoryInfo(currentFolder);
-                                    newVideo.Name = "";
-                                    if (OMLEngine.Settings.OMLSettings.AddParentFoldersToTitleName)
+                                    string pathWithNoExtension = Path.GetDirectoryName(video) + "\\" + Path.GetFileNameWithoutExtension(video);
+                                    if (File.Exists(pathWithNoExtension + ".jpg"))
                                     {
-                                        // If AddParentFolderToTitleName is true then check if the parent folder
-                                        // Is the startfolder. If not add parent folder to name
-                                        DirectoryInfo st = new DirectoryInfo(startFolder);
-                                        if (st.Name != di.Parent.Name)
-                                        {
-                                            newVideo.Name = di.Parent.Name + " - ";
-                                        }
+                                        SetFrontCoverImage(ref newVideo, pathWithNoExtension + ".jpg");
                                     }
-                                    newVideo.Name += (new DirectoryInfo(currentFolder)).Name;
-
-                                    int diskNumber = 1;
-                                    foreach (string video in fileNames)
+                                    else if (File.Exists(video + ".jpg"))
                                     {
-                                        try
-                                        {
-                                            string extension = Path.GetExtension(video).ToUpper().Substring(1);
-                                            extension = extension.Replace("-", "");
-
-
-                                            if (Enum.IsDefined(typeof(VideoFormat), extension.ToUpperInvariant()))
-                                            {
-                                                Disk disk = new Disk();
-                                                disk.Path = video;
-                                                disk.Format = (VideoFormat)Enum.Parse(typeof(VideoFormat), extension, true);
-                                                disk.Name = string.Format("Disk {0}", diskNumber++);
-                                                newVideo.AddDisk(disk);
-                                            }
-                                        }
-                                        catch (Exception ex)
-                                        {
-                                            Utilities.DebugLine("[DVDLibraryImporter] Problem importing file " + video + " : " + ex.Message);
-                                        }
+                                        SetFrontCoverImage(ref newVideo, video + ".jpg");
+                                    }
+                                    else if (File.Exists(Path.GetDirectoryName(video) + "\\folder.jpg"))
+                                    {
+                                        SetFrontCoverImage(ref newVideo, Path.GetDirectoryName(video) + "\\folder.jpg");
                                     }
 
-                                    if (File.Exists(Path.Combine(currentFolder, "folder.jpg")))
-                                        newVideo.FrontCoverPath = Path.Combine(currentFolder, "folder.jpg");
-
-                                    if (newVideo.Disks.Count > 0)
-                                    {
-                                        // There is one or more valid disks for this title. Add it.
-                                        //string temp = newVideo.BackDropFolder; // This initialises the fanart folder forcing a search for fanart
-                                        AddTitle(newVideo);
-                                    }
-                                }
-                                else
-                                {
-                                    foreach (string video in fileNames)
-                                    {
-                                        try
-                                        {
-                                            string extension = Path.GetExtension(video).ToUpper().Substring(1);
-                                            extension = extension.Replace("-", "");
-
-                                            if (Enum.IsDefined(typeof(VideoFormat), extension.ToUpperInvariant()))
-                                            {
-                                                // this isn't 100% safe since there are videoformats that don't map 1-1 to extensions                                    
-                                                VideoFormat videoFormat = (VideoFormat)Enum.Parse(typeof(VideoFormat), extension, true);
-
-                                                Title newVideo = new Title();
-                                                newVideo.Name = GetSuggestedMovieName(Path.GetFileNameWithoutExtension(video));
-                                                Disk disk = new Disk();
-                                                disk.Path = video;
-                                                disk.Name = "Disk 1";
-                                                disk.Format = videoFormat;
-
-                                                string pathWithNoExtension = Path.GetDirectoryName(video) + "\\" + Path.GetFileNameWithoutExtension(video);
-                                                if (File.Exists(pathWithNoExtension + ".jpg"))
-                                                {
-                                                    newVideo.FrontCoverPath = pathWithNoExtension + ".jpg";
-                                                }
-                                                else if (File.Exists(video + ".jpg"))
-                                                {
-                                                    newVideo.FrontCoverPath = video + ".jpg";
-                                                }
-                                                else if (File.Exists(Path.GetDirectoryName(video) + "\\folder.jpg"))
-                                                {
-                                                    newVideo.FrontCoverPath = Path.GetDirectoryName(video) + "\\folder.jpg";
-                                                }
-
-                                                newVideo.AddDisk(disk);
-                                                //string temp = newVideo.BackDropFolder; // This initialises the fanart folder forcing a search for fanart
-                                                AddTitle(newVideo);
-                                            }
-                                        }
-                                        catch (Exception ex)
-                                        {
-                                            Utilities.DebugLine("[DVDLibraryImporter] Problem importing file " + video + " : " + ex.Message);
-                                        }
-                                    }
+                                    newVideo.Disks.Add(disk);
+                                    AddTitle(newVideo);
                                 }
                             }
                         }
+
                     }
                 } // loop through the sub folders
-
-
             }
             catch (Exception ex)
             {
@@ -257,26 +173,23 @@ namespace VMCDVDLibraryPlugin
             try
             {
                 string xmlFile = "";
-
-                DirectoryType dirType = GetDirectoryType(folderName);
-
-                if (dirType != DirectoryType.Normal )
+                if (Directory.Exists(folderName + "\\VIDEO_TS") || File.Exists(folderName + "\\VIDEO_TS.IFO") || File.Exists(folderName + "\\VTS_01_1.VOB"))
                 {
-                    string[] xmlFiles = Directory.GetFiles(folderName, "*dvdid.xml");
+                    string[] xmlFiles = Directory.GetFiles(folderName, "*dvdid*xml");
                     if (xmlFiles.Length > 0)
                     {
                         //xmlFile = Path.GetFileName(xmlFiles[0]); // get the first one
                         xmlFile = xmlFiles[0];
                     }
-                    //else
-                    //{
-                    //    xmlFiles = Directory.GetFiles(folderName, "*xml");
-                    //    if (xmlFiles.Length > 0)
-                    //        //xmlFile = Path.GetFileName(xmlFiles[0]); // get the first one
-                    //        xmlFile = xmlFiles[0]; // get the first one
-                    //    else
-                    //        xmlFile = "";
-                    //}
+                    else
+                    {
+                        xmlFiles = Directory.GetFiles(folderName, "*xml");
+                        if (xmlFiles.Length > 0)
+                            //xmlFile = Path.GetFileName(xmlFiles[0]); // get the first one
+                            xmlFile = xmlFiles[0]; // get the first one
+                        else
+                            xmlFile = "";
+                    }
 
                     Title t = null;
                     // xmlFile contains the dvdid - then we need to lookup in the cache folder based on this id
@@ -286,13 +199,11 @@ namespace VMCDVDLibraryPlugin
                         string xmlDetailsFile = GetDVDCacheFileName(dvdid);
                         t = ReadMetaData(folderName, xmlDetailsFile);
                     }
-
-                    if( t == null )
+                    else
                     {
                         // for DVDs with no dvdid.xml add a stripped down title with just a suggested name
                         t = new Title();
                         t.Name = GetSuggestedMovieName(folderName);
-
                     }
 
                     if (!File.Exists(t.FrontCoverPath))
@@ -303,32 +214,17 @@ namespace VMCDVDLibraryPlugin
 
                     t.ImporterSource = "VMCDVDLibraryPlugin";
                     Disk disk = new Disk();
-                    disk.Name = "Disk 1";                    
-
-                    switch (dirType)
+                    disk.Name = "Disk 1";
+                    disk.Format = VideoFormat.DVD;
+                    if (File.Exists(folderName + "\\VTS_01_1.VOB"))
                     {
-                        case DirectoryType.BluRay:
-                            disk.Format = VideoFormat.BLURAY;
-                            disk.Path = folderName;
-                            break;
-
-                        case DirectoryType.HDDvd:
-                            disk.Format = VideoFormat.HDDVD;
-                            disk.Path = folderName;
-                            break;
-
-                        case DirectoryType.DVD_Flat:
-                            disk.Format = VideoFormat.DVD;
-                            disk.Path = folderName;
-                            break;
-
-                        case DirectoryType.DVD_Ripped:
-                            disk.Format = VideoFormat.DVD;
-                            disk.Path = folderName;
-                            break;
-                    }                    
-
-                    t.AddDisk(disk);
+                        disk.Path = folderName;
+                    }
+                    else
+                    {
+                        disk.Path = folderName + "\\VIDEO_TS";
+                    }
+                    t.Disks.Add(disk);
                     t.MetadataSourceName = "VMC DVD Library";
                     return t;
                 }
@@ -370,6 +266,7 @@ namespace VMCDVDLibraryPlugin
                             string[] actors = leadPerformer.Split(new char[] { ';', ',', '|' });
                             foreach (string actor in actors)
                             {
+                                t.AddActor(new Person(actor.Trim()));
                                 t.AddActingRole(actor.Trim(), "");
                             }
                         }
@@ -391,7 +288,7 @@ namespace VMCDVDLibraryPlugin
 
                         bFound = reader.ReadToFollowing("language");
                         if (bFound)
-                            t.AddAudioTrack(reader.ReadString().Trim());
+                            t.AddLanguageFormat(reader.ReadString().Trim());
 
                         bFound = reader.ReadToFollowing("releaseDate");
                         if (bFound)
@@ -430,7 +327,7 @@ namespace VMCDVDLibraryPlugin
                             imageFileName = movieFolder + "\\folder.jpg";
                         }
 
-                        t.FrontCoverPath = imageFileName;
+                        SetFrontCoverImage(ref t, imageFileName);
 
                         bFound = reader.ReadToFollowing("duration");
                         if (bFound)
@@ -511,8 +408,20 @@ namespace VMCDVDLibraryPlugin
 
         private string GetDVDCacheFileName(string dvdid)
         {
-            string xmlFileName = dvdid.Replace("|", "-") + ".xml";
-            return DVDCacheFolder + "\\" + xmlFileName;
+            string xmlFileName = "";
+
+            // fix from MostlyHarmless on TGB
+            Regex match = new Regex("^[a-fA-F0-9]{6,8}\\|{1}[a-fA-F0-9]{8}");
+            if (match.IsMatch(dvdid))
+            {
+                xmlFileName = dvdid.Replace("|", "-") + ".xml";
+            }
+            else
+            {
+                // can be custom id
+                xmlFileName = dvdid + ".xml";
+            }
+            return DVDCacheFolder + "\\" + xmlFileName; ;
         }
 
         // gets the local machine's VMC DVD cache folder
@@ -523,7 +432,6 @@ namespace VMCDVDLibraryPlugin
 
         private string GetSuggestedMovieName(string fullPath)
         {
-            //string suggestedName = Path.GetDirectoryName(fullPath);
             string suggestedName = Path.GetFileName(fullPath);
             suggestedName = suggestedName.Trim();
             suggestedName = suggestedName.Replace('_', ' ');
@@ -534,9 +442,6 @@ namespace VMCDVDLibraryPlugin
 
         private void GetSubFolders(string startFolder, List<string> folderList)
         {
-            // First check if root is a dvd / bluray disk structure
-            if (GetDirectoryType(startFolder) != DirectoryType.Normal) { return; }
-
             DirectoryInfo[] diArr = null;
             try
             {
@@ -544,15 +449,14 @@ namespace VMCDVDLibraryPlugin
                 diArr = di.GetDirectories();
                 foreach (DirectoryInfo folder in diArr)
                 {
-                    if (folder.Name[0] != '.')
+                    folderList.Add(folder.FullName);
+                    if (Directory.Exists(folder.FullName + "\\VIDEO_TS") || File.Exists(folder.FullName + "\\VIDEO_TS.IFO") || File.Exists(folder.FullName + "\\VTS_01_1.VOB"))
                     {
-                        folderList.Add(folder.FullName);
-
-                        // ignore subdirectories of movie folders
-                        if (GetDirectoryType(folder.FullName) == DirectoryType.Normal)
-                        {
-                            GetSubFolders(folder.FullName, folderList);
-                        }
+                        // stop here
+                    }
+                    else
+                    {
+                        GetSubFolders(folder.FullName, folderList);
                     }
                 }
 
@@ -564,36 +468,45 @@ namespace VMCDVDLibraryPlugin
             }
         }
 
-        /// <summary>
-        /// Gets what kind of movie this directory may contain
-        /// </summary>
-        /// <param name="folder"></param>
-        /// <returns></returns>
-        private DirectoryType GetDirectoryType(string folder)
-        {
-            if (Directory.Exists(Path.Combine(folder, "VIDEO_TS")))
-            {
-                return DirectoryType.DVD_Ripped;
-            }
-            else if (File.Exists(Path.Combine(folder, "VIDEO_TS.IFO")) ||
-                       File.Exists(Path.Combine(folder, "vts_01_1.vob")))
-            {
-                return DirectoryType.DVD_Flat;
-            }
-            else if (Directory.Exists(Path.Combine(folder, "BDMV")))
-            {
-                return DirectoryType.BluRay;
-            }
-            else if (Directory.Exists(Path.Combine(folder, "HVDVD_TS")))
-            {
-                return DirectoryType.HDDvd;
-            }
-
-            return DirectoryType.Normal;
-        }
-
         private void UpdateTitleFromOMLXML(Title t)
         {
         }
+
+        HashSet<string> SupportedVideoExtensions = new HashSet<string>() 
+        {
+        "ASF",
+        "AVC",
+        "AVI", // DivX, Xvid, etc
+        "B5T", // BlindWrite image
+        "B6T", // BlindWrite image
+        "BIN", // using an image loader lib and load/play this as a DVD
+        "BWT", // BlindWrite image
+        "CCD", // CloneCD image
+        "CDI", // DiscJuggler Image
+        "CUE", // cue sheet
+        "DVR-MS", // MPG
+        "DVRMS", // MPG
+        "H264", // AVC OR MP4
+        "IMG", // using an image loader lib and load/play this as a DVD
+        "ISO", // Standard ISO image
+        "ISZ", // Compressed ISO image
+        "MDF", // using an image loader lib and load/play this as a DVD
+        "MDS", // Media Descriptor file
+        "MKV", // Likely h264
+        "MOV", // Quicktime
+        "MPG",
+        "MPEG",
+        "MP4", // DivX, AVC, or H264
+        "NRG", // Nero image
+        "OGM", // Similar to MKV
+        "PDI", // Instant CD/DVD image
+        "TS", // MPEG2
+        "UIF",
+        "WMV",
+        //"VOB", // MPEG2 - make sure it's not part of a DVD
+        "WVX", // wtf is this?
+        "ASX", // wtf is this?
+        "WPL" // playlist file?
+        };
     }
 }

@@ -6,7 +6,7 @@ namespace Library
 {
     public class DirectoryTreeNode : TreeNode
     {
-        public new string FullPath
+        public string FullPath
         {
             get { return _fullPath; }
             set

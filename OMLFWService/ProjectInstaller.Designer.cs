@@ -28,33 +28,33 @@ namespace OMLFWService
         /// </summary>
         private void InitializeComponent()
         {
-            this.OMLFWServiceProcessInstaller = new System.ServiceProcess.ServiceProcessInstaller();
-            this.OMLFWService = new System.ServiceProcess.ServiceInstaller();
+            this.serviceProcessInstaller1 = new System.ServiceProcess.ServiceProcessInstaller();
+            this.serviceInstaller1 = new System.ServiceProcess.ServiceInstaller();
             // 
-            // OMLFWServiceProcessInstaller
+            // serviceProcessInstaller1
             // 
-            this.OMLFWServiceProcessInstaller.Account = System.ServiceProcess.ServiceAccount.LocalSystem;
-            this.OMLFWServiceProcessInstaller.Password = null;
-            this.OMLFWServiceProcessInstaller.Username = null;
+            this.serviceProcessInstaller1.Account = System.ServiceProcess.ServiceAccount.LocalSystem;
+            this.serviceProcessInstaller1.Password = null;
+            this.serviceProcessInstaller1.Username = null;
             // 
-            // OMLFWService
+            // serviceInstaller1
             // 
-            this.OMLFWService.Description = "Watches for changes to files of interest to OML";
-            this.OMLFWService.DisplayName = "OMLFileWatcher";
-            this.OMLFWService.ServiceName = "OMLFWService";
-            this.OMLFWService.StartType = System.ServiceProcess.ServiceStartMode.Automatic;
+            this.serviceInstaller1.Description = "Watches for changes to files of interest to OML";
+            this.serviceInstaller1.DisplayName = "OMLFileWatcher";
+            this.serviceInstaller1.ServiceName = "OMLFWService";
+            this.serviceInstaller1.StartType = System.ServiceProcess.ServiceStartMode.Automatic;
             // 
             // ProjectInstaller
             // 
             this.Installers.AddRange(new System.Configuration.Install.Installer[] {
-            this.OMLFWServiceProcessInstaller,
-            this.OMLFWService});
+            this.serviceProcessInstaller1,
+            this.serviceInstaller1});
 
         }
 
         #endregion
 
-        private System.ServiceProcess.ServiceProcessInstaller OMLFWServiceProcessInstaller;
-        private System.ServiceProcess.ServiceInstaller OMLFWService;
+        private System.ServiceProcess.ServiceProcessInstaller serviceProcessInstaller1;
+        private System.ServiceProcess.ServiceInstaller serviceInstaller1;
     }
 }

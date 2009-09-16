@@ -3,9 +3,6 @@
 
 using System;
 using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.ComTypes;
-
-using STATSTG = System.Runtime.InteropServices.ComTypes.STATSTG;
 
 namespace Toub.MediaCenter.Dvrms.DirectShow
 {
@@ -26,7 +23,7 @@ namespace Toub.MediaCenter.Dvrms.DirectShow
 		/// <param name="reserved1">Reserved for future use; must be zero.</param>
 		/// <param name="reserved2">Reserved for future use; must be zero.</param>
 		/// <returns>Pointer to the location of the new IStream interface pointer.</returns>
-		IStream CreateStream(
+		UCOMIStream CreateStream(
 			[In, MarshalAs(UnmanagedType.BStr)] string pwcsName, 
 			[In] uint grfMode, [In] uint reserved1, [In] uint reserved2);
 		
@@ -36,7 +33,7 @@ namespace Toub.MediaCenter.Dvrms.DirectShow
 		/// <param name="grfMode">Specifies the access mode to be assigned to the open stream.</param>
 		/// <param name="reserved2">Reserved for future use; must be zero.</param>
 		/// <returns>Pointer to IStream pointer variable that receives the interface pointer to the newly opened stream object.</returns>
-		IStream OpenStream(
+		UCOMIStream OpenStream(
 			[In, MarshalAs(UnmanagedType.BStr)] string pwcsName, 
 			[In] IntPtr reserved1, 
 			[In] uint grfMode, [In] uint reserved2);

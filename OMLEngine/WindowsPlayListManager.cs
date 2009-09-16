@@ -180,7 +180,6 @@ namespace OMLEngine
     /// </summary>
     public class PlayListItem : IComparable
     {
-        private string _name;
         private string _fileLocation;
         private int _sortOrder;
 
@@ -193,17 +192,6 @@ namespace OMLEngine
             _fileLocation = FileLocation;
         }
 
-        public PlayListItem(string FileLocation, string name)
-        {
-            _fileLocation = FileLocation;
-            _name = name;
-        }
-
-        public string Name
-        {
-            get { return _name; }
-            set { _name = value; }
-        }
         /// <summary>
         /// 
         /// </summary>

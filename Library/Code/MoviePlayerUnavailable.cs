@@ -11,19 +11,19 @@ namespace Library
 {
     public class UnavailableMoviePlayer : IPlayMovie
     {
-        MediaSource _source;
-
-        public UnavailableMoviePlayer(MediaSource source)
+        public UnavailableMoviePlayer(MovieItem title)
         {
-            _source = source;
+            _title = title;
         }
 
         public bool PlayMovie()
         {
             // show a popup or a page explaining the error
-            AddInHost.Current.MediaCenterEnvironment.Dialog("Could not find file [" + _source.MediaPath + "] or don't know how to play this file type", 
-                "Error", DialogButtons.Ok, 0, true);
+            //return false;
+            AddInHost.Current.MediaCenterEnvironment.Dialog("Could not find file [" + _title.SelectedDisk.Path + "] or don't know how to play this file type", "Error", DialogButtons.Ok, 0, true);
             return false;
         }
+
+        MovieItem _title;
     }
 }

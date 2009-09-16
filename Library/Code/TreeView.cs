@@ -10,7 +10,7 @@ namespace Library
 {
     delegate void AsyncChildNodeRequest(int level);
 
-    public class TreeView : BaseModelItem
+    public class TreeView : ModelItem
     {
         private ArrayListDataSet _childNodes = new ArrayListDataSet();
         private TreeNode _checkedNode = null;

@@ -30,67 +30,12 @@ namespace OMLEngine
             }
         }
 
-        public static string TempPlayListDirectory
-        {
-            get { return Path.Combine(PublicRootDirectory, @"TempPlaylists"); }
-        }
-
-        public static string MainBackDropDirectory
-        {
-            get { return Path.Combine(PublicRootDirectory, @"MainBackDrops"); }
-        }
-
-        public static string FanArtDirectory
-        {
-            get { return Path.Combine(PublicRootDirectory, @"FanArt"); }
-        }
-
-        public static string DBBackupDirectory
-        {
-            get { return Path.Combine(PublicRootDirectory, @"Backups"); }
-        }
-
-        public static bool DBBackupDirectoryExists
-        {
-            get { return Directory.Exists(DBBackupDirectory); }
-        }
-
-        public static void createDBBackupDirectory()
-        {
-            Directory.CreateDirectory(DBBackupDirectory);
-        }
-
-        public static string ThirdPartyData
-        {
-            get { return Path.Combine(PublicRootDirectory, @"ThirdPartyData"); }
-        }
-
-        public static bool ThirdPartyDataExists
-        {
-            get { return Directory.Exists(ThirdPartyData); }
-        }
-
-        public static void createThirdPartyDatay()
-        {
-            Directory.CreateDirectory(ThirdPartyData);
-        }
-
         /// <summary>
         /// Location for cover art and other images to be stored
         /// </summary>
         public static string ImageDirectory
         {
             get { return Path.Combine(PublicRootDirectory, @"Images"); }
-        }
-
-        public static string ImageDownloadDirectory
-        {
-            get { return Path.Combine(PublicRootDirectory, @"DownloadImages"); }
-        }
-
-        public static string ExtenderCacheDirectory
-        {
-            get { return Path.Combine(PublicRootDirectory, @"ExtenderCache"); }
         }
 
         /// <summary>
@@ -101,15 +46,6 @@ namespace OMLEngine
             get { return Path.Combine(RootDirectory, @"Plugins"); }
         }
 
-        public static bool FanArtDirectoryExists
-        {
-            get { return Directory.Exists(FanArtDirectory); }
-        }
-
-        public static void createFanArtDirectory()
-        {
-            Directory.CreateDirectory(FanArtDirectory);
-        }
         /// <summary>
         /// Location where all debug and other logs are created
         /// </summary>
@@ -118,27 +54,6 @@ namespace OMLEngine
             get { return Path.Combine(PublicRootDirectory, @"Logs"); }
         }
 
-        /// <summary>
-        /// Location where all transcoded files are created
-        /// </summary>
-        public static string TranscodeBufferDirectory
-        {
-            get { return Path.Combine(PublicRootDirectory, @"TranscodeBuffers"); }
-        }
-
-        /// <summary>
-        /// Location where all translation files are stored.
-        /// </summary>
-        public static string TranslationsDirectory
-        {
-            get { return Path.Combine(RootDirectory, @"Translations"); }
-        }
-
-
-        public static bool MainBackDropDirExists
-        {
-            get { return Directory.Exists(MainBackDropDirectory); }
-        }
         /// <summary>
         /// Checks to ensure that the Root directory exists
         /// </summary>
@@ -162,16 +77,6 @@ namespace OMLEngine
             get { return Directory.Exists(ImageDirectory); }
         }
 
-        public static bool ExtenderCacheDirectoryExists
-        {
-            get { return Directory.Exists(ExtenderCacheDirectory); }
-        }
-
-        public static bool ImageDownloadDirExists
-        {
-            get { return Directory.Exists(ImageDownloadDirectory); }
-        }
-
         /// <summary>
         /// Checks to ensure that the plugins directory exists
         /// </summary>
@@ -191,34 +96,6 @@ namespace OMLEngine
         }
 
         /// <summary>
-        /// Checks to ensure that the transcode buffer directory exists
-        /// </summary>
-        /// <returns>True on success</returns>
-        public static bool TranscodeBufferDirExists
-        {
-            get { return Directory.Exists(TranscodeBufferDirectory); }
-        }
-
-        /// <summary>
-        /// Checks to ensure that the translations directory exists
-        /// </summary>
-        /// <returns>True on success</returns>
-        public static bool TranslationsDirExists
-        {
-            get { return Directory.Exists(TranslationsDirectory); }
-        }
-
-        public static bool TempPlayListDirExists
-        {
-            get { return Directory.Exists(TempPlayListDirectory); }
-        }
-
-        public static void createMainBackDropDirectory()
-        {
-            Directory.CreateDirectory(MainBackDropDirectory);
-        }
-
-        /// <summary>
         /// Creates the root directory if it doesn't already exist
         /// </summary>
         public static void createRootDirectory()
@@ -231,27 +108,12 @@ namespace OMLEngine
             Directory.CreateDirectory(PublicRootDirectory);
         }
 
-        public static void createTempPlayListDirectory()
-        {
-            Directory.CreateDirectory(TempPlayListDirectory);
-        }
-
         /// <summary>
         /// Creates the image directory if it doesn't already exist
         /// </summary>
         public static void createImageDirectory()
         {
             Directory.CreateDirectory(ImageDirectory);
-        }
-
-        public static void CreateExtenderCacheDirectory()
-        {
-            Directory.CreateDirectory(ExtenderCacheDirectory);
-        }
-
-        public static void createImageDownloadDirectory()
-        {
-            Directory.CreateDirectory(ImageDownloadDirectory);
         }
 
         /// <summary>
@@ -268,14 +130,6 @@ namespace OMLEngine
         public static void createLogDirectory()
         {
             Directory.CreateDirectory(LogDirectory);
-        }
-
-        /// <summary>
-        /// Creates the transcode buffer directory if it doesn't already exist
-        /// </summary>
-        public static void createTranscodeBufferDirectory()
-        {
-            Directory.CreateDirectory(TranscodeBufferDirectory);
         }
 
         /// <summary>
