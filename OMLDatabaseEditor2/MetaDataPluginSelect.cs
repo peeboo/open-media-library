@@ -23,7 +23,7 @@ namespace OMLDatabaseEditor
             _metadataPlugins = metadataPlugins;
 
             // Preferred sources
-            if (!String.IsNullOrEmpty(OMLEngine.Settings.OMLSettings.DefaultMetadataPluginMovies))
+            if (!String.IsNullOrEmpty(OMLEngine.Settings.OMLSettings.DefaultMetadataPlugin))
             {
                 cmbPlugins.Properties.Items.Add("From Preferred Sources");
             }

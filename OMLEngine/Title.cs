@@ -672,8 +672,7 @@ namespace OMLEngine
         {
             if (_thumbnailMenuPath == null)
             {
-                //int? thumbnailId = ImageManager.GetImageIdForTitleThreadSafe(this.Id, ImageType.ThumbnailImage);
-                int? thumbnailId = ImageManager.GetImageIdForTitleThreadSafe(this.Id, ImageType.FrontCoverImage);
+                int? thumbnailId = ImageManager.GetImageIdForTitleThreadSafe(this.Id, ImageType.ThumbnailImage);
                 _thumbnailMenuPath = ImageManager.GetImagePathById(thumbnailId, ImageSize.Small);
 
                 if(string.IsNullOrEmpty(_thumbnailMenuPath) && this.Disks!=null && this.Disks.Count>0)
@@ -709,8 +708,7 @@ namespace OMLEngine
                         {
                             Dao.ImageMapping image = new OMLEngine.Dao.ImageMapping();
                             image.ImageId = id.Value;
-                            //image.ImageType = (byte)ImageType.ThumbnailImage;
-                            image.ImageType = (byte)ImageType.FrontCoverImage;
+                            image.ImageType = (byte)ImageType.ThumbnailImage;
                             TitleCollectionManager.AddThumbnailImage(this, image);
                             //tmp need to change filename
                             //_thumbnailMenuPath = imageNamePath;
@@ -734,8 +732,7 @@ namespace OMLEngine
             {
                 if (_thumbnailMenuPath == null)
                 {
-                    //Dao.ImageMapping thumbnail = _title.Images.FirstOrDefault(i => i.ImageType == (byte)ImageType.ThumbnailImage);
-                    Dao.ImageMapping thumbnail = _title.Images.FirstOrDefault(i => i.ImageType == (byte)ImageType.FrontCoverImage);
+                    Dao.ImageMapping thumbnail = _title.Images.FirstOrDefault(i => i.ImageType == (byte)ImageType.ThumbnailImage);
                     string path = ImageManager.ConstructImagePathById((thumbnail == null) ? (int?)null : thumbnail.ImageId, ImageSize.Small);
 
                     if (File.Exists(path))

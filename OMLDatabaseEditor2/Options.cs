@@ -91,12 +91,8 @@ namespace OMLDatabaseEditor
                 cmbDefaultMetadataPlugin.Properties.Items.Add(plugin.DataProviderName);
                 cmbDefaultMetadataPluginTV.Properties.Items.Add(plugin.DataProviderName);
             }
-            cmbDefaultMetadataPlugin.SelectedItem = OMLEngine.Settings.OMLSettings.DefaultMetadataPluginMovies;
+            cmbDefaultMetadataPlugin.SelectedItem = OMLEngine.Settings.OMLSettings.DefaultMetadataPlugin;
             cmbDefaultMetadataPluginTV.SelectedItem = OMLEngine.Settings.OMLSettings.DefaultMetadataPluginTV;
-            ceUpdateMissingDataOnlyMovies.Checked = !OMLEngine.Settings.OMLSettings.MetadataLookupOverwriteExistingDataPrefMovies;
-            ceUpdateTitleNameMovies.Checked = OMLEngine.Settings.OMLSettings.MetadataLookupUpdateNamePrefMovies;
-            ceUpdateMissingDataOnlyTV.Checked = !OMLEngine.Settings.OMLSettings.MetadataLookupOverwriteExistingDataPrefTV;
-            ceUpdateTitleNameTV.Checked = OMLEngine.Settings.OMLSettings.MetadataLookupUpdateNamePrefTV;
 
             seMetadataLookupResultsQty.Value = OMLEngine.Settings.OMLSettings.MetadataLookupResultsQty;
 
@@ -107,6 +103,8 @@ namespace OMLDatabaseEditor
             beTitledFanArtPath.MaskBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
             beTitledFanArtPath.MaskBox.AutoCompleteSource = AutoCompleteSource.FileSystemDirectories;
 
+            ceAutoScanDiskOnAdd.Checked = OMLSettings.AutoScanDiskOnAdding;
+            ceScanDiskRollInfoToTitle.Checked = OMLSettings.ScanDiskRollInfoToTitle;
             ceStSanaCreateTLFolder.Checked = OMLSettings.StSanaCreateTLFolder;
             ceStSanaAlwaysCreateMovieFolder.Checked = OMLSettings.StSanaAlwaysCreateMovieFolder;
             ceDBEStSanaAutoLookupMeta.Checked = OMLEngine.Settings.OMLSettings.StSanaAutoLookupMeta;
@@ -173,14 +171,8 @@ namespace OMLDatabaseEditor
                 }
 
                 bDirty = true;
-
-                // Preferred metadata lookup
-                OMLEngine.Settings.OMLSettings.DefaultMetadataPluginMovies = (string)cmbDefaultMetadataPlugin.SelectedItem;
+                OMLEngine.Settings.OMLSettings.DefaultMetadataPlugin = (string)cmbDefaultMetadataPlugin.SelectedItem;
                 OMLEngine.Settings.OMLSettings.DefaultMetadataPluginTV = (string)cmbDefaultMetadataPluginTV.SelectedItem;
-                OMLEngine.Settings.OMLSettings.MetadataLookupOverwriteExistingDataPrefMovies = !ceUpdateMissingDataOnlyMovies.Checked;
-                OMLEngine.Settings.OMLSettings.MetadataLookupUpdateNamePrefMovies = ceUpdateTitleNameMovies.Checked;
-                OMLEngine.Settings.OMLSettings.MetadataLookupOverwriteExistingDataPrefTV = !ceUpdateMissingDataOnlyTV.Checked;
-                OMLEngine.Settings.OMLSettings.MetadataLookupUpdateNamePrefTV = ceUpdateTitleNameTV.Checked;
 
                 OMLEngine.Settings.OMLSettings.MetadataLookupResultsQty = (int)seMetadataLookupResultsQty.Value;
                 
@@ -201,6 +193,11 @@ namespace OMLDatabaseEditor
                 {
                     OMLSettings.AddParentFoldersToTitleName = this.cePrependParentFolder.Checked;
                 }
+
+
+                OMLSettings.AutoScanDiskOnAdding = ceAutoScanDiskOnAdd.Checked;
+                OMLSettings.ScanDiskRollInfoToTitle = ceScanDiskRollInfoToTitle.Checked;
+
 
                 MountingTool.Tool tool = (MountingTool.Tool)Enum.Parse(typeof(MountingTool.Tool), rgMountingTool.Text);
                 OMLSettings.MountingToolSelection = tool;
@@ -347,6 +344,11 @@ namespace OMLDatabaseEditor
                 mnt.ScanForMountTool((OMLEngine.FileSystem.MountingTool.Tool)Enum.Parse(typeof(OMLEngine.FileSystem.MountingTool.Tool), rgMountingTool.Text), cmbMntToolScan.Text);
 
             if (teMntToolPath.Text == "") XtraMessageBox.Show("Cannot find the selected image mounting tool!");
+
+        }
+
+        private void tpMetadata_Paint(object sender, PaintEventArgs e)
+        {
 
         }
     }

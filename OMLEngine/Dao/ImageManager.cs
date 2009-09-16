@@ -100,7 +100,7 @@ namespace OMLEngine
         {
             Image image = null;
 
-            using (Dao.LocalDataContext db = new OMLEngine.Dao.LocalDataContext(true))
+            using (Dao.LocalDataContext db = new OMLEngine.Dao.LocalDataContext())
             {                                
                 Dao.DBImage dbImage = db.Context.DBImages.SingleOrDefault(i => i.Id == id);
 
@@ -522,7 +522,7 @@ namespace OMLEngine
 
         public static int? GetImageIdForTitleThreadSafe(int titleId, ImageType imageType)
         {
-            using (Dao.LocalDataContext db = new OMLEngine.Dao.LocalDataContext(true))
+            using (Dao.LocalDataContext db = new OMLEngine.Dao.LocalDataContext())
             {                
                 int imageId = (from a in db.Context.ImageMappings
                                   where a.TitleId == titleId
@@ -542,7 +542,7 @@ namespace OMLEngine
         /// <returns></returns>
         public static bool CheckImageOriginalNameTitleThreadSafe(int titleId, string fileName)
         {
-            using (Dao.LocalDataContext db = new OMLEngine.Dao.LocalDataContext(true))
+            using (Dao.LocalDataContext db = new OMLEngine.Dao.LocalDataContext())
             {
                 int count = (from a in db.Context.ImageMappings
                              where a.OriginalName == Path.GetFileName(fileName)

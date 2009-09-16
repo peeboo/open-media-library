@@ -107,7 +107,7 @@ namespace OMLEngine.Dao
 
         public static int AddImage(byte[] imageStream)
         {
-            using (LocalDataContext db = new LocalDataContext(true))
+            using (LocalDataContext db = new LocalDataContext())
             {                
                 DBImage dbImage = new OMLEngine.Dao.DBImage();
                 dbImage.Image = imageStream;

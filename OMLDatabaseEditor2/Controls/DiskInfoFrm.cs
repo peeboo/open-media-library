@@ -122,15 +122,18 @@ namespace OMLDatabaseEditor.Controls
             }
         }
 
-        private void sbSetAsMainFeature_Click(object sender, EventArgs e) {
-            try {
+        private void sbSetAsMainFeature_Click(object sender, EventArgs e)
+        {
+            try
+            {
                 int Feature;
                 int VideoStream;
                 int AudioStream;
 
                 string selectedNodeName = tvDiskInfo.SelectedNode.Name;
                 string[] pars = selectedNodeName.Split(',');
-                switch (pars[0]) {
+                switch (pars[0])
+                {
                     case "Feature":
                         Feature = Convert.ToInt32(pars[1]);
                         VideoStream = 0;
@@ -160,12 +163,16 @@ namespace OMLDatabaseEditor.Controls
                 _disk.MainFeatureFPS = _disk.DiskFeatures[Feature].VideoStreams[VideoStream].FrameRate;
                 _disk.MainFeatureLength = _disk.DiskFeatures[Feature].Duration.Hours * 60 + _disk.DiskFeatures[Feature].Duration.Minutes;
 
-                _title.VideoResolution = _disk.MainFeatureXRes.ToString() + "x" + _disk.MainFeatureYRes.ToString();
-                _title.AspectRatio = _disk.MainFeatureAspectRatio;
-                //_disk.MainFeatureFPS = _disk.DiskFeatures[Feature].VideoStreams[VideoStream].FrameRate;
-                _title.Runtime = _disk.MainFeatureLength ?? 0;
-            } catch (Exception ex) {
-                Utilities.DebugLine("[DiskInfoForm] Failed to add disk info into title: {0}", ex.Message);
+                if (OMLEngine.Settings.OMLSettings.ScanDiskRollInfoToTitle)
+                {
+                    _title.VideoResolution = _disk.MainFeatureXRes.ToString() + "x" + _disk.MainFeatureYRes.ToString();
+                    _title.AspectRatio = _disk.MainFeatureAspectRatio;
+                    //_disk.MainFeatureFPS = _disk.DiskFeatures[Feature].VideoStreams[VideoStream].FrameRate;
+                    _title.Runtime = _disk.MainFeatureLength ?? 0;
+                }
+            }
+            catch
+            {
             }
         }
     }

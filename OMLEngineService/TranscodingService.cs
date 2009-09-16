@@ -2,11 +2,8 @@
 using System.Configuration;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Threading;
-using System.Runtime.InteropServices;
 using System.ServiceModel;
-using System.ComponentModel;
 
 using OMLEngine;
 using OMLTranscoder;
@@ -102,55 +99,6 @@ namespace OMLEngineService
                     sProxies.Remove(url);
         }
 
-        public string MakeMPEGLink(string mpegFolder, string vob) {
-            string mpegFile = GetMPEGName(mpegFolder, vob);
-            if (File.Exists(mpegFile))
-                return mpegFile;
-
-            bool ret = CreateSymbolicLink(mpegFile, vob, SYMLINK_FLAG_FILE);
-            string retMsg = ret ? "success" : "Sym-Link failed: " + new Win32Exception(Marshal.GetLastWin32Error()).Message;
-            if (File.Exists(mpegFile)) {
-                Utilities.DebugLine(string.Format("created a sym-link {0} -> {1}, kernel32 success", vob, mpegFile));
-                return mpegFile;
-            }
-
-            Utilities.DebugLine("created a sym-link {0} -> {1}, failed, {2}", vob, mpegFile, retMsg);
-
-            string args = string.Format("/c mklink \"{0}\" \"{1}\"", mpegFile, vob);
-            System.Diagnostics.ProcessStartInfo psi = new System.Diagnostics.ProcessStartInfo("cmd.exe", args);
-            psi.CreateNoWindow = true;
-            psi.UseShellExecute = true;
-            psi.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-            System.Diagnostics.Process p = System.Diagnostics.Process.Start(psi);
-            p.WaitForExit();
-            int exitCode = p.ExitCode;
-
-            if (File.Exists(mpegFile)) {
-                Utilities.DebugLine("created a sym-link {0} -> {1}, cmd.exe success", vob, mpegFile);
-                return mpegFile;
-            }
-
-            Utilities.DebugLine("created a sym-link {0} -> {1}, mklink failed: args:'{2}', exit code: {3}", vob, mpegFile, args, exitCode);
-
-            ret = CreateHardLinkAPI(mpegFile, vob, IntPtr.Zero);
-            retMsg = ret ? "success" : "Hard-Link failed: " + new Win32Exception(Marshal.GetLastWin32Error()).Message;
-            if (File.Exists(mpegFile)) {
-                Utilities.DebugLine("created a hard-link {0} -> {1}, success", vob, mpegFile);
-               return mpegFile;
-            }
-
-            Utilities.DebugLine("failed to create link {0} -> {1}, neither with sym-link, mklink nor hard-link", vob, mpegFile);
-            return null;
-        }
-
-        public bool CreateSymbolicLink(string mpegFile, string vob) {
-            return CreateSymbolicLink(mpegFile, vob, SYMLINK_FLAG_FILE);
-        }
-
-        private static string GetMPEGName(string mpegFolder, string vob) {
-            return Path.Combine(mpegFolder, Path.GetFileNameWithoutExtension(vob)) + ".MPG";
-        }
-
         #region -- Implementation --
         internal static void NotifyAll(string key, TranscodingStatus status)
         {
@@ -191,23 +139,6 @@ namespace OMLEngineService
         static IDictionary<string, Transcoder> sTranscoders = new Dictionary<string, Transcoder>();
         static IDictionary<string, string> sUserSession = new Dictionary<string, string>();
         static IDictionary<string, bool> sProxies = new Dictionary<string, bool>();
-        #endregion
-
-        #region -- NTFS helper functions to create hard-links --
-        [DllImport("Kernel32.Dll", CharSet = CharSet.Unicode, SetLastError = true)]
-        static extern bool CreateSymbolicLink(
-            [MarshalAs(UnmanagedType.LPTStr)] string lpSymlinkFileName,
-            [MarshalAs(UnmanagedType.LPTStr)] string lpTargetFileName,
-            int dwFlags);
-        const int SYMLINK_FLAG_DIRECTORY = 1;
-        const int SYMLINK_FLAG_FILE = 0;
-
-        [DllImport("Kernel32.Dll", CharSet = CharSet.Unicode, EntryPoint = "CreateHardLink", SetLastError = true)]
-        static extern bool CreateHardLinkAPI(
-            [MarshalAs(UnmanagedType.LPTStr)] string lpFileName,
-            [MarshalAs(UnmanagedType.LPTStr)] string lpExistingFileName,
-            IntPtr /* LPSECURITY_ATTRIBUTES */ lpSecurityAttributes
-        );
         #endregion
     }
 

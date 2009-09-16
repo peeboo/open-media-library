@@ -71,7 +71,7 @@ namespace OMLSDK
         {
             title = null;
 
-            string preferredplugin = OMLEngine.Settings.OMLSettings.DefaultMetadataPluginMovies;
+            string preferredplugin = OMLEngine.Settings.OMLSettings.DefaultMetadataPlugin;
             
             if ((((titletype & TitleTypes.TVShow) != 0) ||
                 ((titletype & TitleTypes.Season) != 0) ||

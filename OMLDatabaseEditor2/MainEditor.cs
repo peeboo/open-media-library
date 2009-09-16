@@ -262,7 +262,7 @@ namespace OMLDatabaseEditor
                 miMetadataMulti.DropDownItems.Add(metadataItem);*/
             }
 
-            if (String.IsNullOrEmpty(OMLEngine.Settings.OMLSettings.DefaultMetadataPluginMovies))
+            if (String.IsNullOrEmpty(OMLEngine.Settings.OMLSettings.DefaultMetadataPlugin))
                 fromPreferredSourcesToolStripMenuItem1.Visible = false;
         }
 
@@ -770,7 +770,7 @@ namespace OMLDatabaseEditor
                             if (((title.TitleType & TitleTypes.Season) != 0) ||
                                 ((title.TitleType & TitleTypes.TVShow) != 0))
                             {
-                                // Only searching for the Show / season
+                                // Only searching for the Show
                                 searchResultForm = new frmSearchResult(plugin, titleNameSearch, "", 0, 0, true, true);
                             }
                             else
@@ -801,9 +801,9 @@ namespace OMLDatabaseEditor
                                 else
                                 {
                                     title.CopyMetadata(searchresult,
-                                        OMLEngine.Settings.OMLSettings.MetadataLookupOverwriteExistingDataManual,
-                                        OMLEngine.Settings.OMLSettings.MetadataLookupUpdateNameManual,
-                                        OMLEngine.Settings.OMLSettings.MetadataLookupOverwriteExistingDataManual);
+                                        OMLEngine.Settings.OMLSettings.MetadataLookupOverwriteExistingData,
+                                        OMLEngine.Settings.OMLSettings.MetadataLookupUpdateName,
+                                        OMLEngine.Settings.OMLSettings.MetadataLookupOverwriteExistingData);
                                 }
 
                                 LoadFanartFromPlugin(plugin, title);
@@ -830,23 +830,7 @@ namespace OMLDatabaseEditor
                         if (retval)
                         {    
                             // Successful lookup, process
-
-                            if (((title.TitleType & TitleTypes.Season) != 0) ||
-                                ((title.TitleType & TitleTypes.TVShow) != 0) ||
-                                ((title.TitleType & TitleTypes.Episode) != 0))
-                            {
-                                // Use the preferred overwrite settings for TV
-                                title.CopyMetadata(searchresult, OMLEngine.Settings.OMLSettings.MetadataLookupOverwriteExistingDataPrefTV,
-                                    OMLEngine.Settings.OMLSettings.MetadataLookupUpdateNamePrefTV,
-                                    OMLEngine.Settings.OMLSettings.MetadataLookupOverwriteExistingDataPrefTV);
-                            }
-                            else
-                            { 
-                                // Use the preferred overwrite settings for Movies
-                                title.CopyMetadata(searchresult, OMLEngine.Settings.OMLSettings.MetadataLookupOverwriteExistingDataPrefMovies,
-                                    OMLEngine.Settings.OMLSettings.MetadataLookupUpdateNamePrefMovies,
-                                    OMLEngine.Settings.OMLSettings.MetadataLookupOverwriteExistingDataPrefMovies);
-                            }
+                            title.CopyMetadata(searchresult, false, false, false);
 
                             LoadFanart(mds.FanArt, title); 
 
@@ -1001,7 +985,7 @@ namespace OMLDatabaseEditor
                     if (options.OptionsDirty)
                     {
                         this.titleEditor.SetMRULists();
-                        fromPreferredSourcesToolStripMenuItem1.Visible = !String.IsNullOrEmpty(OMLEngine.Settings.OMLSettings.DefaultMetadataPluginMovies);
+                        fromPreferredSourcesToolStripMenuItem1.Visible = !String.IsNullOrEmpty(OMLEngine.Settings.OMLSettings.DefaultMetadataPlugin);
                     }
                     PopulateMovieListV2(SelectedTreeRoot);
                 }
@@ -2362,7 +2346,7 @@ namespace OMLDatabaseEditor
                 cms.Items.Add(metadata);
 
                 // Preferred sources
-                if (((MovieSelected) && (!String.IsNullOrEmpty(OMLEngine.Settings.OMLSettings.DefaultMetadataPluginMovies))) ||
+                if (((MovieSelected) && (!String.IsNullOrEmpty(OMLEngine.Settings.OMLSettings.DefaultMetadataPlugin))) ||
                     ((EpisodeSelected) && (!String.IsNullOrEmpty(OMLEngine.Settings.OMLSettings.DefaultMetadataPluginTV))))
                 {
                     ToolStripMenuItem metadataItem = new ToolStripMenuItem("From Preferred Sources");
@@ -4001,7 +3985,7 @@ namespace OMLDatabaseEditor
         {
             if (OMLEngine.Settings.OMLSettings.StSanaAutoLookupMeta)
             {
-                if ((title == null) || (string.IsNullOrEmpty(OMLEngine.Settings.OMLSettings.DefaultMetadataPluginMovies))) return;
+                if ((title == null) || (string.IsNullOrEmpty(OMLEngine.Settings.OMLSettings.DefaultMetadataPlugin))) return;
                 StartMetadataImport(title, null, false);
             }
         }

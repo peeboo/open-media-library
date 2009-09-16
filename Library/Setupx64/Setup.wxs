@@ -482,7 +482,7 @@
         <![CDATA[NEWERVERSIONDETECTED]]>
       </Custom>
       <RemoveExistingProducts After="InstallInitialize" />
-      <!--<Custom Action="LaunchApplication" After="InstallFinalize" />-->
+      <Custom Action="LaunchApplication" After="InstallFinalize" />
       <LaunchConditions After="AppSearch"/>
 
       <!-- This custom action searches for Windows version 6.0, the Windows Media Center Ident registry  -->
@@ -593,12 +593,12 @@
                   BinaryKey="OMLCALib"
                   DllEntry="ReserveTrailersUrl"
                   Execute="deferred"
-                  Impersonate="no"
                   Return="check" />
 
     <CustomAction Id="StartOMLEngineServiceAction"
                 BinaryKey="OMLCALib"
                 DllEntry="StartOMLEngineService"
+                Execute="deferred"
                 Return="ignore" />
 
     <CustomAction Id="ActivateNetTcpPortSharing"

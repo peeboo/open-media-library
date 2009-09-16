@@ -53,12 +53,12 @@ namespace OMLEngine.Dao
                     if (db == null) {
                         db = new OMLDataDataContext();
 
-                        //db.DeferredLoadingEnabled = false;
+                        db.DeferredLoadingEnabled = true;
 
                         System.Data.Linq.DataLoadOptions loadOptions = new System.Data.Linq.DataLoadOptions();
                         loadOptions.LoadWith<Title>(i => i.Images);
                         db.LoadOptions = loadOptions;
-                        //db.Log = OMLDBContextLogger.Logger();
+                        db.Log = OMLDBContextLogger.Logger();
 
                         db.Connection.ConnectionString = OMLEngine.DatabaseManagement.DatabaseInformation.OMLDatabaseConnectionString;
                     }
@@ -75,18 +75,17 @@ namespace OMLEngine.Dao
         private static object lockObject = new object();
         public OMLDataDataContext Context { get { return db; } }
 
-        public LocalDataContext(bool readOnly)
+        public LocalDataContext()
         {
             lock (lockObject) {
                 db = new OMLDataDataContext();
-                //db.DeferredLoadingEnabled = false;
-//                if (readOnly)
-//                    db.ObjectTrackingEnabled = false;
+                db.DeferredLoadingEnabled = true;
 
                 System.Data.Linq.DataLoadOptions loadOptions = new System.Data.Linq.DataLoadOptions();
+                //loadOptions.LoadWith<Title>(t => t.Disks);
                 loadOptions.LoadWith<Title>(i => i.Images);
                 db.LoadOptions = loadOptions;
-                //db.Log = OMLDBContextLogger.Logger();
+                db.Log = OMLDBContextLogger.Logger();
 
                 db.Connection.ConnectionString = OMLEngine.DatabaseManagement.DatabaseInformation.OMLDatabaseConnectionString;
             }
@@ -113,8 +112,7 @@ namespace OMLEngine.Dao
                     if (db == null) {
                         db = new OMLDataSettingsDataContext();
                         db.Connection.ConnectionString = OMLEngine.DatabaseManagement.DatabaseInformation.OMLDatabaseConnectionString;
-                        //db.DeferredLoadingEnabled = false;
-                        //db.Log = OMLDBContextLogger.Logger();
+                        db.Log = OMLDBContextLogger.Logger();
                     }
                     return db;
                 }

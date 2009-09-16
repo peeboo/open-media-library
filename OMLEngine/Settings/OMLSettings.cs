@@ -405,6 +405,24 @@ namespace OMLEngine.Settings
 
         #endregion
 
+        #region Auto Disk Scanning
+
+        public static bool AutoScanDiskOnAdding
+        {
+            // Only applies to DBEditor
+            get { return SettingsManager.GetSettingByNameBool("AutoScanDiskOnAdding", InstanceName) ?? false; }
+            set { SettingsManager.SaveSettingByName("AutoScanDiskOnAdding", value.ToString(), InstanceName); }
+        }
+
+        public static bool ScanDiskRollInfoToTitle
+        {
+            // On scanning disk file to get res, aspect ratio etc, roll these up into the title record
+            get { return SettingsManager.GetSettingByNameBool("ScanDiskRollInfoToTitle", InstanceName) ?? false; }
+            set { SettingsManager.SaveSettingByName("ScanDiskRollInfoToTitle", value.ToString(), InstanceName); }
+        }
+
+        #endregion
+
         #region Scanner
         public static bool ScannerEnabled
         {
@@ -551,15 +569,15 @@ namespace OMLEngine.Settings
 
 
         #region MetaData
-        public static string DefaultMetadataPluginMovies
+        public static string DefaultMetadataPlugin
         {
-            get { return SettingsManager.GetSettingByName("DefaultMetadataPluginMovies", InstanceName) ?? "themoviedb.org"; }
-            set { SettingsManager.SaveSettingByName("DefaultMetadataPluginMovies", value, InstanceName); }
+            get { return SettingsManager.GetSettingByName("DefaultMetadataPlugin", InstanceName) ?? ""; }
+            set { SettingsManager.SaveSettingByName("DefaultMetadataPlugin", value, InstanceName); }
         }
 
         public static string DefaultMetadataPluginTV
         {
-            get { return SettingsManager.GetSettingByName("DefaultMetadataPluginTV", InstanceName) ?? "thetvdb.com"; }
+            get { return SettingsManager.GetSettingByName("DefaultMetadataPluginTV", InstanceName) ?? ""; }
             set { SettingsManager.SaveSettingByName("DefaultMetadataPluginTV", value, InstanceName); }
         }
 
@@ -569,44 +587,17 @@ namespace OMLEngine.Settings
             set { SettingsManager.SaveSettingByName("MetadataLookupResultsQty", value.ToString(), InstanceName); }
         }
 
-        // Overwrite settings for a manual search
-        public static bool MetadataLookupOverwriteExistingDataManual
+        public static bool MetadataLookupOverwriteExistingData
         {
-            get { return SettingsManager.GetSettingByNameBool("MetadataLookupOverwriteExistingDataManual", InstanceName) ?? false; }
-            set { SettingsManager.SaveSettingByName("MetadataLookupOverwriteExistingDataManual", value.ToString(), InstanceName); }
+            get { return SettingsManager.GetSettingByNameBool("MetadataLookupOverwriteExistingData", InstanceName) ?? false; }
+            set { SettingsManager.SaveSettingByName("MetadataLookupOverwriteExistingData", value.ToString(), InstanceName); }
         }
 
-        public static bool MetadataLookupUpdateNameManual
+        public static bool MetadataLookupUpdateName
         {
-            get { return SettingsManager.GetSettingByNameBool("MetadataLookupUpdateNameManual", InstanceName) ?? false; }
-            set { SettingsManager.SaveSettingByName("MetadataLookupUpdateNameManual", value.ToString(), InstanceName); }
-        }
-
-        // Overwrite settings for a preferred search for TV shows
-        public static bool MetadataLookupOverwriteExistingDataPrefTV
-        {
-            get { return SettingsManager.GetSettingByNameBool("MetadataLookupOverwriteExistingDataPrefTV", InstanceName) ?? false; }
-            set { SettingsManager.SaveSettingByName("MetadataLookupOverwriteExistingDataPrefTV", value.ToString(), InstanceName); }
-        }
-
-        public static bool MetadataLookupUpdateNamePrefTV
-        {
-            get { return SettingsManager.GetSettingByNameBool("MetadataLookupUpdateNamePrefTV", InstanceName) ?? false; }
-            set { SettingsManager.SaveSettingByName("MetadataLookupUpdateNamePrefTV", value.ToString(), InstanceName); }
-        }
-
-        // Overwrite settings for a preferred search for Movies
-        public static bool MetadataLookupOverwriteExistingDataPrefMovies
-        {
-            get { return SettingsManager.GetSettingByNameBool("MetadataLookupOverwriteExistingDataPrefMovies", InstanceName) ?? false; }
-            set { SettingsManager.SaveSettingByName("MetadataLookupOverwriteExistingDataPrefMovies", value.ToString(), InstanceName); }
-        }
-
-        public static bool MetadataLookupUpdateNamePrefMovies
-        {
-            get { return SettingsManager.GetSettingByNameBool("MetadataLookupUpdateNamePrefMovies", InstanceName) ?? false; }
-            set { SettingsManager.SaveSettingByName("MetadataLookupUpdateNamePrefMovies", value.ToString(), InstanceName); }
-        } 
+            get { return SettingsManager.GetSettingByNameBool("MetadataLookupUpdateName", InstanceName) ?? false; }
+            set { SettingsManager.SaveSettingByName("MetadataLookupUpdateName", value.ToString(), InstanceName); }
+        }   
         #endregion
 
 

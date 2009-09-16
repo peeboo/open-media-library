@@ -2,8 +2,8 @@
 
 <!-- These variables define the Windows Installer product version, product code and upgrade code. They   -->
 <!-- will be used later on in this file.                                                                 -->
-<?define Property_ProductVersion = "4.2.0.1798" ?>
-<?define Property_ProductCode = "FC0D9A41-3371-456E-9913-9966FB38B4C5" ?>
+<?define Property_ProductVersion = "4.0.0.1669" ?>
+<?define Property_ProductCode = "1A4F8E3B-2D62-4424-8DF1-4AB9B96C4E2B" ?>
 <?define Property_UpgradeCode = "0921ec75-fddc-46f8-bdf4-a5d697351567" ?>
 
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
@@ -19,8 +19,7 @@
 
     <Package Description="!(loc.Package_Description)"
 		         Comments="!(loc.Package_Comments)"
-		         InstallerVersion="405"
-             InstallPrivileges="elevated"
+		         InstallerVersion="200"
 		         Compressed="yes" />
 
     <!--<Binary Id="OMLDB" SourceFile="..\..\SQL Scripts\Title Database.sql" />-->
@@ -53,10 +52,10 @@
     <!-- described in more detail in the WiX documentation.                                              -->
     <UI>
       <UIRef Id="WixUI_FeatureTree" />
-      <!--Publish Dialog="ExitDialog"
+      <Publish Dialog="ExitDialog"
                Control="Finish"
                Event="DoAction"
-               Value="LaunchApplication">1</Publish-->
+               Value="LaunchApplication">1</Publish>
 
       <ProgressText Action="ReserveTrailersUrlAction">Reserving Url for Trailers Proxy Server</ProgressText>
       <ProgressText Action="ActivateNetTcpPortSharing">Activating NetTcpPortSharing for Transcoding Services</ProgressText>
@@ -73,13 +72,10 @@
       <Custom Action="ActivateNetTcpPortSharing" Before="ReserveTrailersUrlAction">
         <![CDATA[NOT REMOVE]]>
       </Custom>
-        <Custom Action='ReserveTrailersUrlAction' Before='InstallFinalize'>
+        <Custom Action='ReserveTrailersUrlAction' Before='StartOMLEngineServiceAction'>
           <![CDATA[NOT REMOVE]]>
         </Custom>
-      <Custom Action='StartOMLEngineServiceAction' After='InstallFinalize'>
-        <![CDATA[NOT REMOVE]]>
-      </Custom>
-      <Custom Action='LaunchApplication' After='StartOMLEngineServiceAction'>
+      <Custom Action='StartOMLEngineServiceAction' Before='InstallFinalize'>
         <![CDATA[NOT REMOVE]]>
       </Custom>
     </InstallExecuteSequence>
