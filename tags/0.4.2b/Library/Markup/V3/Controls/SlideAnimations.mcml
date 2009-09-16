@@ -1,0 +1,58 @@
+<Mcml xmlns="http://schemas.microsoft.com/2006/mcml">
+  <Animation Name="SlideDeck.SwoopIn.Show" Type="Show">
+    <Keyframes>
+      <PositionKeyframe Time="0.0" Value="0,0,0" RelativeTo="Final" />
+      <PositionKeyframe Time="0.001" Value="0,0,0" />
+    </Keyframes>
+  </Animation>
+  <Animation Name="SlideDeck.SwoopIn.Hide" Type="Hide">
+    <Keyframes>
+      <PositionKeyframe Time="0.0" Value="0,0,0"/>
+      <PositionKeyframe Time="0.001" Value="0,0,0" RelativeTo="Current" />
+    </Keyframes>
+  </Animation>
+  <Animation Name="Slide.Show" Type="Show" >
+    <Keyframes>
+      <AlphaKeyframe Time="0.0" Value="0.0" RelativeTo="Absolute" />
+      <AlphaKeyframe Time="0.001" Value="1.0"/>
+    </Keyframes>
+  </Animation>
+  <Animation Name="Slide.Hide" Type="Hide">
+    <Keyframes>
+      <AlphaKeyframe Time="0.0" Value="1.0" RelativeTo="Current" />
+      <AlphaKeyframe Time="0.001" Value="0.0" RelativeTo="Absolute" />
+    </Keyframes>
+  </Animation>
+  <Animation Name="Slide.NavRight.Show" Type="Show">
+    <Keyframes>
+      <AlphaKeyframe Time="0.0" Value="0.0" RelativeTo="Absolute" Interpolation="Log" />
+      <AlphaKeyframe Time="0.2" Value="1.0" />
+      <PositionKeyframe Time="0.0" Value="1000,0,0" Interpolation="Log" />
+      <PositionKeyframe Time="0.2" Value="0,0,0"/>
+    </Keyframes>
+  </Animation>
+  <Animation Name="Slide.NavLeft.Show" Type="Show">
+    <Keyframes>
+      <AlphaKeyframe Time="0.0" Value="0.0" RelativeTo="Absolute" Interpolation="Log" />
+      <AlphaKeyframe Time="0.2" Value="1.0" />
+      <PositionKeyframe Time="0.0" Value="-1000,0,0" Interpolation="Log" />
+      <PositionKeyframe Time="0.2" Value="0,0,0" />
+    </Keyframes>
+  </Animation>
+  <Animation Name="Slide.NavRight.Hide" Type="Hide">
+    <Keyframes>
+      <AlphaKeyframe Time="0.0" Value="1.0" RelativeTo="Current" />
+      <AlphaKeyframe Time="0.2" Value="0.0" RelativeTo="Absolute" />
+      <PositionKeyframe Time="0.0" Value="0,0,0" RelativeTo="Current" Interpolation="Log" />
+      <PositionKeyframe Time="0.5" Value="-1000,0,0" RelativeTo="Current" />
+    </Keyframes>
+  </Animation>
+  <Animation Name="Slide.NavLeft.Hide" Type="Hide">
+    <Keyframes>
+      <AlphaKeyframe Time="0.0" Value="1.0" RelativeTo="Absolute" Interpolation="Log" />
+      <AlphaKeyframe Time="0.2" Value="0.0" RelativeTo="Absolute" />
+      <PositionKeyframe Time="0.0" Value="0,0,0" RelativeTo="Current" Interpolation="Log" />
+      <PositionKeyframe Time="0.5" Value="1000,0,0" RelativeTo="Current" />
+    </Keyframes>
+  </Animation>
+</Mcml>

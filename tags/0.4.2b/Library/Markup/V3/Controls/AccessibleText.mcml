@@ -1,0 +1,35 @@
+<Mcml xmlns="http://schemas.microsoft.com/2006/mcml" 
+      xmlns:cor ="assembly://MsCorLib/System" 
+      xmlns:comm="resx://Library/Library.Resources/V3_Globals">
+  <UI Name="AccessibleText">
+    <Properties>
+      <cor:String Name="AccessibleName" String="$Required" />
+      <cor:String Name="AccessibleValue" String="Value"/>
+      <AccessibleRole Name="AccessibleRole" AccessibleRole="StaticText" />
+      <cor:String Name="Content" String="$Required"/>
+      <Color Name="Color" Color="color://comm:OffWhite"/>
+      <Font Name="Font" />
+      <cor:Boolean Name="WordWrap" Boolean="false" />
+      <cor:Int32 Name="MaximumLines" Int32="1" />
+      <Inset Name="Margins" />
+    </Properties>
+    <Rules>
+      <Binding Source="[AccessibleName]" Target="[Accessible.Name]" />
+      <Binding Source="[AccessibleRole]" Target="[Accessible.Role]" />
+      <Binding Source="[Content]" Target="[Accessible.Value]" />
+      <Binding Source="[Color]" Target="[Text.Color]" />
+      <Binding Source="[Font]" Target="[Text.Font]">
+        <Conditions>
+          <IsValid Source="[Font]"/>
+        </Conditions>
+      </Binding>
+      <Binding Source="[Content]" Target="[Text.Content]" />
+      <Binding Source="[WordWrap]" Target="[Text.WordWrap]" />
+      <Binding Source="[MaximumLines]" Target="[Text.MaximumLines]" />
+      <Binding Source="[Margins]" Target="[Text.Margins]" />
+    </Rules>
+    <Content>
+      <Text Name="Text" />
+    </Content>
+  </UI>
+</Mcml>

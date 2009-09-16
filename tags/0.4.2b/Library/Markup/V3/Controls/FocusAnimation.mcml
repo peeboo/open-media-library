@@ -1,0 +1,147 @@
+<Mcml
+    xmlns="http://schemas.microsoft.com/2006/mcml"
+    xmlns:cor ="assembly://MsCorLib/System"
+    xmlns:coll="assembly://MsCorLib/System.Collections"
+    xmlns:shell ="assembly://Library/Library.Code.V3"
+    xmlns:comm="resx://Library/Library.Resources/V3_Globals"
+    xmlns:me  ="Me">
+
+  <UI Name="SelectorFocusLoop">
+    <Locals>
+      <Environment Name="Environment"/>
+
+      <Image Name="HorizontalSpot" Source="resx://Library/Library.Resources/V3_Controls_Common_Selector_FocusLoop_HotSpot_Horizontal" Flippable="true"/>
+      <Image Name="VerticalSpot" Source="resx://Library/Library.Resources/V3_Controls_Common_Selector_FocusLoop_HotSpot_Vertical" Flippable="true"/>
+      <Image Name="TopLeftGlow" Source="resx://Library/Library.Resources/V3_Controls_Common_Selector_FocusLoop_Glow_TopLeft" Flippable="true"/>
+      <Image Name="TopRightGlow" Source="resx://Library/Library.Resources/V3_Controls_Common_Selector_FocusLoop_Glow_TopRight" Flippable="true"/>
+      <Image Name="BottomLeftGlow" Source="resx://Library/Library.Resources/V3_Controls_Common_Selector_FocusLoop_Glow_BottomLeft" Flippable="true"/>
+      <Image Name="GlassGlow" Source="resx://Library/Library.Resources/V3_Controls_Common_Selector_FocusLoop_Glow_Glass" Flippable="true"/>
+    </Locals>
+
+    <Content>
+      <Panel Name="LoopParts" Visible="true">
+        <Layout>
+          <AnchorLayout SizeToHorizontalChildren="false" SizeToVerticalChildren="false"/>
+        </Layout>
+        <Children>
+
+          <Panel Name="TopLeftSpot">
+            <LayoutInput>
+              <AnchorLayoutInput Left="Parent, 0" Top="Parent, 0"/>
+            </LayoutInput>
+            <Children>
+
+              <Graphic Content="[HorizontalSpot]" Scale="1.5, 1.0, 1.0" CenterPointPercent="0.5, 0.5, 0.0">
+                <Animations>
+                  <Animation Animation="animation://comm:Selector.FocusLoop.Spot.TopLeft"/>
+                </Animations>
+              </Graphic>
+
+            </Children>
+          </Panel>
+          <Panel Name="TopRightSpot">
+            <LayoutInput>
+              <AnchorLayoutInput Right="Parent, 1" Top="Parent, 0"/>
+            </LayoutInput>
+            <Children>
+
+              <Graphic Content="[HorizontalSpot]" Scale="1.5, 1.0, 1.0" CenterPointPercent="0.5, 0.5, 0.0">
+                <Animations>
+                  <Animation Animation="animation://comm:Selector.FocusLoop.Spot.TopRight"/>
+                </Animations>
+              </Graphic>
+
+            </Children>
+          </Panel>
+          <Panel Name="BottomSpot">
+            <LayoutInput>
+              <AnchorLayoutInput Left="Parent, 0" Bottom="Parent, 1"/>
+            </LayoutInput>
+            <Children>
+
+              <Graphic Content="[HorizontalSpot]" Scale="1.5, 1.0, 1.0" CenterPointPercent="0.5, 0.5, 0.0">
+                <Animations>
+                  <Animation Animation="animation://comm:Selector.FocusLoop.Spot.Bottom"/>
+                </Animations>
+              </Graphic>
+
+            </Children>
+          </Panel>
+          <Panel Name="LeftSpot">
+            <LayoutInput>
+              <AnchorLayoutInput Left="Parent, 0" Top="Parent, 0"/>
+            </LayoutInput>
+            <Children>
+
+              <Graphic Content="[VerticalSpot]" Scale="1.0, 1.5, 1.0" CenterPointPercent="0.5, 0.5, 0.0">
+                <Animations>
+                  <Animation Animation="animation://comm:Selector.FocusLoop.Spot.Left"/>
+                </Animations>
+              </Graphic>
+
+            </Children>
+          </Panel>
+          <Panel Name="RightSpot">
+            <LayoutInput>
+              <AnchorLayoutInput Right="Parent, 1" Top="Parent, 0"/>
+            </LayoutInput>
+            <Children>
+
+              <Graphic Content="[VerticalSpot]" Scale="1.0, 1.5, 1.0" CenterPointPercent="0.5, 0.5, 0.0">
+                <Animations>
+                  <Animation Animation="animation://comm:Selector.FocusLoop.Spot.Right"/>
+                </Animations>
+              </Graphic>
+
+            </Children>
+          </Panel>
+
+          <Panel Alpha="0.4">
+            <Layout>
+              <ScaleLayout AllowScaleUp="true" AllowScaleDown="true" MaintainAspectRatio="false"/>
+            </Layout>
+            <Children>
+
+              <Panel MaximumSize="200, 200">
+                <Layout>
+                  <AnchorLayout SizeToHorizontalChildren="false" SizeToVerticalChildren="false"/>
+                </Layout>
+                <Children>
+
+                  <Graphic Content="[TopLeftGlow]">
+                    <LayoutInput>
+                      <AnchorLayoutInput Left="Parent, 0, -18" Top="Parent, 0, -19"/>
+                    </LayoutInput>
+                    <Animations>
+                      <Animation Animation="animation://comm:Selector.FocusLoop.Glow.TopLeft"/>
+                    </Animations>
+                  </Graphic>
+                  <Graphic Content="[TopRightGlow]">
+                    <LayoutInput>
+                      <AnchorLayoutInput Right="Parent, 1, 31" Top="Parent, 0, -33"/>
+                    </LayoutInput>
+                    <Animations>
+                      <Animation Animation="animation://comm:Selector.FocusLoop.Glow.TopRight"/>
+                    </Animations>
+                  </Graphic>
+                  <Graphic Content="[BottomLeftGlow]">
+                    <LayoutInput>
+                      <AnchorLayoutInput Left="Parent, 0, -23" Bottom="Parent, 1, 30"/>
+                    </LayoutInput>
+                    <Animations>
+                      <Animation Animation="animation://comm:Selector.FocusLoop.Glow.BottomLeft"/>
+                    </Animations>
+                  </Graphic>
+
+                </Children>
+              </Panel>
+
+            </Children>
+          </Panel>
+
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+
+</Mcml>
