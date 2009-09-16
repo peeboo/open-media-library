@@ -1,0 +1,479 @@
+<Title>
+  <ID>491</ID>
+  <WebServiceID>067ef597-9af7-42c3-82d7-a740d6bb5114</WebServiceID>
+  <CollectionNumber>483</CollectionNumber>
+  <Type>DVD</Type>
+  <Barcode>097360148947</Barcode>
+  <Country>United States</Country>
+  <LocalTitle>Airplane II: The Sequel</LocalTitle>
+  <OriginalTitle>Airplane II: The Sequel</OriginalTitle>
+  <SortTitle>Airplane II: The Sequel</SortTitle>
+  <Edition>
+  </Edition>
+  <AspectRatio>1.85:1</AspectRatio>
+  <VideoStandard>NTSC</VideoStandard>
+  <ProductionYear>1982</ProductionYear>
+  <ReleaseDate>10/24/2000</ReleaseDate>
+  <RunningTime>84</RunningTime>
+  <TagLine />
+  <Description><![CDATA[There's a mad bomber on board, the first lunar shuttle is about to self-destruct, the engines are not working and — worst of all — the flight crew discovers they are completely out of coffee! It's the high flying lunacy of 'Airplane!' all over again as Robert Hays and Julie Hagerty fly totally out of the ozone to recreate their hilarious original roles. The crew of crazies includes Peter Graves, Lloyd Bridges, William Shatner, Chad Everett, Sonny Bono, Raymond Burr and many others. Can Hays save the day again — without caffeine? Fasten your seatbelts for a ride you'll never forget — "Airplane II: The Sequel."]]></Description>
+  <ExtraFeatures NotPresent="False"><![CDATA[Interactive Menus
+
+Scene Selection
+]]></ExtraFeatures>
+  <ParentalRating>
+    <Value>3</Value>
+    <Description>
+    </Description>
+  </ParentalRating>
+  <DataProvider>
+  </DataProvider>
+  <DataProviderId>
+  </DataProviderId>
+  <ImportSource />
+  <ImportId />
+  <LocalTrailer>
+    <URL>
+    </URL>
+    <Type>-1</Type>
+  </LocalTrailer>
+  <Covers>
+    <Front>mymovies-front.jpg</Front>
+    <Back>mymovies-back.jpg</Back>
+  </Covers>
+  <DataChanged>7/24/2008 6:07:52 PM</DataChanged>
+  <CoversChanged>4/28/2008 2:32:08 PM</CoversChanged>
+  <LockData>False</LockData>
+  <LockCovers>False</LockCovers>
+  <Added>8/23/2008 5:13:07 PM</Added>
+  <RecordChanged>8/23/2008 5:16:18 PM</RecordChanged>
+  <Categories />
+  <Genres>
+    <Genre>Comedy</Genre>
+  </Genres>
+  <AudioTracks>
+    <AudioTrack Language="English" Type="Dolby Digital" Channels="1.0" />
+    <AudioTrack Language="Farsi" Type="Dolby Digital" Channels="1.0" />
+  </AudioTracks>
+  <Subtitles NotPresent="False">
+    <Subtitle Language="English" />
+  </Subtitles>
+  <Studios>
+    <Studio>Paramount Home Entertainment</Studio>
+    <Studio>Paramount Pictures</Studio>
+  </Studios>
+  <Discs>
+    <Disc TitleMode="False">
+      <DiscIdStored>
+      </DiscIdStored>
+      <DoubleSided>False</DoubleSided>
+      <Name>Disc 1</Name>
+      <DiscIdSideA>F362BBA3-EC43B98D</DiscIdSideA>
+      <DiscIdSideB>
+      </DiscIdSideB>
+      <LocationSideA>.</LocationSideA>
+      <LocationTypeSideA>1</LocationTypeSideA>
+      <LocationSideB>
+      </LocationSideB>
+      <LocationTypeSideB>-1</LocationTypeSideB>
+      <ChangerSlot>
+      </ChangerSlot>
+    </Disc>
+  </Discs>
+  <Persons ActorsComplete="False">
+    <Person>
+      <Name>Lloyd Bridges</Name>
+      <Type>Actor</Type>
+      <Role>McCroskey</Role>
+    </Person>
+    <Person>
+      <Name>Raymond Burr</Name>
+      <Type>Actor</Type>
+      <Role>The Judge</Role>
+    </Person>
+    <Person>
+      <Name>Chuck Connors</Name>
+      <Type>Actor</Type>
+      <Role>The Sarge</Role>
+    </Person>
+    <Person>
+      <Name>Rip Torn</Name>
+      <Type>Actor</Type>
+      <Role>Kruger</Role>
+    </Person>
+    <Person>
+      <Name>John Dehner</Name>
+      <Type>Actor</Type>
+      <Role>The Commissioner</Role>
+    </Person>
+    <Person>
+      <Name>Chad Everett</Name>
+      <Type>Actor</Type>
+      <Role>Simon</Role>
+    </Person>
+    <Person>
+      <Name>Peter Graves</Name>
+      <Type>Actor</Type>
+      <Role>Captain Oveur</Role>
+    </Person>
+    <Person>
+      <Name>Julie Hagerty</Name>
+      <Type>Actor</Type>
+      <Role>Elaine</Role>
+    </Person>
+    <Person>
+      <Name>Robert Hays</Name>
+      <Type>Actor</Type>
+      <Role>Striker</Role>
+    </Person>
+    <Person>
+      <Name>Kent McCord</Name>
+      <Type>Actor</Type>
+      <Role>Unger</Role>
+    </Person>
+    <Person>
+      <Name>James A. Watson Jr.</Name>
+      <Type>Actor</Type>
+      <Role>Dunn</Role>
+    </Person>
+    <Person>
+      <Name>William Shatner</Name>
+      <Type>Actor</Type>
+      <Role>Murdock</Role>
+    </Person>
+    <Person>
+      <Name>Stephen Stucker</Name>
+      <Type>Actor</Type>
+      <Role>Jacobs / Court Reporter</Role>
+    </Person>
+    <Person>
+      <Name>John Vernon</Name>
+      <Type>Actor</Type>
+      <Role>Dr. Stone</Role>
+    </Person>
+    <Person>
+      <Name>Al White</Name>
+      <Type>Actor</Type>
+      <Role>Witness</Role>
+    </Person>
+    <Person>
+      <Name>Sonny Bono</Name>
+      <Type>Actor</Type>
+      <Role>The Bomber</Role>
+    </Person>
+    <Person>
+      <Name>Laurene Landon</Name>
+      <Type>Actor</Type>
+      <Role>Testa</Role>
+    </Person>
+    <Person>
+      <Name>Wendy Phillips</Name>
+      <Type>Actor</Type>
+      <Role>Mary</Role>
+    </Person>
+    <Person>
+      <Name>Jack Jones</Name>
+      <Type>Actor</Type>
+      <Role>Lounge Singer</Role>
+    </Person>
+    <Person>
+      <Name>Art Fleming</Name>
+      <Type>Actor</Type>
+      <Role>Himself</Role>
+    </Person>
+    <Person>
+      <Name>Frank Ashmore</Name>
+      <Type>Actor</Type>
+      <Role>Controller #3</Role>
+    </Person>
+    <Person>
+      <Name>Richard H. Jaeckel</Name>
+      <Type>Actor</Type>
+      <Role>Controller #2</Role>
+    </Person>
+    <Person>
+      <Name>Lee Bryant</Name>
+      <Type>Actor</Type>
+      <Role>Mrs. Hammen</Role>
+    </Person>
+    <Person>
+      <Name>John Larch</Name>
+      <Type>Actor</Type>
+      <Role>Prosecuting Attorney</Role>
+    </Person>
+    <Person>
+      <Name>John Hancock</Name>
+      <Type>Actor</Type>
+      <Role>Controller #1</Role>
+    </Person>
+    <Person>
+      <Name>Oliver Robins</Name>
+      <Type>Actor</Type>
+      <Role>Jimmy Wilson</Role>
+    </Person>
+    <Person>
+      <Name>Louis Giambalvo</Name>
+      <Type>Actor</Type>
+      <Role>Witness</Role>
+    </Person>
+    <Person>
+      <Name>Sam Anderson</Name>
+      <Type>Actor</Type>
+      <Role>Man in White</Role>
+    </Person>
+    <Person>
+      <Name>Leon Askin</Name>
+      <Type>Actor</Type>
+      <Role>Moscow Anchorman</Role>
+    </Person>
+    <Person>
+      <Name>B. J. Barie</Name>
+      <Type>Actor</Type>
+      <Role>Video Kid</Role>
+    </Person>
+    <Person>
+      <Name>Hilary Beane</Name>
+      <Type>Actor</Type>
+      <Role>Next Woman in Line</Role>
+    </Person>
+    <Person>
+      <Name>Craig Berenson</Name>
+      <Type>Actor</Type>
+      <Role>Shaving Man</Role>
+    </Person>
+    <Person>
+      <Name>Sandahl Bergman</Name>
+      <Type>Actor</Type>
+      <Role>Officer #1</Role>
+    </Person>
+    <Person>
+      <Name>Burke Byrnes</Name>
+      <Type>Actor</Type>
+      <Role>Businessman</Role>
+    </Person>
+    <Person>
+      <Name>Ed Call</Name>
+      <Type>Actor</Type>
+      <Role>Information Agent</Role>
+    </Person>
+    <Person>
+      <Name>Michael Currie</Name>
+      <Type>Actor</Type>
+      <Role>Businessman #1</Role>
+    </Person>
+    <Person>
+      <Name>Patty Dworkin</Name>
+      <Type>Actor</Type>
+      <Role>Young Woman</Role>
+    </Person>
+    <Person>
+      <Name>Gary Faga</Name>
+      <Type>Actor</Type>
+      <Role>Guide</Role>
+    </Person>
+    <Person>
+      <Name>Mary Farrell</Name>
+      <Type>Actor</Type>
+      <Role>Alice Wilson</Role>
+    </Person>
+    <Person>
+      <Name>Madeleine Fisher</Name>
+      <Type>Actor</Type>
+      <Role>Shuttle Agent</Role>
+    </Person>
+    <Person>
+      <Name>Bruce French</Name>
+      <Type>Actor</Type>
+      <Role>Officer #2</Role>
+    </Person>
+    <Person>
+      <Name>Richard Gilliland</Name>
+      <Type>Actor</Type>
+      <Role>Pervis</Role>
+    </Person>
+    <Person>
+      <Name>Hugh Gillin</Name>
+      <Type>Actor</Type>
+      <Role>Texan</Role>
+    </Person>
+    <Person>
+      <Name>Elisa Goodman</Name>
+      <Type>Actor</Type>
+      <Role>I Love Sanity Nurse</Role>
+    </Person>
+    <Person>
+      <Name>Laurie Hagen</Name>
+      <Type>Actor</Type>
+      <Role>Tad Woman</Role>
+    </Person>
+    <Person>
+      <Name>Maurice Hill</Name>
+      <Type>Actor</Type>
+      <Role>Stock #2</Role>
+    </Person>
+    <Person>
+      <Name>Steven Hirsch</Name>
+      <Type>Actor</Type>
+      <Role>Rorshack</Role>
+    </Person>
+    <Person>
+      <Name>Howard Honig</Name>
+      <Type>Actor</Type>
+      <Role>Dave Walters</Role>
+    </Person>
+    <Person>
+      <Name>Dennis Howard</Name>
+      <Type>Actor</Type>
+      <Role>John Wilson</Role>
+    </Person>
+    <Person>
+      <Name>Marcy Lafferty</Name>
+      <Type>Actor</Type>
+      <Role>First Woman in Line</Role>
+    </Person>
+    <Person>
+      <Name>Stanley Lawrence</Name>
+      <Type>Actor</Type>
+      <Role>Next Man</Role>
+    </Person>
+    <Person>
+      <Name>David Leisure</Name>
+      <Type>Actor</Type>
+      <Role>Religious Zealot</Role>
+    </Person>
+    <Person>
+      <Name>Floyd Levine</Name>
+      <Type>Actor</Type>
+      <Role>Hallick</Role>
+    </Person>
+    <Person>
+      <Name>Steve Levitt</Name>
+      <Type>Actor</Type>
+      <Role>Creature #1</Role>
+    </Person>
+    <Person>
+      <Name>Gail Matthius</Name>
+      <Type>Actor</Type>
+      <Role>Educational Network Woman</Role>
+    </Person>
+    <Person>
+      <Name>Pat McNamara</Name>
+      <Type>Actor</Type>
+      <Role>Businessman #2</Role>
+    </Person>
+    <Person>
+      <Name>Mary Mercier</Name>
+      <Type>Actor</Type>
+      <Role>Edith Walters</Role>
+    </Person>
+    <Person>
+      <Name>Marcus Mukai</Name>
+      <Type>Actor</Type>
+      <Role>Tokyo Anchorman</Role>
+    </Person>
+    <Person>
+      <Name>Ann Nelson</Name>
+      <Type>Actor</Type>
+      <Role>Airsick Woman</Role>
+    </Person>
+    <Person>
+      <Name>Steve Nevil</Name>
+      <Type>Actor</Type>
+      <Role>Creature #2</Role>
+    </Person>
+    <Person>
+      <Name>James Noble</Name>
+      <Type>Actor</Type>
+      <Role>Father O'Flanagan</Role>
+    </Person>
+    <Person>
+      <Name>Kenneth G. O'Brien</Name>
+      <Type>Actor</Type>
+      <Role>Porter</Role>
+    </Person>
+    <Person>
+      <Name>Rick Overton</Name>
+      <Type>Actor</Type>
+      <Role>Clerk</Role>
+    </Person>
+    <Person>
+      <Name>Lee Patterson</Name>
+      <Type>Actor</Type>
+      <Role>Phoenix Six Captain</Role>
+    </Person>
+    <Person>
+      <Name>David Paymer</Name>
+      <Type>Actor</Type>
+      <Role>Court Photographer</Role>
+    </Person>
+    <Person>
+      <Name>Pamela Ann Rack</Name>
+      <Type>Actor</Type>
+      <Role>Woman with Baby</Role>
+    </Person>
+    <Person>
+      <Name>Barbie Reade</Name>
+      <Type>Actor</Type>
+      <Role>Interpreter</Role>
+    </Person>
+    <Person>
+      <Name>Mary-Robin Redd</Name>
+      <Type>Actor</Type>
+      <Role>Intellectual-Looking Woman</Role>
+    </Person>
+    <Person>
+      <Name>June Sanders</Name>
+      <Type>Actor</Type>
+      <Role>Cashier</Role>
+    </Person>
+    <Person>
+      <Name>Pat Sajak</Name>
+      <Type>Actor</Type>
+      <Role>Buffalo Anchorman</Role>
+    </Person>
+    <Person>
+      <Name>Clint Smith</Name>
+      <Type>Actor</Type>
+      <Role>Scalper</Role>
+    </Person>
+    <Person>
+      <Name>Louise Sorel</Name>
+      <Type>Actor</Type>
+      <Role>Nurse</Role>
+    </Person>
+    <Person>
+      <Name>Sandy Ward</Name>
+      <Type>Actor</Type>
+      <Role>Defense Attorney</Role>
+    </Person>
+    <Person>
+      <Name>Ricky Powell</Name>
+      <Type>Actor</Type>
+      <Role>First Young Man</Role>
+    </Person>
+    <Person>
+      <Name>Sean Peters</Name>
+      <Type>Actor</Type>
+      <Role>Second Young Man</Role>
+    </Person>
+    <Person>
+      <Name>Hervé Villechaize</Name>
+      <Type>Actor</Type>
+      <Role>Little Breather</Role>
+    </Person>
+    <Person>
+      <Name>Allison Hanes</Name>
+      <Type>Actor</Type>
+      <Role>Third Stewardess</Role>
+    </Person>
+    <Person>
+      <Name>Ronald House</Name>
+      <Type>Actor</Type>
+      <Role>Smoking Man</Role>
+    </Person>
+    <Person>
+      <Name>Ken Finkleman</Name>
+      <Type>Director</Type>
+    </Person>
+  </Persons>
+</Title>

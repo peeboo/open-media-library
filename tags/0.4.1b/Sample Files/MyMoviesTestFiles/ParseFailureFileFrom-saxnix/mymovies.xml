@@ -1,0 +1,206 @@
+<Title>
+  <ID>168</ID>
+  <WebServiceID>81ba3a08-895d-4d13-9565-ab787c472753</WebServiceID>
+  <CollectionNumber>167</CollectionNumber>
+  <Type>DVD</Type>
+  <Barcode>9317731026942</Barcode>
+  <Country>Australia</Country>
+  <LocalTitle>When Did You Last See Your Father?</LocalTitle>
+  <OriginalTitle>When Did You Last See Your Father?</OriginalTitle>
+  <SortTitle>When Did You Last See Your Father?</SortTitle>
+  <Edition>
+  </Edition>
+  <AspectRatio>
+  </AspectRatio>
+  <VideoStandard>
+  </VideoStandard>
+  <ProductionYear>2007</ProductionYear>
+  <ReleaseDate />
+  <RunningTime>0</RunningTime>
+  <TagLine />
+  <Description><![CDATA[And When Did You Last See Your Father? is Blake Morrison's moving and candid memoir of his father in the weeks leading up to his death. When Arthur Morrison was diagnosed with terminal cancer he had only a few weeks left to live. Morrison traveled to Yorkshire to stay with his mother in the village where he grew up. He visited his father at the hospital where he had spent so much time with his own patients as a GP. As his father's condition worsened Morrison contemplated their shared experiences, the intimacies and the irritations of their relationship. After his father's death Morrison questions the nature of the bond between them, articulately expressing the contradictions, frustrations, love and loss bound into the complicated relationships which most of us have with our parents as we grow up. ]]></Description>
+  <ExtraFeatures NotPresent="False"><![CDATA[]]></ExtraFeatures>
+  <ParentalRating>
+    <Value>-1</Value>
+    <Description>
+    </Description>
+  </ParentalRating>
+  <DataProvider>
+  </DataProvider>
+  <DataProviderId>
+  </DataProviderId>
+  <ImportSource />
+  <ImportId />
+  <LocalTrailer>
+    <URL>
+    </URL>
+    <Type>-1</Type>
+  </LocalTrailer>
+  <Covers>
+    <Front>mymovies-front.jpg</Front>
+    <Back>mymovies-back.jpg</Back>
+  </Covers>
+  <DataChanged>12/31/2000 11:00:00 PM</DataChanged>
+  <CoversChanged>9/20/2007 9:59:40 PM</CoversChanged>
+  <LockData>False</LockData>
+  <LockCovers>False</LockCovers>
+  <Added>8/9/2008 6:12:43 PM</Added>
+  <RecordChanged>8/15/2008 7:42:13 AM</RecordChanged>
+  <Categories />
+  <Genres>
+    <Genre>Drama</Genre>
+  </Genres>
+  <AudioTracks />
+  <Subtitles NotPresent="False" />
+  <Studios />
+  <Discs>
+    <Disc TitleMode="False">
+      <DiscIdStored>
+      </DiscIdStored>
+      <DoubleSided>False</DoubleSided>
+      <Name>Disc 1</Name>
+      <DiscIdSideA>
+      </DiscIdSideA>
+      <DiscIdSideB>
+      </DiscIdSideB>
+      <LocationSideA>.</LocationSideA>
+      <LocationTypeSideA>1</LocationTypeSideA>
+      <LocationSideB>
+      </LocationSideB>
+      <LocationTypeSideB>-1</LocationTypeSideB>
+      <ChangerSlot>
+      </ChangerSlot>
+    </Disc>
+  </Discs>
+  <Persons ActorsComplete="False">
+    <Person>
+      <Name>Jim Broadbent</Name>
+      <Type>Actor</Type>
+      <Role>Arthur</Role>
+    </Person>
+    <Person>
+      <Name>Colin Firth</Name>
+      <Type>Actor</Type>
+      <Role>Blake</Role>
+    </Person>
+    <Person>
+      <Name>Juliet Stevenson</Name>
+      <Type>Actor</Type>
+      <Role>Kim</Role>
+    </Person>
+    <Person>
+      <Name>Gina McKee</Name>
+      <Type>Actor</Type>
+      <Role>Kathy</Role>
+    </Person>
+    <Person>
+      <Name>Sarah Lancashire</Name>
+      <Type>Actor</Type>
+      <Role>Beaty</Role>
+    </Person>
+    <Person>
+      <Name>Elaine Cassidy</Name>
+      <Type>Actor</Type>
+      <Role>Sandra</Role>
+    </Person>
+    <Person>
+      <Name>Claire Skinner</Name>
+      <Type>Actor</Type>
+      <Role>Gillian</Role>
+    </Person>
+    <Person>
+      <Name>Matthew Beard</Name>
+      <Type>Actor</Type>
+      <Role>Blake - Teen</Role>
+    </Person>
+    <Person>
+      <Name>Bradley Johnson</Name>
+      <Type>Actor</Type>
+      <Role>Blake - Child</Role>
+    </Person>
+    <Person>
+      <Name>Chris Middleton</Name>
+      <Type>Actor</Type>
+      <Role>Racing Steward</Role>
+    </Person>
+    <Person>
+      <Name>Elliot Avery</Name>
+      <Type>Actor</Type>
+      <Role>Peter</Role>
+    </Person>
+    <Person>
+      <Name>Rhiannon Howden</Name>
+      <Type>Actor</Type>
+      <Role>Sophie</Role>
+    </Person>
+    <Person>
+      <Name>Tom Butcher</Name>
+      <Type>Actor</Type>
+      <Role>Dr. Taggart</Role>
+    </Person>
+    <Person>
+      <Name>Alannah Barlow</Name>
+      <Type>Actor</Type>
+      <Role>Gillian - Child</Role>
+    </Person>
+    <Person>
+      <Name>Tara Berwin</Name>
+      <Type>Actor</Type>
+      <Role>Gillian - Teen</Role>
+    </Person>
+    <Person>
+      <Name>Richard Standing</Name>
+      <Type>Actor</Type>
+      <Role>Publican</Role>
+    </Person>
+    <Person>
+      <Name>Olivia Lindsay</Name>
+      <Type>Actor</Type>
+      <Role>Josie - Child</Role>
+    </Person>
+    <Person>
+      <Name>Naomi Allisstone</Name>
+      <Type>Actor</Type>
+      <Role>Josie</Role>
+    </Person>
+    <Person>
+      <Name>Tilly Curtis</Name>
+      <Type>Actor</Type>
+      <Role>Josie - Teen</Role>
+    </Person>
+    <Person>
+      <Name>Justin McDonald</Name>
+      <Type>Actor</Type>
+      <Role>Steve</Role>
+    </Person>
+    <Person>
+      <Name>Carey Mulligan</Name>
+      <Type>Actor</Type>
+      <Role>Rachel</Role>
+    </Person>
+    <Person>
+      <Name>Graham Turner</Name>
+      <Type>Actor</Type>
+      <Role>Undertaker</Role>
+    </Person>
+    <Person>
+      <Name>Robert Angell</Name>
+      <Type>Actor</Type>
+      <Role>Uncle Sam (uncredited)</Role>
+    </Person>
+    <Person>
+      <Name>Tom Clear</Name>
+      <Type>Actor</Type>
+      <Role>Mechanic (uncredited)</Role>
+    </Person>
+    <Person>
+      <Name>Blake Morrison</Name>
+      <Type>Actor</Type>
+      <Role>Awards Ceremony Attendee (uncredited)</Role>
+    </Person>
+    <Person>
+      <Name>Anand Tucker</Name>
+      <Type>Director</Type>
+    </Person>
+  </Persons>
+</Title>

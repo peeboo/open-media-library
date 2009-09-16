@@ -1,0 +1,34 @@
+<Mcml xmlns ="http://schemas.microsoft.com/2006/mcml" 
+      xmlns:cor ="assembly://MsCorLib/System" 
+      xmlns:comm="resx://Library/Library.Resources/V3_Globals">
+  
+  <UI Name="StaticGraphic">
+    <Properties>
+      <cor:String Name="AccessibilityName" String="null"/>
+      <cor:String Name="AccessibilityValue" String="null"/>
+      <Image Name="Content" Image="null"/>
+      <Image Name="AcquiringImage" Image="null"/>
+      <Image Name="ErrorImage" Image="null"/>
+      <cor:Boolean Name="MaintainAspectRatio" Boolean="false"/>
+      <SizingPolicy Name="SizingPolicy" SizingPolicy="SizeToContent" />
+      <Size Name="MaximumSize"/>
+      <ItemAlignment Name="HorizontalAlignment" ItemAlignment="Fill" />
+      <ItemAlignment Name="VerticalAlignment" ItemAlignment="Fill" />
+    </Properties>
+    <Rules>
+      <Binding Target="[Accessible.Name]" Source="[AccessibilityName]"/>
+      <Binding Target="[Accessible.Value]" Source="[AccessibilityValue]"/>
+      <Default Target="[Accessible.Role]" Value="Graphic"/>
+      <Binding Source="[Content]" Target="[WrappedGraphic.Content]"/>
+      <Binding Source="[AcquiringImage]" Target="[WrappedGraphic.AcquiringImage]"/>
+      <Binding Source="[ErrorImage]" Target="[WrappedGraphic.ErrorImage]"/>
+      <Binding Source="[MaintainAspectRatio]" Target="[WrappedGraphic.MaintainAspectRatio]"/>
+      <Binding Source="[MaximumSize]" Target="[WrappedGraphic.MaximumSize]"/>
+      <Binding Source="[HorizontalAlignment]" Target="[WrappedGraphic.HorizontalAlignment]"/>
+      <Binding Source="[VerticalAlignment]" Target="[WrappedGraphic.VerticalAlignment]"/>
+    </Rules>
+    <Content>
+      <Graphic Name="WrappedGraphic" />
+    </Content>
+  </UI>
+</Mcml>

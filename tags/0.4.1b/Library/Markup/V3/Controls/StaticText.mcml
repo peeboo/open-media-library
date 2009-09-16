@@ -1,0 +1,41 @@
+<Mcml
+    xmlns     ="http://schemas.microsoft.com/2006/mcml"
+    xmlns:cor ="assembly://MsCorLib/System"
+    xmlns:comm="resx://Library/Library.Resources/V3_Globals">
+
+  <UI Name="StaticText">
+
+    <Properties>
+      <cor:String  Name="AccessibilityName" String="null"/>
+      <cor:String  Name="Content"           String="null"/>
+      <Font        Name="Font"              Font="font://comm:ButtonText"/>
+      <Color       Name="Color"             Color="color://comm:OffWhite"/>
+      <cor:Int32   Name="MaximumLines"      Int32="9999"/>
+      <cor:Boolean Name="WordWrap"          Boolean="false"/>
+      <cor:Single  Name="FadeSize"          Single="32"/>
+    </Properties>
+
+    <Rules>
+      <!-- Accessibility -->
+      <Binding Target="[Accessible.Value]" Source="[Content]"/>
+      <Binding Target="[Accessible.Name]"  Source="[AccessibilityName]"/>
+      <Default Target="[Accessible.Role]"  Value="StaticText"/>
+
+      <Binding Source="[Color]"        Target="[Label.Color]"/>
+      <Binding Source="[Font]"         Target="[Label.Font]"/>
+      <Binding Source="[Content]"      Target="[Label.Content]"/>
+      <Binding Source="[MaximumLines]" Target="[Label.MaximumLines]"/>
+      <Binding Source="[WordWrap]"     Target="[Label.WordWrap]"/>
+      <Binding Source="[FadeSize]"     Target="[Label.FadeSize]"/>
+
+    </Rules>
+
+    <Content>
+
+      <Text Name="Label"/>
+
+    </Content>
+
+  </UI>
+
+</Mcml>

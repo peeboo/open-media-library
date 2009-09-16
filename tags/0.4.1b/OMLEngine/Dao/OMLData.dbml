@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Database Name="OML" Class="OMLDataDataContext" AccessModifier="Internal" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=localhost\OML;Initial Catalog=OML;Integrated Security=True" SettingsObjectName="OMLEngine.Properties.Settings" SettingsPropertyName="OMLConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.GenreMetaData" Member="GenreMetaDatas" AccessModifier="Internal">
+    <Type Name="GenreMetaData" AccessModifier="Internal">
+      <Column Name="Name" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="datetime" CanBeNull="true" />
+      <Column Name="PhotoID" Storage="_Photo" Type="System.Int32" DbType="Int" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Genres" Member="Genres" AccessModifier="Internal">
+    <Type Name="Genre" AccessModifier="Internal">
+      <Column Name="TitleId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="GenreMetaDataId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="true" />
+      <Association Name="GenreMetaData_Genre" Member="MetaData" Storage="_GenreMetaData" ThisKey="GenreMetaDataId" OtherKey="Id" Type="GenreMetaData" IsForeignKey="true" />
+      <Association Name="Title_Genre" Member="Title" ThisKey="TitleId" OtherKey="Id" Type="Title" IsForeignKey="true" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Titles" Member="Titles" AccessModifier="Internal">
+    <Type Name="Title" AccessModifier="Internal">
+      <Column Name="Name" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="SortName" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="true" />
+      <Column Name="WatchedCount" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="MetaDataSource" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="Runtime" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="ParentalRating" Type="System.String" DbType="NVarChar(80)" CanBeNull="true" />
+      <Column Name="Synopsis" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="Studio" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="CountryOfOrigin" Storage="_CountryOfOrgin" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="WebsiteUrl" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="ReleaseDate" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
+      <Column Name="DateAdded" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
+      <Column Name="AudioTracks" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="UserRating" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
+      <Column Name="AspectRatio" Type="System.String" DbType="NVarChar(5)" CanBeNull="true" />
+      <Column Name="VideoStandard" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
+      <Column Name="UPC" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
+      <Column Name="Trailers" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="ParentalRatingReason" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="VideoDetails" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="Subtitles" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="VideoResolution" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
+      <Column Name="OriginalName" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="ImporterSource" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="GroupId" Type="System.Int32" DbType="int (System.Int32)" CanBeNull="true" />
+      <Column Name="MetaDataSourceItemId" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="ProductionYear" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ParentTitleId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="datetime" CanBeNull="true" />
+      <Column Name="TitleType" Type="System.Int32" DbType="int" CanBeNull="false" />
+      <Column Name="SeasonNumber" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="EpisodeNumber" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Association Name="Title_Genre" Member="Genres" ThisKey="Id" OtherKey="TitleId" Type="Genre" />
+      <Association Name="Title_Person" Member="People" Storage="_Peoples" ThisKey="Id" OtherKey="TitleId" Type="Person" />
+      <Association Name="Title_Tag" Member="Tags" ThisKey="Id" OtherKey="TitleId" Type="Tag" />
+      <Association Name="Title_Disk" Member="Disks" ThisKey="Id" OtherKey="TitleId" Type="Disk" />
+      <Association Name="Title_ImageMapping" Member="Images" ThisKey="Id" OtherKey="TitleId" Type="ImageMapping" />
+    </Type>
+  </Table>
+  <Table Name="dbo.People" Member="Persons" AccessModifier="Internal">
+    <Type Name="Person" AccessModifier="Internal">
+      <Column Name="CharacterName" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="TitleId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Sort" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="Role" Type="System.Byte" DbType="TinyInt" CanBeNull="false" />
+      <Column Name="BioId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="true" />
+      <Association Name="BioData_Person" Member="MetaData" Storage="_BioData" ThisKey="BioId" OtherKey="Id" Type="BioData" IsForeignKey="true" />
+      <Association Name="Title_Person" Member="Title" ThisKey="TitleId" OtherKey="Id" Type="Title" IsForeignKey="true" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.BioData" Member="BioDatas" AccessModifier="Internal">
+    <Type Name="BioData" AccessModifier="Internal">
+      <Column Name="FullName" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="PhotoID" Storage="_Photo" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="DateOfBirth" Type="System.DateTime" DbType="SmallDateTime" CanBeNull="true" />
+      <Column Name="Biography " Member="Biography" Storage="_Synopsis" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="datetime" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Tags" Member="Tags" AccessModifier="Internal">
+    <Type Name="Tag" AccessModifier="Internal">
+      <Column Name="TitleId" Storage="_MovieId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="true" />
+      <Association Name="Title_Tag" Member="Title" ThisKey="TitleId" OtherKey="Id" Type="Title" IsForeignKey="true" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Disks" Member="Disks" AccessModifier="Internal">
+    <Type Name="Disk" AccessModifier="Internal">
+      <Column Name="Name" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="Path" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="VideoFormat" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="true" />
+      <Column Name="TitleId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ExtraOptions" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="MainFeatureXRes" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="MainFeatureYRes" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="MainFeatureAspectRatio" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
+      <Column Name="MainFeatureFPS" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="MainFeatureLength" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Title_Disk" Member="Title" ThisKey="TitleId" OtherKey="Id" Type="Title" IsForeignKey="true" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.DBImages" Member="DBImages" AccessModifier="Internal">
+    <Type Name="DBImage" AccessModifier="Internal">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Image" Type="System.Data.Linq.Binary" DbType="Image NOT NULL" CanBeNull="false" UpdateCheck="Never" />
+      <Association Name="DBImage_ImageMapping" Member="ImageMappings" ThisKey="Id" OtherKey="ImageId" Type="ImageMapping" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ImageMappings" Member="ImageMappings" AccessModifier="Internal">
+    <Type Name="ImageMapping" AccessModifier="Internal">
+      <Column Name="TitleId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ImageId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ImageType" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="OriginalName" Type="System.String" DbType="NVarChar(80)" CanBeNull="true" />
+      <Association Name="Title_ImageMapping" Member="Title" ThisKey="TitleId" OtherKey="Id" Type="Title" IsForeignKey="true" />
+      <Association Name="DBImage_ImageMapping" Member="DBImage" ThisKey="ImageId" OtherKey="Id" Type="DBImage" IsForeignKey="true" />
+    </Type>
+  </Table>
+</Database>
