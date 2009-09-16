@@ -1,0 +1,44 @@
+<application title="Open Media Library" id="{3f0850a7-0fd7-4cbf-b8dc-c7f7ea31534e}">
+	<entrypoint id="{1044a023-44cc-401c-a5df-4f58601f1f57}"
+				addin="Library.MyAddIn, Library,Culture=Neutral,Version=4.0.0.0,PublicKeyToken=74d3b407d6cf16f1"
+				title="Open Media Library"
+				context="Menu"
+				description="Open Media Library"
+				ImageUrl="Application.png">
+		<!--category category="OML\Open Media Library"/-->
+    <category category="More Programs" />
+  </entrypoint>
+  <entrypoint id="{0e62839a-acbe-48d1-b6f1-a7e5992d5c1d}"
+              addin="Library.MyAddIn, Library,Culture=Neutral,Version=4.0.0.0,PublicKeyToken=74d3b407d6cf16f1"
+              title="LibraryFirstRun"
+              context="FirstRun"
+              description="LibraryFirstRun"
+              ImageUrl=".\AppIcon.png">
+    <category category="Background"/>
+  </entrypoint>
+  <!--entrypoint id="{7fefb88a-0c20-4089-bc52-ce95a51acf10}"
+				addin="Library.MyAddIn, Library,Culture=Neutral,Version=3.0.0.0,PublicKeyToken=74d3b407d6cf16f1"
+				title="tv"
+				context="TV"
+				description="Open Media Library"
+				ImageUrl="Application.png">
+    <category category="OML\Open Media Library"/>
+  </entrypoint>
+    <entrypoint id="{a4a863e5-9459-425f-9eff-01380911dc68}"
+				addin="Library.MyAddIn, Library,Culture=Neutral,Version=3.0.0.0,PublicKeyToken=74d3b407d6cf16f1"
+				title="search"
+				context="Search"
+				description="Open Media Library"
+				ImageUrl="Application.png">
+        <category category="OML\Open Media Library"/>
+    </entrypoint>
+  <entrypoint id="{6b13de20-7e64-499b-af97-db1aba23d1e8}"
+				addin="Library.MyAddIn, Library,Culture=Neutral,Version=3.0.0.0,PublicKeyToken=74d3b407d6cf16f1"
+				title="trailers"
+				context="Trailers"
+				description="Open Media Library"
+				ImageUrl="Application.png">
+    <category category="OML\Open Media Library"/>
+    <capabilitiesRequired console="true"/>
+  </entrypoint-->
+</application>

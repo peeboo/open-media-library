@@ -1,0 +1,180 @@
+<Mcml xmlns="http://schemas.microsoft.com/2006/mcml" 
+      xmlns:cor ="assembly://MsCorLib/System" 
+      xmlns:comm="resx://Library/Library.Resources/V3_Globals"
+      xmlns:shel ="assembly://Library/Library.Code.V3"
+      xmlns:me="Me">
+
+  <UI Name="TestButton">
+    <Properties>
+      <Command Name="SampleButton5" Description="Other Showings"/>
+      <Choice Name="SampleChoice">
+        <Options>
+          <Command Name="SampleButton1" Description="Cast + More"/>
+          <Command Name="SampleButton2" Description="Record"/>
+          <Command Name="SampleButton3" Description="Advanced Record"/>
+          <Command Name="SampleButton4" Description="Other Showings"/>
+        </Options>
+      </Choice>
+    </Properties>
+    <Content>
+      <Panel Layout="Center">
+        <Children>
+          <Panel Layout="VerticalFlow">
+            <Children>
+              <me:RadioButton Model="[SampleChoice]" Option="[SampleButton5]"/>
+            </Children>
+          </Panel>
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+  <UI Name="FirstRunRadioButton" BaseUI="me:RadioButton">
+    <Properties>
+      <Choice Name="Model" Choice="$Required"/>
+      <cor:Object Name="Option" Object="$Required"/>
+      <Font Name="Font" Font="font://comm:ButtonText"/>
+      <Size Name="TileSize" Width="34" Height="34"/>
+      <Inset Name="LabelMargins" Inset="5, 5, 10, 5"/>
+      <cor:Boolean Name="ShowLabel" Boolean="true"/>
+      <Image Name="NoFocusImage" Source="resx://Library/Library.Resources/V3_FirstRun_SmallRadioButton_NoFocus"/>
+      <Image Name="FocusImage" Source="resx://Library/Library.Resources/V3_FirstRun_SmallRadioButton_Focus"/>
+      <Image Name="DisabledImage" Source="resx://Library/Library.Resources/V3_FirstRun_SmallRadioButton_Disabled"/>
+      <Image Name="CheckedNoFocusImage" Source="resx://Library/Library.Resources/V3_FirstRun_SmallRadioButton_NoFocus_Selected"/>
+      <Image Name="CheckedFocusImage" Source="resx://Library/Library.Resources/V3_FirstRun_SmallRadioButton_Focus_Selected"/>
+      <Image Name="CheckedDisabledImage" Source="resx://Library/Library.Resources/V3_FirstRun_SmallRadioButton_Disabled_Selected"/>
+      <Color Name="NoFocusColor" Color="color://comm:LightBlue"/>
+      <Color Name="FocusColor" Color="color://comm:OffWhite"/>
+      <Color Name="DisabledColor" Color="color://comm:LightBlue40Percent"/>
+    </Properties>
+  </UI>
+  
+  <UI Name="RadioButton">
+    <Properties>
+      <Choice Name="Model" Choice="$Required"/>
+      <cor:Object Name="Option" Object="$Required"/>
+      <Font Name="Font" Font="font://comm:ButtonText"/>
+      <Size Name="TileSize" Width="50" Height="50"/>
+      <Inset Name="LabelMargins" Inset="15, 5, 10, 5"/>
+      <cor:Boolean Name="ShowLabel" Boolean="true"/>
+      <Image Name="NoFocusImage" Source="resx://Library/Library.Resources/V3_Controls_Common_GlobalSettings_RadioButton_NoFocus"/>
+      <Image Name="FocusImage" Source="resx://Library/Library.Resources/V3_Controls_Common_GlobalSettings_RadioButton_Focus"/>
+      <Image Name="DisabledImage" Source="resx://Library/Library.Resources/V3_Controls_Common_GlobalSettings_RadioButton_Disabled"/>
+      <Image Name="CheckedNoFocusImage" Source="resx://Library/Library.Resources/V3_Controls_Common_GlobalSettings_RadioButton_Select_NoFocus"/>
+      <Image Name="CheckedFocusImage" Source="resx://Library/Library.Resources/V3_Controls_Common_GlobalSettings_RadioButton_Select_Focus"/>
+      <Image Name="CheckedDisabledImage" Source="resx://Library/Library.Resources/V3_Controls_Common_GlobalSettings_RadioButton_Select_Disabled"/>
+      <Color Name="NoFocusColor" Color="color://comm:LightBlue"/>
+      <Color Name="FocusColor" Color="color://comm:OffWhite"/>
+      <Color Name="DisabledColor" Color="color://comm:LightBlue40Percent"/>
+    </Properties>
+    <Locals>
+      <Command Name="Command"/>
+      <ClickHandler Name="Clicker"/>
+    </Locals>
+    <Rules>
+      <Condition Source="[Input.Enabled]" SourceValue="false" Target="[Label.Color]" Value="[DisabledColor]"/>
+      <Condition Source="[Input.KeyFocus]" SourceValue="true" Target="[Label.Color]" Value="[FocusColor]"/>
+      <Rule>
+        <Conditions>
+          <Equality Source="[Input.KeyFocus]" Value="false"/>
+          <Equality Source="[Input.Enabled]" Value="false"/>
+          <Equality Source="[Model.Chosen]" Value="[Option]"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Background.Content]" Value="[CheckedDisabledImage]"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Equality Source="[Input.KeyFocus]" Value="true"/>
+          <Equality Source="[Model.Chosen]" Value="[Option]"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Background.Content]" Value="[CheckedFocusImage]"/>
+          <Set Target="[Accessible.IsChecked]" Value="true"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Equality Source="[Input.KeyFocus]" Value="false"/>
+          <Equality Source="[Model.Chosen]" Value="[Option]"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Background.Content]" Value="[CheckedNoFocusImage]"/>
+          <Set Target="[Accessible.IsChecked]" Value="true"/>
+        </Actions>
+      </Rule>
+      <Condition Source="[Input.Enabled]" SourceValue="false" Target="[Background.Content]" Value="[DisabledImage]"/>
+      <Condition Source="[Input.KeyFocus]" SourceValue="true" Target="[Background.Content]" Value="[FocusImage]"/>
+      <!--Binding Source="[Input.KeyFocus]" Target="[Label.AllowMarquee]"/-->
+      <Binding Source="[Input.KeyFocus]" Target="[FocusOverlay.Visible]"/>
+      <Binding Source="[Clicker.Clicking]" Target="[Highlight.Visible]"/>
+      <Binding Source="[Option]" Target="[Label.Content]">
+        <Transformer>
+          <shel:DescriptionTransformer Format="{0}"/>
+        </Transformer>
+      </Binding>
+      <Changed Source="[Command.Invoked]">
+        <Actions>
+          <Set Target="[Model.Chosen]" Value="[Option]"/>
+        </Actions>
+      </Changed>
+      <Changed Source="[Clicker.Invoked]">
+        <Actions>
+          <PlaySound Sound="resx://Library/Library.Resources/V3_Controls_Common_MiniSelect_a" />
+        </Actions>
+      </Changed>
+      <Condition Source="[Input.KeyFocus]" SourceValue="true">
+        <Actions>
+          <PlaySound Sound="resx://Library/Library.Resources/V3_Controls_Common_Focus_a" />
+        </Actions>
+      </Condition>
+      <Binding Target="[Accessible.IsPressed]" Source="[Clicker.Clicking]"/>
+      <Binding Target="[Accessible.IsFocusable]" Source="[Input.KeyInteractive]"/>
+      <Binding Target="[Accessible.IsFocused]" Source="[Input.KeyFocus]"/>
+      <Binding Target="[Accessible.Name]" Source="[Option.ToString]"/>
+      <Default Target="[Accessible.IsSelectable]" Value="true"/>
+      <Default Target="[Accessible.DefaultActionCommand]" Value="[Command]"/>
+      <Default Target="[Accessible.DefaultAction]" Value="RadioButton"/>
+      <Default Target="[Accessible.Role]" Value="RadioButton"/>
+      <Default Target="[Accessible.IsChecked]" Value="false"/>
+      <Default Target="[Clicker.Command]" Value="[Command]"/>
+    </Rules>
+    <Content>
+      <Panel MouseInteractive="true">
+        <Layout>
+          <FlowLayout Orientation="Horizontal" ItemAlignment="Center"/>
+        </Layout>
+        <Children>
+          <Panel Layout="Anchor">
+            <Children>
+              <Clip Layout="Fill" FadeSize="10">
+                <LayoutInput>
+                  <AnchorLayoutInput Left="Background,0" Top="Background,0" Right="Background,1" Bottom="Background,1"/>
+                </LayoutInput>
+                <Children>
+                  <Graphic Name="Highlight" Content="resx://Library/Library.Resources/V3_Controls_Common_Button_Pressed_Highlight" SizingPolicy="SizeToConstraint">
+                    <Animations>
+                      <IAnimationProvider IAnimationProvider="global://comm:Button.PressedHighlight.Show"/>
+                      <IAnimationProvider IAnimationProvider="global://comm:Button.PressedHighlight.Hide"/>
+                    </Animations>
+                  </Graphic>
+                </Children>
+              </Clip>
+              <Graphic Name="FocusOverlay" Content="resx://Library/Library.Resources/V3_Controls_Common_GlobalSettings_RadioButton_FocusOverlay" SizingPolicy="SizeToConstraint">
+                <LayoutInput>
+                  <AnchorLayoutInput Left="Background,0" Top="Background,0" Right="Background,1" Bottom="Background,1"/>
+                </LayoutInput>
+                <Animations>
+                  <Animation Animation="animation://comm:Button.FocusOverlay.Idle"/>
+                  <Animation Animation="animation://comm:StandardFade.Hide"/>
+                </Animations>
+              </Graphic>
+              <Graphic Name="Background" Content="[NoFocusImage]" MaximumSize="[TileSize]" SizingPolicy="SizeToConstraint"/>
+            </Children>
+          </Panel>
+          <Text Name="Label" Color="[NoFocusColor]" Font="[Font]" Margins="[LabelMargins]" Visible="[ShowLabel]"/>
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+</Mcml>

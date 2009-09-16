@@ -1,0 +1,480 @@
+<Mcml
+    xmlns="http://schemas.microsoft.com/2006/mcml"
+    xmlns:cor ="assembly://MsCorLib/System"
+    xmlns:coll="assembly://MsCorLib/System.Collections"
+    xmlns:shell ="assembly://Library/Library.Code.V3"
+    xmlns:comm="resx://Library/Library.Resources/V3_Globals"
+    xmlns:omlShell ="assembly://Library/Library"
+    xmlns:me="Me">
+
+  <Aggregate Source="resx://Library/Library.Resources/V3_Controls_BrowseGalleryItem"/>
+  <Aggregate Source="resx://Library/Library.Resources/V3_Controls_BrowseListViewItem"/>
+
+  <UI Name="ListViewGroup" BaseUI="me:GalleryGroup">
+    <Properties>
+      <!--LegacyVerticalFlowLayout Name="LabelFlowLayout"/-->
+      <FlowLayout Name="LabelFlowLayout" Orientation="Vertical" AllowWrap="true"/>
+      <Font Name="GroupLabelFontNoFocus" FontName="global://comm:MainFontFace" FontSize="16"/>
+      <Color Name="GroupLabelColorNoFocus" Color="color://comm:MediumBlue"/>
+      <Inset Name="GroupLabelColorMargins" Inset="-18, 0, 0, 0"/>
+      <cor:Int32 Name="LabelRotation" Int32="0"/>
+      <Size Name="GroupedListViewItemSize"/>
+      <shell:RepeaterHelper Name="RepeaterHelper"></shell:RepeaterHelper>
+    </Properties>
+    <Content Name="Item">
+      <!--me:ListViewItem Model="[RepeatedItem!ICommand]" SelectionPolicy="[Pivot.ContentSelectionPolicy]" Source="[ContentItemTemplate]" Index="[RepeatedItemIndex]" TileSize="[GroupedListViewItemSize]" ItemProperties="[ItemProperties]"/-->
+      <me:ListViewItem Application="[Application]" Page="[Page]" Model="[RepeatedItem!ICommand]" Index="[RepeatedItemIndex]" ItemProperties="[ItemProperties]" GroupProperties="[GroupProperties]"/>
+    </Content>
+  </UI>
+  
+  <UI Name="GalleryGroup">
+    <Properties>
+      <omlShell:OMLApplication Name="Application" OMLApplication="$Required"/>
+      <!--shell:IBrowseGroup Name="Model"               IBrowseGroup="$Required"/-->
+      <shell:BrowseGroup Name="Model"               BrowseGroup="$Required"/>
+      <shell:IBrowsePivot Name="Pivot"               IBrowsePivot="$Required"/>
+      <shell:GalleryPage Name="Page" GalleryPage="null"/>
+      <shell:ISelectionPolicy Name="SelectionPolicy" ISelectionPolicy="$Required"/>
+      <!--cor:String         Name="ContentItemTemplate" String="$Required"/-->
+
+      <Index              Name="MyIndex"             Index="$Required"/>
+      <IntRangedValue     Name="SelectedGroup"       IntRangedValue="$Required"/>
+      <IntRangedValue     Name="SelectedIndex"       IntRangedValue="$Required"/>
+
+      <PropertySet        Name="ItemProperties"      PropertySet="$Required"/>
+      <Inset              Name="GroupLabelColorMarginsNoFocus" Inset="0, 0, 0, 0"/>
+      <Inset              Name="GroupLabelColorMargins"        Inset="-20, 0, 0, 0"/>
+      <cor:Int32          Name="LabelRotation"                 Int32="90"/>
+
+      <cor:String         Name="OverlayContentTemplate"   String="null"/>
+
+      <cor:Int32          Name="ListViewLabelRotation"         Int32="0"/>
+      <cor:Int32          Name="PosterLabelRotation"           Int32="90"/>
+      <shell:RepeaterHelper Name="RepeaterHelper"></shell:RepeaterHelper>
+    </Properties>
+
+    <Locals>
+      <!--ScrollingData Name="ScrollData" ScrollStep="90" BeginPadding="0" EndPadding="800"/>
+      <ScrollingHandler Name="ScrollingHandler" HandlerStage="Bubbled"/-->
+      <Environment         Name="Environment"/>
+      <cor:Int32       Name="OffsetIndex" Int32="0"/>
+      <MathTransformer Name="OffsetCalc" Absolute="true"/>
+
+      <IntRangedValue Name="TotalCount"      IntRangedValue="[ItemProperties.#TotalCount!IntRangedValue]"/>
+      <EditableText   Name="TransitionState" EditableText="[ItemProperties.#TransitionState!EditableText]"/>
+
+      <!-- Pass group specific details down into the group items. -->
+      <PropertySet Name="GroupProperties">
+        <Entries>
+          <IntRangedValue Name="GroupIndex" Value="[MyIndex.Value]"/>
+          <IntRangedValue Name="GroupCount" Value="1"/>
+        </Entries>
+      </PropertySet>
+
+      <TransformAnimation Name="TransitionToForward" Source="animation://me:Browse.Gallery.Group.Label.NavigateToForward"/>
+      <TransformAnimation Name="TransitionToBackward" Source="animation://me:Browse.Gallery.Group.Label.NavigateToBackward"/>
+      <TransformAnimation Name="TransitionAwayForward" Source="animation://me:Browse.Gallery.Group.Label.NavigateAwayForward"/>
+      <TransformAnimation Name="TransitionAwayBackward" Source="animation://me:Browse.Gallery.Group.Label.NavigateAwayBackward"/>
+      <!--ScrollingHandler Name="ScrollingHandler" HandleHomeEndKeys="true"
+                        HandleDirectionalKeys="true" HandlePageKeys="true"/>
+      <ScrollingData Name="ScrollingData" /-->
+
+    </Locals>
+
+    <Rules>
+      <!--Rule>
+        <Conditions>
+          <Equality Source="[Pivot!shell:BrowsePivot.SubContentItemTemplate]" ConditionOp="NotEquals" Value="ListViewItem"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[LabelRotation]" Value="[ListViewLabelRotation]"/>
+        </Actions>
+      </Rule-->
+      <!--Rule>
+        <Conditions>
+          <Equality Source="[Pivot!shell:BrowsePivot.SubContentItemTemplate]" ConditionOp="NotEquals" Value="ListViewItem"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[LabelRotation]" Value="[PosterLabelRotation]"/>
+        </Actions>
+      </Rule-->
+      <!--Default Target="[ScrollingHandler.ScrollingData]" Value="[ScrollData]"/-->
+      <!-- @ -->
+      <!--Default Target="[ScrollData.Repeater]" Value="[Repeater]"/-->
+      <!-- @ -->
+      <!-- Accessibility -->
+      <Default Target="[Accessible.Name]" Value="[Model.Description]"/>
+      <Default Target="[Accessible.Role]" Value="Grouping"/>
+
+      <!-- Append some additional ContentMappings if any were specified. -->
+      <!--Condition Source="[Pivot.AdditionalContentItemMappings]" ConditionOp="NotEquals" SourceValue="null">
+                <Actions>
+                    <Invoke Target="[RepeatHelper.AddMappings]" mappings="[Pivot.AdditionalContentItemMappings]"/>
+                </Actions>
+            </Condition-->
+
+      <!-- Hook up the RepeatHelper. -->
+      <!--Default Target="[Repeater.RepeatedItem]" Value="[RepeatHelper.RepeatedHandler]"/>
+            <Default Target="[Repeater.PreRepeatHandler]" Value="[RepeatHelper.ContentTypeHandler]"/-->
+
+      <Binding Target="[GroupProperties.#GroupCount!IntRangedValue.Value]" Source="[Model.Content.Count]"/>
+
+      <!-- Bind Our Model to that of our Label, to ensure it updated if our Model changes. -->
+      <Binding Source="[Model]" Target="[Label.Model]" />
+
+      <!-- Bind our Labels Source to our Model's ContentLabelTemplate -->
+      <Binding Source="[Model.ContentLabelTemplate]" Target="[Label.Source]"/>
+
+      <!-- Bind the DeepKeyFocus to the Group Labels UseFocusLayout Property -->
+      <Binding Source="[Input.DeepKeyFocus]" Target="[Label.UseFocusLayout]"/>
+
+      <!-- Apply the correct Animations and margins  to the label based on keyfocus -->
+      <Rule>
+        <Conditions>
+          <Equality Source="[Input.DeepKeyFocus]" Value="true"/>
+          <Equality Source="[TransitionState.Value]" Value="Idle"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[Label.AttachAnimation]" animation="animation://me:Browse.GroupedGallery.GroupLabel.Focus" InvokePolicy="Synchronous"/>
+          <Set Target="[Label.Margins]" Value="[GroupLabelColorMargins]"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Equality Source="[Input.DeepKeyFocus]" Value="false"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[Label.AttachAnimation]" animation="animation://me:Browse.GroupedGallery.GroupLabel.UnFocus" InvokePolicy="Synchronous"/>
+          <Set Target="[Label.Margins]" Value="[GroupLabelColorMarginsNoFocus]"/>
+        </Actions>
+      </Rule>
+
+      <!-- When we get deep key focus, set the selected group value to our index, since we're the one selected -->
+      <Rule>
+        <Conditions>
+          <Equality Source="[Input.DeepKeyFocus]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[SelectedGroup.Value]" Value="[MyIndex.Value]"/>
+        </Actions>
+      </Rule>
+
+      <!--
+                If we're the selected group, we've got the responsibility of setting the total count
+                value so that the browse page can update it's counter appropriately.
+            -->
+      <Rule>
+        <Conditions>
+          <IsValid Source="[Model.Content.Count]"/>
+          <Equality Source="[Input.DeepKeyFocus]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[TotalCount.Value]" Value="[Model.Content.Count]"/>
+        </Actions>
+      </Rule>
+
+      <!--
+              If we're the chosen group, have our focus order ensure that the selected item
+              will be created, scrolled into view, and recieve default focus.
+
+              TODO: Need to verify if the IsValid for SelectedIndex.Value is actually needed.  Can this ever be null?
+            -->
+      <!--Rule>
+                <Conditions>
+                    <Equality Source="[Model.Content.Count]" ConditionOp="GreaterThan" Value="[SelectedIndex.Value]"/>
+                    <Equality Source="[SelectedGroup.Value]" Value="[MyIndex.Value]"/>
+                    <IsValid Source="[SelectedIndex.Value]"/>
+                </Conditions>
+                <Actions>
+                    <Set Target="[FocusOrderHelper.RequestFocusIndex]" Value="[SelectedIndex.Value]"/>
+                    <Set Target="[FocusOrderHelper.SetEssentialIndexOnRepeater]" Value="true"/>
+                    <Set Target="[FocusOrderHelper.SetAreaOfInterestOnRepeatedItem]" Value="true"/>
+                </Actions>
+            </Rule-->
+
+      <!-- 
+                If selected items were deleted at the end of a group (for example) and we are refreshing, our
+                Selected Index may no longer be valid and need updating along with focus to the new last item
+                so that it is within the constraints.  Making this the last item makes the most sense from
+                the user POV.
+
+                TODO: Need to verify if the IsValid for SelectedIndex.Value is actually needed.  Can this ever be null?
+            -->
+      <Rule>
+        <Conditions>
+          <Equality Source="[Model.Content.Count]" ConditionOp="LessThanOrEquals" Value="[SelectedIndex.Value]"/>
+          <Equality Source="[SelectedGroup.Value]" Value="[MyIndex.Value]"/>
+          <IsValid Source="[SelectedIndex.Value]"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[SelectedIndex.Value]" Value="[Model.Content.Count]">
+            <Transformer>
+              <MathTransformer SubtractInt="1"/>
+            </Transformer>
+          </Set>
+          <!--Set Target="[FocusOrderHelper.RequestFocusIndex]" Value="[SelectedIndex.Value]"/>
+                    <Set Target="[FocusOrderHelper.SetEssentialIndexOnRepeater]" Value="true"/>
+                    <Set Target="[FocusOrderHelper.SetAreaOfInterestOnRepeatedItem]" Value="true"/-->
+        </Actions>
+      </Rule>
+
+      <!--Default Target="[FocusOrderHelper.SetEssentialIndexOnRepeater]" Value="false"/>
+            <Default Target="[FocusOrderHelper.SetAreaOfInterestOnRepeatedItem]" Value="false"/>
+            <Default Target="[FocusOrderHelper.Repeater]" Value="[Repeater]"/-->
+
+      <!-- Keep the relative-to-the-focused-group offset value accurate -->
+      <Changed Source="[SelectedGroup.Value]" InitialEvaluate="true">
+        <Actions>
+          <Set Target="[OffsetCalc.SubtractInt]" Value="[SelectedGroup.Value]"/>
+          <Set Target="[OffsetIndex]" Value="[MyIndex.Value]" Transformer="[OffsetCalc]"/>
+        </Actions>
+      </Changed>
+
+      <!-- Set up the Show animation for the transition arrival forward case.  This creates a rippling delay -->
+      <Condition Source="[TransitionState.Value]" SourceValue="NavigatingToForward">
+        <Actions>
+          <Set Target="[TransitionToForward.Delay]" Value="[OffsetIndex]">
+            <Transformer>
+              <MathTransformer Multiply="0.1" Type="Single"/>
+            </Transformer>
+          </Set>
+          <Invoke Target="[GroupLabel.AttachAnimation]" animation="[TransitionToForward]" InvokePolicy="Synchronous"/>
+        </Actions>
+      </Condition>
+      <!-- Set up the Show animation for the transition arrival backward case.  The ripple is faster -->
+      <Condition Source="[TransitionState.Value]" SourceValue="NavigatingToBackward">
+        <Actions>
+          <Set Target="[TransitionToBackward.Delay]" Value="[OffsetIndex]">
+            <Transformer>
+              <MathTransformer Multiply="0.033" Type="Single"/>
+            </Transformer>
+          </Set>
+          <Invoke Target="[GroupLabel.AttachAnimation]" animation="[TransitionToBackward]" InvokePolicy="Synchronous"/>
+        </Actions>
+      </Condition>
+      <!-- Set up the Show animation for the transition away forward case.  This creates a rippling delay -->
+      <Condition Source="[TransitionState.Value]" SourceValue="NavigatingAwayForward">
+        <Actions>
+          <Set Target="[TransitionAwayForward.Delay]" Value="[OffsetIndex]">
+            <Transformer>
+              <MathTransformer Multiply="0.02" Type="Single"/>
+            </Transformer>
+          </Set>
+          <Invoke Target="[GroupLabel.AttachAnimation]" animation="[TransitionAwayForward]" InvokePolicy="Synchronous"/>
+        </Actions>
+      </Condition>
+      <!-- Set up the Hide animation for the transition away back case.  The ripple is faster -->
+      <Condition Source="[TransitionState.Value]" SourceValue="NavigatingAwayBackward">
+        <Actions>
+          <Set Target="[TransitionAwayBackward.Delay]" Value="[OffsetIndex]">
+            <Transformer>
+              <MathTransformer Multiply="0.01" Type="Single"/>
+            </Transformer>
+          </Set>
+          <Invoke Target="[GroupLabel.AttachAnimation]" animation="[TransitionAwayBackward]" InvokePolicy="Synchronous"/>
+        </Actions>
+      </Condition>
+    
+    <Condition Source="[Model.Description]" SourceValue="subgroup">
+      <Actions>
+        <Set Target="[MarginPanel.Margins]" Value="0, 0, 0, 0"/>
+      </Actions>
+    </Condition>
+      <Rule>
+        <Conditions>
+          <Equality Source="[Pivot!shell:BrowsePivot.SubContentItemTemplate]" ConditionOp="NotEquals" Value="null"/>
+          <Modified Source="[Pivot!shell:BrowsePivot.SubContentItemTemplate]" />
+        </Conditions>
+        <Actions>
+          <!--Set Target="[GalleryLayout]" Value="[Model.ContentItemTemplate]"/-->
+          <Set Target="[Repeater.ContentName]" Value="[Pivot!shell:BrowsePivot.SubContentItemTemplate]"/>
+          <Invoke Target="[RepeaterHelper.ForceRefresh]" Repeater="[Repeater]"/>
+          <!--Invoke Target="[Scroller.ForceContentChange]"/-->
+        </Actions>
+      </Rule>
+    </Rules>
+    <Content>
+
+      <!--Panel Margins="30, 0, 0, 0" Layout="[LabelFlowLayout]"-->
+      <Panel Name="MarginPanel" Margins="30, 0, 0, 0" Layout="HorizontalFlow">
+        <Children>
+          <!--Scroller MouseInteractive="false" Name="ScrollerGrid" Orientation="Horizontal" MaximumSize="0,0" ScrollingData="[ScrollingData]" FocusPadding="0" Margins="0,0,0,0" Navigation="FlowVertical" Prefetch="1.0">
+            <Children-->
+
+              <Panel Name="GroupLabel" Padding="0, 0, 5, 0">
+                <Layout>
+                  <RotateLayout AngleDegrees="[LabelRotation]"/>
+                </Layout>
+                <Children>
+
+                  <me:BaseContentLabel Name="Label" Model="[Model]" Source="[Model.ContentLabelTemplate]"
+                          MaximumSize="300,0"   Margins="[GroupLabelColorMargins]"/>
+
+                </Children>
+              </Panel>
+              <Repeater Name="Repeater" Source="[Model.Content]" ContentName="[Pivot!shell:BrowsePivot.SubContentItemTemplate]" Navigation="FlowVertical">
+                <Layout>
+                  <GridLayout Orientation="Vertical" AllowWrap="true" Spacing="2, 2"/>
+                </Layout>
+              </Repeater>
+            <!--/Children>
+          </Scroller-->
+        </Children>
+      </Panel>
+
+    </Content>
+    <Content Name="xtwoRowPoster">
+      <me:Item/>
+    </Content>
+    <Content Name="oneRowPoster">
+
+      <!-- Same as Gallery's definition, minus the possibility of a label. -->
+      <!--me:GalleryItem Model="[RepeatedItem!ICommand]" SelectionPolicy="[Pivot.ContentSelectionPolicy]" Source="[ContentItemTemplate]"
+                      ShowLabel="false" Index="[RepeatedItemIndex]" ItemProperties="[ItemProperties]" GroupProperties="[GroupProperties]"
+                      OverlayContentTemplate="[OverlayContentTemplate]"/-->
+      <!--me:oneRowGalleryItemPoster Page="[Page]" Model="[RepeatedItem!ICommand]" SelectionPolicy="[Pivot.ContentSelectionPolicy]" Source="[Pivot.ContentItemTemplate]"
+                      Index="[RepeatedItemIndex]" ItemProperties="[ItemProperties]" GroupProperties="[GroupProperties]" ShowLabel="false">
+      </me:oneRowGalleryItemPoster-->
+      <me:oneRowGalleryItemPoster OverlayContentTemplate="[RepeatedItem!shell:GalleryItem.OverlayContentTemplate]" Application="[Application]" Page="[Page]" Model="[RepeatedItem!ICommand]" SelectionPolicy="[Pivot.ContentSelectionPolicy]"
+                      Index="[RepeatedItemIndex]" ItemProperties="[ItemProperties]" GroupProperties="[GroupProperties]" ShowLabel="false">
+      </me:oneRowGalleryItemPoster>
+      <!--Text Content="[RepeatedItem!ICommand.Description]"/-->
+
+    </Content>
+    <Content Name="twoRowPoster">
+
+      <!-- Same as Gallery's definition, minus the possibility of a label. -->
+      <!--me:GalleryItem Model="[RepeatedItem!ICommand]" SelectionPolicy="[Pivot.ContentSelectionPolicy]" Source="[ContentItemTemplate]"
+                      ShowLabel="false" Index="[RepeatedItemIndex]" ItemProperties="[ItemProperties]" GroupProperties="[GroupProperties]"
+                      OverlayContentTemplate="[OverlayContentTemplate]"/-->
+      <!--me:oneRowGalleryItemPoster Page="[Page]" Model="[RepeatedItem!ICommand]" SelectionPolicy="[Pivot.ContentSelectionPolicy]" Source="[Pivot.ContentItemTemplate]"
+                      Index="[RepeatedItemIndex]" ItemProperties="[ItemProperties]" GroupProperties="[GroupProperties]" ShowLabel="false">
+      </me:oneRowGalleryItemPoster-->
+      <me:twoRowGalleryItemPoster OverlayContentTemplate="[RepeatedItem!shell:GalleryItem.OverlayContentTemplate]" Application="[Application]" Page="[Page]" Model="[RepeatedItem!ICommand]" SelectionPolicy="[Pivot.ContentSelectionPolicy]"
+                      Index="[RepeatedItemIndex]" ItemProperties="[ItemProperties]" GroupProperties="[GroupProperties]" ShowLabel="false">
+      </me:twoRowGalleryItemPoster>
+      <!--Text Content="[RepeatedItem!ICommand.Description]"/-->
+
+    </Content>
+    <Content Name="ListViewItem">
+      <me:ListViewItem Application="[Application]" Page="[Page]" Model="[RepeatedItem!ICommand]" Index="[RepeatedItemIndex]" ItemProperties="[ItemProperties]" GroupProperties="[GroupProperties]">
+      </me:ListViewItem>
+    </Content>
+  </UI>
+
+  <UI Name="Item">
+
+    <Properties>
+      <cor:String Name="Value" String="0"/>
+    </Properties>
+
+
+    <Rules>
+      <Default Target="[Input.MakeTopmostOnFocus]" Value="true"/>
+      <Default Target="[Input.KeyFocusOnMouseEnter]" Value="false"/>
+      <Default Target="[Input.KeyInteractive]" Value="true"/>
+
+      <Condition Source="[Input.KeyFocus]" SourceValue="true" ConditionOp="Equals">
+        <Actions>
+          <Set Target="[ItemPanel.Scale]" Value="1.3,1.3,1.3"/>
+          <Set Target="[ItemColor.Content]" Value="Red"/>
+        </Actions>
+      </Condition>
+
+      <Condition Source="[Input.KeyFocus]" SourceValue="false" ConditionOp="Equals">
+        <Actions>
+          <Set Target="[ItemPanel.Scale]" Value="1.0,1.0,1.0"/>
+          <Set Target="[ItemColor.Content]" Value="LightBlue"/>
+        </Actions>
+      </Condition>
+
+    </Rules>
+
+
+    <Content>
+      <Panel Name="ItemPanel" MaximumSize="131, 184">
+        <Layout>
+          <AnchorLayout SizeToHorizontalChildren="false" SizeToVerticalChildren="false"/>
+        </Layout>
+        <Animations>
+          <Animation Type="Scale" CenterPointPercent="0.5,0.5,1">
+            <Keyframes>
+              <ScaleKeyframe RelativeTo="Current" Value="1,1,1" Time="0.0" Interpolation="Linear"/>
+              <ScaleKeyframe Time="0.2" Value="1,1,1" Interpolation="Linear"/>
+            </Keyframes>
+          </Animation>
+        </Animations>
+        <Children>
+
+          <Text Content="[Value]">
+            <LayoutInput>
+              <AnchorLayoutInput Horizontal="Center" Vertical="Center"/>
+            </LayoutInput>
+          </Text>
+
+          <ColorFill Name="ItemColor" Layout="Fill"/>
+        </Children>
+      </Panel>
+    </Content>
+
+  </UI>
+  
+  <UI Name="BaseContentLabel">
+    <Properties>
+      <shell:IBrowseGroup Name="Model"                IBrowseGroup="$Required"/>
+      <cor:Boolean        Name="UseFocusLayout"       Boolean="false"/>
+    </Properties>
+  </UI>
+
+  <UI Name="TextContentLabel" BaseUI="me:BaseContentLabel">
+    <Properties>
+      <Font  Name="GroupLabelFontNoFocus"         FontName="global://comm:MainFontFace" FontSize="18"/>
+      <Color Name="GroupLabelColorNoFocus"        Color="color://comm:LightBlue"/>
+      <Color Name="GroupLabelColorFocus"          Color="color://comm:MediumBlue"/>
+    </Properties>
+
+    <Rules>
+
+      <!-- Set the desired text color based on UseFocusLayout -->
+      <Rule>
+        <Conditions>
+          <Equality Source="[UseFocusLayout]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Label.Color]" Value="[GroupLabelColorFocus]"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Equality Source="[UseFocusLayout]" Value="false"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Label.Color]" Value="[GroupLabelColorNoFocus]"/>
+        </Actions>
+      </Rule>
+
+      <!-- Group label -->
+      <Binding Source="[Model.Description]" Target="[Label.Content]">
+        <Transformer>
+          <FormatTransformer ToUpper="true"/>
+        </Transformer>
+      </Binding>
+
+    </Rules>
+
+    <Content>
+      <Text Name="Label" Font="[GroupLabelFontNoFocus]" Color="[GroupLabelColorNoFocus]"/>
+    </Content>
+  </UI>
+
+  <UI Name="NoTextContentLabel" BaseUI="me:BaseContentLabel">
+    <Properties>
+      <Font  Name="GroupLabelFontNoFocus"         FontName="global://comm:MainFontFace" FontSize="18"/>
+      <Color Name="GroupLabelColorNoFocus"        Color="color://comm:LightBlue"/>
+      <Color Name="GroupLabelColorFocus"          Color="color://comm:MediumBlue"/>
+    </Properties>
+    <Content>
+      <Text Name="Label" Visible="false"/>
+    </Content>
+  </UI>
+</Mcml>

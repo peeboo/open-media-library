@@ -1,0 +1,2471 @@
+<Mcml
+  xmlns="http://schemas.microsoft.com/2006/mcml"
+  xmlns:cor="assembly://MScorLib/System"
+  xmlns:scr="resx://Library/Library.Resources/V3_Controls_ScrollControl"
+  xmlns:styles="resx://Library/Library.Resources/V3_Controls_Common_Styles"
+  xmlns:z ="assembly://Library/Library.Code.V3"
+  xmlns:ctl="resx://Library/Library.Resources/V3_Controls"
+  xmlns:chk="resx://Library/Library.Resources/V3_Controls_CheckBox"
+  xmlns:me="Me">
+  <UI Name="FocusLocking">
+
+    <Locals>
+      <!-- The list that we will be repeating -->
+      <ArrayListDataSet Name="List">
+        <Source>
+          <cor:String String="X"/>
+          <cor:String String="X"/>
+          <cor:String String="B"/>
+          <cor:String String="C"/>
+          <cor:String String="X"/>
+        </Source>
+      </ArrayListDataSet>
+
+      <ArrayListDataSet Name="Groups">
+        <Source>
+          <ArrayListDataSet Name="Group1" Description="Group 1">
+            <Source>
+              <Command Name="MyCommand" Description="A Baby Story" />
+            </Source>
+          </ArrayListDataSet>
+          <ArrayListDataSet Name="Group2" Description="Group 2">
+            <Source>
+              <Command Name="MyCommand" Description="this"/>
+              <Command Name="MyCommand" Description="is"/>
+              <Command Name="MyCommand" Description="test"/>
+              <Command Name="MyCommand" Description="B"/>
+              <Command Name="MyCommand" Description="C"/>
+              <Command Name="MyCommand" Description="this"/>
+              <Command Name="MyCommand" Description="is"/>
+              <Command Name="MyCommand" Description="test"/>
+              <Command Name="MyCommand" Description="B"/>
+              <Command Name="MyCommand" Description="C"/>
+              <Command Name="MyCommand" Description="this"/>
+              <Command Name="MyCommand" Description="is"/>
+              <Command Name="MyCommand" Description="test"/>
+              <Command Name="MyCommand" Description="B"/>
+              <Command Name="MyCommand" Description="C"/>
+              <Command Name="MyCommand" Description="this"/>
+              <Command Name="MyCommand" Description="is"/>
+              <Command Name="MyCommand" Description="test"/>
+              <Command Name="MyCommand" Description="B"/>
+              <Command Name="MyCommand" Description="C"/>
+              <Command Name="MyCommand" Description="this"/>
+              <Command Name="MyCommand" Description="is"/>
+              <Command Name="MyCommand" Description="test"/>
+              <Command Name="MyCommand" Description="B"/>
+              <Command Name="MyCommand" Description="C"/>
+              <Command Name="MyCommand" Description="this"/>
+              <Command Name="MyCommand" Description="is"/>
+              <Command Name="MyCommand" Description="test"/>
+              <Command Name="MyCommand" Description="B"/>
+              <Command Name="MyCommand" Description="C"/>
+              <Command Name="MyCommand" Description="this"/>
+              <Command Name="MyCommand" Description="is"/>
+              <Command Name="MyCommand" Description="test"/>
+              <Command Name="MyCommand" Description="B"/>
+              <Command Name="MyCommand" Description="C"/>
+              <Command Name="MyCommand" Description="this"/>
+              <Command Name="MyCommand" Description="is"/>
+              <Command Name="MyCommand" Description="test"/>
+              <Command Name="MyCommand" Description="B"/>
+              <Command Name="MyCommand" Description="C"/>
+              <Command Name="MyCommand" Description="this"/>
+              <Command Name="MyCommand" Description="is"/>
+              <Command Name="MyCommand" Description="test"/>
+              <Command Name="MyCommand" Description="B"/>
+              <Command Name="MyCommand" Description="C"/>
+              <Command Name="MyCommand" Description="this"/>
+              <Command Name="MyCommand" Description="is"/>
+              <Command Name="MyCommand" Description="test"/>
+              <Command Name="MyCommand" Description="B"/>
+              <Command Name="MyCommand" Description="C"/>
+              <Command Name="MyCommand" Description="this"/>
+              <Command Name="MyCommand" Description="is"/>
+              <Command Name="MyCommand" Description="test"/>
+              <Command Name="MyCommand" Description="B"/>
+              <Command Name="MyCommand" Description="C"/>
+            </Source>
+          </ArrayListDataSet>
+          <ArrayListDataSet Name="Group3">
+            <Source>
+              <Command Name="MyCommand" Description="this"/>
+              <Command Name="MyCommand" Description="is"/>
+              <Command Name="MyCommand" Description="C"/>
+            </Source>
+          </ArrayListDataSet>
+          <ArrayListDataSet Name="Group3">
+            <Source>
+              <Command Name="MyCommand" Description="this"/>
+              <Command Name="MyCommand" Description="is"/>
+              <Command Name="MyCommand" Description="C"/>
+            </Source>
+          </ArrayListDataSet>
+        </Source>
+      </ArrayListDataSet>
+
+    </Locals>
+    <Properties>
+      <Image Name="BackgroundImage"/>
+      <Image Name="BGImage" Image="resx://Library/Library.Resources/V3_Controls_Background_Static" Flippable="true"/>
+    </Properties>
+    <Content>
+      <Panel>
+        <Children>
+          <Panel Layout="VerticalFlow" Margins="150,150,150,150">
+            <Children>
+              <me:ScrollingListGrouper Content="[List]" Groups="[Groups]" MaximumSize="0,320">
+                <ScrollingData>
+                  <ScrollingData/>
+                </ScrollingData>
+              </me:ScrollingListGrouper>
+
+            </Children>
+          </Panel>
+          <!-- simple background color for test -->
+          <ColorFill Content="DarkBlue"  Padding="0,0,0,0">
+            <Children>
+              <Graphic Content="[BackgroundImage]" SizingPolicy="SizeToContent" MaintainAspectRatio="true" MaximumSize="1280, 756" Visible="false"></Graphic>
+              <Graphic Content="[BGImage]" Visible="true" Layout="Fill"></Graphic>
+            </Children>
+          </ColorFill>
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+
+  <UI Name="ScrollingListCheckBoxes">
+
+    <Properties>
+      <z:FilterSettings Name="Page" FilterSettings="$Required"/>
+      <ArrayListDataSet Name="Content" ArrayListDataSet="$Required"/>
+      <ScrollingData Name="ScrollingData" ScrollingData="$Required"/>
+      <ScrollingData Name="ScrollingDataSpoofer"/>
+      <cor:String Name="GroupName" String="$Required"/>
+      <cor:String Name="TitleString" String=""/>
+      <cor:String Name="DetailsString" String=""/>
+      <IntRangedValue Name="FocusedIndex"/>
+      <Image Name="CellBackground" Source="resx://Library/Library.Resources/V3_Controls_Common_Epg_Results_Cell_Background"/>
+    </Properties>
+
+    <Locals>
+      <ScrollingHandler Name="ScrollingHandler" ScrollingData="[ScrollingData]" HandleHomeEndKeys="true"
+                        HandlePageKeys="true"/>
+      <Command Name="MyCommand" Description="A Baby Story" />
+      <cor:Int32 Name="SelectedIndex" />
+      <ShortcutHandler Name="PageDownHandler" Shortcut="PageDown" HandlerStage="Bubbled" Handle="true"/>
+      <ShortcutHandler Name="PageUpHandler" Shortcut="PageUp" HandlerStage="Bubbled" Handle="true"/>
+      <KeyHandler Name="HomeHandler" Key="Home" HandlerStage="Bubbled" Handle="true"/>
+      <KeyHandler Name="EndHandler" Key="End" HandlerStage="Bubbled" Handle="true"/>
+    </Locals>
+
+    <Rules>
+      <Default Target="[ScrollingHandler.ScrollingData]" Value="[ScrollingData]"/>
+      <Default Target="[ScrollingData.Repeater]" Value="[ListRepeater]"/>
+      <Default Target="[bbb.Content]" Value="[GroupName]"/>
+      <Binding Target="[ScrollMe.TotalCount]" Source="[Content.Count]"/>
+      <Binding Target="[ScrollMe.ItemIndex]" Source="[FocusedIndex.Value]"/>
+      <Default Target="[Input.KeyFocusOnMouseEnter]" Value="false"/>
+      <Default Target="[ScrollingDataSpoofer]" Value="[ScrollingData]"/>
+      <Changed Source="[Content.Count]">
+        <Conditions>
+          <Equality ConditionOp="GreaterThan" Source="[FocusedIndex.Value]" Value="1"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[ScrollingData.Home]"/>
+
+        </Actions>
+      </Changed>
+
+      <Changed Source="[Content.Count]">
+        <Conditions>
+          <Equality ConditionOp="Equals" Source="[Content.Count]" Value="0"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Input.KeyInteractive]" Value="false" />
+        </Actions>
+      </Changed>
+      <Changed Source="[Content.Count]">
+        <Conditions>
+          <Equality ConditionOp="GreaterThan" Source="[Content.Count]" Value="0"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Input.KeyInteractive]" Value="true" />
+        </Actions>
+      </Changed>
+      <Changed Source="[PageDownHandler.Invoked]">
+        <Actions>
+          <Invoke Target="[ScrollingData.PageDown]"/>
+        </Actions>
+      </Changed>
+      <Changed Source="[PageUpHandler.Invoked]">
+        <Actions>
+          <Invoke Target="[ScrollingData.PageUp]"/>
+        </Actions>
+      </Changed>
+      <Changed Source="[HomeHandler.Invoked]">
+        <Actions>
+          <Invoke Target="[ScrollingData.Home]"/>
+        </Actions>
+      </Changed>
+      <Changed Source="[EndHandler.Invoked]">
+        <Actions>
+          <Invoke Target="[ScrollingData.End]"/>
+        </Actions>
+      </Changed>
+      <Default Target="[theScroller.ScrollingData]" Value="[ScrollingData]"/>
+      <Binding Target="[ListRepeater.Source]" Source="[Content]">
+        <Conditions>
+          <IsValid Source="[Content]"/>
+        </Conditions>
+      </Binding>
+    </Rules>
+    <Content>
+      <Panel Layout="VerticalFlow" MaximumSize="625,0">
+        <Children>
+          <!-- The Scroller -->
+          <Scroller Name="theScroller"  Orientation="Vertical" FadeSize="-1" MaximumSize="0,301" MinimumSize="0,301">
+            <Children>
+              <Panel Visible="true">
+                <Children>
+                  <Text Name="bbb" Color="255, 151, 217, 255" Visible="true" Content="zffffffff">
+                  </Text>
+                </Children>
+              </Panel>
+              <Repeater Name="ListRepeater" DefaultFocusIndex="0">
+                <Layout>
+                  <FlowLayout Orientation="Vertical" Spacing="0,0"/>
+                </Layout>
+                <Animations>
+                  <Animation Type="Move">
+                    <Keyframes>
+                      <PositionKeyframe Time="0.0" RelativeTo="Current" Interpolation="SCurve"/>
+                      <PositionKeyframe Time="0.25" RelativeTo="Final" Value="0, -5, 0"/>
+                      <PositionKeyframe Time="0.55" RelativeTo="Final" Value="0, 0, 0"/>
+                    </Keyframes>
+                  </Animation>
+                </Animations>
+                <Content>
+
+                  <!-- The item to repeat -->
+                  <me:CheckBoxListView FocusedIndex="[FocusedIndex]" ItemIndex="[RepeatedItemIndex.Value]" Model="[RepeatedItem!BooleanChoice]"/>
+
+                </Content>
+              </Repeater>
+            </Children>
+          </Scroller>
+          <Panel Margins="0,10,5,0">
+            <Layout>
+              <FlowLayout HideOffscreenItems="false" Orientation="Horizontal" ItemAlignment="Far" FillStrip="false" StripAlignment="Far"/>
+            </Layout>
+            <Children>
+              <scr:ScrollControlItem Name="ScrollMe" ItemIndex="0" TotalCount="0" ScrollData="[ScrollingData]"></scr:ScrollControlItem>
+            </Children>
+          </Panel>
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+
+  <UI Name="CheckBoxListView" BaseUI="chk:CheckBox">
+    <Properties>
+      <cor:Int32 Name="ItemIndex" Int32="0"/>
+      <IntRangedValue Name="FocusedIndex"/>
+    </Properties>
+    <Rules>
+      <Rule>
+        <Conditions>
+          <Equality Source="[Input.DeepKeyFocus]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[FocusedIndex.Value]" Value="[ItemIndex]"/>
+        </Actions>
+      </Rule>
+    </Rules>
+  </UI>
+
+  <UI Name="ScrollingListStartMenu">
+
+    <Properties>
+      <ArrayListDataSet Name="Content" ArrayListDataSet="$Required"/>
+      <ScrollingData Name="ScrollingData" ScrollingData="$Required"/>
+      <ScrollingData Name="ScrollingDataSpoofer"/>
+      <cor:String Name="GroupName" String="$Required"/>
+      <cor:String Name="TitleString" String=""/>
+      <cor:String Name="DetailsString" String=""/>
+      <IntRangedValue Name="FocusedIndex"/>
+      <Image Name="CellBackground" Source="resx://Library/Library.Resources/V3_Controls_Common_Epg_Results_Cell_Background"/>
+    </Properties>
+
+    <Locals>
+      <ScrollingHandler Name="ScrollingHandler" ScrollingData="[ScrollingData]" HandleHomeEndKeys="true"
+                        HandlePageKeys="true"/>
+      <Command Name="MyCommand" Description="A Baby Story" />
+      <cor:Int32 Name="SelectedIndex" />
+      <ShortcutHandler Name="PageDownHandler" Shortcut="PageDown" HandlerStage="Bubbled" Handle="true"/>
+      <ShortcutHandler Name="PageUpHandler" Shortcut="PageUp" HandlerStage="Bubbled" Handle="true"/>
+      <KeyHandler Name="HomeHandler" Key="Home" HandlerStage="Bubbled" Handle="true"/>
+      <KeyHandler Name="EndHandler" Key="End" HandlerStage="Bubbled" Handle="true"/>
+    </Locals>
+
+    <Rules>
+      <Default Target="[ScrollingHandler.ScrollingData]" Value="[ScrollingData]"/>
+      <Default Target="[ScrollingData.Repeater]" Value="[ListRepeater]"/>
+      <Default Target="[bbb.Content]" Value="[GroupName]"/>
+      <Binding Target="[ScrollMe.TotalCount]" Source="[Content.Count]"/>
+      <Binding Target="[ScrollMe.ItemIndex]" Source="[FocusedIndex.Value]"/>
+      <Default Target="[Input.KeyFocusOnMouseEnter]" Value="false"/>
+      <Default Target="[ScrollingDataSpoofer]" Value="[ScrollingData]"/>
+      <Changed Source="[Content.Count]">
+        <Conditions>
+          <Equality ConditionOp="GreaterThan" Source="[FocusedIndex.Value]" Value="1"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[ScrollingData.Home]"/>
+
+        </Actions>
+      </Changed>
+
+      <Changed Source="[Content.Count]">
+        <Conditions>
+          <Equality ConditionOp="Equals" Source="[Content.Count]" Value="0"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Input.KeyInteractive]" Value="false" />
+        </Actions>
+      </Changed>
+      <Changed Source="[Content.Count]">
+        <Conditions>
+          <Equality ConditionOp="GreaterThan" Source="[Content.Count]" Value="0"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Input.KeyInteractive]" Value="true" />
+        </Actions>
+      </Changed>
+      <Changed Source="[PageDownHandler.Invoked]">
+        <Actions>
+          <Invoke Target="[ScrollingData.PageDown]"/>
+        </Actions>
+      </Changed>
+      <Changed Source="[PageUpHandler.Invoked]">
+        <Actions>
+          <Invoke Target="[ScrollingData.PageUp]"/>
+        </Actions>
+      </Changed>
+      <Changed Source="[HomeHandler.Invoked]">
+        <Actions>
+          <Invoke Target="[ScrollingData.Home]"/>
+        </Actions>
+      </Changed>
+      <Changed Source="[EndHandler.Invoked]">
+        <Actions>
+          <Invoke Target="[ScrollingData.End]"/>
+        </Actions>
+      </Changed>
+      <Default Target="[theScroller.ScrollingData]" Value="[ScrollingData]"/>
+      <Binding Target="[ListRepeater.Source]" Source="[Content]">
+        <Conditions>
+          <IsValid Source="[Content]"/>
+        </Conditions>
+      </Binding>
+    </Rules>
+    <Content>
+      <Panel Layout="VerticalFlow" MaximumSize="625,0">
+        <Children>
+          <!-- The Scroller -->
+          <Scroller Name="theScroller"  Orientation="Vertical" FadeSize="-1" MaximumSize="0,493" MinimumSize="0,301">
+            <Children>
+              <Panel Visible="true">
+                <Children>
+                  <Text Name="bbb" Color="255, 151, 217, 255" Visible="true" Content="zffffffff">
+                  </Text>
+                </Children>
+              </Panel>
+              <Repeater Name="ListRepeater" DefaultFocusIndex="0">
+                <Layout>
+                  <FlowLayout Orientation="Vertical" Spacing="0,0"/>
+                </Layout>
+                <Animations>
+                  <Animation Type="Move">
+                    <Keyframes>
+                      <PositionKeyframe Time="0.0" RelativeTo="Current" Interpolation="SCurve"/>
+                      <PositionKeyframe Time="0.25" RelativeTo="Final" Value="0, -5, 0"/>
+                      <PositionKeyframe Time="0.55" RelativeTo="Final" Value="0, 0, 0"/>
+                    </Keyframes>
+                  </Animation>
+                </Animations>
+                <Content>
+
+                  <!-- The item to repeat -->
+                  <me:StartMenuButtonWrapper FocusedIndex="[FocusedIndex]" ItemIndex="[RepeatedItemIndex.Value]" Model="[RepeatedItem!Command]"/>
+
+                </Content>
+              </Repeater>
+            </Children>
+          </Scroller>
+          <Panel Margins="0,10,5,0">
+            <Layout>
+              <FlowLayout HideOffscreenItems="false" Orientation="Horizontal" ItemAlignment="Far" FillStrip="false" StripAlignment="Far"/>
+            </Layout>
+            <Children>
+              <scr:ScrollControlItem Name="ScrollMe" ItemIndex="0" TotalCount="0" ScrollData="[ScrollingData]"></scr:ScrollControlItem>
+            </Children>
+          </Panel>
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+
+  <UI Name="StartMenuButtonWrapper">
+    <Properties>
+      <ICommand Name="Model" ICommand="$Required"/>
+      <cor:String Name="AccessibilityName" String="null"/>
+      <cor:String Name="AccessibilityDesc" String="null"/>
+      <cor:Int32 Name="ItemIndex" Int32="0"/>
+      <IntRangedValue Name="FocusedIndex"/>
+      <DockLayoutInput
+                  Name="LabelBorderInput"    Position="Left" Alignment="Center"/>
+    </Properties>
+    <Rules>
+      <Rule>
+        <Conditions>
+          <Equality Source="[Input.DeepKeyFocus]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[FocusedIndex.Value]" Value="[ItemIndex]"/>
+        </Actions>
+      </Rule>
+    </Rules>
+    <Content>
+      <Panel Name="LabelPanel" Layout="Anchor" LayoutInput="[LabelBorderInput]" Margins="16,2,8,2">
+        <Children>
+          <Panel>
+            <Layout>
+              <FlowLayout Orientation="Horizontal"/>
+            </Layout>
+            <Children>
+              <me:StartMenuButton TileSize="430,51" FocusedIndex="[FocusedIndex]" ItemIndex="[ItemIndex]" Model="[Model]"/>
+              <ctl:Button Model="[Model!z:StartMenuCommand.MoveUp]" Margins="5,0,0,0" TileSize="51,51" ShowLabel="false" NoFocusImage="resx://Library/Library.Resources/V3_Controls_Arrow_Up_NoFocus" FocusImage="resx://Library/Library.Resources/V3_Controls_Arrow_Up_Focus" DisabledImage="resx://Library/Library.Resources/V3_Controls_Arrow_Up_Disabled" FocusOverlayImage="resx://Library/Library.Resources/V3_Controls_Arrow_Up_FocusOverlay"/>
+              <ctl:Button Model="[Model!z:StartMenuCommand.MoveDown]" Margins="5,0,0,0" TileSize="51,51" ShowLabel="false" NoFocusImage="resx://Library/Library.Resources/V3_Controls_Arrow_Down_NoFocus" FocusImage="resx://Library/Library.Resources/V3_Controls_Arrow_Down_Focus" DisabledImage="resx://Library/Library.Resources/V3_Controls_Arrow_Down_Disabled" FocusOverlayImage="resx://Library/Library.Resources/V3_Controls_Arrow_Down_FocusOverlay"/>
+              <ctl:Button Model="[Model]" Margins="5,0,0,0" TileSize="51,51" ShowLabel="false" NoFocusImage="resx://Library/Library.Resources/V3_Controls_Remove_NoFocus" FocusImage="resx://Library/Library.Resources/V3_Controls_Remove_Focus" DisabledImage="resx://Library/Library.Resources/V3_Controls_Remove_Disabled" FocusOverlayImage="resx://Library/Library.Resources/V3_Controls_Remove_FocusOverlay"/>
+
+            </Children>
+          </Panel>
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+
+  <UI Name="StartMenuButton" BaseUI="me:DiscButtonBase">
+
+    <Properties>
+      <ICommand Name="Model" ICommand="$Required"/>
+      <cor:String Name="AccessibilityName" String="null"/>
+      <cor:String Name="AccessibilityDesc" String="null"/>
+      <cor:Int32 Name="ItemIndex" Int32="0"/>
+      <IntRangedValue Name="FocusedIndex"/>
+      <AccessibleRole Name="AccessibilityRole" AccessibleRole="PushButton"/>
+      <Font Name="SmallFont" Font="Segoe Media Center Semibold, 18"/>
+      <Size    Name="TileSize"            Size="420, 43"/>
+    </Properties>
+
+    <Rules>
+      <Rule>
+        <Conditions>
+          <Equality Source="[Input.KeyFocus]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[FocusedIndex.Value]" Value="[ItemIndex]"/>
+        </Actions>
+      </Rule>
+      <!-- Accessibility -->
+      <Binding Target="[Accessible.IsUnavailable]"        Source="[Model.Available]" >
+        <Transformer>
+          <BooleanTransformer Inverse="true"/>
+        </Transformer>
+      </Binding>
+      <Binding Target="[Accessible.IsPressed]"            Source="[Clicker.Clicking]"/>
+      <Binding Target="[Accessible.IsFocusable]"          Source="[Input.KeyInteractive]"/>
+      <Binding Target="[Accessible.IsFocused]"            Source="[Input.KeyFocus]"/>
+      <Binding Target="[Accessible.Description]"          Source="[AccessibilityDesc]"/>
+      <Default Target="[Accessible.DefaultActionCommand]" Value="[Model]"/>
+      <Default Target="[Accessible.Role]"                 Value="[AccessibilityRole]"/>
+      <Default Target="[Label2.Visible]"                 Value="false"/>
+
+      <!-- Associate the Model with the Behavior -->
+      <!--Default Target="[Clicker.Command]" Value="[Model!ICommand]"/-->
+      <Default Target="[Clicker.Command]" Value="[Model!z:StartMenuCommand.Edit]"/>
+
+      <!-- If the Command is unavailable, disable the UI -->
+      <Binding Source="[Model.Available]" Target="[Input.Enabled]"/>
+
+      <!-- if Accessibility name is not specified get it from Model.Description -->
+      <Rule >
+        <Conditions>
+          <Equality Source="[AccessibilityName]" Value="null"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Accessible.Name]" Value="[Model.Description]"/>
+        </Actions>
+      </Rule>
+
+      <!-- Assign the Accessibility name if it is specified -->
+      <Default Target="[Accessible.Name]" Value="[AccessibilityName]"/>
+
+      <Binding Source="[Model.Description]"  Target="[Label.Content]"/>
+
+    </Rules>
+
+  </UI>
+  
+  <UI Name="ScrollingListFavorites">
+
+    <Properties>
+      <ArrayListDataSet Name="Content" ArrayListDataSet="$Required"/>
+      <ScrollingData Name="ScrollingData" ScrollingData="$Required"/>
+      <ScrollingData Name="ScrollingDataSpoofer"/>
+      <cor:String Name="GroupName" String="$Required"/>
+      <cor:String Name="TitleString" String=""/>
+      <cor:String Name="DetailsString" String=""/>
+      <IntRangedValue Name="FocusedIndex"/>
+      <Image Name="CellBackground" Source="resx://Library/Library.Resources/V3_Controls_Common_Epg_Results_Cell_Background"/>
+    </Properties>
+
+    <Locals>
+      <ScrollingHandler Name="ScrollingHandler" ScrollingData="[ScrollingData]" HandleHomeEndKeys="true"
+                        HandlePageKeys="true"/>
+      <Command Name="MyCommand" Description="A Baby Story" />
+      <cor:Int32 Name="SelectedIndex" />
+      <ShortcutHandler Name="PageDownHandler" Shortcut="PageDown" HandlerStage="Bubbled" Handle="true"/>
+      <ShortcutHandler Name="PageUpHandler" Shortcut="PageUp" HandlerStage="Bubbled" Handle="true"/>
+      <KeyHandler Name="HomeHandler" Key="Home" HandlerStage="Bubbled" Handle="true"/>
+      <KeyHandler Name="EndHandler" Key="End" HandlerStage="Bubbled" Handle="true"/>
+    </Locals>
+
+    <Rules>
+      <Default Target="[ScrollingHandler.ScrollingData]" Value="[ScrollingData]"/>
+      <Default Target="[ScrollingData.Repeater]" Value="[ListRepeater]"/>
+      <Default Target="[bbb.Content]" Value="[GroupName]"/>
+      <Binding Target="[ScrollMe.TotalCount]" Source="[Content.Count]"/>
+      <Binding Target="[ScrollMe.ItemIndex]" Source="[FocusedIndex.Value]"/>
+      <Default Target="[Input.KeyFocusOnMouseEnter]" Value="false"/>
+      <Default Target="[ScrollingDataSpoofer]" Value="[ScrollingData]"/>
+      <Changed Source="[Content.Count]">
+        <Conditions>
+          <Equality ConditionOp="GreaterThan" Source="[FocusedIndex.Value]" Value="1"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[ScrollingData.Home]"/>
+
+        </Actions>
+      </Changed>
+
+      <Changed Source="[Content.Count]">
+        <Conditions>
+          <Equality ConditionOp="Equals" Source="[Content.Count]" Value="0"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Input.KeyInteractive]" Value="false" />
+        </Actions>
+      </Changed>
+      <Changed Source="[Content.Count]">
+        <Conditions>
+          <Equality ConditionOp="GreaterThan" Source="[Content.Count]" Value="0"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Input.KeyInteractive]" Value="true" />
+        </Actions>
+      </Changed>
+      <Changed Source="[PageDownHandler.Invoked]">
+        <Actions>
+          <Invoke Target="[ScrollingData.PageDown]"/>
+        </Actions>
+      </Changed>
+      <Changed Source="[PageUpHandler.Invoked]">
+        <Actions>
+          <Invoke Target="[ScrollingData.PageUp]"/>
+        </Actions>
+      </Changed>
+      <Changed Source="[HomeHandler.Invoked]">
+        <Actions>
+          <Invoke Target="[ScrollingData.Home]"/>
+        </Actions>
+      </Changed>
+      <Changed Source="[EndHandler.Invoked]">
+        <Actions>
+          <Invoke Target="[ScrollingData.End]"/>
+        </Actions>
+      </Changed>
+      <Default Target="[theScroller.ScrollingData]" Value="[ScrollingData]"/>
+      <Binding Target="[ListRepeater.Source]" Source="[Content]">
+        <Conditions>
+          <IsValid Source="[Content]"/>
+        </Conditions>
+      </Binding>
+    </Rules>
+    <Content>
+      <Panel Layout="VerticalFlow" MaximumSize="625,0">
+        <Children>
+          <!-- The Scroller -->
+          <Scroller Name="theScroller"  Orientation="Vertical" FadeSize="-1" MaximumSize="0,493" MinimumSize="0,401">
+            <Children>
+              <Panel Visible="true">
+                <Children>
+                  <Text Name="bbb" Color="255, 151, 217, 255" Visible="true" Content="zffffffff">
+                  </Text>
+                </Children>
+              </Panel>
+              <Repeater Name="ListRepeater" DefaultFocusIndex="0">
+                <Layout>
+                  <FlowLayout Orientation="Vertical" Spacing="0,0"/>
+                </Layout>
+                <Animations>
+                  <Animation Type="Move">
+                    <Keyframes>
+                      <PositionKeyframe Time="0.0" RelativeTo="Current" Interpolation="SCurve"/>
+                      <PositionKeyframe Time="0.25" RelativeTo="Final" Value="0, -5, 0"/>
+                      <PositionKeyframe Time="0.55" RelativeTo="Final" Value="0, 0, 0"/>
+                    </Keyframes>
+                  </Animation>
+                </Animations>
+                <Content>
+
+                  <!-- The item to repeat -->
+                  <me:FavoritesButtonWrapper FocusedIndex="[FocusedIndex]" ItemIndex="[RepeatedItemIndex.Value]" Model="[RepeatedItem!Command]"/>
+
+                </Content>
+              </Repeater>
+            </Children>
+          </Scroller>
+          <Panel Margins="0,10,5,0">
+            <Layout>
+              <FlowLayout HideOffscreenItems="false" Orientation="Horizontal" ItemAlignment="Far" FillStrip="false" StripAlignment="Far"/>
+            </Layout>
+            <Children>
+              <scr:ScrollControlItem Name="ScrollMe" ItemIndex="0" TotalCount="0" ScrollData="[ScrollingData]"></scr:ScrollControlItem>
+            </Children>
+          </Panel>
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+
+  <UI Name="FavoritesButtonWrapper">
+    <Properties>
+      <ICommand Name="Model" ICommand="$Required"/>
+      <cor:String Name="AccessibilityName" String="null"/>
+      <cor:String Name="AccessibilityDesc" String="null"/>
+      <cor:Int32 Name="ItemIndex" Int32="0"/>
+      <IntRangedValue Name="FocusedIndex"/>
+      <DockLayoutInput
+                  Name="LabelBorderInput"    Position="Left" Alignment="Center"/>
+    </Properties>
+    <Rules>
+      <Rule>
+        <Conditions>
+          <Equality Source="[Input.DeepKeyFocus]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[FocusedIndex.Value]" Value="[ItemIndex]"/>
+        </Actions>
+      </Rule>
+    </Rules>
+    <Content>
+      <Panel Name="LabelPanel" Layout="Anchor" LayoutInput="[LabelBorderInput]" Margins="16,2,8,2">
+        <Children>
+          <Panel>
+            <Layout>
+              <FlowLayout Orientation="Horizontal"/>
+            </Layout>
+            <Children>
+              <me:FavoritesButton TileSize="545,51" FocusedIndex="[FocusedIndex]" ItemIndex="[ItemIndex]" Model="[Model]"/>
+              <ctl:Button Model="[Model]" Margins="5,0,0,0" TileSize="51,51" ShowLabel="false" NoFocusImage="resx://Library/Library.Resources/V3_Controls_Remove_NoFocus" FocusImage="resx://Library/Library.Resources/V3_Controls_Remove_Focus" DisabledImage="resx://Library/Library.Resources/V3_Controls_Remove_Disabled" FocusOverlayImage="resx://Library/Library.Resources/V3_Controls_Remove_FocusOverlay"/>
+
+            </Children>
+          </Panel>
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+
+  <UI Name="FavoritesButton" BaseUI="me:DiscButtonBase">
+
+    <Properties>
+      <ICommand Name="Model" ICommand="$Required"/>
+      <cor:String Name="AccessibilityName" String="null"/>
+      <cor:String Name="AccessibilityDesc" String="null"/>
+      <cor:Int32 Name="ItemIndex" Int32="0"/>
+      <IntRangedValue Name="FocusedIndex"/>
+      <AccessibleRole Name="AccessibilityRole" AccessibleRole="PushButton"/>
+      <Font Name="SmallFont" Font="Segoe Media Center Semibold, 18"/>
+    </Properties>
+
+    <Rules>
+      <Rule>
+        <Conditions>
+          <Equality Source="[Input.KeyFocus]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[FocusedIndex.Value]" Value="[ItemIndex]"/>
+        </Actions>
+      </Rule>
+      <!-- Accessibility -->
+      <Binding Target="[Accessible.IsUnavailable]"        Source="[Model.Available]" >
+        <Transformer>
+          <BooleanTransformer Inverse="true"/>
+        </Transformer>
+      </Binding>
+      <Binding Target="[Accessible.IsPressed]"            Source="[Clicker.Clicking]"/>
+      <Binding Target="[Accessible.IsFocusable]"          Source="[Input.KeyInteractive]"/>
+      <Binding Target="[Accessible.IsFocused]"            Source="[Input.KeyFocus]"/>
+      <Binding Target="[Accessible.Description]"          Source="[AccessibilityDesc]"/>
+      <Default Target="[Accessible.DefaultActionCommand]" Value="[Model]"/>
+      <Default Target="[Accessible.Role]"                 Value="[AccessibilityRole]"/>
+      <Default Target="[Label2.Visible]"                 Value="false"/>
+
+      <!-- Associate the Model with the Behavior -->
+      <!--Default Target="[Clicker.Command]" Value="[Model!ICommand]"/-->
+      <Default Target="[Clicker.Command]" Value="[Model!z:FavoritesCommand.Edit]"/>
+
+      <!-- If the Command is unavailable, disable the UI -->
+      <Binding Source="[Model.Available]" Target="[Input.Enabled]"/>
+
+      <!-- if Accessibility name is not specified get it from Model.Description -->
+      <Rule >
+        <Conditions>
+          <Equality Source="[AccessibilityName]" Value="null"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Accessible.Name]" Value="[Model.Description]"/>
+        </Actions>
+      </Rule>
+
+      <!-- Assign the Accessibility name if it is specified -->
+      <Default Target="[Accessible.Name]" Value="[AccessibilityName]"/>
+
+      <Binding Source="[Model.Description]"  Target="[Label.Content]"/>
+
+    </Rules>
+
+  </UI>
+
+  <UI Name="ScrollingListDiscs">
+
+    <Properties>
+      <z:MediaChangerManagerPage Name="Page" MediaChangerManagerPage="$Required"/>
+      <ArrayListDataSet Name="Content" ArrayListDataSet="$Required"/>
+      <ScrollingData Name="ScrollingData" ScrollingData="$Required"/>
+      <ScrollingData Name="ScrollingDataSpoofer"/>
+      <cor:String Name="GroupName" String="$Required"/>
+      <cor:String Name="TitleString" String=""/>
+      <cor:String Name="DetailsString" String=""/>
+      <IntRangedValue Name="FocusedIndex"/>
+      <Image Name="CellBackground" Source="resx://Library/Library.Resources/V3_Controls_Common_Epg_Results_Cell_Background"/>
+    </Properties>
+
+    <Locals>
+      <ScrollingHandler Name="ScrollingHandler" ScrollingData="[ScrollingData]" HandleHomeEndKeys="true"
+                        HandlePageKeys="true"/>
+      <Command Name="MyCommand" Description="A Baby Story" />
+      <cor:Int32 Name="SelectedIndex" />
+      <ShortcutHandler Name="PageDownHandler" Shortcut="PageDown" HandlerStage="Bubbled" Handle="true"/>
+      <ShortcutHandler Name="PageUpHandler" Shortcut="PageUp" HandlerStage="Bubbled" Handle="true"/>
+      <KeyHandler Name="HomeHandler" Key="Home" HandlerStage="Bubbled" Handle="true"/>
+      <KeyHandler Name="EndHandler" Key="End" HandlerStage="Bubbled" Handle="true"/>
+    </Locals>
+
+    <Rules>
+      <Default Target="[ScrollingHandler.ScrollingData]" Value="[ScrollingData]"/>
+      <Default Target="[ScrollingData.Repeater]" Value="[ListRepeater]"/>
+      <Default Target="[bbb.Content]" Value="[GroupName]"/>
+      <Binding Target="[ScrollMe.TotalCount]" Source="[Content.Count]"/>
+      <Binding Target="[ScrollMe.ItemIndex]" Source="[FocusedIndex.Value]"/>
+      <Default Target="[Input.KeyFocusOnMouseEnter]" Value="false"/>
+      <Default Target="[ScrollingDataSpoofer]" Value="[ScrollingData]"/>
+      <Changed Source="[Content.Count]">
+        <Conditions>
+          <Equality ConditionOp="GreaterThan" Source="[FocusedIndex.Value]" Value="1"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[ScrollingData.Home]"/>
+
+        </Actions>
+      </Changed>
+
+      <Changed Source="[Content.Count]">
+        <Conditions>
+          <Equality ConditionOp="Equals" Source="[Content.Count]" Value="0"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Input.KeyInteractive]" Value="false" />
+        </Actions>
+      </Changed>
+      <Changed Source="[Content.Count]">
+        <Conditions>
+          <Equality ConditionOp="GreaterThan" Source="[Content.Count]" Value="0"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Input.KeyInteractive]" Value="true" />
+        </Actions>
+      </Changed>
+      <Changed Source="[PageDownHandler.Invoked]">
+        <Actions>
+          <Invoke Target="[ScrollingData.PageDown]"/>
+        </Actions>
+      </Changed>
+      <Changed Source="[PageUpHandler.Invoked]">
+        <Actions>
+          <Invoke Target="[ScrollingData.PageUp]"/>
+        </Actions>
+      </Changed>
+      <Changed Source="[HomeHandler.Invoked]">
+        <Actions>
+          <Invoke Target="[ScrollingData.Home]"/>
+        </Actions>
+      </Changed>
+      <Changed Source="[EndHandler.Invoked]">
+        <Actions>
+          <Invoke Target="[ScrollingData.End]"/>
+        </Actions>
+      </Changed>
+      <Default Target="[theScroller.ScrollingData]" Value="[ScrollingData]"/>
+      <Binding Target="[ListRepeater.Source]" Source="[Content]">
+        <Conditions>
+          <IsValid Source="[Content]"/>
+        </Conditions>
+      </Binding>
+    </Rules>
+    <Content>
+      <Panel Layout="VerticalFlow" MaximumSize="625,0">
+        <Children>
+          <!-- The Scroller -->
+          <Scroller Name="theScroller"  Orientation="Vertical" FadeSize="-1" MaximumSize="0,493" MinimumSize="0,401">
+            <Children>
+              <Panel Visible="true">
+                <Children>
+                  <Text Name="bbb" Color="255, 151, 217, 255" Visible="true" Content="zffffffff">
+                  </Text>
+                </Children>
+              </Panel>
+              <Repeater Name="ListRepeater" DefaultFocusIndex="0">
+                <Layout>
+                  <FlowLayout Orientation="Vertical" Spacing="0,0"/>
+                </Layout>
+                <Animations>
+                  <Animation Type="Move">
+                    <Keyframes>
+                      <PositionKeyframe Time="0.0" RelativeTo="Current" Interpolation="SCurve"/>
+                      <PositionKeyframe Time="0.25" RelativeTo="Final" Value="0, -5, 0"/>
+                      <PositionKeyframe Time="0.55" RelativeTo="Final" Value="0, 0, 0"/>
+                    </Keyframes>
+                  </Animation>
+                </Animations>
+                <Content>
+
+                  <!-- The item to repeat -->
+                  <me:DiscButtonWrapper Page="[Page]" FocusedIndex="[FocusedIndex]" ItemIndex="[RepeatedItemIndex.Value]" Model="[RepeatedItem!Command]"/>
+
+                </Content>
+              </Repeater>
+            </Children>
+          </Scroller>
+          <Panel Margins="0,10,5,0">
+            <Layout>
+              <FlowLayout HideOffscreenItems="false" Orientation="Horizontal" ItemAlignment="Far" FillStrip="false" StripAlignment="Far"/>
+            </Layout>
+            <Children>
+              <scr:ScrollControlItem Name="ScrollMe" ItemIndex="0" TotalCount="0" ScrollData="[ScrollingData]"></scr:ScrollControlItem>
+            </Children>
+          </Panel>
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+
+  <UI Name="DiscButtonWrapper">
+    <Properties>
+      <z:MediaChangerManagerPage Name="Page" MediaChangerManagerPage="$Required"/>
+      <ICommand Name="Model" ICommand="$Required"/>
+      <cor:String Name="AccessibilityName" String="null"/>
+      <cor:String Name="AccessibilityDesc" String="null"/>
+      <cor:Int32 Name="ItemIndex" Int32="0"/>
+      <IntRangedValue Name="FocusedIndex"/>
+      <DockLayoutInput
+                  Name="LabelBorderInput"    Position="Left" Alignment="Center"/>
+    </Properties>
+    <Rules>
+      <Rule>
+        <Conditions>
+          <Equality Source="[Input.DeepKeyFocus]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[FocusedIndex.Value]" Value="[ItemIndex]"/>
+          <Set Target="[Page.SelectedDisc]" Value="[Model]"/>
+        </Actions>
+      </Rule>
+    </Rules>
+    <Content>
+      <Panel Name="LabelPanel" Layout="Anchor" LayoutInput="[LabelBorderInput]" Margins="16,2,8,2">
+        <Children>
+          <Panel>
+            <Layout>
+              <FlowLayout Orientation="Horizontal"/>
+            </Layout>
+            <Children>
+              <me:DiscButton TileSize="545,51" FocusedIndex="[FocusedIndex]" ItemIndex="[ItemIndex]" Model="[Model]"/>
+              <ctl:Button Model="[Model]" Margins="5,0,0,0" TileSize="51,51" ShowLabel="false" NoFocusImage="resx://Library/Library.Resources/V3_Controls_ChangerEject_Tile_NoFocus" FocusImage="resx://Library/Library.Resources/V3_Controls_ChangerEject_Tile_Focus" DisabledImage="resx://Library/Library.Resources/V3_Controls_ChangerEject_Tile_Disabled" FocusOverlayImage="resx://Library/Library.Resources/V3_Controls_ChangerEject_Tile_FocusOverlay"/>
+
+            </Children>
+          </Panel>
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+
+  <UI Name="DiscButtonBase">
+
+    <Properties>
+      <Font    Name="Font"                Font="Segoe Media Center Semibold, 21"/>
+      <Font    Name="SmallFont"                Font="Segoe Media Center Semibold, 16"/>
+      <Font    Name="FocusFont"           Font="null"/>
+      <Font    Name="DisabledFont"        Font="null"/>
+      <cor:Boolean Name="ShowLabel"           Boolean="true"/>
+      <cor:Boolean Name="AllowPressedEffect"  Boolean="true"/>
+      <cor:Boolean Name="AllowMarquee"        Boolean="true"/>
+      <Size    Name="TileSize"            Size="430, 43"/>
+
+      <cor:Boolean     Name="ShowLabelBackground"      Boolean="false"/>
+      <Image  Name="LabelBackground"          Image="null"/>
+      <Image  Name="LabelBackgroundFocus"     Image="null"/>
+      <Image  Name="LabelBackgroundDisc"          Image="resx://Library/Library.Resources/V3_Controls_BrowseGalleryItem_InsertCDFocus"/>
+
+      <Image Name="ButtonFocus" Image="resx://Library/Library.Resources/V3_Controls_Background_Static" Flippable="true"/>
+
+      <Image  Name="NoFocusImage"        Image="null"/>
+      <Image  Name="FocusImage"          Image="resx://Library/Library.Resources/V3_Controls_Common_Button_Full_Focus"/>
+      <Image  Name="DisabledImage"       Image="null"/>
+
+      <Image  Name="FocusOverlayImage"   Image="resx://Library/Library.Resources/V3_Controls_Common_Button_Full_FocusOverlay"/>
+      <Image  Name="PressedImage"        Image="resx://Library/Library.Resources/V3_Controls_Common_Button_Full_PressedHighlight"/>
+
+      <Color      Name="NoFocusColor"        Color="255, 242, 242, 242"/>
+      <Color      Name="FocusColor"          Color="255, 242, 242, 242"/>
+      <Color      Name="DisabledColor"       Color="102, 151, 217, 255"/>
+      
+      <!-- colors for description-->
+      <Color      Name="FocusColorDescription"           Color="255, 242, 242, 242"/>
+      <Color      Name="NoFocusColorDescription"         Color="255, 151, 217, 255"/>
+
+      <!-- Fill colors, if non-transparent, supercede background images -->
+      <Color      Name="NoFocusFillColor"    Color="0,   0,   0,   0"/>
+      <Color      Name="FocusFillColor"      Color="0,   0,   0,   0"/>
+      <Color      Name="DisabledFillColor"   Color="0,   0,   0,   0"/>
+
+      <DockLayoutInput
+                  Name="LabelBorderInput"    Position="Left" Alignment="Center"/>
+      <AnchorLayoutInput Name="LabelBackgroundLayoutInput"
+                  Left="PressedGradient,0,-8" Top="PressedGradient,0,-4" Right="PressedGradient,1,8" Bottom="PressedGradient,1,4" ContributesToWidth="false" ContributesToHeight="false"/>
+      <AnchorLayoutInput Name="LabelBackgroundDiscLayoutInput"
+                  Top="Label2,0,-4" Left="Label2,1,8" ContributesToWidth="false" ContributesToHeight="false"/>
+
+      <cor:Boolean    Name="ShowIcon"             Boolean="true"/>
+      <Image Name="IconImage"            Image="null"/>
+      <Image Name="FocusIconImage"       Image="null"/>
+      <Image          Name="IconAcquiringImage"   Image="null"/>
+      <Image          Name="IconErrorImage"       Image="null"/>
+
+      <Size   Name="IconMinSize"/>
+      <Size   Name="IconMaxSize"/>
+      <Inset  Name="IconPadding"/>
+      <DockLayoutInput Name="IconBorderInput"      Position="Left" Alignment="Center"/>
+
+      <cor:String Name="FocusLoopContentTemplate"  String="null"/>
+
+      <!-- Is this Button the type that will cause a large action like a page navigation? -->
+      <!-- Or is it something smaller like a spinner up/down button? -->
+      <!-- This determines what sound set we use. -->
+      <cor:Boolean Name="IsNavigatingCommand" Boolean="true"/>
+
+    </Properties>
+
+    <Locals>
+
+      <ClickHandler Name="Clicker"/>
+
+      <TransformAnimation Name="TransitionToForward" Source="animation://me:ListViewItem.NavigateToForward"/>
+      <TransformAnimation Name="TransitionToBackward" Source="animation://me:ListViewItem.NavigateToBackward"/>
+      <TransformAnimation Name="TransitionAwayForward"  Source="animation://me:ListViewItem.NavigateAwayForward"/>
+      <TransformAnimation Name="TransitionAwayBackward" Source="animation://me:ListViewItem.NavigateAwayBackward"/>
+
+    </Locals>
+
+    <Rules>
+      <!-- Accessibility -->
+      <Binding Target="[Accessible.IsFocusable]" Source="[Input.KeyInteractive]"/>
+      <Binding Target="[Accessible.IsFocused]"   Source="[Input.KeyFocus]"/>
+
+      <!-- click sound -->
+      <Rule>
+        <Conditions>
+          <Modified Source="[Clicker.Invoked]"/>
+          <Equality Source="[IsNavigatingCommand]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <PlaySound Sound="resx://Library/Library.Resources/V3_Controls_Common_Select_a" />
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Modified Source="[Clicker.Invoked]"/>
+          <Equality Source="[IsNavigatingCommand]" Value="false"/>
+        </Conditions>
+        <Actions>
+          <PlaySound Sound="resx://Library/Library.Resources/V3_Controls_Common_MiniSelect_a" />
+        </Actions>
+      </Rule>
+
+      <!-- Text color -->
+      <Condition Source="[Input.Enabled]"  SourceValue="false"
+                 Target="[Label.Color]"       Value="[DisabledColor]"/>
+      <Condition Source="[Input.KeyFocus]" SourceValue="true"
+                 Target="[Label.Color]"       Value="[FocusColor]"/>
+
+      <Condition Source="[Input.KeyFocus]" SourceValue="true"
+                 Target="[Label2.Color]"       Value="[FocusColorDescription]"/>
+
+      <!-- Only show the icon focus animation loop if we were given a template -->
+      <Rule>
+        <Conditions>
+          <Equality Source="[Input.KeyFocus]" Value="true"/>
+          <Equality Source="[FocusLoopContentTemplate]" ConditionOp="NotEquals" Value="null"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[IconFocusLoopHost.Visible]" Value="true"/>
+          <Set Target="[IconFocusLoopHost.Source]" Value="[FocusLoopContentTemplate]"/>
+        </Actions>
+      </Rule>
+
+      <Rule>
+        <Conditions>
+          <Equality Source="[Input.KeyFocus]" Value="true"/>
+          <Equality Source="[FocusIconImage]" ConditionOp="NotEquals" Value="null"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Icon.Content]"  Value="[FocusIconImage]"/>
+        </Actions>
+      </Rule>
+
+      <!-- 
+            Icon image 
+            In order for multi-state icon images to work with imagesets, we need to have both the 
+            Default and Binding applied to the Icon.Image.  This way there is a default state for the icon image,
+            as well as resetting the image if it should happen to need changing with the Bind.  
+            -->
+      <Binding Source="[IconErrorImage]" Target="[Icon.ErrorImage]"/>
+      <Binding Source="[IconAcquiringImage]" Target="[Icon.AcquiringImage]"/>
+      <Binding Source="[IconImage]" Target="[Icon.Content]"/>
+      <Default Target="[Icon.Content]" Value="[IconImage]"/>
+
+      <Condition Source="[Input.KeyFocus]" SourceValue="true"
+           Target="[LabelBackgroundGraphic.Content]"       Value="[LabelBackgroundFocus]"/>
+
+      <Rule>
+        <Conditions>
+          <Equality Source="[Input.Enabled]" Value="false"/>
+          <Equality Source="[DisabledFont]" ConditionOp="NotEquals" Value="null"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Label.Font]" Value="[DisabledFont]"/>
+        </Actions>
+      </Rule>
+
+      <!-- Font -->
+      <Rule>
+        <Conditions>
+          <Equality Source="[Input.KeyFocus]" Value="true"/>
+          <Equality Source="[FocusFont]" ConditionOp="NotEquals" Value="null"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Label.Font]" Value="[FocusFont]"/>
+        </Actions>
+      </Rule>
+
+      <!-- Background image -->
+      <Condition Source="[Input.Enabled]"  SourceValue="false"
+           Target="[Background.Content]"  Value="[DisabledImage]"/>
+      <Condition Source="[Input.KeyFocus]" SourceValue="true"
+                 Target="[Background.Content]"  Value="[FocusImage]"/>
+
+      <!-- Fill color -->
+      <Condition Source="[Input.Enabled]"  SourceValue="false"
+                 Target="[Fill.Content]"  Value="[DisabledFillColor]"/>
+
+      <!-- focus sound and color -->
+      <Rule>
+        <Conditions>
+          <Equality Source="[Input.KeyFocus]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Fill.Content]" Value="[FocusFillColor]"/>
+          <PlaySound Sound="resx://Library/Library.Resources/V3_Controls_Common_Focus_a" />
+        </Actions>
+      </Rule>
+
+      <Binding Source="[Input.KeyFocus]"   Target="[FocusOverlay.Visible]"/>
+      <Binding Source="[Clicker.Clicking]"   Target="[Highlight.Visible]"/>
+
+      <!-- Setting Label Background images from the ImageSet -->
+      <Default Target="[LabelBackgroundFocus]" Value="[ButtonFocus]" />
+
+    </Rules>
+    <Content>
+      <Panel Layout="VerticalFlow">
+        <Children>
+          <Panel Name="Root" MouseInteractive="true" MaximumSize="[TileSize]">
+            <Children>
+
+              <!-- Content container -->
+              <Panel Name="LabelScalePanel" Layout="Dock">
+                <Children>
+
+                  <!-- Icon -->
+                  <Graphic Name="Icon" LayoutInput="[IconBorderInput]" Margins="[IconPadding]" MaintainAspectRatio="true" MinimumSize="[IconMinSize]" MaximumSize="[IconMaxSize]" Visible="[ShowIcon]">
+                    <Children>
+                      <me:BaseIconFocusLoopContent Name="IconFocusLoopHost" Visible="false" Source="null"/>
+                    </Children>
+                  </Graphic>
+
+                  <!-- Text container -->
+                  <Panel Name="LabelPanel" Layout="Anchor" LayoutInput="[LabelBorderInput]" Margins="16,2,8,2" Visible="[ShowLabel]">
+                    <Children>
+                      <Panel Layout="Dock">
+                        <!--Layout>
+                          <FlowLayout Orientation="Horizontal"/>
+                        </Layout-->
+                        <Children>
+                          <Text Name="Label" Color="[NoFocusColor]" Font="[Font]" MinimumSize="400, 0" MaximumSize="450, 0">
+                            <LayoutInput>
+                              <DockLayoutInput Alignment="Center" Position="Left"  />
+                            </LayoutInput>
+                          </Text>
+                          <Text Name="Label2" Color="[NoFocusColorDescription]" Font="[SmallFont]" Content="">
+                            <LayoutInput>
+                              <DockLayoutInput Alignment="Center" Position="Right"  />
+                            </LayoutInput>
+                          </Text>
+                          <Graphic Name="LabelBackgroundDiscGraphic" Content="[LabelBackgroundDisc]" Visible="false" LayoutInput="[LabelBackgroundDiscLayoutInput]" />
+                          </Children>
+                      </Panel>
+                      <Graphic Name="LabelBackgroundGraphic" Content="[LabelBackground]" Visible="[ShowLabelBackground]" LayoutInput="[LabelBackgroundLayoutInput]" />
+                    </Children>
+                  </Panel>
+                </Children>
+              </Panel>
+
+              <!-- Highlight base -->
+              <Clip FadeSize="20" Layout="Fill">
+                <Children>
+
+                  <!-- Highlight -->
+                  <Graphic Name="Highlight" Content="[PressedImage]">
+                    <Animations>
+                      <!-- Button highlight -->
+                      <TransformByAttributeAnimation Name="Button.PressedHighlight.Show" Filter="Position" Attribute="Width" Magnitude="1.0">
+                        <Source>
+                          <Animation Type="Show">
+                            <Keyframes>
+                              <PositionKeyframe Time="0.00" Value="-1.0,0,0" RelativeTo="Final"/>
+                              <PositionKeyframe Time="0.10" Value="0.00,0,0" RelativeTo="Final"/>
+                              <PositionKeyframe Time="0.18" Value="0.35,0,0" RelativeTo="Final"/>
+                              <PositionKeyframe Time="0.35" Value="0.55,0,0" RelativeTo="Final"/>
+                              <PositionKeyframe Time="0.60" Value="1.25,0,0" RelativeTo="Final"/>
+                              <PositionKeyframe Time="0.70" Value="1.25,0,0" RelativeTo="Final"/>
+
+                              <AlphaKeyframe Time="0.00" Value="0.00" RelativeTo="Absolute"/>
+                              <AlphaKeyframe Time="0.05" Value="0.75" RelativeTo="Absolute"/>
+                              <AlphaKeyframe Time="0.17" Value="0.75" RelativeTo="Absolute"/>
+                              <AlphaKeyframe Time="0.40" Value="0.00" RelativeTo="Absolute"/>
+                            </Keyframes>
+                          </Animation>
+                        </Source>
+                      </TransformByAttributeAnimation>
+
+                      <!-- Button highlight - stop -->
+                      <TransformByAttributeAnimation Name="Button.PressedHighlight.Hide" Filter="Position" Attribute="Width" Magnitude="1.0">
+                        <Source>
+                          <Animation Type="Hide">
+                            <Keyframes>
+                              <PositionKeyframe Time="0.00" Value="0.0,0,0" RelativeTo="Current"/>
+                              <PositionKeyframe Time="0.10" Value="1.0,0,0" RelativeTo="Final"/>
+
+                              <AlphaKeyframe Time="0.00" RelativeTo="Current"/>
+                              <AlphaKeyframe Time="0.10" Value="0.0" RelativeTo="Absolute"/>
+                            </Keyframes>
+                          </Animation>
+                        </Source>
+                      </TransformByAttributeAnimation>
+                    </Animations>
+                  </Graphic>
+
+                </Children>
+              </Clip>
+
+              <!-- Focus overlay -->
+              <Graphic Name="FocusOverlay" Layout="Fill" Content="[FocusOverlayImage]">
+                <Animations>
+                  <!-- Button focus overlay pulse -->
+                  <Animation Name="Button.FocusOverlay.Idle" Loop="-1" Type="Idle">
+                    <Keyframes>
+                      <AlphaKeyframe Time="0.0" Value="0.0" Interpolation="SCurve" RelativeTo="Absolute"/>
+                      <AlphaKeyframe Time="1.5" Value="0.63" Interpolation="SCurve" RelativeTo="Absolute"/>
+                      <AlphaKeyframe Time="3.0" Value="0.0" RelativeTo="Absolute"/>
+                    </Keyframes>
+                  </Animation>
+
+                </Animations>
+              </Graphic>
+
+              <!-- Fill color -->
+              <ColorFill Name="Fill" Layout="Fill" Content="0,   0,   0,   0" MinimumSize="[TileSize]"/>
+
+              <!-- Background image -->
+              <Graphic Name="Background" Layout="Fill" Content="[NoFocusImage]" MinimumSize="[TileSize]">
+              </Graphic>
+
+            </Children>
+          </Panel>
+          <Text Margins="16,0,0,0" Name="RoleText" Visible="false" Font="Segoe Media Center Semibold,18" Color="255, 151, 217, 255"/>
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+  <UI Name="DiscButton" BaseUI="me:DiscButtonBase">
+
+    <Properties>
+      <ICommand Name="Model" ICommand="$Required"/>
+      <cor:String Name="AccessibilityName" String="null"/>
+      <cor:String Name="AccessibilityDesc" String="null"/>
+      <cor:Int32 Name="ItemIndex" Int32="0"/>
+      <IntRangedValue Name="FocusedIndex"/>
+      <AccessibleRole Name="AccessibilityRole" AccessibleRole="PushButton"/>
+      <Font Name="SmallFont" Font="Segoe Media Center Semibold, 18"/>
+    </Properties>
+
+    <Rules>
+      <Rule>
+        <Conditions>
+          <Equality Source="[Input.KeyFocus]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[FocusedIndex.Value]" Value="[ItemIndex]"/>
+        </Actions>
+      </Rule>
+      <!-- Accessibility -->
+      <Binding Target="[Accessible.IsUnavailable]"        Source="[Model.Available]" >
+        <Transformer>
+          <BooleanTransformer Inverse="true"/>
+        </Transformer>
+      </Binding>
+      <Binding Target="[Accessible.IsPressed]"            Source="[Clicker.Clicking]"/>
+      <Binding Target="[Accessible.IsFocusable]"          Source="[Input.KeyInteractive]"/>
+      <Binding Target="[Accessible.IsFocused]"            Source="[Input.KeyFocus]"/>
+      <Binding Target="[Accessible.Description]"          Source="[AccessibilityDesc]"/>
+      <Default Target="[Accessible.DefaultActionCommand]" Value="[Model]"/>
+      <Default Target="[Accessible.Role]"                 Value="[AccessibilityRole]"/>
+      <Default Target="[Label2.Visible]"                 Value="true"/>
+      <Default Target="[Label2.Content]"                 Value="[Model!z:DiscCommand.DisplayType]"/>
+
+      <!-- Associate the Model with the Behavior -->
+      <!--Default Target="[Clicker.Command]" Value="[Model!ICommand]"/-->
+      <Default Target="[Clicker.Command]" Value="[Model!z:DiscCommand.Load]"/>
+
+      <!-- If the Command is unavailable, disable the UI -->
+      <Binding Source="[Model.Available]" Target="[Input.Enabled]"/>
+
+      <!-- if Accessibility name is not specified get it from Model.Description -->
+      <Rule >
+        <Conditions>
+          <Equality Source="[AccessibilityName]" Value="null"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Accessible.Name]" Value="[Model.Description]"/>
+        </Actions>
+      </Rule>
+
+      <!-- Assign the Accessibility name if it is specified -->
+      <Default Target="[Accessible.Name]" Value="[AccessibilityName]"/>
+
+      <Binding Source="[Model.Description]"  Target="[Label.Content]"/>
+
+    </Rules>
+
+  </UI>
+  
+  <UI Name="ScrollingListCast">
+
+    <Properties>
+      <ArrayListDataSet Name="Content" ArrayListDataSet="$Required"/>
+      <ScrollingData Name="ScrollingData" ScrollingData="$Required"/>
+      <ScrollingData Name="ScrollingDataSpoofer"/>
+      <cor:String Name="GroupName" String="$Required"/>
+      <cor:String Name="TitleString" String=""/>
+      <cor:String Name="DetailsString" String=""/>
+      <IntRangedValue Name="FocusedIndex"/>
+      <z:DetailsPage Name="Page" DetailsPage="$Required"/>
+      <Image Name="CellBackground" Source="resx://Library/Library.Resources/V3_Controls_Common_Epg_Results_Cell_Background"/>
+    </Properties>
+
+    <Locals>
+      <ScrollingHandler Name="ScrollingHandler" ScrollingData="[ScrollingData]" HandleHomeEndKeys="true"
+                        HandlePageKeys="true"/>
+      <Command Name="MyCommand" Description="A Baby Story" />
+      <cor:Int32 Name="SelectedIndex" />
+      <ShortcutHandler Name="PageDownHandler" Shortcut="PageDown" HandlerStage="Bubbled" Handle="true"/>
+      <ShortcutHandler Name="PageUpHandler" Shortcut="PageUp" HandlerStage="Bubbled" Handle="true"/>
+      <KeyHandler Name="HomeHandler" Key="Home" HandlerStage="Bubbled" Handle="true"/>
+      <KeyHandler Name="EndHandler" Key="End" HandlerStage="Bubbled" Handle="true"/>
+    </Locals>
+
+    <Rules>
+      <Default Target="[ScrollingHandler.ScrollingData]" Value="[ScrollingData]"/>
+      <Default Target="[ScrollingData.Repeater]" Value="[ListRepeater]"/>
+      <Default Target="[bbb.Content]" Value="[GroupName]"/>
+      <Binding Target="[ScrollMe.TotalCount]" Source="[Content.Count]"/>
+      <Binding Target="[ScrollMe.ItemIndex]" Source="[FocusedIndex.Value]"/>
+      <Default Target="[Input.KeyFocusOnMouseEnter]" Value="false"/>
+      <Default Target="[ScrollingDataSpoofer]" Value="[ScrollingData]"/>
+      <Changed Source="[Content.Count]">
+        <Conditions>
+          <Equality ConditionOp="GreaterThan" Source="[FocusedIndex.Value]" Value="1"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[ScrollingData.Home]"/>
+
+        </Actions>
+      </Changed>
+
+      <Changed Source="[Content.Count]">
+        <Conditions>
+          <Equality ConditionOp="Equals" Source="[Content.Count]" Value="0"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Input.KeyInteractive]" Value="false" />
+        </Actions>
+      </Changed>
+      <Changed Source="[Content.Count]">
+        <Conditions>
+          <Equality ConditionOp="GreaterThan" Source="[Content.Count]" Value="0"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Input.KeyInteractive]" Value="true" />
+        </Actions>
+      </Changed>
+      <Changed Source="[PageDownHandler.Invoked]">
+        <Actions>
+          <Invoke Target="[ScrollingData.PageDown]"/>
+        </Actions>
+      </Changed>
+      <Changed Source="[PageUpHandler.Invoked]">
+        <Actions>
+          <Invoke Target="[ScrollingData.PageUp]"/>
+        </Actions>
+      </Changed>
+      <Changed Source="[HomeHandler.Invoked]">
+        <Actions>
+          <Invoke Target="[ScrollingData.Home]"/>
+        </Actions>
+      </Changed>
+      <Changed Source="[EndHandler.Invoked]">
+        <Actions>
+          <Invoke Target="[ScrollingData.End]"/>
+        </Actions>
+      </Changed>
+      <Default Target="[theScroller.ScrollingData]" Value="[ScrollingData]"/>
+      <Binding Target="[ListRepeater.Source]" Source="[Content]">
+        <Conditions>
+          <IsValid Source="[Content]"/>
+        </Conditions>
+      </Binding>
+    </Rules>
+    <Content>
+      <Panel Layout="VerticalFlow">
+        <Children>
+          <!-- The Scroller -->
+          <Scroller Name="theScroller"  Orientation="Vertical" FadeSize="-1" MaximumSize="0,401" MinimumSize="0,401">
+            <Children>
+              <Panel Visible="true">
+                <Children>
+                  <Text Name="bbb" Color="255, 151, 217, 255" Visible="true" Content="zffffffff">
+                  </Text>
+                </Children>
+              </Panel>
+              <Repeater Name="ListRepeater" DefaultFocusIndex="0">
+                <Layout>
+                  <FlowLayout Orientation="Vertical" Spacing="5,0"/>
+                </Layout>
+                <Animations>
+                  <Animation Type="Move">
+                    <Keyframes>
+                      <PositionKeyframe Time="0.0" RelativeTo="Current" Interpolation="SCurve"/>
+                      <PositionKeyframe Time="0.25" RelativeTo="Final" Value="0, -5, 0"/>
+                      <PositionKeyframe Time="0.55" RelativeTo="Final" Value="0, 0, 0"/>
+                    </Keyframes>
+                  </Animation>
+                </Animations>
+                <!-- The item to repeat -->
+                <ContentSelectors>
+                  <ValueSelector Source="[RepeatedItem!z:CastCommand.CastType]" Value="TitleAndDesc" ContentName="TitleAndDesc"/>
+                  <ValueSelector Source="[RepeatedItem!z:CastCommand.CastType]" Value="Desc" ContentName="Desc"/>
+                  <ValueSelector Source="[RepeatedItem!z:CastCommand.CastType]" Value="Default" ContentName="Default"/>
+                </ContentSelectors>
+              </Repeater>
+            </Children>
+          </Scroller>
+          <Panel Margins="0,10,50,0">
+            <Layout>
+              <FlowLayout HideOffscreenItems="false" Orientation="Horizontal" ItemAlignment="Far" FillStrip="false" StripAlignment="Far"/>
+            </Layout>
+            <Children>
+              <scr:ScrollControlItem Name="ScrollMe" ItemIndex="0" TotalCount="0" ScrollData="[ScrollingData]"></scr:ScrollControlItem>
+            </Children>
+          </Panel>
+        </Children>
+      </Panel>
+    </Content>
+    <Content Name="TitleAndDesc">
+      <me:ButtonWithDescriptionAndTitle FocusedIndex="[FocusedIndex]" ItemIndex="[RepeatedItemIndex.Value]" Model="[RepeatedItem!z:CastCommand]"/>
+    </Content>
+    <Content Name="Desc">
+      <me:ButtonWithDescription FocusedIndex="[FocusedIndex]" ItemIndex="[RepeatedItemIndex.Value]" Model="[RepeatedItem!z:CastCommand]"/>
+    </Content>
+    <Content Name="Default">
+      <me:Button FocusedIndex="[FocusedIndex]" ItemIndex="[RepeatedItemIndex.Value]" Model="[RepeatedItem!z:CastCommand]"/>
+    </Content>
+  </UI>
+
+  <!-- This is our list of scrolling content -->
+  <UI Name="ScrollingList">
+
+    <Properties>
+      <ArrayListDataSet Name="Content" ArrayListDataSet="$Required"/>
+      <ScrollingData Name="ScrollingData" ScrollingData="$Required"/>
+      <cor:String Name="GroupName" String="$Required"/>
+    </Properties>
+
+    <Locals>
+      <ScrollingHandler Name="ScrollingHandler" ScrollingData="[ScrollingData]"/>
+      <Command Name="MyCommand" Description="A Baby Story" />
+    </Locals>
+
+    <Rules>
+      <Default Target="[ScrollingHandler.ScrollingData]" Value="[ScrollingData]"/>
+      <Default Target="[ScrollingData.Repeater]" Value="[ListRepeater]"/>
+      <Default Target="[bbb.Content]" Value="[GroupName]"/>
+    </Rules>
+
+    <Content>
+      <!-- The Scroller -->
+      <Scroller Orientation="Vertical" ScrollingData="[ScrollingData]" Layout="VerticalFlow">
+        <Children>
+          <Panel Visible="true">
+            <Children>
+              <Text Name="bbb" Color="255, 151, 217, 255" Visible="true" Content="zffffffff">
+              </Text>
+            </Children>
+          </Panel>
+          <Repeater Name="ListRepeater" Source="[Content]" Layout="VerticalFlow">
+            <Layout>
+              <GridLayout Orientation="Vertical" AllowWrap="false"
+                          Spacing="5,5" Columns="1"/>
+            </Layout>
+            <Content>
+
+              <!-- The item to repeat -->
+              <me:Button ItemIndex="1" Model="[RepeatedItem!Command]"/>
+
+            </Content>
+          </Repeater>
+        </Children>
+      </Scroller>
+
+    </Content>
+  </UI>
+
+  <UI Name="ScrollingListSearch2">
+
+    <Properties>
+      <ArrayListDataSet Name="Content" ArrayListDataSet="$Required"/>
+      <ScrollingData Name="ScrollingData" ScrollingData="$Required"/>
+      <cor:String Name="GroupName" String="$Required"/>
+      <IntRangedValue Name="FocusedIndex"/>
+    </Properties>
+
+    <Locals>
+      <ScrollingHandler Name="ScrollingHandler" ScrollingData="[ScrollingData]"/>
+      <Command Name="MyCommand" Description="A Baby Story" />
+      <cor:Int32 Name="SelectedIndex" />
+    </Locals>
+
+    <Rules>
+      <Default Target="[ScrollingHandler.ScrollingData]" Value="[ScrollingData]"/>
+      <Default Target="[ScrollingData.Repeater]" Value="[ListRepeater]"/>
+      <Default Target="[bbb.Content]" Value="[GroupName]"/>
+      <Binding Target="[ScrollMe.TotalCount]" Source="[Content.Count]"/>
+      <Binding Target="[ScrollMe.ItemIndex]" Source="[FocusedIndex.Value]"/>
+    </Rules>
+
+    <Content>
+      <Panel Layout="VerticalFlow">
+        <Children>
+          <!-- The Scroller -->
+          <Scroller Name="theScroller" Orientation="Vertical" ScrollingData="[ScrollingData]" FadeSize="-1" MaximumSize="0,380" MinimumSize="0,380">
+            <Children>
+              <Panel Visible="true">
+                <Children>
+                  <Text Name="bbb" Color="255, 151, 217, 255" Visible="true" Content="zffffffff">
+                  </Text>
+                </Children>
+              </Panel>
+              <Repeater Name="ListRepeater" Source="[Content]" Layout="VerticalFlow">
+                <Layout>
+                  <GridLayout Orientation="Vertical" AllowWrap="false"
+                              Spacing="5,5" Columns="1"/>
+                </Layout>
+                <Animations>
+                  <Animation Type="Move">
+                    <Keyframes>
+                      <PositionKeyframe Time="0.0" RelativeTo="Current" Interpolation="SCurve"/>
+                      <PositionKeyframe Time="0.25" RelativeTo="Final" Value="0, -5, 0"/>
+                      <PositionKeyframe Time="0.55" RelativeTo="Final" Value="0, 0, 0"/>
+                    </Keyframes>
+                  </Animation>
+                </Animations>
+                <Content>
+                  <!-- The item to repeat -->
+                  <me:Button FocusedIndex="[FocusedIndex]" ItemIndex="[RepeatedItemIndex.Value]" Model="[RepeatedItem!Command]"/>
+                </Content>
+              </Repeater>
+            </Children>
+          </Scroller>
+          <Panel Margins="0,10,110,0">
+            <Layout>
+              <FlowLayout HideOffscreenItems="false" Orientation="Horizontal" ItemAlignment="Far" FillStrip="false" StripAlignment="Far"/>
+            </Layout>
+            <Children>
+              <scr:ScrollControlItem Name="ScrollMe" ItemIndex="0" TotalCount="0" ScrollData="[ScrollingData]"></scr:ScrollControlItem>
+            </Children>
+          </Panel>
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+
+  <!-- This is our list of scrolling content -->
+  <UI Name="ScrollingListGrouper">
+
+    <Properties>
+
+      <!-- The content we want to scroll -->
+      <ArrayListDataSet Name="Content" ArrayListDataSet="$Required"/>
+      <ArrayListDataSet Name="Groups" ArrayListDataSet="$Required"/>
+
+      <!-- Scrolling state that will be preconfigured with the desired     -->
+      <!-- locking behavior.                                               -->
+      <ScrollingData Name="ScrollingData" ScrollingData="$Required"/>
+
+    </Properties>
+
+    <Locals>
+      <ScrollingHandler Name="ScrollingHandler" ScrollingData="[ScrollingData]" HandlerStage="Bubbled"/>
+      <cor:Int32 Name="SelectedIndex" />
+
+    </Locals>
+
+    <Rules>
+
+      <!-- Give our Repeater to ScrollingData. -->
+      <Default Target="[ScrollingHandler.ScrollingData]" Value="[ScrollingData]"/>
+      <Default Target="[ScrollingData.Repeater]" Value="[ListRepeater]"/>
+      <Binding Target="[ScrollMe.TotalCount]" Source="[Content.Count]"/>
+      <Binding Target="[ScrollMe.ItemIndex]" Source="[SelectedIndex]"/>
+    </Rules>
+
+    <Content>
+
+      <Panel Layout="VerticalFlow">
+        <Children>
+          <Scroller Name="theScroller" Orientation="Vertical" ScrollingData="[ScrollingData]" FadeSize="-1" MaximumSize="0,250" >
+            <LayoutInput>
+              <FormLayoutInput Left="Parent,0" Top="Parent, 0"/>
+            </LayoutInput>
+            <Children>
+              <Repeater Name="ListRepeater" Source="[Groups]" Layout="VerticalFlow">
+                <Layout>
+                  <FlowLayout AllowWrap="true" Repeat="Never"/>
+                </Layout>
+                <Content>
+                  <!-- put header for list here-->
+
+                  <!-- The item to repeat -->
+                  <me:ScrollingList Content="[RepeatedItem!ArrayListDataSet]" GroupName="[RepeatedItem!ArrayListDataSet.Description]">
+                    <ScrollingData>
+                      <ScrollingData/>
+                    </ScrollingData>
+                  </me:ScrollingList>
+
+                </Content>
+              </Repeater>
+            </Children>
+          </Scroller>
+          <Panel Margins="0,10,110,0">
+            <Layout>
+              <FlowLayout Orientation="Horizontal" ItemAlignment="Far" FillStrip="false" StripAlignment="Far"/>
+            </Layout>
+            <Children>
+
+              <scr:ScrollControlItem Name="ScrollMe" ItemIndex="0" TotalCount="0" ScrollData="[ScrollingData]"></scr:ScrollControlItem>
+
+            </Children>
+          </Panel>
+        </Children>
+      </Panel>
+    </Content>
+
+  </UI>
+
+  <!-- A UI that is key-interactive for demonstrating the Scroller. -->
+  <!-- It is what is used within the Repeater's Content for the     -->
+  <!-- list items.                                                  -->
+  <UI Name="ListItem">
+    <Properties>
+      <cor:String Name="Description" String="$Required"/>
+      <Index Name="MyIndex" Index="$Required"/>
+      <cor:String Name="MyText" String="$Required"/>
+      <Image Image="null" Name="nullImage"/>
+      <cor:Int32 Name="SelectedIndex" />
+    </Properties>
+
+    <Locals>
+      <ClickHandler Name="Clicker"/>
+    </Locals>
+
+    <Rules>
+
+      <Default Target="[Input.KeyInteractive]" Value="true" />
+
+      <Condition Source="[Input.KeyFocus]" SourceValue="true">
+        <Actions>
+          <Set Target="[Label.Color]" Value="White"/>
+          <Set Target="[MyText]" Value="[Description]"/>
+        </Actions>
+      </Condition>
+      <Default Target="[Input.MakeTopmostOnFocus]" Value="true"/>
+    </Rules>
+
+    <Content>
+      <Panel>
+        <Layout>
+          <FlowLayout/>
+        </Layout>
+        <Children>
+          <Graphic Name="Image" Content="resx://Library/Library.Resources/V3_Controls_Background_Static" MinimumSize="90,95"/>
+          <Text Name="Label" Content="[Description]" Color="SlateGray" Font="Tahoma,24"/>
+        </Children>
+      </Panel>
+
+    </Content>
+  </UI>
+
+  <UI Name="ButtonWithDescription" BaseUI="me:ButtonBase">
+
+    <Properties>
+      <ICommand Name="Model" ICommand="$Required"/>
+      <z:CastCommand Name="CastItem"/>
+      <cor:String Name="AccessibilityName" String="null"/>
+      <cor:String Name="AccessibilityDesc" String="null"/>
+      <cor:Int32 Name="ItemIndex" Int32="0"/>
+      <IntRangedValue Name="FocusedIndex"/>
+      <AccessibleRole Name="AccessibilityRole" AccessibleRole="PushButton"/>
+    </Properties>
+
+    <Rules>
+      <Binding Target="[CastItem]"   Source="[Model!z:CastCommand]"/>
+      <Rule>
+        <Conditions>
+          <IsValid Source="[CastItem.Role]"/>
+          <Equality Source="[CastItem.Role]" ConditionOp="NotEquals" Value=""/>
+        </Conditions>
+        <Actions>
+          <Set Target="[RoleText.Visible]" Value="true"/>
+          <Set Target="[RoleText.Content]" Value="[CastItem.Role]"/>
+        </Actions>
+      </Rule>
+      <!-- end set role-->
+      <Rule>
+        <Conditions>
+          <Equality Source="[Input.KeyFocus]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[FocusedIndex.Value]" Value="[ItemIndex]"/>
+        </Actions>
+      </Rule>
+      <!-- Accessibility -->
+      <Binding Target="[Accessible.IsUnavailable]"        Source="[Model.Available]" >
+        <Transformer>
+          <BooleanTransformer Inverse="true"/>
+        </Transformer>
+      </Binding>
+      <Binding Target="[Accessible.IsPressed]"            Source="[Clicker.Clicking]"/>
+      <Binding Target="[Accessible.IsFocusable]"          Source="[Input.KeyInteractive]"/>
+      <Binding Target="[Accessible.IsFocused]"            Source="[Input.KeyFocus]"/>
+      <Binding Target="[Accessible.Description]"          Source="[AccessibilityDesc]"/>
+      <Default Target="[Accessible.DefaultActionCommand]" Value="[Model]"/>
+      <Default Target="[Accessible.Role]"                 Value="[AccessibilityRole]"/>
+
+      <!-- Associate the Model with the Behavior -->
+      <Default Target="[Clicker.Command]" Value="[Model!ICommand]"/>
+
+      <!-- If the Command is unavailable, disable the UI -->
+      <Binding Source="[Model.Available]" Target="[Input.Enabled]"/>
+
+      <!-- if Accessibility name is not specified get it from Model.Description -->
+      <Rule >
+        <Conditions>
+          <Equality Source="[AccessibilityName]" Value="null"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Accessible.Name]" Value="[Model.Description]"/>
+        </Actions>
+      </Rule>
+
+      <!-- Assign the Accessibility name if it is specified -->
+      <Default Target="[Accessible.Name]" Value="[AccessibilityName]"/>
+
+      <Binding Source="[Model.Description]"  Target="[Label.Content]"/>
+
+    </Rules>
+
+  </UI>
+
+  <UI Name="ButtonWithDescriptionAndTitle" BaseUI="me:ButtonBase">
+
+    <Properties>
+      <ICommand Name="Model" ICommand="$Required"/>
+      <z:CastCommand Name="CastItem"/>
+      <cor:String Name="AccessibilityName" String="null"/>
+      <cor:String Name="AccessibilityDesc" String="null"/>
+      <cor:Int32 Name="ItemIndex" Int32="0"/>
+      <IntRangedValue Name="FocusedIndex"/>
+      <AccessibleRole Name="AccessibilityRole" AccessibleRole="PushButton"/>
+    </Properties>
+
+    <Rules>
+      <Binding Target="[CastItem]"   Source="[Model!z:CastCommand]"/>
+      <Rule>
+        <Conditions>
+          <IsValid Source="[CastItem.GroupTitle]"/>
+          <Equality Source="[CastItem.GroupTitle]" ConditionOp="NotEquals" Value=""/>
+        </Conditions>
+        <Actions>
+          <Set Target="[GroupHeaderText.Visible]" Value="true"/>
+          <Set Target="[GroupHeaderText.Content]" Value="[CastItem.GroupTitle]"/>
+        </Actions>
+      </Rule>
+      <!-- set role -->
+      <Rule>
+        <Conditions>
+          <IsValid Source="[CastItem.Role]"/>
+          <Equality Source="[CastItem.Role]" ConditionOp="NotEquals" Value=""/>
+        </Conditions>
+        <Actions>
+          <Set Target="[RoleText.Visible]" Value="true"/>
+          <Set Target="[RoleText.Content]" Value="[CastItem.Role]"/>
+        </Actions>
+      </Rule>
+      <!-- end set role-->
+      <Rule>
+        <Conditions>
+          <Equality Source="[Input.KeyFocus]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[FocusedIndex.Value]" Value="[ItemIndex]"/>
+        </Actions>
+      </Rule>
+      <!-- Accessibility -->
+      <Binding Target="[Accessible.IsUnavailable]"        Source="[Model.Available]" >
+        <Transformer>
+          <BooleanTransformer Inverse="true"/>
+        </Transformer>
+      </Binding>
+      <Binding Target="[Accessible.IsPressed]"            Source="[Clicker.Clicking]"/>
+      <Binding Target="[Accessible.IsFocusable]"          Source="[Input.KeyInteractive]"/>
+      <Binding Target="[Accessible.IsFocused]"            Source="[Input.KeyFocus]"/>
+      <Binding Target="[Accessible.Description]"          Source="[AccessibilityDesc]"/>
+      <Default Target="[Accessible.DefaultActionCommand]" Value="[Model]"/>
+      <Default Target="[Accessible.Role]"                 Value="[AccessibilityRole]"/>
+
+      <!-- Associate the Model with the Behavior -->
+      <Default Target="[Clicker.Command]" Value="[Model!ICommand]"/>
+
+      <!-- If the Command is unavailable, disable the UI -->
+      <Binding Source="[Model.Available]" Target="[Input.Enabled]"/>
+
+      <!-- if Accessibility name is not specified get it from Model.Description -->
+      <Rule >
+        <Conditions>
+          <Equality Source="[AccessibilityName]" Value="null"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Accessible.Name]" Value="[Model.Description]"/>
+        </Actions>
+      </Rule>
+
+      <!-- Assign the Accessibility name if it is specified -->
+      <Default Target="[Accessible.Name]" Value="[AccessibilityName]"/>
+      <Binding Source="[Model.Description]"  Target="[Label.Content]"/>
+
+    </Rules>
+
+  </UI>
+
+  <UI Name="Button" BaseUI="me:ButtonBase">
+
+    <Properties>
+      <ICommand Name="Model" ICommand="$Required"/>
+      <z:CastCommand Name="CastItem"/>
+      <cor:String Name="AccessibilityName" String="null"/>
+      <cor:String Name="AccessibilityDesc" String="null"/>
+      <cor:Int32 Name="ItemIndex" Int32="0"/>
+      <IntRangedValue Name="FocusedIndex"/>
+      <AccessibleRole Name="AccessibilityRole" AccessibleRole="PushButton"/>
+    </Properties>
+
+    <Rules>
+      <Binding Target="[CastItem]"   Source="[Model!z:CastCommand]"/>
+      <Rule>
+        <Conditions>
+          <Equality Source="[Input.KeyFocus]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[FocusedIndex.Value]" Value="[ItemIndex]"/>
+        </Actions>
+      </Rule>
+      <!-- Accessibility -->
+      <Binding Target="[Accessible.IsUnavailable]"        Source="[Model.Available]" >
+        <Transformer>
+          <BooleanTransformer Inverse="true"/>
+        </Transformer>
+      </Binding>
+      <Binding Target="[Accessible.IsPressed]"            Source="[Clicker.Clicking]"/>
+      <Binding Target="[Accessible.IsFocusable]"          Source="[Input.KeyInteractive]"/>
+      <Binding Target="[Accessible.IsFocused]"            Source="[Input.KeyFocus]"/>
+      <Binding Target="[Accessible.Description]"          Source="[AccessibilityDesc]"/>
+      <Default Target="[Accessible.DefaultActionCommand]" Value="[Model]"/>
+      <Default Target="[Accessible.Role]"                 Value="[AccessibilityRole]"/>
+
+      <!-- Associate the Model with the Behavior -->
+      <Default Target="[Clicker.Command]" Value="[Model!ICommand]"/>
+
+      <!-- If the Command is unavailable, disable the UI -->
+      <Binding Source="[Model.Available]" Target="[Input.Enabled]"/>
+
+      <!-- if Accessibility name is not specified get it from Model.Description -->
+      <Rule >
+        <Conditions>
+          <Equality Source="[AccessibilityName]" Value="null"/>
+          <!--Modified Source="[Model.Description]" InitialTransitionEvaluate="true"/-->
+        </Conditions>
+        <Actions>
+          <Set Target="[Accessible.Name]" Value="[Model.Description]"/>
+        </Actions>
+      </Rule>
+
+      <!-- Assign the Accessibility name if it is specified -->
+      <Default Target="[Accessible.Name]" Value="[AccessibilityName]"/>
+      <Binding Source="[Model.Description]"  Target="[Label.Content]"/>
+
+    </Rules>
+
+  </UI>
+
+  <!-- This base view provides most of the implementation of Button, but leaves
+         out assumptions about the main ModelItem parameters.  This allows alternate
+         views to built on top with the button look, but perhaps have different
+         parameter assumptions (e.g. MenuRadioButton). -->
+  <UI Name="ButtonBase">
+
+    <Properties>
+      <Font    Name="Font"                Font="Segoe Media Center Semibold, 21"/>
+      <Font    Name="SmallFont"                Font="Segoe Media Center Semibold, 16"/>
+      <Font    Name="FocusFont"           Font="null"/>
+      <Font    Name="DisabledFont"        Font="null"/>
+      <cor:Boolean Name="ShowLabel"           Boolean="true"/>
+      <cor:Boolean Name="AllowPressedEffect"  Boolean="true"/>
+      <cor:Boolean Name="AllowMarquee"        Boolean="true"/>
+      <Size    Name="TileSize"            Size="612, 43"/>
+
+      <cor:Boolean     Name="ShowLabelBackground"      Boolean="false"/>
+      <Image  Name="LabelBackground"          Image="null"/>
+      <Image  Name="LabelBackgroundFocus"     Image="null"/>
+
+      <Image Name="ButtonFocus" Image="resx://Library/Library.Resources/V3_Controls_Background_Static" Flippable="true"/>
+
+      <Image  Name="NoFocusImage"        Image="null"/>
+      <Image  Name="FocusImage"          Image="resx://Library/Library.Resources/V3_Controls_Common_Button_Full_Focus"/>
+      <Image  Name="DisabledImage"       Image="null"/>
+
+      <Image  Name="FocusOverlayImage"   Image="resx://Library/Library.Resources/V3_Controls_Common_Button_Full_FocusOverlay"/>
+      <Image  Name="PressedImage"        Image="resx://Library/Library.Resources/V3_Controls_Common_Button_Full_PressedHighlight"/>
+
+      <Color      Name="NoFocusColor"        Color="255, 242, 242, 242"/>
+      <Color      Name="FocusColor"          Color="255, 242, 242, 242"/>
+      <Color      Name="DisabledColor"       Color="102, 151, 217, 255"/>
+
+      <!-- Fill colors, if non-transparent, supercede background images -->
+      <Color      Name="NoFocusFillColor"    Color="0,   0,   0,   0"/>
+      <Color      Name="FocusFillColor"      Color="0,   0,   0,   0"/>
+      <Color      Name="DisabledFillColor"   Color="0,   0,   0,   0"/>
+
+      <DockLayoutInput
+                  Name="LabelBorderInput"    Position="Left" Alignment="Center"/>
+      <AnchorLayoutInput Name="LabelBackgroundLayoutInput"
+                  Left="PressedGradient,0,-8" Top="PressedGradient,0,-4" Right="PressedGradient,1,8" Bottom="PressedGradient,1,4" ContributesToWidth="false" ContributesToHeight="false"/>
+
+      <cor:Boolean    Name="ShowIcon"             Boolean="true"/>
+      <Image Name="IconImage"            Image="null"/>
+      <Image Name="FocusIconImage"       Image="null"/>
+      <Image          Name="IconAcquiringImage"   Image="null"/>
+      <Image          Name="IconErrorImage"       Image="null"/>
+
+      <Size   Name="IconMinSize"/>
+      <Size   Name="IconMaxSize"/>
+      <Inset  Name="IconPadding"/>
+      <DockLayoutInput Name="IconBorderInput"      Position="Left" Alignment="Center"/>
+
+      <cor:String Name="FocusLoopContentTemplate"  String="null"/>
+
+      <!-- Is this Button the type that will cause a large action like a page navigation? -->
+      <!-- Or is it something smaller like a spinner up/down button? -->
+      <!-- This determines what sound set we use. -->
+      <cor:Boolean Name="IsNavigatingCommand" Boolean="true"/>
+
+    </Properties>
+
+    <Locals>
+
+      <ClickHandler Name="Clicker"/>
+
+      <TransformAnimation Name="TransitionToForward" Source="animation://me:ListViewItem.NavigateToForward"/>
+      <TransformAnimation Name="TransitionToBackward" Source="animation://me:ListViewItem.NavigateToBackward"/>
+      <TransformAnimation Name="TransitionAwayForward"  Source="animation://me:ListViewItem.NavigateAwayForward"/>
+      <TransformAnimation Name="TransitionAwayBackward" Source="animation://me:ListViewItem.NavigateAwayBackward"/>
+
+    </Locals>
+
+    <Rules>
+      <!-- Accessibility -->
+      <Binding Target="[Accessible.IsFocusable]" Source="[Input.KeyInteractive]"/>
+      <Binding Target="[Accessible.IsFocused]"   Source="[Input.KeyFocus]"/>
+
+      <!-- click sound -->
+      <Rule>
+        <Conditions>
+          <Modified Source="[Clicker.Invoked]"/>
+          <Equality Source="[IsNavigatingCommand]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <PlaySound Sound="resx://Library/Library.Resources/V3_Controls_Common_Select_a" />
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Modified Source="[Clicker.Invoked]"/>
+          <Equality Source="[IsNavigatingCommand]" Value="false"/>
+        </Conditions>
+        <Actions>
+          <PlaySound Sound="resx://Library/Library.Resources/V3_Controls_Common_MiniSelect_a" />
+        </Actions>
+      </Rule>
+
+      <!-- Text color -->
+      <Condition Source="[Input.Enabled]"  SourceValue="false"
+                 Target="[Label.Color]"       Value="[DisabledColor]"/>
+      <Condition Source="[Input.KeyFocus]" SourceValue="true"
+                 Target="[Label.Color]"       Value="[FocusColor]"/>
+
+      <!-- Only show the icon focus animation loop if we were given a template -->
+      <Rule>
+        <Conditions>
+          <Equality Source="[Input.KeyFocus]" Value="true"/>
+          <Equality Source="[FocusLoopContentTemplate]" ConditionOp="NotEquals" Value="null"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[IconFocusLoopHost.Visible]" Value="true"/>
+          <Set Target="[IconFocusLoopHost.Source]" Value="[FocusLoopContentTemplate]"/>
+        </Actions>
+      </Rule>
+
+      <Rule>
+        <Conditions>
+          <Equality Source="[Input.KeyFocus]" Value="true"/>
+          <Equality Source="[FocusIconImage]" ConditionOp="NotEquals" Value="null"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Icon.Content]"  Value="[FocusIconImage]"/>
+        </Actions>
+      </Rule>
+
+      <!-- 
+            Icon image 
+            In order for multi-state icon images to work with imagesets, we need to have both the 
+            Default and Binding applied to the Icon.Image.  This way there is a default state for the icon image,
+            as well as resetting the image if it should happen to need changing with the Bind.  
+            -->
+      <Binding Source="[IconErrorImage]" Target="[Icon.ErrorImage]"/>
+      <Binding Source="[IconAcquiringImage]" Target="[Icon.AcquiringImage]"/>
+      <Binding Source="[IconImage]" Target="[Icon.Content]"/>
+      <Default Target="[Icon.Content]" Value="[IconImage]"/>
+
+      <Condition Source="[Input.KeyFocus]" SourceValue="true"
+           Target="[LabelBackgroundGraphic.Content]"       Value="[LabelBackgroundFocus]"/>
+
+      <Rule>
+        <Conditions>
+          <Equality Source="[Input.Enabled]" Value="false"/>
+          <Equality Source="[DisabledFont]" ConditionOp="NotEquals" Value="null"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Label.Font]" Value="[DisabledFont]"/>
+        </Actions>
+      </Rule>
+
+      <!-- Font -->
+      <Rule>
+        <Conditions>
+          <Equality Source="[Input.KeyFocus]" Value="true"/>
+          <Equality Source="[FocusFont]" ConditionOp="NotEquals" Value="null"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Label.Font]" Value="[FocusFont]"/>
+        </Actions>
+      </Rule>
+
+      <!-- Background image -->
+      <Condition Source="[Input.Enabled]"  SourceValue="false"
+           Target="[Background.Content]"  Value="[DisabledImage]"/>
+      <Condition Source="[Input.KeyFocus]" SourceValue="true"
+                 Target="[Background.Content]"  Value="[FocusImage]"/>
+
+      <!-- Fill color -->
+      <Condition Source="[Input.Enabled]"  SourceValue="false"
+                 Target="[Fill.Content]"  Value="[DisabledFillColor]"/>
+
+      <!-- focus sound and color -->
+      <Rule>
+        <Conditions>
+          <Equality Source="[Input.KeyFocus]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Fill.Content]" Value="[FocusFillColor]"/>
+          <PlaySound Sound="resx://Library/Library.Resources/V3_Controls_Common_Focus_a" />
+        </Actions>
+      </Rule>
+
+      <Binding Source="[Input.KeyFocus]"   Target="[FocusOverlay.Visible]"/>
+      <Binding Source="[Clicker.Clicking]"   Target="[Highlight.Visible]"/>
+
+      <!-- Setting Label Background images from the ImageSet -->
+      <Default Target="[LabelBackgroundFocus]" Value="[ButtonFocus]" />
+
+    </Rules>
+    <Content>
+      <Panel Layout="VerticalFlow">
+        <Children>
+          <Text Margins="16,0,0,0" Name="GroupHeaderText" Visible="false" Font="Segoe Media Center Semibold,16" Color="255, 151, 217, 255"/>
+          <Panel Name="Root" MouseInteractive="true" MaximumSize="[TileSize]">
+            <Children>
+
+              <!-- Content container -->
+              <Panel Name="LabelScalePanel" Layout="Dock">
+                <Children>
+
+                  <!-- Icon -->
+                  <Graphic Name="Icon" LayoutInput="[IconBorderInput]" Margins="[IconPadding]" MaintainAspectRatio="true" MinimumSize="[IconMinSize]" MaximumSize="[IconMaxSize]" Visible="[ShowIcon]">
+                    <Children>
+                      <me:BaseIconFocusLoopContent Name="IconFocusLoopHost" Visible="false" Source="null"/>
+                    </Children>
+                  </Graphic>
+
+                  <!-- Text container -->
+                  <Panel Name="LabelPanel" Layout="Anchor" LayoutInput="[LabelBorderInput]" Margins="16,2,8,2" Visible="[ShowLabel]">
+                    <Children>
+                      <Panel>
+                        <Layout>
+                          <FlowLayout Orientation="Horizontal"/>
+                        </Layout>
+                        <Children>
+
+                          <Text Name="Label3" Color="[NoFocusColor]" Font="[Font]" Content="hehe" Visible="false"/>
+                          <Text Name="Label" Color="[NoFocusColor]" Font="[Font]" MinimumSize="420, 0" MaximumSize="420, 0"/>
+                          <Text Name="Label2" Color="[NoFocusColor]" Font="[SmallFont]" Content="" Margins="35,7,0,0" HorizontalAlignment="Center"/>
+                        </Children>
+                      </Panel>
+                      <Graphic Name="LabelBackgroundGraphic" Content="[LabelBackground]" Visible="[ShowLabelBackground]" LayoutInput="[LabelBackgroundLayoutInput]" />
+                    </Children>
+                  </Panel>
+                </Children>
+              </Panel>
+
+              <!-- Highlight base -->
+              <Clip FadeSize="20" Layout="Fill">
+                <Children>
+
+                  <!-- Highlight -->
+                  <Graphic Name="Highlight" Content="[PressedImage]">
+                    <Animations>
+                      <!-- Button highlight -->
+                      <TransformByAttributeAnimation Name="Button.PressedHighlight.Show" Filter="Position" Attribute="Width" Magnitude="1.0">
+                        <Source>
+                          <Animation Type="Show">
+                            <Keyframes>
+                              <PositionKeyframe Time="0.00" Value="-1.0,0,0" RelativeTo="Final"/>
+                              <PositionKeyframe Time="0.10" Value="0.00,0,0" RelativeTo="Final"/>
+                              <PositionKeyframe Time="0.18" Value="0.35,0,0" RelativeTo="Final"/>
+                              <PositionKeyframe Time="0.35" Value="0.55,0,0" RelativeTo="Final"/>
+                              <PositionKeyframe Time="0.60" Value="1.25,0,0" RelativeTo="Final"/>
+                              <PositionKeyframe Time="0.70" Value="1.25,0,0" RelativeTo="Final"/>
+
+                              <AlphaKeyframe Time="0.00" Value="0.00" RelativeTo="Absolute"/>
+                              <AlphaKeyframe Time="0.05" Value="0.75" RelativeTo="Absolute"/>
+                              <AlphaKeyframe Time="0.17" Value="0.75" RelativeTo="Absolute"/>
+                              <AlphaKeyframe Time="0.40" Value="0.00" RelativeTo="Absolute"/>
+                            </Keyframes>
+                          </Animation>
+                        </Source>
+                      </TransformByAttributeAnimation>
+
+                      <!-- Button highlight - stop -->
+                      <TransformByAttributeAnimation Name="Button.PressedHighlight.Hide" Filter="Position" Attribute="Width" Magnitude="1.0">
+                        <Source>
+                          <Animation Type="Hide">
+                            <Keyframes>
+                              <PositionKeyframe Time="0.00" Value="0.0,0,0" RelativeTo="Current"/>
+                              <PositionKeyframe Time="0.10" Value="1.0,0,0" RelativeTo="Final"/>
+
+                              <AlphaKeyframe Time="0.00" RelativeTo="Current"/>
+                              <AlphaKeyframe Time="0.10" Value="0.0" RelativeTo="Absolute"/>
+                            </Keyframes>
+                          </Animation>
+                        </Source>
+                      </TransformByAttributeAnimation>
+                    </Animations>
+                  </Graphic>
+
+                </Children>
+              </Clip>
+
+              <!-- Focus overlay -->
+              <Graphic Name="FocusOverlay" Layout="Fill" Content="[FocusOverlayImage]">
+                <Animations>
+                  <!-- Button focus overlay pulse -->
+                  <Animation Name="Button.FocusOverlay.Idle" Loop="-1" Type="Idle">
+                    <Keyframes>
+                      <AlphaKeyframe Time="0.0" Value="0.0" Interpolation="SCurve" RelativeTo="Absolute"/>
+                      <AlphaKeyframe Time="1.5" Value="0.63" Interpolation="SCurve" RelativeTo="Absolute"/>
+                      <AlphaKeyframe Time="3.0" Value="0.0" RelativeTo="Absolute"/>
+                    </Keyframes>
+                  </Animation>
+
+                </Animations>
+              </Graphic>
+
+              <!-- Fill color -->
+              <ColorFill Name="Fill" Layout="Fill" Content="0,   0,   0,   0" MinimumSize="[TileSize]"/>
+
+              <!-- Background image -->
+              <Graphic Name="Background" Layout="Fill" Content="[NoFocusImage]" MinimumSize="[TileSize]">
+              </Graphic>
+
+            </Children>
+          </Panel>
+          <Text Margins="16,0,0,0" Name="RoleText" Visible="false" Font="Segoe Media Center Semibold,18" Color="255, 151, 217, 255"/>
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+
+  <UI Name="BaseIconFocusLoopContent">
+  </UI>
+  <!-- ListViewItem animations -->
+  <Animation Name="ListViewItem.NavigateToForward" Type="Show" CenterPointPercent="0.0, 0.5, 0.0">
+    <Keyframes>
+      <PositionKeyframe Time="0.0" Value="-60, 40, 0" RelativeTo="Final"/>
+      <PositionKeyframe Time="0.4" Value="-60, 40, 0" RelativeTo="Final" Interpolation="Log, 2.0"/>
+      <PositionKeyframe Time="0.6" Value="0, 0, 0" RelativeTo="Final"/>
+
+      <ScaleKeyframe Time="0.0" Value="0.8, 0.8, 1.0" RelativeTo="Final"/>
+      <ScaleKeyframe Time="0.4" Value="0.8, 0.8, 1.0" RelativeTo="Final" Interpolation="Log, 2.0"/>
+      <ScaleKeyframe Time="0.6" RelativeTo="Final"/>
+
+      <AlphaKeyframe Time="0.0" Value="0.0" RelativeTo="Absolute"/>
+      <AlphaKeyframe Time="0.4" Value="0.0" RelativeTo="Absolute" Interpolation="Log"/>
+      <AlphaKeyframe Time="0.6" RelativeTo="Final"/>
+    </Keyframes>
+  </Animation>
+  <Animation Name="ListViewItem.NavigateToBackward" Type="Show" CenterPointPercent="0.0, 0.5, 0.0">
+    <Keyframes>
+      <ScaleKeyframe Time="0.0" Value="1.2, 1.2, 1.0" RelativeTo="Final"/>
+      <ScaleKeyframe Time="0.2" Value="1.2, 1.2, 1.0" RelativeTo="Final" Interpolation="EaseIn, 2.0, 0.4"/>
+      <ScaleKeyframe Time="0.4" RelativeTo="Final"/>
+
+      <AlphaKeyframe Time="0.0" Value="0.0" RelativeTo="Absolute"/>
+      <AlphaKeyframe Time="0.2" Value="0.0" RelativeTo="Absolute" Interpolation="Log"/>
+      <AlphaKeyframe Time="0.4" RelativeTo="Final"/>
+    </Keyframes>
+  </Animation>
+  <Animation Name="ListViewItem.NavigateAwayForward" Type="Hide" CenterPointPercent="0.0, 0.5, 0.0">
+    <Keyframes>
+      <ScaleKeyframe Time="0.0" RelativeTo="Current" Interpolation="Log"/>
+      <ScaleKeyframe Time="0.2" Value="1.2, 1.2, 1.0" RelativeTo="Current"/>
+
+      <AlphaKeyframe Time="0.0" RelativeTo="Current" Interpolation="Log"/>
+      <AlphaKeyframe Time="0.2" Value="0.0" RelativeTo="Absolute"/>
+    </Keyframes>
+  </Animation>
+  <Animation Name="ListViewItem.NavigateAwayBackward" Type="Hide" CenterPointPercent="0.0, 0.5, 0.0">
+    <Keyframes>
+      <ScaleKeyframe Time="0.0" RelativeTo="Current" Interpolation="Log"/>
+      <ScaleKeyframe Time="0.2" Value="0.8, 0.8, 1.0" RelativeTo="Current"/>
+
+      <AlphaKeyframe Time="0.0" RelativeTo="Current" Interpolation="Log"/>
+      <AlphaKeyframe Time="0.2" Value="0.0" RelativeTo="Absolute"/>
+    </Keyframes>
+  </Animation>
+  <Animation Name="ListViewItem.Alpha.GainFocus.Slow" Type="Alpha">
+    <Keyframes>
+      <AlphaKeyframe Time="0.0" RelativeTo="Current"/>
+      <AlphaKeyframe Time="0.35" RelativeTo="Current" Interpolation="Log"/>
+      <AlphaKeyframe Time="0.7" RelativeTo="Final"/>
+    </Keyframes>
+  </Animation>
+  <Animation Name="ListViewItem.Alpha.GainFocus.Fast" Type="Alpha">
+    <Keyframes>
+      <AlphaKeyframe Time="0.0" RelativeTo="Current" Interpolation="Log"/>
+      <AlphaKeyframe Time="0.1" RelativeTo="Final"/>
+    </Keyframes>
+  </Animation>
+  <Animation Name="ListViewItem.Alpha.GainFocus.Mouse" Type="Alpha">
+    <Keyframes>
+      <AlphaKeyframe Time="0.0" RelativeTo="Current" Interpolation="Log"/>
+      <AlphaKeyframe Time="0.05" RelativeTo="Final"/>
+    </Keyframes>
+  </Animation>
+  <Animation Name="ListViewItem.Alpha.LoseFocus" Type="Alpha">
+    <Keyframes>
+      <AlphaKeyframe Time="0.0" RelativeTo="Current" Interpolation="Exp"/>
+      <AlphaKeyframe Time="0.1" RelativeTo="Final"/>
+    </Keyframes>
+  </Animation>
+  <Animation Name="ListViewItem.Move.GainFocus.Slow" Type="Move">
+    <Keyframes>
+      <PositionKeyframe Time="0.0" RelativeTo="Current"/>
+      <PositionKeyframe Time="0.35" RelativeTo="Current" Interpolation="Log"/>
+      <PositionKeyframe Time="0.7" RelativeTo="Final"/>
+    </Keyframes>
+  </Animation>
+  <Animation Name="ListViewItem.Move.GainFocus.Fast" Type="Move">
+    <Keyframes>
+      <PositionKeyframe Time="0.0" RelativeTo="Current" Interpolation="Log"/>
+      <PositionKeyframe Time="0.1" RelativeTo="Final"/>
+    </Keyframes>
+  </Animation>
+  <Animation Name="ListViewItem.Move.GainFocus.Mouse" Type="Move">
+    <Keyframes>
+      <PositionKeyframe Time="0.0" RelativeTo="Current" Interpolation="Log"/>
+      <PositionKeyframe Time="0.05" RelativeTo="Final"/>
+    </Keyframes>
+  </Animation>
+  <Animation Name="ListViewItem.Move.LoseFocus" Type="Move">
+    <Keyframes>
+      <PositionKeyframe Time="0.0" RelativeTo="Current" Interpolation="Exp"/>
+      <PositionKeyframe Time="0.1" RelativeTo="Final"/>
+    </Keyframes>
+  </Animation>
+  <Animation Name="ListViewItem.Size.GainFocus.Slow" Type="Size">
+    <Keyframes>
+      <SizeKeyframe Time="0.0" RelativeTo="Current"/>
+      <SizeKeyframe Time="0.35" RelativeTo="Current" Interpolation="EaseIn, 1.0, 0.3"/>
+      <SizeKeyframe Time="0.7" RelativeTo="Final"/>
+    </Keyframes>
+  </Animation>
+  <Animation Name="ListViewItem.Size.GainFocus.Fast" Type="Size">
+    <Keyframes>
+      <SizeKeyframe Time="0.0" RelativeTo="Current" Interpolation="Log"/>
+      <SizeKeyframe Time="0.1" RelativeTo="Final"/>
+    </Keyframes>
+  </Animation>
+  <Animation Name="ListViewItem.Size.GainFocus.Mouse" Type="Size">
+    <Keyframes>
+      <SizeKeyframe Time="0.0" RelativeTo="Current" Interpolation="Log"/>
+      <SizeKeyframe Time="0.05" RelativeTo="Final"/>
+    </Keyframes>
+  </Animation>
+  <Animation Name="ListViewItem.Size.LoseFocus" Type="Size">
+    <Keyframes>
+      <SizeKeyframe Time="0.0" RelativeTo="Current" Interpolation="Exp"/>
+      <SizeKeyframe Time="0.1" RelativeTo="Final"/>
+    </Keyframes>
+  </Animation>
+  <Animation Name="ListViewItem.Text.Scale.GainFocus.Slow" Type="Scale" CenterPointPercent="0.0, 0.5, 0.0">
+    <Keyframes>
+      <ScaleKeyframe Time="0.0" RelativeTo="Current"/>
+      <ScaleKeyframe Time="0.35" RelativeTo="Current" Interpolation="EaseIn, 1.0, 0.3"/>
+      <ScaleKeyframe Time="0.7" RelativeTo="Final"/>
+    </Keyframes>
+  </Animation>
+  <Animation Name="ListViewItem.Text.Scale.GainFocus.Fast" Type="Scale" CenterPointPercent="0.0, 0.5, 0.0">
+    <Keyframes>
+      <ScaleKeyframe Time="0.0" RelativeTo="Current" Interpolation="Log"/>
+      <ScaleKeyframe Time="0.1" RelativeTo="Final"/>
+    </Keyframes>
+  </Animation>
+  <Animation Name="ListViewItem.Text.Scale.GainFocus.Mouse" Type="Scale" CenterPointPercent="0.0, 0.5, 0.0">
+    <Keyframes>
+      <ScaleKeyframe Time="0.0" RelativeTo="Current" Interpolation="Log"/>
+      <ScaleKeyframe Time="0.05" RelativeTo="Final"/>
+    </Keyframes>
+  </Animation>
+  <Animation Name="ListViewItem.Text.Scale.LoseFocus" Type="Scale" CenterPointPercent="0.0, 0.5, 0.0">
+    <Keyframes>
+      <ScaleKeyframe Time="0.0" RelativeTo="Current" Interpolation="Exp"/>
+      <ScaleKeyframe Time="0.1" RelativeTo="Final"/>
+    </Keyframes>
+  </Animation>
+  <Animation Name="ListViewItem.Thumb.Scale.GainFocus.Slow" Type="Scale" CenterPointPercent="1.0, 0.5, 0.0">
+    <Keyframes>
+      <ScaleKeyframe Time="0.0" RelativeTo="Current"/>
+      <ScaleKeyframe Time="0.35" RelativeTo="Current" Interpolation="EaseIn, 1.0, 0.3"/>
+      <ScaleKeyframe Time="0.75" RelativeTo="Final"/>
+    </Keyframes>
+  </Animation>
+  <Animation Name="ListViewItem.Thumb.Scale.GainFocus.Fast" Type="Scale" CenterPointPercent="1.0, 0.5, 0.0">
+    <Keyframes>
+      <ScaleKeyframe Time="0.0" RelativeTo="Current" Interpolation="Log"/>
+      <ScaleKeyframe Time="0.1" RelativeTo="Final"/>
+    </Keyframes>
+  </Animation>
+  <Animation Name="ListViewItem.Thumb.Scale.GainFocus.Mouse" Type="Scale" CenterPointPercent="1.0, 0.5, 0.0">
+    <Keyframes>
+      <ScaleKeyframe Time="0.0" RelativeTo="Current" Interpolation="Log"/>
+      <ScaleKeyframe Time="0.05" RelativeTo="Final"/>
+    </Keyframes>
+  </Animation>
+  <Animation Name="ListViewItem.Thumb.Scale.LoseFocus" Type="Scale" CenterPointPercent="1.0, 0.5, 0.0">
+    <Keyframes>
+      <ScaleKeyframe Time="0.0" RelativeTo="Current" Interpolation="Exp"/>
+      <ScaleKeyframe Time="0.1" RelativeTo="Final"/>
+    </Keyframes>
+  </Animation>
+  <Animation Name="ListViewItem.Color.GainFocus.Slow.Show" Type="ContentChangeShow">
+    <Keyframes>
+      <AlphaKeyframe Time="0.0" Value="0" RelativeTo="Absolute"/>
+      <AlphaKeyframe Time="0.35" Value="0" RelativeTo="Absolute" Interpolation="Log"/>
+      <AlphaKeyframe Time="0.7" Value="1" RelativeTo="Absolute"/>
+    </Keyframes>
+  </Animation>
+  <Animation Name="ListViewItem.Color.GainFocus.Slow.Hide" Type="ContentChangeHide">
+    <Keyframes>
+      <AlphaKeyframe Time="0.0" RelativeTo="Current"/>
+      <AlphaKeyframe Time="0.35" RelativeTo="Current" Interpolation="Exp"/>
+      <AlphaKeyframe Time="0.7" Value="0" RelativeTo="Absolute"/>
+    </Keyframes>
+  </Animation>
+  <Animation Name="ListViewItem.Color.GainFocus.Fast.Show" Type="ContentChangeShow">
+    <Keyframes>
+      <AlphaKeyframe Time="0.0" Value="0" RelativeTo="Absolute" Interpolation="Log"/>
+      <AlphaKeyframe Time="0.1" Value="1" RelativeTo="Absolute"/>
+    </Keyframes>
+  </Animation>
+  <Animation Name="ListViewItem.Color.GainFocus.Fast.Hide" Type="ContentChangeHide">
+    <Keyframes>
+      <AlphaKeyframe Time="0.0" RelativeTo="Current" Interpolation="Exp"/>
+      <AlphaKeyframe Time="0.1" Value="0" RelativeTo="Absolute"/>
+    </Keyframes>
+  </Animation>
+  <Animation Name="ListViewItem.Color.GainFocus.Mouse.Show" Type="ContentChangeShow">
+    <Keyframes>
+      <AlphaKeyframe Time="0.0" Value="0" RelativeTo="Absolute" Interpolation="Log"/>
+      <AlphaKeyframe Time="0.05" Value="1" RelativeTo="Absolute"/>
+    </Keyframes>
+  </Animation>
+  <Animation Name="ListViewItem.Color.GainFocus.Mouse.Hide" Type="ContentChangeHide">
+    <Keyframes>
+      <AlphaKeyframe Time="0.0" RelativeTo="Current" Interpolation="Exp"/>
+      <AlphaKeyframe Time="0.05" RelativeTo="Final"/>
+    </Keyframes>
+  </Animation>
+  <Animation Name="ListViewItem.Color.LoseFocus.Show" Type="ContentChangeShow">
+    <Keyframes>
+      <AlphaKeyframe Time="0.0" RelativeTo="Current" Interpolation="Log"/>
+      <AlphaKeyframe Time="0.1" Value="1" RelativeTo="Absolute"/>
+    </Keyframes>
+  </Animation>
+  <Animation Name="ListViewItem.Color.LoseFocus.Hide" Type="ContentChangeHide">
+    <Keyframes>
+      <AlphaKeyframe Time="0.0" RelativeTo="Current" Interpolation="Exp"/>
+      <AlphaKeyframe Time="0.1" Value="0" RelativeTo="Absolute"/>
+    </Keyframes>
+  </Animation>
+  <Animation Name="ListViewItem.Move" Type="Move">
+    <Keyframes>
+      <PositionKeyframe Time="0.0" RelativeTo="Current" Interpolation="EaseIn, 1.5, 0.5"/>
+      <PositionKeyframe Time="0.7" RelativeTo="Final"/>
+    </Keyframes>
+  </Animation>
+  <Animation Name="ListViewItem.Press" Type="Idle" CenterPointPercent="0.5, 0.5, 0.0">
+    <Keyframes>
+      <ScaleKeyframe Time="0.0" RelativeTo="Current" Interpolation="Log"/>
+      <ScaleKeyframe Time="0.1" Value="0.9, 0.9, 1.0" RelativeTo="Final"/>
+    </Keyframes>
+  </Animation>
+  <Animation Name="ListViewItem.Release" Type="Idle" CenterPointPercent="0.5, 0.5, 0.0">
+    <Keyframes>
+      <ScaleKeyframe Time="0.0" RelativeTo="Current" Interpolation="Exp"/>
+      <ScaleKeyframe Time="0.1" Value="1.0, 1.0, 1.0" RelativeTo="Final"/>
+    </Keyframes>
+  </Animation>
+  <Animation Name="ListViewItem.Select" Type="Hide" CenterPointPercent="0.0, 0.5, 0.0">
+    <Keyframes>
+      <ScaleKeyframe Time="0.0" RelativeTo="Current" Interpolation="Exp"/>
+      <ScaleKeyframe Time="0.233" Value="2.0, 2.0, 1.0" RelativeTo="Absolute"/>
+
+      <AlphaKeyframe Time="0.0" RelativeTo="Current"/>
+      <AlphaKeyframe Time="0.233" Value="0.0" RelativeTo="Absolute"/>
+    </Keyframes>
+  </Animation>
+  <Animation Name="ListViewItem.SelectorFrame.Show.Slow" Type="Show">
+    <Keyframes>
+      <AlphaKeyframe Time="0.0" Value="0.0" RelativeTo="Absolute"/>
+      <AlphaKeyframe Time="0.5" Value="0.0" RelativeTo="Absolute" Interpolation="Log"/>
+      <AlphaKeyframe Time="0.75" RelativeTo="Final"/>
+    </Keyframes>
+  </Animation>
+  <Animation Name="ListViewItem.SelectorFrame.Show.Fast" Type="Show">
+    <Keyframes>
+      <AlphaKeyframe Time="0.0" Value="0.0" RelativeTo="Absolute" Interpolation="Log"/>
+      <AlphaKeyframe Time="0.1" RelativeTo="Final"/>
+    </Keyframes>
+  </Animation>
+  <Animation Name="ListViewItem.SelectorFrame.Show.Mouse" Type="Show">
+    <Keyframes>
+      <AlphaKeyframe Time="0.0" Value="0.0" RelativeTo="Absolute" Interpolation="Log"/>
+      <AlphaKeyframe Time="0.05" RelativeTo="Final"/>
+    </Keyframes>
+  </Animation>
+  <Animation Name="ListViewItem.SelectorFrame.Hide" Type="Hide">
+    <Keyframes>
+      <AlphaKeyframe Time="0.0" RelativeTo="Current" Interpolation="Log"/>
+      <AlphaKeyframe Time="0.1" Value="0.0" RelativeTo="Absolute"/>
+    </Keyframes>
+  </Animation>
+</Mcml>

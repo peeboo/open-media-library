@@ -1,0 +1,1762 @@
+<Mcml
+    xmlns     ="http://schemas.microsoft.com/2006/mcml"
+    xmlns:cor ="assembly://MsCorLib/System"
+    xmlns:coll="assembly://MsCorLib/System.Collections"
+    xmlns:util="assembly://Microsoft.MediaCenter.UI/Microsoft.MediaCenter.UI.Utility"
+    xmlns:shel ="assembly://Library/Library.Code.V3"
+    xmlns:comm="resx://Library/Library.Resources/V3_Globals"
+    xmlns:focus="resx://Library/Library.Resources/V3_Controls_FocusAnimation"
+    xmlns:omlShell ="assembly://Library/Library"
+    xmlns:me="Me">
+  <!-- xmlns:comm="res://Microsoft.MediaCenter.Shell!Globals.mcml"
+    xmlns:b   ="res://Microsoft.MediaCenter.Shell!Button.mcml" -->
+  <Image Name="Browse.Selector" Source="resx://Library/Library.Resources/V3_Controls_Common_Browse_Selector" NineGrid="9, 9, 9, 9"/>
+  <UI Name="testListViewItem">
+    <Locals>
+      <ArrayListDataSet Name="List">
+        <Source>
+          <cor:String String="X"/>
+          <cor:String String="X"/>
+          <cor:String String="B"/>
+          <cor:String String="C"/>
+          <cor:String String="X"/>
+          <cor:String String="X"/>
+          <cor:String String="B"/>
+          <cor:String String="C"/>
+          <cor:String String="X"/>
+          <cor:String String="X"/>
+          <cor:String String="B"/>
+          <cor:String String="C"/>
+          <cor:String String="X"/>
+          <cor:String String="X"/>
+          <cor:String String="B"/>
+          <cor:String String="C"/>
+          <cor:String String="X"/>
+          <cor:String String="X"/>
+          <cor:String String="B"/>
+          <cor:String String="C"/>
+          <cor:String String="X"/>
+          <cor:String String="X"/>
+          <cor:String String="B"/>
+          <cor:String String="C"/>
+          <cor:String String="X"/>
+          <cor:String String="X"/>
+          <cor:String String="B"/>
+          <cor:String String="C"/>
+          <cor:String String="X"/>
+          <cor:String String="X"/>
+          <cor:String String="B"/>
+          <cor:String String="C"/>
+          <cor:String String="X"/>
+          <cor:String String="X"/>
+          <cor:String String="B"/>
+          <cor:String String="C"/>
+          <cor:String String="X"/>
+          <cor:String String="X"/>
+          <cor:String String="B"/>
+          <cor:String String="C"/>
+          <cor:String String="X"/>
+          <cor:String String="X"/>
+          <cor:String String="B"/>
+          <cor:String String="C"/>
+          <cor:String String="X"/>
+          <cor:String String="X"/>
+          <cor:String String="B"/>
+          <cor:String String="C"/>
+        </Source>
+      </ArrayListDataSet>
+    </Locals>
+
+    <Content>
+      <Panel>
+        <Children>
+          <!--Text Content="hi"></Text-->
+          <Panel>
+            <Children>
+              <!-- The Scroller -->
+              <Scroller Orientation="Vertical">
+                <Layout>
+                  <FlowLayout AllowWrap="true" Repeat="Always" FillStrip="true" Orientation="Horizontal"/>
+                </Layout>
+                <Children>
+                  <Repeater Name="ListRepeater" Source="[List]" Layout="VerticalFlow">
+                    <Layout>
+                      <FlowLayout AllowWrap="true" Repeat="Never"/>
+                    </Layout>
+                    <Content>
+                      <!-- The item to repeat -->
+                      <me:ScrollingList Content="[RepeatedItem!cor:String]">
+                        <ScrollingData>
+                          <ScrollingData/>
+                        </ScrollingData>
+                      </me:ScrollingList>
+
+                    </Content>
+                  </Repeater>
+
+                </Children>
+              </Scroller>
+            </Children>
+          </Panel>
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+
+  <UI Name="ScrollingList">
+
+    <Properties>
+      <ArrayListDataSet Name="Content" ArrayListDataSet="$Required"/>
+      <ScrollingData Name="ScrollingData" ScrollingData="$Required"/>
+      <PropertySet Description="desc" Name="MyPropertySet">
+        <Entries>
+          <IntRangedValue Name="SelectedIndex"></IntRangedValue>
+          <IntRangedValue Name="TotalCount"></IntRangedValue>
+          <EditableText Name="TransitionState"></EditableText>
+          <EditableText Name="ItemMode"></EditableText>
+          <EditableText Name="KeyAxis"></EditableText>
+          <EditableText Name="FocusArea"></EditableText>
+        </Entries>
+      </PropertySet>
+    </Properties>
+
+    <Locals>
+      <ScrollingHandler Name="ScrollingHandler" ScrollingData="[ScrollingData]"/>
+      <Command Name="MyCommand" Description="this is a test" />
+    </Locals>
+
+    <Rules>
+      <!--Default Target="[bbb.Visible]" Value="true"/-->
+      <Default Target="[ScrollingHandler.ScrollingData]" Value="[ScrollingData]"/>
+      <Default Target="[ScrollingData.Repeater]" Value="[ListRepeater]"/>
+    </Rules>
+
+    <Content>
+
+      <!-- The Scroller -->
+      <Scroller Orientation="Vertical" ScrollingData="[ScrollingData]" Layout="VerticalFlow">
+        <Children>
+          <Repeater Name="ListRepeater" Source="[Content]" Layout="VerticalFlow">
+            <Layout>
+              <GridLayout Orientation="Vertical" AllowWrap="false"
+                          Spacing="5,5" Columns="1"/>
+            </Layout>
+            <Content>
+              <me:ListViewItem Application="null" Model="[MyCommand]" Index="[RepeatedItemIndex]" ItemProperties="[MyPropertySet]"/>
+            </Content>
+          </Repeater>
+        </Children>
+      </Scroller>
+
+    </Content>
+  </UI>
+
+  <UI Name="ListViewItem">
+    <Properties>
+      <!-- new -->
+      <omlShell:OMLApplication Name="Application" OMLApplication="$Required"/>
+      <shel:GalleryPage Name="Page"/>
+      <!--shel:ISelectionPolicy Name="SelectionPolicy"/-->
+      <PropertySet      Name="GroupProperties"/>
+      <!-- end new -->
+      <ICommand         Name="Model"           ICommand="$Required"/>
+      <!--shel:ISelectionPolicy Name="SelectionPolicy" ISelectionPolicy="$Required"/-->
+      <Index            Name="Index"           Index="$Required"/>
+      <PropertySet      Name="ItemProperties"  PropertySet="$Required"/>
+
+      <IntRangedValue   Name="SelectedGroup"/>
+      <cor:Int32        Name="Group"/>
+
+      <AnchorLayoutInput Name="LabelBackgroundLayoutInput" ContributesToWidth="false" ContributesToHeight="false"
+                         Left="Label, 0, -8" Top="Label, 0, -4" Right="Label, 1, 8" Bottom="Label, 1, 4"/>
+
+      <DockLayoutInput Name="LeftContentLayoutInput"  Position="Left" Alignment="Center"/>
+      <DockLayoutInput Name="LabelContentLayoutInput" Position="Left" Alignment="Center"/>
+      <DockLayoutInput Name="RightContentLayoutInput" Position="Left" Alignment="Center"/>
+
+      <!-- How should the focus be handled - current values: Text, Thumbnail -->
+      <cor:String Name="FocusStyle" String="Text"/>
+
+      <Size    Name="TileSize"          Size="462, 63"/>
+      <!--Size    Name="TileSize"          Size="462, 56"/-->
+
+      <!--Color   Name="NoFocusColor"      Color="color://comm:LightBlue"/-->
+      <Color   Name="NoFocusColor"      Color="color://comm:LightBlue"/>
+      <Color   Name="FocusColor"        Color="color://comm:OffWhite"/>
+      <Color   Name="DisabledColor"     Color="color://comm:LightBlue40Percent"/>
+
+      <Inset   Name="TilePadding"       Inset="0, 0, 0, 0"/>
+      <Inset   Name="TileMargins"       Inset="0, 0, 0, 0"/>
+      <Inset   Name="LabelMargins"      Inset="0, 0, 0, 0"/>
+      <Inset   Name="FocusLabelMargins" Inset="-18, 0, 18, 0"/>
+
+      <Size    Name="LabelSize"         Size="420, 0"/>
+      <Size    Name="FocusLabelSize"    Size="420, 0"/>
+
+      <cor:Single  Name="NoFocusAlpha"  Single="0.6"/>
+      <cor:Single  Name="FocusAlpha"	  Single="1.0"/>
+      <Vector3     Name="NoFocusScale"  Vector3="1.0, 1.0, 1.0"/>
+      <Vector3     Name="FocusScale"    Vector3="1.16, 1.16, 1.0"/>
+
+      <Font Name="LabelFont" FontName="global://comm:MainFontFace" FontSize="24"/>
+
+      <cor:Boolean Name="AllowSelectAnimation"  Boolean="false"/>
+
+      <cor:Boolean Name="UseFullBackground" Boolean="false"/>
+      <!--Image   Name="LabelBackground"       Image="null"/>
+            <Image   Name="LabelBackgroundFocus"  Image="null"/>
+            <Image   Name="FullBackground"        Image="null"/>
+            <Image   Name="FullBackgroundFocus"   Image="null"/-->
+
+      <cor:String Name="LeftContentTemplate"  String="null"/>
+      <cor:String Name="RightContentTemplate" String="null"/>
+
+      <!--shel:ImageSet Name="LabelBackgroundImageSet" ImageSet="global://comm:Button.Label.Background"/-->
+
+      <Image   Name="LabelBackground"       Image="null"/>
+      <Image   Name="LabelBackgroundFocus"  Image="null"/>
+      <Image   Name="FullBackground"        Image="null"/>
+      <Image   Name="FullBackgroundFocus"   Image="null"/>
+
+      <!--AccessibleRole Name="AccessibilityRole"  AccessibleRole="ListItem"/-->
+      <cor:Int32   Name="ItemMetaDataTopOffset"    Int32="-5"/>
+      <cor:Int32   Name="ItemMetaDataLeftOffset"   Int32="0"/>
+    </Properties>
+
+    <Locals>
+      <Environment Name="Environment"/>
+
+      <IntRangedValue   Name="SelectedIndex"   IntRangedValue="[ItemProperties.#SelectedIndex!IntRangedValue]"/>
+      <IntRangedValue   Name="TotalCount"      IntRangedValue="[ItemProperties.#TotalCount!IntRangedValue]"/>
+      <EditableText     Name="TransitionState" EditableText="[ItemProperties.#TransitionState!EditableText]"/>
+      <EditableText     Name="ItemMode"        EditableText="[ItemProperties.#ItemMode!EditableText]"/>
+      <EditableText     Name="KeyAxis"         EditableText="[ItemProperties.#KeyAxis!EditableText]"/>
+      <EditableText     Name="FocusArea"       EditableText="[ItemProperties.#FocusArea!EditableText]"/>
+      <IntRangedValue   Name="MetaDataTopShift"    IntRangedValue="[ItemProperties.#MetaDataTopShift!IntRangedValue]"/>
+      <IntRangedValue   Name="MetaDataLeftShift"   IntRangedValue="[ItemProperties.#MetaDataLeftShift!IntRangedValue]"/>
+
+      <ClickHandler Name="Clicker"/>
+      <shel:AreaOfInterestLayoutInput Name="AreaOfInterest" Id="InitialFocus"/>
+
+
+      <KeyHandler Name="LeftKey"  Key="Left"   HandlerStage="Routed"/>
+      <KeyHandler Name="RightKey" Key="Right" HandlerStage="Routed"/>
+      <KeyHandler Name="UpKey"    Key="Up"   HandlerStage="Routed"/>
+      <KeyHandler Name="DownKey"  Key="Down" HandlerStage="Routed"/>
+
+      <cor:Boolean  Name="IsFocused" Boolean="false"/>
+      <cor:String   Name="FocusAnimationSpeed" String="slow"/>
+
+      <cor:Int32    Name="WrappedIndex"/>
+      <shel:WrappedIndexTransformer Name="IndexTransformer"/>
+
+      <cor:Int32       Name="OffsetIndex" Int32="0"/>
+      <MathTransformer Name="OffsetCalc" Absolute="true"/>
+
+      <Command      Name="Selected"/>
+      <Command      Name="Trigger"/>
+      <Command      Name="Reset"/>
+      <EditableText Name="LocalMode" Value="None"/>
+      <cor:Object   Name="InvokeReturned"/>
+
+      <!-- There are 4 of these because sharing one and changing the Source and attaching them doesn't work as expected -->
+      <TransformAnimation Name="TransitionToForward" Source="animation://comm:ListViewItem.NavigateToForward"/>
+      <TransformAnimation Name="TransitionToBackward" Source="animation://comm:ListViewItem.NavigateToBackward"/>
+      <TransformAnimation Name="TransitionAwayForward"  Source="animation://comm:ListViewItem.NavigateAwayForward"/>
+      <TransformAnimation Name="TransitionAwayBackward" Source="animation://comm:ListViewItem.NavigateAwayBackward"/>
+
+      <!-- Context Menu view description -->
+      <!--shel:ContextualUIDescription Name="ContextualUIDescription" Source="@res://Microsoft.MediaCenter.Shell!ContextMenu.mcml#ListViewItem.ContextualView"/-->
+    </Locals>
+
+    <Rules>
+      <!-- Sets the value to update the MetaData Left alignment.  -->
+      <Default Target="[MetaDataLeftShift.Value]" Value="[ItemMetaDataLeftOffset]"/>
+
+      <!-- Sets the value to update the MetaData Top alignment.  -->
+      <Default Target="[MetaDataTopShift.Value]" Value="[ItemMetaDataTopOffset]"/>
+      
+      <!-- calculate the wrapped index so the column and row calculations will work consistently -->
+      <Binding Target="[IndexTransformer.Count]" Source="[TotalCount.Value]"/>
+      <Binding Target="[WrappedIndex]" Source="[Index.Value]" Transformer="[IndexTransformer]"/>
+
+      <!-- Set the shared selected index tracker -->
+      <Condition Source="[Input.KeyFocus]" SourceValue="true"
+                 Target="[SelectedIndex.Value]" Value="[Index.Value]"/>
+
+      <!-- Keep the relative-to-the-focused-group offset value accurate -->
+      <Changed Source="[SelectedIndex.Value]" InitialEvaluate="true">
+        <Actions>
+          <Set Target="[OffsetCalc.SubtractInt]" Value="[SelectedIndex.Value]"/>
+          <Set Target="[OffsetIndex]" Value="[Index.Value]" Transformer="[OffsetCalc]"/>
+        </Actions>
+      </Changed>
+
+      <!-- start from a known state -->
+      <Rule ConditionLogicalOp="Or">
+        <Conditions>
+          <Equality Source="[TransitionState.Value]" Value="NavigatingToForward"/>
+          <Equality Source="[TransitionState.Value]" Value="NavigatingToBackward"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[LocalMode.Value]" Value="None" ExclusiveApply="false"/>
+          <Set Target="[LabelPanel.Scale]" Value="[NoFocusScale]" ExclusiveApply="false"/>
+        </Actions>
+      </Rule>
+
+      <!-- Two things can cause this item to present the visually focused state - OR them together -->
+      <Rule ConditionLogicalOp="Or">
+        <Conditions>
+          <Equality Source="[Input.KeyFocus]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[IsFocused]" Value="true"/>
+        </Actions>
+      </Rule>
+      <Rule ConditionLogicalOp="Or">
+        <Conditions>
+          <Equality Source="[LocalMode.Value]" Value="Select"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[IsFocused]" Value="true"/>
+        </Actions>
+      </Rule>
+      <Default Target="[IsFocused]" Value="false"/>
+
+      <!-- Set up and attach the appropriate transition animation -->
+      <Condition Source="[TransitionState.Value]" SourceValue="NavigatingToForward">
+        <Actions>
+          <Set Target="[TransitionToForward.Delay]" Value="[OffsetIndex]">
+            <Transformer>
+              <MathTransformer Multiply="0.02" Absolute="true" Type="Single"/>
+            </Transformer>
+          </Set>
+          <Invoke Target="[Root.AttachAnimation]" animation="[TransitionToForward]" InvokePolicy="Synchronous"/>
+          <Invoke Target="[MousePanel.DetachAnimation]" type="Hide" InvokePolicy="Synchronous"/>
+          <Invoke Target="[LabelPanel.DetachAnimation]" type="Hide" InvokePolicy="Synchronous"/>
+        </Actions>
+      </Condition>
+      <Condition Source="[TransitionState.Value]" SourceValue="NavigatingToBackward">
+        <Actions>
+          <Set Target="[TransitionToBackward.Delay]" Value="[OffsetIndex]">
+            <Transformer>
+              <MathTransformer Multiply="0.01" Absolute="true" Type="Single"/>
+            </Transformer>
+          </Set>
+          <Invoke Target="[Root.AttachAnimation]" animation="[TransitionToBackward]" InvokePolicy="Synchronous"/>
+          <Invoke Target="[MousePanel.DetachAnimation]" type="Hide" InvokePolicy="Synchronous"/>
+          <Invoke Target="[LabelPanel.DetachAnimation]" type="Hide" InvokePolicy="Synchronous"/>
+        </Actions>
+      </Condition>
+      <!-- Attach the away animation when not the selected item -->
+      <Rule>
+        <Conditions>
+          <Equality Source="[TransitionState.Value]" Value="NavigatingAwayForward"/>
+          <Equality Source="[IsFocused]" Value="false"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[TransitionAwayForward.Delay]" Value="[OffsetIndex]">
+            <Transformer>
+              <MathTransformer Multiply="0.01" Absolute="true" Type="Single"/>
+            </Transformer>
+          </Set>
+          <Invoke Target="[Root.AttachAnimation]" animation="[TransitionAwayForward]" InvokePolicy="Synchronous"/>
+          <Invoke Target="[MousePanel.DetachAnimation]" type="Hide" InvokePolicy="Synchronous"/>
+          <Invoke Target="[LabelPanel.DetachAnimation]" type="Hide" InvokePolicy="Synchronous"/>
+        </Actions>
+      </Rule>
+      <Condition Source="[TransitionState.Value]" SourceValue="NavigatingAwayBackward">
+        <Actions>
+          <Set Target="[TransitionAwayBackward.Delay]" Value="[OffsetIndex]">
+            <Transformer>
+              <MathTransformer Multiply="0.01" Absolute="true" Type="Single"/>
+            </Transformer>
+          </Set>
+          <Invoke Target="[Root.AttachAnimation]" animation="[TransitionAwayBackward]" InvokePolicy="Synchronous"/>
+          <Invoke Target="[MousePanel.DetachAnimation]" type="Hide" InvokePolicy="Synchronous"/>
+          <Invoke Target="[LabelPanel.DetachAnimation]" type="Hide" InvokePolicy="Synchronous"/>
+        </Actions>
+      </Condition>
+
+      <!-- The item is being clicked via key or mouse, Apply the pressed look -->
+      <Rule>
+        <Conditions>
+          <Equality Source="[Clicker.Clicking]" Value="true"/>
+          <Equality Source="[Input.KeyFocus]" Value="true"/>
+          <Equality Source="[AllowSelectAnimation]" Value="false"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[LocalMode.Value]" Value="Press" ExclusiveApply="false"/>
+        </Actions>
+      </Rule>
+
+      <!-- The mouse is moved away from the item - release the pressed look -->
+      <Rule>
+        <Conditions>
+          <Equality Source="[Clicker.Clicking]" Value="false"/>
+          <Equality Source="[LocalMode.Value]" Value="Press"/>
+          <Equality Source="[AllowSelectAnimation]" Value="false"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[LocalMode.Value]" Value="Release" ExclusiveApply="false"/>
+        </Actions>
+      </Rule>
+
+      <!-- The click is released inside the item - invoke the item -->
+      <Rule>
+        <Conditions>
+          <Modified Source="[Selected.Invoked]"/>
+          <Equality Source="[AllowSelectAnimation]" Value="false"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[LocalMode.Value]" Value="Select" ExclusiveApply="false"/>
+        </Actions>
+      </Rule>
+
+      <!-- Play the item-has-been-pressed animation -->
+      <Rule>
+        <Conditions>
+          <Equality Source="[LocalMode.Value]" Value="Press"/>
+          <Equality Source="[FocusStyle]" Value="Text"/>
+        </Conditions>
+        <Actions>
+          <PlayAnimation Target="[MousePanel]" Animation="animation://comm:ListViewItem.Press" ExclusiveApply="false"/>
+          <Set Target="[ItemMode.Value]" Value="[LocalMode.Value]"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Equality Source="[LocalMode.Value]" Value="Press"/>
+          <Equality Source="[FocusStyle]" Value="Thumbnail"/>
+        </Conditions>
+        <Actions>
+          <PlayAnimation Target="[LeftContentHost]" Animation="animation://comm:ListViewItem.Press"/>
+          <Set Target="[ItemMode.Value]" Value="[LocalMode.Value]"/>
+        </Actions>
+      </Rule>
+
+      <!-- Play the item-has-been-released animation -->
+      <Rule>
+        <Conditions>
+          <Equality Source="[LocalMode.Value]" Value="Release"/>
+          <Equality Source="[FocusStyle]" Value="Text"/>
+        </Conditions>
+        <Actions>
+          <PlayAnimation Target="[MousePanel]" Animation="animation://comm:ListViewItem.Release" ExclusiveApply="false"/>
+          <Set Target="[ItemMode.Value]" Value="[LocalMode.Value]"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Equality Source="[LocalMode.Value]" Value="Release"/>
+          <Equality Source="[FocusStyle]" Value="Thumbnail"/>
+        </Conditions>
+        <Actions>
+          <PlayAnimation Target="[LeftContentHost]" Animation="animation://comm:ListViewItem.Release"/>
+          <Set Target="[ItemMode.Value]" Value="[LocalMode.Value]"/>
+        </Actions>
+      </Rule>
+
+      <!-- The item has been selected, set up the appropriate visual reaction -->
+      <Rule>
+        <Conditions>
+          <Equality Source="[LocalMode.Value]" Value="Select"/>
+          <Equality Source="[FocusStyle]" Value="Text"/>
+        </Conditions>
+        <Actions>
+          <PlayAnimation Target="[MousePanel]" Animation="animation://comm:ListViewItem.Release"/>
+          <Invoke Target="[MousePanel.AttachAnimation]" animation="animation://comm:ListViewItem.Select" ExclusiveApply="false"/>
+          <Set Target="[ItemMode.Value]" Value="[LocalMode.Value]"/>
+          <Invoke Target="[Trigger.Invoke]" InvokePolicy="AsynchronousLowPri"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Equality Source="[LocalMode.Value]" Value="Select"/>
+          <Equality Source="[FocusStyle]" Value="Thumbnail"/>
+        </Conditions>
+        <Actions>
+          <PlayAnimation Target="[LeftContentHost]" Animation="animation://comm:ListViewItem.Release"/>
+          <Invoke Target="[Root.AttachAnimation]" animation="animation://comm:ListViewItem.Select" ExclusiveApply="false"/>
+          <Invoke Target="[MousePanel.DetachAnimation]" type="Hide" InvokePolicy="Synchronous"/>
+          <Invoke Target="[Label.DetachAnimation]" type="ContentChangeShow" InvokePolicy="Synchronous"/>
+          <Invoke Target="[Label.DetachAnimation]" type="ContentChangeHide" InvokePolicy="Synchronous"/>
+          <Set Target="[ItemMode.Value]" Value="[LocalMode.Value]"/>
+          <Invoke Target="[Trigger.Invoke]" InvokePolicy="AsynchronousLowPri"/>
+        </Actions>
+      </Rule>
+
+      <!-- The item has been triggered, so tell the model.  this is seperate from the previous rule because of the Synchronous settings
+                 which create animation delays when put all in one rule.  the double command invocation allows the animations to get
+                 started before invoking the model -->
+      <Changed Source="[Trigger.Invoked]">
+        <Actions>
+          <Invoke Target="[Model!Command.Invoke]" ResultTarget="[InvokeReturned]" invokePolicy="Synchronous" InvokePolicy="Synchronous"/>
+        </Actions>
+      </Changed>
+
+      <!-- pass the click through if this is a ListMaker item -->
+      <Rule>
+        <Conditions>
+          <Modified Source="[Selected.Invoked]"/>
+          <Equality Source="[AllowSelectAnimation]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <PlayAnimation Target="[Root]" Animation="animation://comm:ListViewItem.Release"/>
+          <Set Target="[ItemMode.Value]" Value="Release"/>
+          <Invoke Target="[Model!ICommand.Invoke]"/>
+        </Actions>
+      </Rule>
+
+      <!-- Accessibility -->
+      <Binding Target="[Accessible.IsPressed]"            Source="[Clicker.Clicking]"/>
+      <Binding Target="[Accessible.IsFocusable]"          Source="[Input.KeyInteractive]"/>
+      <Binding Target="[Accessible.IsFocused]"            Source="[Input.KeyFocus]"/>
+      <Binding Target="[Accessible.Name]"                 Source="[Model.Description]"/>
+      <Default Target="[Accessible.DefaultActionCommand]" Value="[Model]"/>
+      <!--Default Target="[Accessible.DefaultAction]"        Value="res://ehres!Acc_DefaultAction_Button"/-->
+      <!--Default Target="[Accessible.Role]"                 Value="[AccessibilityRole]"/-->
+
+      <!-- connect the click responder -->
+      <Default Target="[Clicker.Command]" Value="[Selected]"/>
+
+      <!-- If the Command is unavailable, disable the UI -->
+      <Binding Target="[Input.Enabled]" Source="[Model.Available]"/>
+
+      <!-- Text color and sound for focus -->
+      <Condition Source="[Input.Enabled]" SourceValue="false"
+                 Target="[Label.Color]"   Value="[DisabledColor]"/>
+
+      <!-- Set the layer so the item is above the others.  This is done manually instead of with
+                 MakeTopmostOnFocus for the w/icon version where the selected icon overlaps its neighbors.  -->
+      <!--Condition Source="[IsFocused]" SourceValue="true">
+                <Actions-->
+      <!-- Double <Set> to keep any caching from missing the new value -->
+      <!--Set Target="[Root.Parent.Layer]" Value="0" ExclusiveApply="false"/>
+                    <Set Target="[Root.Parent.Layer]" Value="1"/>
+                </Actions>
+            </Condition-->
+      <!-- Reset the layer so the item is no longer above the others.  This is done manually instead of with
+                 MakeTopmostOnFocus for the w/icon version where the selected icon overlaps its neighbors.  -->
+      <!--Condition Source="[IsFocused]" SourceValue="false">
+                <Actions-->
+      <!-- Double <Set> to keep any caching from missing the new value -->
+      <!--Set Target="[Root.Parent.Layer]" Value="1" ExclusiveApply="false"/>
+                    <Set Target="[Root.Parent.Layer]" Value="0"/>
+                </Actions>
+            </Condition-->
+
+      <!-- Play the response sound when clicked regardless of any other reaction that may occur -->
+      <Rule>
+        <Conditions>
+          <Modified Source="[Clicker.Invoked]"/>
+        </Conditions>
+        <Actions>
+          <PlaySound Sound="resx://Library/Library.Resources/V3_Controls_Common_Select_a" />
+        </Actions>
+      </Rule>
+
+      <!-- Only show the Right content if we were given a template -->
+      <Condition Source="[RightContentTemplate]" ConditionOp="NotEquals" SourceValue="null">
+        <Actions>
+          <Set Target="[RightContentHost.Visible]" Value="true"/>
+          <Set Target="[RightContentHost.Source]" Value="[RightContentTemplate]"/>
+        </Actions>
+      </Condition>
+
+      <!-- Only show the left content if we were given a template -->
+      <Condition Source="[LeftContentTemplate]" ConditionOp="NotEquals" SourceValue="null">
+        <Actions>
+          <Set Target="[LeftContentHost.Visible]" Value="true"/>
+          <Set Target="[LeftContentHost.Source]" Value="[LeftContentTemplate]"/>
+        </Actions>
+      </Condition>
+
+      <!-- Attach the ISelectionPolicy (if any) -->
+      <!-- NOTE: It's important that this happens *after* setting Clicker.Command as that we are
+                 going to override the FocusModel -->
+      <!--Rule>
+                <Conditions>
+                    <IsValid Source="[SelectionPolicy]"/>
+                </Conditions>
+                <Actions>
+                    <Set Target="[Model!shel:ISelectable.SelectionPolicy]" Value="[SelectionPolicy]"/>
+                    <Set Target="[Input.FocusModel]" Value="[Model!ISelectable]"/>
+                </Actions>
+            </Rule-->
+
+      <!-- Pass the focus state down into the connected UIs -->
+      <Rule>
+        <Conditions>
+          <Equality Source="[IsFocused]" Value="true"/>
+          <Equality Source="[TransitionState.Value]" ConditionOp="NotEquals" Value="NavigatingToForward"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[LeftContentHost.ParentKeyFocus]" Value="true"/>
+          <Set Target="[RightContentHost.ParentKeyFocus]" Value="true"/>
+        </Actions>
+      </Rule>
+      <Default Target="[RightContentHost.ParentKeyFocus]" Value="false"/>
+      <Default Target="[LeftContentHost.ParentKeyFocus]" Value="false"/>
+
+      <!-- Will show the focus background around the entire item.  Used for high contrast stroke. -->
+      <Rule>
+        <Conditions>
+          <Equality Source="[IsFocused]" Value="true"/>
+          <Equality Source="[TransitionState.Value]" ConditionOp="NotEquals" Value="NavigatingToForward"/>
+          <Equality Source="[UseFullBackground]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[FullBackgroundGraphic.Content]" Value="[FullBackgroundFocus]"/>
+        </Actions>
+      </Rule>
+
+      <!-- Will show the focus background around the Label text only.  Used for high contrast stroke.  -->
+      <Rule>
+        <Conditions>
+          <Equality Source="[IsFocused]" Value="true"/>
+          <Equality Source="[TransitionState.Value]" ConditionOp="NotEquals" Value="NavigatingToForward"/>
+          <Equality Source="[UseFullBackground]" Value="false"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[LabelBackgroundGraphic.Content]" Value="[LabelBackgroundFocus]"/>
+        </Actions>
+      </Rule>
+
+      <!-- Notify the selection policy (if there is one) -->
+      <!--Rule>
+                <Conditions>
+                    <Equality Source="[Input.KeyFocus]" Value="true"/>
+                    <IsValid Source="[SelectionPolicy]"/>
+                </Conditions>
+                <Actions>
+                    <Set Target="[SelectionPolicy.SelectionIndex]" Value="[Index.Value]"/>
+                </Actions>
+            </Rule-->
+
+      <!-- Play the focus sound -->
+      <Rule>
+        <Conditions>
+          <Equality Source="[Input.KeyFocus]" Value="true"/>
+          <Equality Source="[TransitionState.Value]" ConditionOp="NotEquals" Value="NavigatingToForward"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Page.SelectedItemCommand]" Value="[Model]"/>
+          <PlaySound Sound="resx://Library/Library.Resources/V3_Controls_Common_Focus_a"/>
+        </Actions>
+      </Rule>
+
+      <!-- Set the flag for the speed of the focus change animations based on various inputs -->
+      <Condition Source="[FocusArea.Value]" ConditionOp="ChangedTo" SourceValue="Gallery" Target="[FocusAnimationSpeed]" Value="fast"/>
+      <Condition Source="[TransitionState.Value]" SourceValue="NavigatingToBackward" Target="[FocusAnimationSpeed]" Value="instant"/>
+      <!--Condition Source="[Environment.IsMouseActive]" SourceValue="true" Target="[FocusAnimationSpeed]" Value="mouse"/-->
+      <Rule ConditionLogicalOp="Or">
+        <Conditions>
+          <Modified Source="[LeftKey.Invoked]"/>
+          <Modified Source="[RightKey.Invoked]"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[KeyAxis.Value]" Value="none" ExclusiveApply="false"/>
+          <Set Target="[KeyAxis.Value]" Value="Horizontal" ExclusiveApply="false"/>
+          <Set Target="[FocusAnimationSpeed]" Value="slow"/>
+        </Actions>
+      </Rule>
+      <Rule ConditionLogicalOp="Or">
+        <Conditions>
+          <Modified Source="[UpKey.Invoked]"/>
+          <Modified Source="[DownKey.Invoked]"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[KeyAxis.Value]" Value="none" ExclusiveApply="false"/>
+          <Set Target="[KeyAxis.Value]" Value="Vertical" ExclusiveApply="false"/>
+          <Set Target="[FocusAnimationSpeed]" Value="fast"/>
+        </Actions>
+      </Rule>
+      <Condition Source="[KeyAxis.Value]" SourceValue="Horizontal" Target="[FocusAnimationSpeed]" Value="slow"/>
+      <Condition Source="[KeyAxis.Value]" SourceValue="Vertical" Target="[FocusAnimationSpeed]" Value="fast"/>
+
+      <!-- Pass the speed flag down into the overlays -->
+      <Binding Target="[LeftContentHost.FocusAnimationSpeed]" Source="[FocusAnimationSpeed]"/>
+      <Binding Target="[RightContentHost.FocusAnimationSpeed]" Source="[FocusAnimationSpeed]"/>
+
+      <!-- The following is pretty messy, but it currently apepars to be the only way to get all the visual effects working.
+                 The ContentChange lines are commented out because they aren't getting assigned properly in all cases and it was
+                 decided that the behavior without them was a better choice than the odd behavior that was present when they are active.
+                 But I'm leaving them here hoping that they can be turned on easily after the problem is solved.
+                 
+                 These are also very redundant but i was unable to get everything to trigger consistently when I had them split up into
+                 animation assignment rules and layout adjustment rules.
+            -->
+
+      <!-- Get focus, Thumbnail view, no transition animation (return navigation) -->
+      <Rule>
+        <Conditions>
+          <Equality Source="[IsFocused]" Value="true"/>
+          <Equality Source="[TransitionState.Value]" ConditionOp="NotEquals" Value="NavigatingToForward"/>
+          <Equality Source="[FocusStyle]" Value="Thumbnail"/>
+          <Equality Source="[FocusAnimationSpeed]" Value="instant"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[Root.DetachAnimation]" type="Alpha" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[MousePanel.DetachAnimation]" type="Move" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[MousePanel.DetachAnimation]" type="Size" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[MousePanel.DetachAnimation]" type="Scale" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <!--<Invoke Target="[Label.DetachAnimation]" type="ContentChangeShow" InvokePolicy="Synchronous" ExclusiveApply="false"/>-->
+          <!--<Invoke Target="[Label.DetachAnimation]" type="ContentChangeHide" InvokePolicy="Synchronous" ExclusiveApply="false"/>-->
+          <Invoke Target="[RightContentHost.DetachAnimation]" type="Move" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[RightContentHost.DetachAnimation]" type="Size" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[RightContentHost.DetachAnimation]" type="Scale" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+
+          <!-- Doubled to force the new value to take -->
+          <Set Target="[Root.Alpha]" Value="[NoFocusAlpha]" ExclusiveApply="false"/>
+          <Set Target="[Root.Alpha]" Value="[FocusAlpha]"/>
+          <Set Target="[Label.Color]" Value="[FocusColor]"/>
+          <!--<Invoke Target="[Label.ForceContentChange]" InvokePolicy="Synchronous"/>-->
+          <Set Target="[MousePanel.MaximumSize]" Value="[FocusLabelSize]"/>
+          <Set Target="[MousePanel.Margins]" Value="[FocusLabelMargins]"/>
+          <Set Target="[MousePanel.Scale]" Value="[FocusScale]"/>
+        </Actions>
+      </Rule>
+      <!-- Get focus, Thumbnail view, slow transition animation (horizontal key movement) -->
+      <Rule>
+        <Conditions>
+          <Equality Source="[IsFocused]" Value="true"/>
+          <Equality Source="[TransitionState.Value]" ConditionOp="NotEquals" Value="NavigatingToForward"/>
+          <Equality Source="[FocusStyle]" Value="Thumbnail"/>
+          <Equality Source="[FocusAnimationSpeed]" Value="slow"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[Root.DetachAnimation]" type="Alpha" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[MousePanel.DetachAnimation]" type="Move" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[MousePanel.DetachAnimation]" type="Size" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[MousePanel.DetachAnimation]" type="Scale" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <!--<Invoke Target="[Label.DetachAnimation]" type="ContentChangeShow" InvokePolicy="Synchronous" ExclusiveApply="false"/>-->
+          <!--<Invoke Target="[Label.DetachAnimation]" type="ContentChangeHide" InvokePolicy="Synchronous" ExclusiveApply="false"/>-->
+          <Invoke Target="[RightContentHost.DetachAnimation]" type="Move" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[RightContentHost.DetachAnimation]" type="Size" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[RightContentHost.DetachAnimation]" type="Scale" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+
+          <Invoke Target="[Root.AttachAnimation]" animation="animation://comm:ListViewItem.Alpha.GainFocus.Slow" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[Root.AttachAnimation]" animation="animation://comm:ListViewItem.Alpha.GainFocus.Slow" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[MousePanel.AttachAnimation]" animation="animation://comm:ListViewItem.Move.GainFocus.Slow" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[MousePanel.AttachAnimation]" animation="animation://comm:ListViewItem.Size.GainFocus.Slow" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[MousePanel.AttachAnimation]" animation="animation://comm:ListViewItem.Text.Scale.GainFocus.Slow" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <!--<Invoke Target="[Label.AttachAnimation]" animation="animation://comm:ListViewItem.Color.GainFocus.Slow.Show" InvokePolicy="Synchronous" ExclusiveApply="false"/>-->
+          <!--<Invoke Target="[Label.AttachAnimation]" animation="animation://comm:ListViewItem.Color.GainFocus.Slow.Hide" InvokePolicy="Synchronous" ExclusiveApply="false"/>-->
+          <Invoke Target="[RightContentHost.AttachAnimation]" animation="animation://comm:ListViewItem.Move.GainFocus.Slow" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[RightContentHost.AttachAnimation]" animation="animation://comm:ListViewItem.Size.GainFocus.Slow" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[RightContentHost.AttachAnimation]" animation="animation://comm:ListViewItem.Text.Scale.GainFocus.Slow" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+
+          <!-- Doubled to force the new value to take -->
+          <Set Target="[Root.Alpha]" Value="[NoFocusAlpha]" ExclusiveApply="false"/>
+          <Set Target="[Root.Alpha]" Value="[FocusAlpha]"/>
+          <Set Target="[Label.Color]" Value="[FocusColor]"/>
+          <!--<Invoke Target="[Label.ForceContentChange]" InvokePolicy="Synchronous"/>-->
+          <Set Target="[MousePanel.MaximumSize]" Value="[FocusLabelSize]"/>
+          <Set Target="[MousePanel.Margins]" Value="[FocusLabelMargins]"/>
+          <Set Target="[MousePanel.Scale]" Value="[FocusScale]"/>
+        </Actions>
+      </Rule>
+      <!-- Get focus, Thumbnail view, fast transition animation (vertical key movement) -->
+      <Rule>
+        <Conditions>
+          <Equality Source="[IsFocused]" Value="true"/>
+          <Equality Source="[TransitionState.Value]" ConditionOp="NotEquals" Value="NavigatingToForward"/>
+          <Equality Source="[FocusStyle]" Value="Thumbnail"/>
+          <Equality Source="[FocusAnimationSpeed]" Value="fast"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[Root.DetachAnimation]" type="Alpha" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[MousePanel.DetachAnimation]" type="Move" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[MousePanel.DetachAnimation]" type="Size" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[MousePanel.DetachAnimation]" type="Scale" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <!--<Invoke Target="[Label.DetachAnimation]" type="ContentChangeShow" InvokePolicy="Synchronous" ExclusiveApply="false"/>-->
+          <!--<Invoke Target="[Label.DetachAnimation]" type="ContentChangeHide" InvokePolicy="Synchronous" ExclusiveApply="false"/>-->
+          <Invoke Target="[RightContentHost.DetachAnimation]" type="Move" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[RightContentHost.DetachAnimation]" type="Size" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[RightContentHost.DetachAnimation]" type="Scale" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+
+          <Invoke Target="[Root.AttachAnimation]" animation="animation://comm:ListViewItem.Alpha.GainFocus.Fast" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[Root.AttachAnimation]" animation="animation://comm:ListViewItem.Alpha.GainFocus.Fast" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[MousePanel.AttachAnimation]" animation="animation://comm:ListViewItem.Move.GainFocus.Fast" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[MousePanel.AttachAnimation]" animation="animation://comm:ListViewItem.Size.GainFocus.Fast" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[MousePanel.AttachAnimation]" animation="animation://comm:ListViewItem.Text.Scale.GainFocus.Fast" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <!--<Invoke Target="[Label.AttachAnimation]" animation="animation://comm:ListViewItem.Color.GainFocus.Fast.Show" InvokePolicy="Synchronous" ExclusiveApply="false"/>-->
+          <!--<Invoke Target="[Label.AttachAnimation]" animation="animation://comm:ListViewItem.Color.GainFocus.Fast.Hide" InvokePolicy="Synchronous" ExclusiveApply="false"/>-->
+          <Invoke Target="[RightContentHost.AttachAnimation]" animation="animation://comm:ListViewItem.Move.GainFocus.Fast" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[RightContentHost.AttachAnimation]" animation="animation://comm:ListViewItem.Size.GainFocus.Fast" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[RightContentHost.AttachAnimation]" animation="animation://comm:ListViewItem.Text.Scale.GainFocus.Fast" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+
+          <!-- Doubled to force the new value to take -->
+          <Set Target="[Root.Alpha]" Value="[NoFocusAlpha]" ExclusiveApply="false"/>
+          <Set Target="[Root.Alpha]" Value="[FocusAlpha]"/>
+          <Set Target="[Label.Color]" Value="[FocusColor]"/>
+          <!--<Invoke Target="[Label.ForceContentChange]" InvokePolicy="Synchronous"/>-->
+          <Set Target="[MousePanel.MaximumSize]" Value="[FocusLabelSize]"/>
+          <Set Target="[MousePanel.Margins]" Value="[FocusLabelMargins]"/>
+          <Set Target="[MousePanel.Scale]" Value="[FocusScale]"/>
+        </Actions>
+      </Rule>
+      <!-- Get focus, Thumbnail view, very fast transition animation for mouse tracking -->
+      <Rule>
+        <Conditions>
+          <Equality Source="[IsFocused]" Value="true"/>
+          <Equality Source="[TransitionState.Value]" ConditionOp="NotEquals" Value="NavigatingToForward"/>
+          <Equality Source="[FocusStyle]" Value="Thumbnail"/>
+          <Equality Source="[FocusAnimationSpeed]" Value="mouse"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[Root.DetachAnimation]" type="Alpha" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[MousePanel.DetachAnimation]" type="Move" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[MousePanel.DetachAnimation]" type="Size" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[MousePanel.DetachAnimation]" type="Scale" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <!--<Invoke Target="[Label.DetachAnimation]" type="ContentChangeShow" InvokePolicy="Synchronous" ExclusiveApply="false"/>-->
+          <!--<Invoke Target="[Label.DetachAnimation]" type="ContentChangeHide" InvokePolicy="Synchronous" ExclusiveApply="false"/>-->
+          <Invoke Target="[RightContentHost.DetachAnimation]" type="Move" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[RightContentHost.DetachAnimation]" type="Size" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[RightContentHost.DetachAnimation]" type="Scale" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+
+          <Invoke Target="[Root.AttachAnimation]" animation="animation://comm:ListViewItem.Alpha.GainFocus.Mouse" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[Root.AttachAnimation]" animation="animation://comm:ListViewItem.Alpha.GainFocus.Mouse" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[MousePanel.AttachAnimation]" animation="animation://comm:ListViewItem.Move.GainFocus.Mouse" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[MousePanel.AttachAnimation]" animation="animation://comm:ListViewItem.Size.GainFocus.Mouse" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[MousePanel.AttachAnimation]" animation="animation://comm:ListViewItem.Text.Scale.GainFocus.Mouse" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <!--<Invoke Target="[Label.AttachAnimation]" animation="animation://comm:ListViewItem.Color.GainFocus.Mouse.Show" InvokePolicy="Synchronous" ExclusiveApply="false"/>-->
+          <!--<Invoke Target="[Label.AttachAnimation]" animation="animation://comm:ListViewItem.Color.GainFocus.Mouse.Hide" InvokePolicy="Synchronous" ExclusiveApply="false"/>-->
+          <Invoke Target="[RightContentHost.AttachAnimation]" animation="animation://comm:ListViewItem.Move.GainFocus.Mouse" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[RightContentHost.AttachAnimation]" animation="animation://comm:ListViewItem.Size.GainFocus.Mouse" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[RightContentHost.AttachAnimation]" animation="animation://comm:ListViewItem.Text.Scale.GainFocus.Mouse" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+
+          <!-- Doubled to force the new value to take -->
+          <Set Target="[Root.Alpha]" Value="[NoFocusAlpha]" ExclusiveApply="false"/>
+          <Set Target="[Root.Alpha]" Value="[FocusAlpha]"/>
+          <Set Target="[Label.Color]" Value="[FocusColor]"/>
+          <!--<Invoke Target="[Label.ForceContentChange]" InvokePolicy="Synchronous"/>-->
+          <Set Target="[MousePanel.MaximumSize]" Value="[FocusLabelSize]"/>
+          <Set Target="[MousePanel.Margins]" Value="[FocusLabelMargins]"/>
+          <Set Target="[MousePanel.Scale]" Value="[FocusScale]"/>
+        </Actions>
+      </Rule>
+
+      <!-- Get focus, simple Text view, no transition animation -->
+      <Rule>
+        <Conditions>
+          <Equality Source="[IsFocused]" Value="true"/>
+          <Equality Source="[TransitionState.Value]" ConditionOp="NotEquals" Value="NavigatingToForward"/>
+          <Equality Source="[FocusStyle]" Value="Text"/>
+          <Equality Source="[FocusAnimationSpeed]" Value="instant"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[Root.DetachAnimation]" type="Alpha" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[LabelPanel.DetachAnimation]" type="Move" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[LabelPanel.DetachAnimation]" type="Size" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[LabelPanel.DetachAnimation]" type="Scale" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <!--<Invoke Target="[Label.DetachAnimation]" type="ContentChangeShow" InvokePolicy="Synchronous" ExclusiveApply="false"/>-->
+          <!--<Invoke Target="[Label.DetachAnimation]" type="ContentChangeHide" InvokePolicy="Synchronous" ExclusiveApply="false"/>-->
+
+          <!-- Doubled to force the new value to take -->
+          <Set Target="[Root.Alpha]" Value="[NoFocusAlpha]" ExclusiveApply="false"/>
+          <Set Target="[Root.Alpha]" Value="[FocusAlpha]"/>
+          <Set Target="[Label.Color]" Value="[FocusColor]"/>
+          <!--<Invoke Target="[Label.ForceContentChange]" InvokePolicy="Synchronous"/>-->
+          <Set Target="[LabelPanel.MaximumSize]" Value="[FocusLabelSize]"/>
+          <Set Target="[LabelPanel.Margins]" Value="[FocusLabelMargins]"/>
+          <Set Target="[LabelPanel.Scale]" Value="[FocusScale]"/>
+        </Actions>
+      </Rule>
+      <!-- Get focus, simple Text view, slow transition animation (horizontal key movement) -->
+      <Rule>
+        <Conditions>
+          <Equality Source="[IsFocused]" Value="true"/>
+          <Equality Source="[TransitionState.Value]" ConditionOp="NotEquals" Value="NavigatingToForward"/>
+          <Equality Source="[FocusStyle]" Value="Text"/>
+          <Equality Source="[FocusAnimationSpeed]" Value="slow"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[Root.DetachAnimation]" type="Alpha" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[LabelPanel.DetachAnimation]" type="Move" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[LabelPanel.DetachAnimation]" type="Size" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[LabelPanel.DetachAnimation]" type="Scale" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <!--<Invoke Target="[Label.DetachAnimation]" type="ContentChangeShow" InvokePolicy="Synchronous" ExclusiveApply="false"/>-->
+          <!--<Invoke Target="[Label.DetachAnimation]" type="ContentChangeHide" InvokePolicy="Synchronous" ExclusiveApply="false"/>-->
+
+          <Invoke Target="[Root.AttachAnimation]" animation="animation://comm:ListViewItem.Alpha.GainFocus.Slow" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[Root.AttachAnimation]" animation="animation://comm:ListViewItem.Alpha.GainFocus.Slow" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[LabelPanel.AttachAnimation]" animation="animation://comm:ListViewItem.Move.GainFocus.Slow" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[LabelPanel.AttachAnimation]" animation="animation://comm:ListViewItem.Size.GainFocus.Slow" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[LabelPanel.AttachAnimation]" animation="animation://comm:ListViewItem.Text.Scale.GainFocus.Slow" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <!--<Invoke Target="[Label.AttachAnimation]" animation="animation://comm:ListViewItem.Color.GainFocus.Slow.Show" InvokePolicy="Synchronous" ExclusiveApply="false"/>-->
+          <!--<Invoke Target="[Label.AttachAnimation]" animation="animation://comm:ListViewItem.Color.GainFocus.Slow.Hide" InvokePolicy="Synchronous" ExclusiveApply="false"/>-->
+
+          <!-- Doubled to force the new value to take -->
+          <Set Target="[Root.Alpha]" Value="[NoFocusAlpha]" ExclusiveApply="false"/>
+          <Set Target="[Root.Alpha]" Value="[FocusAlpha]"/>
+          <Set Target="[Label.Color]" Value="[FocusColor]"/>
+          <!--<Invoke Target="[Label.ForceContentChange]" InvokePolicy="Synchronous"/>-->
+          <Set Target="[LabelPanel.MaximumSize]" Value="[FocusLabelSize]"/>
+          <Set Target="[LabelPanel.Margins]" Value="[FocusLabelMargins]"/>
+          <Set Target="[LabelPanel.Scale]" Value="[FocusScale]"/>
+        </Actions>
+      </Rule>
+      <!-- Get focus, simple Text view, fast transition animation (vertical key movement) -->
+      <Rule>
+        <Conditions>
+          <Equality Source="[IsFocused]" Value="true"/>
+          <Equality Source="[TransitionState.Value]" ConditionOp="NotEquals" Value="NavigatingToForward"/>
+          <Equality Source="[FocusStyle]" Value="Text"/>
+          <Equality Source="[FocusAnimationSpeed]" Value="fast"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[Root.DetachAnimation]" type="Alpha" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[LabelPanel.DetachAnimation]" type="Move" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[LabelPanel.DetachAnimation]" type="Size" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[LabelPanel.DetachAnimation]" type="Scale" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <!--<Invoke Target="[Label.DetachAnimation]" type="ContentChangeShow" InvokePolicy="Synchronous" ExclusiveApply="false"/>-->
+          <!--<Invoke Target="[Label.DetachAnimation]" type="ContentChangeHide" InvokePolicy="Synchronous" ExclusiveApply="false"/>-->
+
+          <Invoke Target="[Root.AttachAnimation]" animation="animation://comm:ListViewItem.Alpha.GainFocus.Fast" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[Root.AttachAnimation]" animation="animation://comm:ListViewItem.Alpha.GainFocus.Fast" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[LabelPanel.AttachAnimation]" animation="animation://comm:ListViewItem.Move.GainFocus.Fast" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[LabelPanel.AttachAnimation]" animation="animation://comm:ListViewItem.Size.GainFocus.Fast" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[LabelPanel.AttachAnimation]" animation="animation://comm:ListViewItem.Text.Scale.GainFocus.Fast" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <!--<Invoke Target="[Label.AttachAnimation]" animation="animation://comm:ListViewItem.Color.GainFocus.Fast.Show" InvokePolicy="Synchronous" ExclusiveApply="false"/>-->
+          <!--<Invoke Target="[Label.AttachAnimation]" animation="animation://comm:ListViewItem.Color.GainFocus.Fast.Hide" InvokePolicy="Synchronous" ExclusiveApply="false"/>-->
+
+          <!-- Doubled to force the new value to take -->
+          <Set Target="[Root.Alpha]" Value="[NoFocusAlpha]" ExclusiveApply="false"/>
+          <Set Target="[Root.Alpha]" Value="[FocusAlpha]"/>
+          <Set Target="[Label.Color]" Value="[FocusColor]"/>
+          <!--<Invoke Target="[Label.ForceContentChange]" InvokePolicy="Synchronous"/>-->
+          <Set Target="[LabelPanel.MaximumSize]" Value="[FocusLabelSize]"/>
+          <Set Target="[LabelPanel.Margins]" Value="[FocusLabelMargins]"/>
+          <Set Target="[LabelPanel.Scale]" Value="[FocusScale]"/>
+        </Actions>
+      </Rule>
+      <!-- Get focus, simple Text view, very fast transition animation for mouse tracking -->
+      <Rule>
+        <Conditions>
+          <Equality Source="[IsFocused]" Value="true"/>
+          <Equality Source="[TransitionState.Value]" ConditionOp="NotEquals" Value="NavigatingToForward"/>
+          <Equality Source="[FocusStyle]" Value="Text"/>
+          <Equality Source="[FocusAnimationSpeed]" Value="mouse"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[Root.DetachAnimation]" type="Alpha" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[LabelPanel.DetachAnimation]" type="Move" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[LabelPanel.DetachAnimation]" type="Size" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[LabelPanel.DetachAnimation]" type="Scale" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <!--<Invoke Target="[Label.DetachAnimation]" type="ContentChangeShow" InvokePolicy="Synchronous" ExclusiveApply="false"/>-->
+          <!--<Invoke Target="[Label.DetachAnimation]" type="ContentChangeHide" InvokePolicy="Synchronous" ExclusiveApply="false"/>-->
+
+          <Invoke Target="[Root.AttachAnimation]" animation="animation://comm:ListViewItem.Alpha.GainFocus.Mouse" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[Root.AttachAnimation]" animation="animation://comm:ListViewItem.Alpha.GainFocus.Mouse" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[LabelPanel.AttachAnimation]" animation="animation://comm:ListViewItem.Move.GainFocus.Mouse" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[LabelPanel.AttachAnimation]" animation="animation://comm:ListViewItem.Size.GainFocus.Mouse" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[LabelPanel.AttachAnimation]" animation="animation://comm:ListViewItem.Text.Scale.GainFocus.Mouse" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <!--<Invoke Target="[Label.AttachAnimation]" animation="animation://comm:ListViewItem.Color.GainFocus.Mouse.Show" InvokePolicy="Synchronous" ExclusiveApply="false"/>-->
+          <!--<Invoke Target="[Label.AttachAnimation]" animation="animation://comm:ListViewItem.Color.GainFocus.Mouse.Hide" InvokePolicy="Synchronous" ExclusiveApply="false"/>-->
+
+          <!-- Doubled to force the new value to take -->
+          <Set Target="[Root.Alpha]" Value="[NoFocusAlpha]" ExclusiveApply="false"/>
+          <Set Target="[Root.Alpha]" Value="[FocusAlpha]"/>
+          <Set Target="[Label.Color]" Value="[FocusColor]"/>
+          <!--<Invoke Target="[Label.ForceContentChange]" InvokePolicy="Synchronous"/>-->
+          <Set Target="[LabelPanel.MaximumSize]" Value="[FocusLabelSize]"/>
+          <Set Target="[LabelPanel.Margins]" Value="[FocusLabelMargins]"/>
+          <Set Target="[LabelPanel.Scale]" Value="[FocusScale]"/>
+        </Actions>
+      </Rule>
+
+      <!-- Set the animations when losing focus -->
+      <Rule>
+        <Conditions>
+          <Equality Source="[IsFocused]" ConditionOp="ChangedTo" Value="false"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[Root.DetachAnimation]" type="Alpha" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[MousePanel.DetachAnimation]" type="Move" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[MousePanel.DetachAnimation]" type="Size" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[MousePanel.DetachAnimation]" type="Scale" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[LabelPanel.DetachAnimation]" type="Move" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[LabelPanel.DetachAnimation]" type="Size" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[LabelPanel.DetachAnimation]" type="Scale" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <!--<Invoke Target="[Label.DetachAnimation]" type="ContentChangeShow" InvokePolicy="Synchronous" ExclusiveApply="false"/>-->
+          <!--<Invoke Target="[Label.DetachAnimation]" type="ContentChangeHide" InvokePolicy="Synchronous" ExclusiveApply="false"/>-->
+          <Invoke Target="[RightContentHost.DetachAnimation]" type="Move" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[RightContentHost.DetachAnimation]" type="Size" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[RightContentHost.DetachAnimation]" type="Scale" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+
+          <Invoke Target="[Root.AttachAnimation]" animation="animation://comm:ListViewItem.Alpha.LoseFocus" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[Root.AttachAnimation]" animation="animation://comm:ListViewItem.Alpha.LoseFocus" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[MousePanel.AttachAnimation]" animation="animation://comm:ListViewItem.Move.LoseFocus" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[MousePanel.AttachAnimation]" animation="animation://comm:ListViewItem.Size.LoseFocus" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[MousePanel.AttachAnimation]" animation="animation://comm:ListViewItem.Text.Scale.LoseFocus" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[LabelPanel.AttachAnimation]" animation="animation://comm:ListViewItem.Move.LoseFocus" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[LabelPanel.AttachAnimation]" animation="animation://comm:ListViewItem.Size.LoseFocus" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[LabelPanel.AttachAnimation]" animation="animation://comm:ListViewItem.Text.Scale.LoseFocus" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <!--<Invoke Target="[Label.AttachAnimation]" animation="animation://comm:ListViewItem.Color.LoseFocus.Show" InvokePolicy="Synchronous" ExclusiveApply="false"/>-->
+          <!--<Invoke Target="[Label.AttachAnimation]" animation="animation://comm:ListViewItem.Color.LoseFocus.Hide" InvokePolicy="Synchronous" ExclusiveApply="false"/>-->
+          <Invoke Target="[RightContentHost.AttachAnimation]" animation="animation://comm:ListViewItem.Move.LoseFocus" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[RightContentHost.AttachAnimation]" animation="animation://comm:ListViewItem.Size.LoseFocus" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[RightContentHost.AttachAnimation]" animation="animation://comm:ListViewItem.Text.Scale.LoseFocus" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+
+          <!-- Doubled to force the new value to take -->
+          <Set Target="[Root.Alpha]" Value="[FocusAlpha]" ExclusiveApply="false"/>
+          <Set Target="[Root.Alpha]" Value="[NoFocusAlpha]"/>
+          <Set Target="[Label.Color]" Value="[NoFocusColor]"/>
+          <!--<Invoke Target="[Label.ForceContentChange]" InvokePolicy="Synchronous"/>-->
+        </Actions>
+      </Rule>
+
+      <Changed Source="[Model.Description]" InitialEvaluate="true">
+        <Actions>
+          <Set Target="[Label.Content]" Value="[Model.Description]"/>
+          <!--Invoke Target="[ContextualUIDescription.SetPropertyValue]" name="Text" value="[Model.Description]"/-->
+        </Actions>
+      </Changed>
+
+      <!-- Setting Label Background images from the ImageSet -->
+      <!--Default Target="[FullBackgroundFocus]" Value="[LabelBackgroundImageSet.Values.#Focus!Image]"/>
+            <Default Target="[FullBackground]" Value="[LabelBackgroundImageSet.Values.#Default!Image]"/>
+            <Default Target="[LabelBackgroundFocus]" Value="[LabelBackgroundImageSet.Values.#Focus!Image]"/>
+            <Default Target="[LabelBackground]" Value="[LabelBackgroundImageSet.Values.#Default!Image]"/-->
+
+      <!--
+            <Rule>
+                <Conditions>
+                    <IsValid Source="[SelectedGroup.Value]"/>
+                    <IsValid Source="[SelectedIndex.Value]"/>
+                    <Equality Source="[Index.Value]" Value="[SelectedIndex.Value]"/>
+                    <Equality Source="[Group]" Value="[SelectedGroup.Value]"/>
+                </Conditions>
+                <Actions>
+                    <Invoke Target="[Root.SetLayoutInput]" oNewValue="[AreaOfInterest]"/> 
+                </Actions>
+            </Rule>
+            -->
+
+      <!-- Defaults for each style - these are used to reset the focus values applied above.
+                 They are different because the two panels have different center points -->
+      <Condition Source="[FocusStyle]" SourceValue="Text">
+        <Actions>
+          <Set Target="[LabelPanel.MaximumSize]" Value="[LabelSize]"/>
+          <Set Target="[LabelPanel.Margins]" Value="[LabelMargins]"/>
+          <Set Target="[LabelPanel.Scale]" Value="[NoFocusScale]"/>
+        </Actions>
+      </Condition>
+      <Condition Source="[FocusStyle]" SourceValue="Thumbnail">
+        <Actions>
+          <Set Target="[MousePanel.MaximumSize]" Value="[LabelSize]"/>
+          <Set Target="[MousePanel.Margins]" Value="[LabelMargins]"/>
+          <Set Target="[MousePanel.Scale]" Value="[NoFocusScale]"/>
+        </Actions>
+      </Condition>
+    </Rules>
+
+
+    <Content>
+
+      <Panel Alpha="[NoFocusAlpha]" Name="Root" MaximumSize="[TileSize]" Padding="[TilePadding]" Margins="[TileMargins]" CenterPointPercent="0.5, 0.5, 0.0">
+        <Layout>
+          <AnchorLayout SizeToHorizontalChildren="false" SizeToVerticalChildren="false"/>
+        </Layout>
+        <Children>
+
+          <!-- Content container -->
+          <Panel>
+            <Layout>
+              <FlowLayout Orientation="Horizontal" ItemAlignment="Center"/>
+            </Layout>
+            <LayoutInput>
+              <AnchorLayoutInput Vertical="Fill" Horizontal="Fill"/>
+            </LayoutInput>
+            <Children>
+
+              <!-- Customizable Left View -->
+              <me:BaseListItemOverlayContent Name="LeftContentHost" Model="[Model]" Visible="false" Source="null" MouseInteractive="true"/>
+
+              <!-- This extra panel allows for the right content to hold it's space -->
+              <Panel Name="MousePanel" MouseInteractive="true" CenterPointPercent="0.5, 0.5, 0.0">
+                <Layout>
+                  <FlowLayout Orientation="Horizontal" ItemAlignment="Center"/>
+                  <!--LegacyHorizontalFlowLayout ReverseTraversal="true" InvertCoordinates="true" ItemAlignment="Center"/-->
+                </Layout>
+                <Children>
+
+                  <!-- Label Text container -->
+                  <Panel Name="LabelPanel" Layout="Anchor">
+                    <Children>
+
+                      <Text Name="Label" Color="[NoFocusColor]" Font="[LabelFont]">
+                        <LayoutInput>
+                          <AnchorLayoutInput Vertical="Center" Horizontal="Near"/>
+                        </LayoutInput>
+                      </Text>
+
+                      <!--Graphic Name="LabelBackgroundGraphic" Image="[LabelBackground]" LayoutInput="[LabelBackgroundLayoutInput]"/-->
+                      <Graphic Name="LabelBackgroundGraphic" Content="[LabelBackground]" LayoutInput="[LabelBackgroundLayoutInput]"/>
+
+                    </Children>
+                  </Panel>
+
+                  <!-- Customizable Right View -->
+                  <me:BaseListItemOverlayContent Name="RightContentHost" Model="[Model]" Visible="false" Source="null"/>
+
+                </Children>
+              </Panel>
+
+            </Children>
+          </Panel>
+
+          <!-- Background image -->
+          <!--Graphic Name="FullBackgroundGraphic" Image="[FullBackground]" MinimumSize="[TileSize]"-->
+          <Graphic Name="FullBackgroundGraphic" Content="[FullBackground]" MinimumSize="[TileSize]">
+            <LayoutInput>
+              <AnchorLayoutInput Vertical="Fill" Horizontal="Fill"/>
+            </LayoutInput>
+          </Graphic>
+
+        </Children>
+      </Panel>
+
+    </Content>
+  </UI>
+
+
+  <!-- The base class for the overlays -->
+  <UI Name="BaseListItemOverlayContent">
+    <Properties>
+      <ICommand    Name="Model"               ICommand="$Required"/>
+      <cor:Boolean Name="ParentKeyFocus"      Boolean="false"/>
+      <cor:String  Name="FocusAnimationSpeed" String="slow"/>
+    </Properties>
+  </UI>
+
+  <UI Name="RecordedTVListViewItemThumbnail" BaseUI="me:BaseListItemOverlayContent">
+    <Properties>
+      <Image Name="NoThumbnailImage" Image="resx://Library/Library.Resources/V3_Controls_BrowseGalleryItem_NoImage1Row4x3"/>
+      <Color Name="BGColor" Color="color://comm:GalleryItemFill"/>
+      <cor:Single Name="NoFocusAlpha" Single="0.55"/>
+      <cor:Single Name="FocusAlpha" Single="1.0"/>
+      <Vector3 Name="FocusScale" Vector3="1.36, 1.36, 1.0"/>
+      <Inset Name="FocusMargins" Inset="-20, 0, 20, 0"/>
+    </Properties>
+    <Locals>
+      <Environment Name="Environment"/>
+    </Locals>
+    <Rules>
+      <Binding Target="[Frame.Visible]" Source="[ParentKeyFocus]"/>
+      <!--Rule>
+        <Conditions>
+          <Equality Source="[Environment.RenderingDeviceType]" Value="Gdi"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[NoFocusAlpha]" Value="1.0"/>
+        </Actions>
+      </Rule-->
+      <Rule>
+        <Conditions>
+          <IsType Source="[Model]" Type="shel:IThumbnailCommand"/>
+          <IsValid Source="[Model!shel:IThumbnailCommand.DefaultImage]"/>
+        </Conditions>
+        <Actions>
+          <Set Value="[Model!shel:IThumbnailCommand.DefaultImage]" Target="[Thumb.Content]"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Equality Source="[FocusAnimationSpeed]" Value="instant"/>
+          <Equality Source="[ParentKeyFocus]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[Frame.DetachAnimation]" type="Show" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[ItemBGColor.DetachAnimation]" type="Alpha" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[Thumb.DetachAnimation]" type="Alpha" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.DetachAnimation]" type="Move" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.DetachAnimation]" type="Size" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.DetachAnimation]" type="Scale" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Equality Source="[FocusAnimationSpeed]" Value="slow"/>
+          <Equality Source="[ParentKeyFocus]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[Frame.DetachAnimation]" type="Show" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[ItemBGColor.DetachAnimation]" type="Alpha" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[Thumb.DetachAnimation]" type="Alpha" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.DetachAnimation]" type="Move" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.DetachAnimation]" type="Size" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.DetachAnimation]" type="Scale" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[Frame.AttachAnimation]" animation="animation://comm:ListViewItem.SelectorFrame.Show.Slow" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[ItemBGColor.AttachAnimation]" animation="animation://comm:ListViewItem.Alpha.GainFocus.Slow" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[Thumb.AttachAnimation]" animation="animation://comm:ListViewItem.Alpha.GainFocus.Slow" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.AttachAnimation]" animation="animation://comm:ListViewItem.Move.GainFocus.Slow" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.AttachAnimation]" animation="animation://comm:ListViewItem.Size.GainFocus.Slow" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.AttachAnimation]" animation="animation://comm:ListViewItem.Thumb.Scale.GainFocus.Slow" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Equality Source="[FocusAnimationSpeed]" Value="fast"/>
+          <Equality Source="[ParentKeyFocus]" Value="true"/>
+          <!--Equality Source="[Environment.Is2DAnimationExperience]" Value="false"/-->
+        </Conditions>
+        <Actions>
+          <Invoke Target="[Frame.DetachAnimation]" type="Show" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[ItemBGColor.DetachAnimation]" type="Alpha" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[Thumb.DetachAnimation]" type="Alpha" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.DetachAnimation]" type="Move" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.DetachAnimation]" type="Size" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.DetachAnimation]" type="Scale" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[Frame.AttachAnimation]" animation="animation://comm:ListViewItem.SelectorFrame.Show.Fast" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[ItemBGColor.AttachAnimation]" animation="animation://comm:ListViewItem.Alpha.GainFocus.Fast" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[Thumb.AttachAnimation]" animation="animation://comm:ListViewItem.Alpha.GainFocus.Fast" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.AttachAnimation]" animation="animation://comm:ListViewItem.Move.GainFocus.Fast" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.AttachAnimation]" animation="animation://comm:ListViewItem.Size.GainFocus.Fast" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.AttachAnimation]" animation="animation://comm:ListViewItem.Thumb.Scale.GainFocus.Fast" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+        </Actions>
+      </Rule>
+      <!--Rule>
+        <Conditions>
+          <Equality Source="[FocusAnimationSpeed]" Value="fast"/>
+          <Equality Source="[ParentKeyFocus]" Value="true"/>
+          <Equality Source="[Environment.Is2DAnimationExperience]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[Frame.DetachAnimation]" type="Show" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[ItemBGColor.DetachAnimation]" type="Alpha" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[Thumb.DetachAnimation]" type="Alpha" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.DetachAnimation]" type="Move" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.DetachAnimation]" type="Size" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.DetachAnimation]" type="Scale" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[Frame.AttachAnimation]" animation="animation://comm:ListViewItem.SelectorFrame.Show.Fast.GDI" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[ItemBGColor.AttachAnimation]" animation="animation://comm:ListViewItem.Alpha.GainFocus.Fast.GDI" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[Thumb.AttachAnimation]" animation="animation://comm:ListViewItem.Alpha.GainFocus.Fast.GDI" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.AttachAnimation]" animation="animation://comm:ListViewItem.Move.GainFocus.Fast.GDI" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.AttachAnimation]" animation="animation://comm:ListViewItem.Size.GainFocus.Fast.GDI" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.AttachAnimation]" animation="animation://comm:ListViewItem.Thumb.Scale.GainFocus.Fast.GDI" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+        </Actions>
+      </Rule-->
+      <Rule>
+        <Conditions>
+          <Equality Source="[FocusAnimationSpeed]" Value="mouse"/>
+          <Equality Source="[ParentKeyFocus]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[Frame.DetachAnimation]" type="Show" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[ItemBGColor.DetachAnimation]" type="Alpha" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[Thumb.DetachAnimation]" type="Alpha" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.DetachAnimation]" type="Move" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.DetachAnimation]" type="Size" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.DetachAnimation]" type="Scale" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[Frame.AttachAnimation]" animation="animation://comm:ListViewItem.SelectorFrame.Show.Mouse" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[ItemBGColor.AttachAnimation]" animation="animation://comm:ListViewItem.Alpha.GainFocus.Mouse" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[Thumb.AttachAnimation]" animation="animation://comm:ListViewItem.Alpha.GainFocus.Mouse" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.AttachAnimation]" animation="animation://comm:ListViewItem.Move.GainFocus.Mouse" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.AttachAnimation]" animation="animation://comm:ListViewItem.Size.GainFocus.Mouse" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.AttachAnimation]" animation="animation://comm:ListViewItem.Thumb.Scale.GainFocus.Mouse" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+        </Actions>
+      </Rule>
+      <Condition Source="[ParentKeyFocus]" SourceValue="true">
+        <Actions>
+          <Set Target="[ItemBGColor.Content]" Value="color://comm:GalleryItemFillFocus"/>
+          <Set Target="[ItemBGColor.Alpha]" Value="[FocusAlpha]"/>
+          <Set Target="[Thumb.Alpha]" Value="[FocusAlpha]"/>
+          <Set Target="[OverlayPanel.Margins]" Value="[FocusMargins]"/>
+          <Set Target="[OverlayPanel.Scale]" Value="[FocusScale]"/>
+        </Actions>
+      </Condition>
+      <Rule>
+        <Conditions>
+          <Equality Source="[ParentKeyFocus]" Value="false"/>
+          <!--Equality Source="[Environment.Is2DAnimationExperience]" Value="false"/-->
+        </Conditions>
+        <Actions>
+          <Invoke Target="[Frame.DetachAnimation]" type="Show" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[ItemBGColor.DetachAnimation]" type="Alpha" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[Thumb.DetachAnimation]" type="Alpha" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.DetachAnimation]" type="Move" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.DetachAnimation]" type="Size" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.DetachAnimation]" type="Scale" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[ItemBGColor.AttachAnimation]" animation="animation://comm:ListViewItem.Alpha.LoseFocus" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[Thumb.AttachAnimation]" animation="animation://comm:ListViewItem.Alpha.LoseFocus" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.AttachAnimation]" animation="animation://comm:ListViewItem.Move.LoseFocus" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.AttachAnimation]" animation="animation://comm:ListViewItem.Size.LoseFocus" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.AttachAnimation]" animation="animation://comm:ListViewItem.Thumb.Scale.LoseFocus" InvokePolicy="Synchronous"/>
+        </Actions>
+      </Rule>
+      <!--Rule>
+        <Conditions>
+          <Equality Source="[ParentKeyFocus]" Value="false"/>
+          <Equality Source="[Environment.Is2DAnimationExperience]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[Frame.DetachAnimation]" type="Show" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[ItemBGColor.DetachAnimation]" type="Alpha" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[Thumb.DetachAnimation]" type="Alpha" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.DetachAnimation]" type="Move" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.DetachAnimation]" type="Size" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.DetachAnimation]" type="Scale" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[ItemBGColor.AttachAnimation]" animation="animation://comm:ListViewItem.Alpha.LoseFocus.GDI" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[Thumb.AttachAnimation]" animation="animation://comm:ListViewItem.Alpha.LoseFocus.GDI" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.AttachAnimation]" animation="animation://comm:ListViewItem.Move.LoseFocus.GDI" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.AttachAnimation]" animation="animation://comm:ListViewItem.Size.LoseFocus.GDI" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.AttachAnimation]" animation="animation://comm:ListViewItem.Thumb.Scale.LoseFocus.GDI" InvokePolicy="Synchronous"/>
+        </Actions>
+      </Rule-->
+      <!--Rule>
+        <Conditions>
+          <Equality Source="[Environment.Is2DAnimationExperience]" Value="false"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[Frame.AttachAnimation]" animation="animation://comm:ListViewItem.SelectorFrame.Hide" InvokePolicy="Synchronous"/>
+        </Actions>
+      </Rule-->
+      <!--Rule>
+        <Conditions>
+          <Equality Source="[Environment.Is2DAnimationExperience]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[Frame.AttachAnimation]" animation="animation://comm:ListViewItem.SelectorFrame.Hide.GDI" InvokePolicy="Synchronous"/>
+        </Actions>
+      </Rule-->
+      <!--Condition Source="[Environment.ColorScheme]" ConditionOp="NotEquals" SourceValue="Default" Target="[FocusLoopAnimation.Visible]" Value="false"/-->
+      <Default Target="[Thumb.Content]" Value="[NoThumbnailImage]"/>
+      <!--Rule>
+        <Conditions>
+          <Modified Source="[Model!video:RecordedTVBrowseItem.Recording]" />
+        </Conditions>
+        <Actions>
+          <Set Target="[RecordingStateIcon.Image]" Value="[Model!video:RecordedTVBrowseItem.RecordStatusIcon]"/>
+        </Actions>
+      </Rule>
+      <Default Target="[RecordingStateIcon.Image]" Value="[Model!video:RecordedTVBrowseItem.RecordStatusIcon]"/-->
+    </Rules>
+    <Content>
+      <Panel Name="OverlayPanel" MaximumSize="88, 65" Margins="0, 0, 0, 0" Scale="1.0, 1.0, 1.0" CenterPointPercent="1.0, 0.5, 0.0">
+        <Layout>
+          <AnchorLayout SizeToHorizontalChildren="false" SizeToVerticalChildren="false"/>
+        </Layout>
+        <Children>
+          <Graphic Name="Frame" Content="image://me:Browse.Selector" Visible="false">
+            <LayoutInput>
+              <AnchorLayoutInput Top="Thumb, 0, -3" Left="Thumb, 0, -3" Bottom="Thumb, 1, 3" Right="Thumb, 1, 3" ContributesToWidth="false" ContributesToHeight="false"/>
+            </LayoutInput>
+            <Animations>
+                <!--Invoke Target="[Frame.AttachAnimation]" animation="animation://comm:ListViewItem.SelectorFrame.Hide" InvokePolicy="Synchronous"/-->
+                <Animation Animation="animation://comm:ListViewItem.SelectorFrame.Hide"/>
+            </Animations>
+            <Children>
+              <focus:SelectorFocusLoop Name="FocusLoopAnimation" Visible="true">
+                <LayoutInput>
+                  <AnchorLayoutInput Left="Parent, 0" Right="Parent, 1" Top="Parent, 0" Bottom="Parent, 1" ContributesToWidth="false" ContributesToHeight="false"/>
+                </LayoutInput>
+              </focus:SelectorFocusLoop>
+            </Children>
+          </Graphic>
+          <Graphic Name="RecordingStateIcon" MaintainAspectRatio="true" MaximumSize="0, 30">
+            <LayoutInput>
+              <AnchorLayoutInput Left="Parent, 0, 5" Bottom="Parent, 1, -5"/>
+            </LayoutInput>
+          </Graphic>
+          <Graphic Name="Thumb" Alpha="[NoFocusAlpha]" MaintainAspectRatio="true">
+            <LayoutInput>
+              <AnchorLayoutInput Horizontal="Fill" Vertical="Fill"/>
+            </LayoutInput>
+          </Graphic>
+          <ColorFill Name="ItemBGColor" Alpha="[NoFocusAlpha]" Content="[BGColor]">
+            <LayoutInput>
+              <AnchorLayoutInput Top="Thumb, 0, 0" Left="Thumb, 0, 0" Bottom="Thumb, 1, 0" Right="Thumb, 1, 0" ContributesToWidth="false" ContributesToHeight="false"/>
+            </LayoutInput>
+          </ColorFill>
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+
+  <UI Name="MovieListViewItemThumbnail" BaseUI="me:BaseListItemOverlayContent">
+    <Properties>
+      <Image Name="NoThumbnailImage" Image="resx://Library/Library.Resources/V3_Controls_BrowseGalleryItem_NoImage1Row4x3"/>
+      <Color Name="BGColor" Color="color://comm:GalleryItemFill"/>
+      <cor:Single Name="NoFocusAlpha" Single="0.55"/>
+      <cor:Single Name="FocusAlpha" Single="1.0"/>
+      <Vector3 Name="FocusScale" Vector3="1.36, 1.36, 1.0"/>
+      <Inset Name="FocusMargins" Inset="-20, 0, 20, 0"/>
+    </Properties>
+    <Locals>
+      <Environment Name="Environment"/>
+    </Locals>
+    <Rules>
+      <Binding Target="[Frame.Visible]" Source="[ParentKeyFocus]"/>
+      <!--Rule>
+        <Conditions>
+          <Equality Source="[Environment.RenderingDeviceType]" Value="Gdi"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[NoFocusAlpha]" Value="1.0"/>
+        </Actions>
+      </Rule-->
+      <Rule>
+        <Conditions>
+          <IsType Source="[Model]" Type="shel:IThumbnailCommand"/>
+          <IsValid Source="[Model!shel:IThumbnailCommand.DefaultImage]"/>
+        </Conditions>
+        <Actions>
+          <Set Value="[Model!shel:IThumbnailCommand.DefaultImage]" Target="[Thumb.Content]"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Equality Source="[FocusAnimationSpeed]" Value="instant"/>
+          <Equality Source="[ParentKeyFocus]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[Frame.DetachAnimation]" type="Show" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[ItemBGColor.DetachAnimation]" type="Alpha" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[Thumb.DetachAnimation]" type="Alpha" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.DetachAnimation]" type="Move" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.DetachAnimation]" type="Size" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.DetachAnimation]" type="Scale" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Equality Source="[FocusAnimationSpeed]" Value="slow"/>
+          <Equality Source="[ParentKeyFocus]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[Frame.DetachAnimation]" type="Show" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[ItemBGColor.DetachAnimation]" type="Alpha" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[Thumb.DetachAnimation]" type="Alpha" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.DetachAnimation]" type="Move" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.DetachAnimation]" type="Size" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.DetachAnimation]" type="Scale" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[Frame.AttachAnimation]" animation="animation://comm:ListViewItem.SelectorFrame.Show.Slow" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[ItemBGColor.AttachAnimation]" animation="animation://comm:ListViewItem.Alpha.GainFocus.Slow" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[Thumb.AttachAnimation]" animation="animation://comm:ListViewItem.Alpha.GainFocus.Slow" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.AttachAnimation]" animation="animation://comm:ListViewItem.Move.GainFocus.Slow" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.AttachAnimation]" animation="animation://comm:ListViewItem.Size.GainFocus.Slow" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.AttachAnimation]" animation="animation://comm:ListViewItem.Thumb.Scale.GainFocus.Slow" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Equality Source="[FocusAnimationSpeed]" Value="fast"/>
+          <Equality Source="[ParentKeyFocus]" Value="true"/>
+          <!--Equality Source="[Environment.Is2DAnimationExperience]" Value="false"/-->
+        </Conditions>
+        <Actions>
+          <Invoke Target="[Frame.DetachAnimation]" type="Show" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[ItemBGColor.DetachAnimation]" type="Alpha" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[Thumb.DetachAnimation]" type="Alpha" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.DetachAnimation]" type="Move" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.DetachAnimation]" type="Size" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.DetachAnimation]" type="Scale" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[Frame.AttachAnimation]" animation="animation://comm:ListViewItem.SelectorFrame.Show.Fast" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[ItemBGColor.AttachAnimation]" animation="animation://comm:ListViewItem.Alpha.GainFocus.Fast" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[Thumb.AttachAnimation]" animation="animation://comm:ListViewItem.Alpha.GainFocus.Fast" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.AttachAnimation]" animation="animation://comm:ListViewItem.Move.GainFocus.Fast" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.AttachAnimation]" animation="animation://comm:ListViewItem.Size.GainFocus.Fast" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.AttachAnimation]" animation="animation://comm:ListViewItem.Thumb.Scale.GainFocus.Fast" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+        </Actions>
+      </Rule>
+      <!--Rule>
+        <Conditions>
+          <Equality Source="[FocusAnimationSpeed]" Value="fast"/>
+          <Equality Source="[ParentKeyFocus]" Value="true"/>
+          <Equality Source="[Environment.Is2DAnimationExperience]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[Frame.DetachAnimation]" type="Show" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[ItemBGColor.DetachAnimation]" type="Alpha" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[Thumb.DetachAnimation]" type="Alpha" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.DetachAnimation]" type="Move" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.DetachAnimation]" type="Size" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.DetachAnimation]" type="Scale" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[Frame.AttachAnimation]" animation="animation://comm:ListViewItem.SelectorFrame.Show.Fast.GDI" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[ItemBGColor.AttachAnimation]" animation="animation://comm:ListViewItem.Alpha.GainFocus.Fast.GDI" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[Thumb.AttachAnimation]" animation="animation://comm:ListViewItem.Alpha.GainFocus.Fast.GDI" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.AttachAnimation]" animation="animation://comm:ListViewItem.Move.GainFocus.Fast.GDI" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.AttachAnimation]" animation="animation://comm:ListViewItem.Size.GainFocus.Fast.GDI" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.AttachAnimation]" animation="animation://comm:ListViewItem.Thumb.Scale.GainFocus.Fast.GDI" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+        </Actions>
+      </Rule-->
+      <Rule>
+        <Conditions>
+          <Equality Source="[FocusAnimationSpeed]" Value="mouse"/>
+          <Equality Source="[ParentKeyFocus]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[Frame.DetachAnimation]" type="Show" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[ItemBGColor.DetachAnimation]" type="Alpha" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[Thumb.DetachAnimation]" type="Alpha" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.DetachAnimation]" type="Move" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.DetachAnimation]" type="Size" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.DetachAnimation]" type="Scale" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[Frame.AttachAnimation]" animation="animation://comm:ListViewItem.SelectorFrame.Show.Mouse" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[ItemBGColor.AttachAnimation]" animation="animation://comm:ListViewItem.Alpha.GainFocus.Mouse" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[Thumb.AttachAnimation]" animation="animation://comm:ListViewItem.Alpha.GainFocus.Mouse" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.AttachAnimation]" animation="animation://comm:ListViewItem.Move.GainFocus.Mouse" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.AttachAnimation]" animation="animation://comm:ListViewItem.Size.GainFocus.Mouse" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.AttachAnimation]" animation="animation://comm:ListViewItem.Thumb.Scale.GainFocus.Mouse" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+        </Actions>
+      </Rule>
+      <Condition Source="[ParentKeyFocus]" SourceValue="true">
+        <Actions>
+          <Set Target="[ItemBGColor.Content]" Value="color://comm:GalleryItemFillFocus"/>
+          <Set Target="[ItemBGColor.Alpha]" Value="[FocusAlpha]"/>
+          <Set Target="[Thumb.Alpha]" Value="[FocusAlpha]"/>
+          <Set Target="[OverlayPanel.Margins]" Value="[FocusMargins]"/>
+          <Set Target="[OverlayPanel.Scale]" Value="[FocusScale]"/>
+        </Actions>
+      </Condition>
+      <Rule>
+        <Conditions>
+          <Equality Source="[ParentKeyFocus]" Value="false"/>
+          <!--Equality Source="[Environment.Is2DAnimationExperience]" Value="false"/-->
+        </Conditions>
+        <Actions>
+          <Invoke Target="[Frame.DetachAnimation]" type="Show" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[ItemBGColor.DetachAnimation]" type="Alpha" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[Thumb.DetachAnimation]" type="Alpha" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.DetachAnimation]" type="Move" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.DetachAnimation]" type="Size" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.DetachAnimation]" type="Scale" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[ItemBGColor.AttachAnimation]" animation="animation://comm:ListViewItem.Alpha.LoseFocus" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[Thumb.AttachAnimation]" animation="animation://comm:ListViewItem.Alpha.LoseFocus" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.AttachAnimation]" animation="animation://comm:ListViewItem.Move.LoseFocus" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.AttachAnimation]" animation="animation://comm:ListViewItem.Size.LoseFocus" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.AttachAnimation]" animation="animation://comm:ListViewItem.Thumb.Scale.LoseFocus" InvokePolicy="Synchronous"/>
+        </Actions>
+      </Rule>
+      <!--Rule>
+        <Conditions>
+          <Equality Source="[ParentKeyFocus]" Value="false"/>
+          <Equality Source="[Environment.Is2DAnimationExperience]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[Frame.DetachAnimation]" type="Show" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[ItemBGColor.DetachAnimation]" type="Alpha" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[Thumb.DetachAnimation]" type="Alpha" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.DetachAnimation]" type="Move" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.DetachAnimation]" type="Size" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.DetachAnimation]" type="Scale" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[ItemBGColor.AttachAnimation]" animation="animation://comm:ListViewItem.Alpha.LoseFocus.GDI" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[Thumb.AttachAnimation]" animation="animation://comm:ListViewItem.Alpha.LoseFocus.GDI" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.AttachAnimation]" animation="animation://comm:ListViewItem.Move.LoseFocus.GDI" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.AttachAnimation]" animation="animation://comm:ListViewItem.Size.LoseFocus.GDI" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayPanel.AttachAnimation]" animation="animation://comm:ListViewItem.Thumb.Scale.LoseFocus.GDI" InvokePolicy="Synchronous"/>
+        </Actions>
+      </Rule-->
+      <!--Rule>
+        <Conditions>
+          <Equality Source="[Environment.Is2DAnimationExperience]" Value="false"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[Frame.AttachAnimation]" animation="animation://comm:ListViewItem.SelectorFrame.Hide" InvokePolicy="Synchronous"/>
+        </Actions>
+      </Rule-->
+      <!--Rule>
+        <Conditions>
+          <Equality Source="[Environment.Is2DAnimationExperience]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[Frame.AttachAnimation]" animation="animation://comm:ListViewItem.SelectorFrame.Hide.GDI" InvokePolicy="Synchronous"/>
+        </Actions>
+      </Rule-->
+      <!--Condition Source="[Environment.ColorScheme]" ConditionOp="NotEquals" SourceValue="Default" Target="[FocusLoopAnimation.Visible]" Value="false"/-->
+      <Default Target="[Thumb.Content]" Value="[NoThumbnailImage]"/>
+      <!--Rule>
+        <Conditions>
+          <Modified Source="[Model!video:RecordedTVBrowseItem.Recording]" />
+        </Conditions>
+        <Actions>
+          <Set Target="[RecordingStateIcon.Image]" Value="[Model!video:RecordedTVBrowseItem.RecordStatusIcon]"/>
+        </Actions>
+      </Rule>
+      <Default Target="[RecordingStateIcon.Image]" Value="[Model!video:RecordedTVBrowseItem.RecordStatusIcon]"/-->
+    </Rules>
+    <Content>
+      <Panel Name="OverlayPanel" MaximumSize="48, 65" Margins="0, 0, 0, 0" Scale="1.0, 1.0, 1.0" CenterPointPercent="1.0, 0.5, 0.0">
+        <Layout>
+          <AnchorLayout SizeToHorizontalChildren="false" SizeToVerticalChildren="false"/>
+        </Layout>
+        <Children>
+          <Graphic Name="Frame" Content="image://me:Browse.Selector" Visible="false">
+            <LayoutInput>
+              <AnchorLayoutInput Top="Thumb, 0, -3" Left="Thumb, 0, -3" Bottom="Thumb, 1, 3" Right="Thumb, 1, 3" ContributesToWidth="false" ContributesToHeight="false"/>
+            </LayoutInput>
+            <Animations>
+              <!--Invoke Target="[Frame.AttachAnimation]" animation="animation://comm:ListViewItem.SelectorFrame.Hide" InvokePolicy="Synchronous"/-->
+              <Animation Animation="animation://comm:ListViewItem.SelectorFrame.Hide"/>
+            </Animations>
+            <Children>
+              <focus:SelectorFocusLoop Name="FocusLoopAnimation" Visible="true">
+                <LayoutInput>
+                  <AnchorLayoutInput Left="Parent, 0" Right="Parent, 1" Top="Parent, 0" Bottom="Parent, 1" ContributesToWidth="false" ContributesToHeight="false"/>
+                </LayoutInput>
+              </focus:SelectorFocusLoop>
+            </Children>
+          </Graphic>
+          <Graphic Name="RecordingStateIcon" MaintainAspectRatio="true" MaximumSize="0, 30">
+            <LayoutInput>
+              <AnchorLayoutInput Left="Parent, 0, 5" Bottom="Parent, 1, -5"/>
+            </LayoutInput>
+          </Graphic>
+          <Graphic Name="Thumb" Alpha="[NoFocusAlpha]" MaintainAspectRatio="true">
+            <LayoutInput>
+              <AnchorLayoutInput Horizontal="Fill" Vertical="Fill"/>
+            </LayoutInput>
+          </Graphic>
+          <ColorFill Name="ItemBGColor" Alpha="[NoFocusAlpha]" Content="[BGColor]">
+            <LayoutInput>
+              <AnchorLayoutInput Top="Thumb, 0, 0" Left="Thumb, 0, 0" Bottom="Thumb, 1, 0" Right="Thumb, 1, 0" ContributesToWidth="false" ContributesToHeight="false"/>
+            </LayoutInput>
+          </ColorFill>
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+
+  <UI Name="ItemCountGalleryItemUnderlay" BaseUI="me:BaseListItemOverlayContent">
+    <Properties>
+      <Font Name="EpisodeCountLabel" FontName="global://comm:RegularFontFace" FontSize="16"/>
+      <Color Name="EpisodeCountLabelColor" Color="color://comm:LightBlue"/>
+    </Properties>
+    <Rules>
+      <Condition Source="[ParentKeyFocus]" ConditionOp="Equals" SourceValue="true">
+        <Actions>
+          <Set Target="[EpisodeCount.Visible]" Value="false"/>
+        </Actions>
+      </Condition>
+      <!--Rule>
+        <Conditions>
+          <Modified Source="[Model!video:RecordedTVBrowseItemBucketBase.RecordingCountInfo]" />
+        </Conditions>
+        <Actions>
+          <Set Target="[EpisodeCount.Content]" Value="[Model!video:RecordedTVBrowseItemBucketBase.RecordingCountInfo]"/>
+        </Actions>
+      </Rule>
+      <Default Target="[EpisodeCount.Content]" Value="[Model!video:RecordedTVBrowseItemBucketBase.RecordingCountInfo]"/-->
+    </Rules>
+    <Content>
+      <Panel>
+        <Layout>
+          <AnchorLayout SizeToHorizontalChildren="false" SizeToVerticalChildren="false" />
+        </Layout>
+        <Children>
+          <Text Name="EpisodeCount" Font="[EpisodeCountLabel]" Color="[EpisodeCountLabelColor]" Visible="true">
+            <LayoutInput>
+              <AnchorLayoutInput Horizontal="Near" Vertical="Far" Left="Parent, 0, 5" Bottom="Parent, 1,-15"/>
+            </LayoutInput>
+            <Content>(5)</Content>
+          </Text>
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+
+  <UI Name="RecordedTVListViewItemRightBase" BaseUI="me:BaseListItemOverlayContent">
+    <Properties>
+      <Font Name="OverlayTextFont" FontName="global://comm:RegularFontFace" FontSize="18"/>
+      <Color Name="FocusColor" Color="color://comm:OffWhite"/>
+      <Color Name="NoFocusColor" Color="color://comm:LightBlue60Percent"/>
+    </Properties>
+    <Locals>
+      <Environment Name="Environment"/>
+    </Locals>
+    <Rules>
+      <Rule>
+        <Conditions>
+          <Equality Source="[FocusAnimationSpeed]" Value="instant"/>
+          <Equality Source="[ParentKeyFocus]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[OverlayText.DetachAnimation]" type="Move" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayText.DetachAnimation]" type="Size" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayText.DetachAnimation]" type="Scale" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Equality Source="[FocusAnimationSpeed]" Value="slow"/>
+          <Equality Source="[ParentKeyFocus]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[OverlayText.DetachAnimation]" type="Move" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayText.DetachAnimation]" type="Size" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayText.DetachAnimation]" type="Scale" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayText.AttachAnimation]" animation="animation://comm:ListViewItem.Move.GainFocus.Slow" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayText.AttachAnimation]" animation="animation://comm:ListViewItem.Size.GainFocus.Slow" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayText.AttachAnimation]" animation="animation://comm:ListViewItem.Text.Scale.GainFocus.Slow" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Equality Source="[FocusAnimationSpeed]" Value="fast"/>
+          <Equality Source="[ParentKeyFocus]" Value="true"/>
+          <!--Equality Source="[Environment.Is2DAnimationExperience]" Value="false"/-->
+        </Conditions>
+        <Actions>
+          <Invoke Target="[OverlayText.DetachAnimation]" type="Move" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayText.DetachAnimation]" type="Size" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayText.DetachAnimation]" type="Scale" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayText.AttachAnimation]" animation="animation://comm:ListViewItem.Move.GainFocus.Fast" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayText.AttachAnimation]" animation="animation://comm:ListViewItem.Size.GainFocus.Fast" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayText.AttachAnimation]" animation="animation://comm:ListViewItem.Text.Scale.GainFocus.Fast" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Equality Source="[FocusAnimationSpeed]" Value="mouse"/>
+          <Equality Source="[ParentKeyFocus]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[OverlayText.DetachAnimation]" type="Move" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayText.DetachAnimation]" type="Size" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayText.DetachAnimation]" type="Scale" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayText.AttachAnimation]" animation="animation://comm:ListViewItem.Move.GainFocus.Mouse" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayText.AttachAnimation]" animation="animation://comm:ListViewItem.Size.GainFocus.Mouse" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayText.AttachAnimation]" animation="animation://comm:ListViewItem.Text.Scale.GainFocus.Mouse" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Equality Source="[ParentKeyFocus]" ConditionOp="ChangedTo" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[OverlayText.Color]" Value="[FocusColor]"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Equality Source="[ParentKeyFocus]" ConditionOp="ChangedTo" Value="false"/>
+          <!--Equality Source="[Environment.Is2DAnimationExperience]" Value="false"/-->
+        </Conditions>
+        <Actions>
+          <Invoke Target="[OverlayText.DetachAnimation]" type="Move" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayText.DetachAnimation]" type="Size" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayText.DetachAnimation]" type="Scale" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayText.AttachAnimation]" animation="animation://comm:ListViewItem.Move.LoseFocus" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayText.AttachAnimation]" animation="animation://comm:ListViewItem.Size.LoseFocus" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Invoke Target="[OverlayText.AttachAnimation]" animation="animation://comm:ListViewItem.Text.Scale.LoseFocus" InvokePolicy="Synchronous" ExclusiveApply="false"/>
+          <Set Target="[OverlayText.Color]" Value="[NoFocusColor]"/>
+        </Actions>
+      </Rule>
+    </Rules>
+    <Content>
+      <Panel Padding="10, 0, 0, 0" Layout="Anchor">
+        <Children>
+          <Text Name="OverlayText" Font="[OverlayTextFont]" Color="[NoFocusColor]" Visible="true">
+            <LayoutInput>
+              <AnchorLayoutInput Horizontal="Near" Vertical="Center" Top="Parent, 0, 0" Left="Parent, 0, 10" Bottom="Parent, 1, 0"/>
+            </LayoutInput>
+            <Content>(6)</Content>
+          </Text>
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+</Mcml>

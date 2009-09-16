@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- These variables define the Windows Installer product version, product code and upgrade code. They   -->
+<!-- will be used later on in this file.                                                                 -->
+<?define Property_ProductVersion = "4.0.0.1669" ?>
+<?define Property_ProductCode = "63586C2D-203A-449A-B285-119C8A8FA770" ?>
+<?define Property_UpgradeCode = "0921ec75-fddc-46f8-bdf4-a5d697351567" ?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension"
+     xmlns:sql="http://schemas.microsoft.com/wix/SqlExtension"
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+  <Product Id="$(var.Property_ProductCode)"
+	         UpgradeCode="$(var.Property_UpgradeCode)"
+	         Name="!(loc.Property_ProductName)"
+	         Language="!(loc.Property_ProductLanguage)"
+	         Version="$(var.Property_ProductVersion)"
+	         Manufacturer="!(loc.Property_CompanyName)">
+
+    <Package Description="!(loc.Package_Description)"
+		         Comments="!(loc.Package_Comments)"
+		         InstallerVersion="200"
+		         Compressed="yes" />
+
+    <!--<Binary Id="OMLDB" SourceFile="..\..\SQL Scripts\Title Database.sql" />-->
+    <!-- This information enables Windows Installer major upgrade functionality so users can seamlessly  -->
+    <!-- install a new version of the product and have the old version automatically uninstall behind    -->
+    <!-- the scenes. See the following topic in the MSDN Library for additional information:             -->
+    <!-- http://msdn.microsoft.com/library/default.asp?url=/library/en-us/msi/setup/major_upgrades.asp   -->
+    <Upgrade Id="$(var.Property_UpgradeCode)">
+      <UpgradeVersion OnlyDetect="no"
+                      Property="OLDERVERSIONBEINGUPGRADED"
+                      Minimum="1.0.0"
+                      IncludeMinimum="yes"
+                      Maximum="$(var.Property_ProductVersion)"
+                      IncludeMaximum="no"/>
+      <UpgradeVersion Minimum="$(var.Property_ProductVersion)"
+                      OnlyDetect="yes"
+                      Property="NEWERVERSIONDETECTED" />
+    </Upgrade>
+
+    <DirectoryRef Id="APPLICATIONROOTDIRECTORY">
+      <Directory Id="SQLINSTALLERSOURCE" Name="SQLInstaller">
+        <Component Id="SQLEXPR_x86_ENU.exe" Guid="50F4CF02-7061-4d2c-8DE5-1F26A9FB9885" DiskId="1">
+          <File Name="SQLEXPR_x86_ENU.exe"
+                            Source="..\..\PostInstallerWizard\SQLInstallers\SQLEXPR_x86_ENU.exe" Checksum="no" />
+        </Component>
+      </Directory>
+    </DirectoryRef>
+
+    <ComponentGroup Id="ServerGroup">
+      <ComponentRef Id ="SQLEXPR_x86_ENU.exe"/>
+    </ComponentGroup>
+
+    <Feature Id="APPLICATIONROOTFEATURE" Title="Open Media Library" Level="1" AllowAdvertise="no" Absent="disallow">
+      <ComponentGroupRef Id="CommonComponents"/>
+      <ComponentGroupRef Id="UserGuide"/>
+      <Feature Id="SERVERFEATURE" Title="OML Server" Level="1" AllowAdvertise="no" Description="Install the server components.">
+        <ComponentGroupRef Id ="ServerGroup"/>
+      </Feature>
+      <FeatureGroupRef Id="CLIENTFEATURES"/>
+    </Feature>
+
+    <!-- This UIRef element specifies what WiXUI dialog set to use for the setup UI. This package uses   -->
+    <!-- the WixUI_InstallDir dialog set, which provides a welcome page, a license agreement page, a     -->
+    <!-- page to allow changing the installation path, an installation confirmation page, a progress     -->
+    <!-- page and a completion page. Other dialog sets are available in the WiX toolset and are          -->
+    <!-- described in more detail in the WiX documentation.                                              -->
+    <UI>
+      <UIRef Id="WixUI_FeatureTree" />
+      <Publish Dialog="ExitDialog"
+               Control="Finish"
+               Event="DoAction"
+               Value="LaunchApplication">1</Publish>
+    </UI>
+
+    <Property Id="WixShellExecTarget" Value="[#PostInstallerWizard.exe]" />
+
+    <CustomAction Id="LaunchApplication"
+        BinaryKey="WixCA"
+        DllEntry="WixShellExec"
+        Impersonate="yes" />
+    
+  </Product>
+</Wix>
+
+

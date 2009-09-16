@@ -1,0 +1,266 @@
+<Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
+	  xmlns:shl="assembly://Library/Library.Code.V3"
+      xmlns:omlShell ="assembly://Library/Library"
+	  xmlns:sys="assembly://mscorlib/System"
+	  xmlns:ctl="resx://Library/Library.Resources/V3_Controls"
+	  xmlns:core="resx://Library/Library.Resources/V3_Globals"
+    xmlns:pip="resx://Library/Library.Resources/V3_GalleryPage"
+      xmlns:scr="resx://Library/Library.Resources/V3_Controls_ScrollControl"
+	  xmlns:me="Me">
+
+  <!-- A details page -->
+  <UI Name="SettingsManager">
+    <Properties>
+      <shl:SettingsManager Name="Page" SettingsManager="$Required"/>
+      <omlShell:OMLApplication Name="Application" OMLApplication="$Required"/>
+    </Properties>
+
+    <Locals>
+      <sys:Boolean Name="Initialized" Boolean="false"/>
+      <Environment    Name="Environment"/>
+      <IntRangedValue Name="MetaDataTopShift" Value="0"/>
+      <IntRangedValue Name="GalleryContentShift"/>
+      <IntRangedValue Name="MetaDataLeftShift"/>
+      <IntRangedValue Name="TotalCount"/>
+      <IntRangedValue Name="TotalCountOverride"/>
+      <!-- used by galleries that override the count/index UI -->
+      <IntRangedValue Name="ItemIndexOverride"/>
+      <!-- used by galleries that override the count/index UI -->
+      <BooleanChoice  Name="IsOneRow"/>
+      <EditableText   Name="FocusArea" Value="Gallery"/>
+      <!-- tracks the focus on a gross scale -->
+      <EditableText   Name="NavigationDirection" Value="none"/>
+      <!-- Used to trigger directional animations -->
+      <EditableText   Name="TransitionState" Value="Idle"/>
+      <!-- tracks the current transition to activate the right animations -->
+      <EditableText   Name="ItemMode" Value="none"/>
+    </Locals>
+    <Rules>
+      <Condition Source="[Input.DeepKeyFocus]" SourceValue="false">
+        <Actions>
+          <Set Target="[FocusArea.Value]" Value="PIP"/>
+        </Actions>
+      </Condition>
+      <Condition Source="[Input.DeepKeyFocus]" SourceValue="true">
+        <Actions>
+          <Set Target="[FocusArea.Value]" Value="Gallery"/>
+        </Actions>
+      </Condition>
+      <Rule>
+        <Conditions>
+          <Equality Source="[FocusArea.Value]" ConditionOp="Equals" Value="PIP"/>
+        </Conditions>
+        <Actions>
+          <PlayAnimation Target="[ContentArea]" Animation="animation://me:Browse.Gallery.Hide.Focus"/>
+          <Set Target="[ContentPanel.ShowFar]" Value="true"/>
+          <Set Target="[ContentPanel.ShowNear]" Value="false"/>
+          <Set Target="[ContentPanel.FadeSize]" Value="300"/>
+          <Set Target="[PIPFocusBackground.Visible]" Value="true"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Equality Source="[FocusArea.Value]" Value="Gallery"/>
+          <Equality Source="[TransitionState.Value]" Value="Idle"/>
+        </Conditions>
+        <Actions>
+          <PlayAnimation Target="[ContentArea]" Animation="animation://me:Browse.Gallery.Show.Focus"/>
+          <Set Target="[ContentPanel.FadeSize]" Value="0"/>
+          <Set Target="[PIPFocusBackground.Visible]" Value="false"/>
+
+        </Actions>
+      </Rule>
+      <!-- Only show the fanart if we were given a image -->
+      <Condition Source="[Application.PrimaryBackgroundImage]" ConditionOp="NotEquals" SourceValue="null">
+        <Actions>
+          <Set Target="[Background.Source]" Value="core:FanArtBackgroundGallery"/>
+        </Actions>
+      </Condition>
+
+      <Binding Target="[Background.FanArt]" Source="[Application.PrimaryBackgroundImage]"/>
+      <Binding Target="[Background.FanArtAlpha]" Source="[Application.PrimaryBackgroundImageAlpha]"/>
+
+    </Rules>
+    <Content>
+      <Panel>
+        <Children>
+          <Panel Name="PIPFocusBackground" MaximumSize="1366, 0" Visible="false">
+            <Children>
+
+              <Graphic Alpha=".75" Content="resx://Library/Library.Resources/V3_Controls_Common_NowPlayingPIP_BackgroundMask" Layout="Fill">
+                <Animations>
+                  <!-- Standard fade out -->
+                  <Animation Type="Hide">
+                    <Keyframes>
+                      <AlphaKeyframe Time="0.00" RelativeTo="Current" Interpolation="SCurve"/>
+                      <AlphaKeyframe Time="0.25" Value="0.0" RelativeTo="Absolute"/>
+                    </Keyframes>
+                  </Animation>
+                  <!-- Standard fade in -->
+                  <Animation Type="Show">
+                    <Keyframes>
+                      <AlphaKeyframe Time="0.0" Value="0.0" Interpolation="SCurve" RelativeTo="Absolute"/>
+                      <AlphaKeyframe Time="0.25" Value="1.0" RelativeTo="Absolute"/>
+                    </Keyframes>
+                  </Animation>
+
+                </Animations>
+              </Graphic>
+
+            </Children>
+          </Panel>
+          <!--Clip Name="ContentPanel" FocusOrder="0" ShowFar="false" ShowNear="true" Orientation="Vertical" FadeAmount="1" FadeSize="300" Alpha="1"
+          CenterPointPercent="0.5,0.5,0.5"-->
+          <Clip Name="ContentPanel">
+            <!--Scale="0.95,0.95,0.95"-->
+            <Layout>
+              <AnchorLayout SizeToHorizontalChildren="false" SizeToVerticalChildren="true"/>
+            </Layout>
+            <LayoutInput>
+              <AnchorLayoutInput Horizontal="Near" Vertical="Near" />
+            </LayoutInput>
+            <Children>
+              <Panel Name="ContentArea" Layout="Center">
+                <!--LayoutInput>
+                  <AnchorLayoutInput Horizontal="Near" Vertical="Near"/>
+                </LayoutInput-->
+                <Children>
+                  <me:DetailsPane Page="[Page]"/>
+                </Children>
+              </Panel>
+            </Children>
+          </Clip>
+          <!-- Placeholder for the Now Playing Inset -->
+          <Panel>
+            <Layout>
+              <AnchorLayout SizeToVerticalChildren="false"/>
+            </Layout>
+            <Children>
+
+              <pip:PIPArea Name="PIPArea" MaximumSize="861, 150" MinimumSize="861, 150" FocusArea="[FocusArea]"
+                          NavigationDirection="[NavigationDirection]" TransitionState="[TransitionState]">
+                <LayoutInput>
+                  <AnchorLayoutInput Horizontal="Near" Vertical="Far" />
+                </LayoutInput>
+              </pip:PIPArea>
+
+            </Children>
+          </Panel>
+          <core:AnimatedBackground Name="Background" FanArt="[Application.PrimaryBackgroundImage]" FanArtAlpha="[Application.PrimaryBackgroundImageAlpha]"/>
+
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+
+  <!-- The primary display area of a details page -->
+  <UI Name="DetailsPane">
+    <Properties>
+      <shl:SettingsManager Name="Page" SettingsManager="$Required"/>
+      <Color Name="ButtonNoFocusColor" Color="color://core:OffWhite"/>
+    </Properties>
+    <Content>
+      <Panel>
+        <Animations>
+          <!-- Standard fade in -->
+          <Animation Type="Show">
+            <Keyframes>
+              <AlphaKeyframe Time="0.0" Value="0.0" Interpolation="SCurve" RelativeTo="Absolute"/>
+              <AlphaKeyframe Time="0.5" Value="1.0" RelativeTo="Absolute"/>
+            </Keyframes>
+          </Animation>
+
+          <!-- Standard fade out -->
+          <Animation Type="Hide">
+            <Keyframes>
+              <AlphaKeyframe Time="0.00" RelativeTo="Current" Interpolation="SCurve"/>
+              <AlphaKeyframe Time="0.2" Value="0.0" RelativeTo="Absolute"/>
+            </Keyframes>
+          </Animation>
+        </Animations>
+        <Children>
+          <Panel Margins="190,41,205,0">
+            <Children>
+              <Clip FadeSize="25" MaximumSize="500,70" NearOffset="-40" Orientation="Vertical">
+                <Children>
+                  <Text Content="[Page.Title]" Color="102, 151, 217, 255" Font="Segoe Media Center Light,28" Alpha=".92" CenterPointPercent="1,0,1"/>
+                </Children>
+              </Clip>
+            </Children>
+          </Panel>
+          <!-- main layout panel -->
+          <Panel Margins="0,56,0,0" Layout="Center">
+            <!--Layout>
+              <FlowLayout Orientation="Horizontal"/>
+            </Layout-->
+            <Animations>
+              <!-- Grow create -->
+              <Animation Type="Show" CenterPointPercent="0.5, 0.5, 1.0">
+                <Keyframes>
+                  <ScaleKeyframe Time="0.0" Value="0.0, 0.0, 0.0" Interpolation="Log" RelativeTo="Absolute"/>
+                  <ScaleKeyframe Time="0.5" Value="1.0, 1.0, 1.0" RelativeTo="Absolute"/>
+
+                  <AlphaKeyframe Time="0.0" Value="0.0" Interpolation="Log" RelativeTo="Absolute"/>
+                  <AlphaKeyframe Time="0.5" Value="1.0" RelativeTo="Absolute"/>
+                </Keyframes>
+              </Animation>
+              <!-- Shrink Destroy -->
+              <Animation Type="Hide" CenterPointPercent="0.5, 0.5, 1.0">
+                <Keyframes>
+                  <ScaleKeyframe Time="0.0" RelativeTo="Current" Interpolation="Exp"/>
+                  <ScaleKeyframe Time="0.25" Value="0.60, 0.60, 0.60" RelativeTo="Absolute"/>
+
+                  <AlphaKeyframe Time="0.0" RelativeTo="Current" Interpolation="Log"/>
+                  <AlphaKeyframe Time="0.5" Value="0.0" RelativeTo="Absolute"/>
+                </Keyframes>
+              </Animation>
+            </Animations>
+            <Children>
+              <!--Panel Layout="Form" Padding="0,0,0,0">
+                <Children-->
+                  <Panel Name="ButtonsHolder" MinimumSize="240,500" Margins="225,0,0,0" Layout="VerticalFlow">
+                    <LayoutInput>
+                      <FormLayoutInput Left="Parent,0" Top="Parent,0"/>
+                    </LayoutInput>
+                    <Children>
+                      <Repeater Name="Buttons" Source="[Page.Commands]" Layout="VerticalFlow" Margins="0,0,0,0">
+                        <LayoutInput>
+                          <AnchorLayoutInput Top="Parent,0" Horizontal="Near"/>
+                        </LayoutInput>
+                        <Content>
+
+                          <!--ctl:Button Model="[RepeatedItem!Command]" TileMinSize="250,51" TileMaxSize="250,51" TextMargins="12,5,12,5" /-->
+                          <ctl:Button Model="[RepeatedItem!Command]" TileSize="590,51" NoFocusColor="[ButtonNoFocusColor]" />
+
+                        </Content>
+                      </Repeater>
+                    </Children>
+                  </Panel>
+              <!--/Children>
+              </Panel-->
+            </Children>
+          </Panel>
+        </Children>
+      </Panel>
+    </Content>
+
+  </UI>
+  <Animation Name="Browse.Gallery.Show.Focus" Type="Idle" CenterPointPercent="0.5, 0.5, 0.0">
+    <Keyframes>
+      <ScaleKeyframe Time="0.0" RelativeTo="Current" Interpolation="Log, 4.0"/>
+      <ScaleKeyframe Time="0.3" Value="1.0, 1.0, 1.0" RelativeTo="Absolute"/>
+
+      <AlphaKeyframe Time="0.0" RelativeTo="Current"/>
+      <AlphaKeyframe Time="0.3" Value="1.0" RelativeTo="Absolute"/>
+    </Keyframes>
+  </Animation>
+  <Animation Name="Browse.Gallery.Hide.Focus" Type="Idle" CenterPointPercent="0.5, 0.5, 0.0">
+    <Keyframes>
+      <ScaleKeyframe Time="0.0" RelativeTo="Current" Interpolation="Log, 4.0"/>
+      <ScaleKeyframe Time="0.3" Value="0.95, 0.95, 1.0" RelativeTo="Absolute"/>
+
+      <AlphaKeyframe Time="0.0" RelativeTo="Current"/>
+      <AlphaKeyframe Time="0.3" Value="0.7" RelativeTo="Absolute"/>
+    </Keyframes>
+  </Animation>
+</Mcml>

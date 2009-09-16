@@ -1,0 +1,157 @@
+<!--Mcml xmlns="http://schemas.microsoft.com/2006/mcml" 
+xmlns:cor ="assembly://MsCorLib/System" 
+xmlns:comm="res://Microsoft.MediaCenter.Shell!Globals.mcml"-->
+<Mcml xmlns="http://schemas.microsoft.com/2006/mcml"
+	  xmlns:cor="assembly://mscorlib/System"
+    xmlns:comm="resx://Library/Library.Resources/V3_Globals"
+	  xmlns:me="Me">
+
+  <UI Name="TestEdit">
+    <Properties>
+      <EditableText Name="SampleEditableText" Value="4"/>
+      <EditableText Name="SampleEditableText2" Value="00"/>
+    </Properties>
+    <Content>
+      <ColorFill Layout="Center" Content="255,   5,  33,  92">
+        <Children>
+
+          <Panel Layout="HorizontalFlow">
+            <Children>
+              <me:Edit ContentMinSize="50,32" ContentMaxSize="50,32" Model="[SampleEditableText]"/>
+              <Text Content=" : "/>
+              <me:Edit Model="[SampleEditableText2]"/>
+            </Children>
+          </Panel>
+        </Children>
+      </ColorFill>
+    </Content>
+  </UI>
+  
+  <UI Name="Edit">
+    <Properties>
+      <EditableText Name="Model" EditableText="$Required"/>
+      <cor:Boolean Name="PasswordMasked" Boolean="false" />
+      <Font Name="Font" Font="font://comm:ButtonText"/>
+      <Font Name="LabelFont" Font="font://comm:ButtonText"/>
+      <Size Name="CaretSize" Size="25, 5"/>
+      <Size Name="ContentMinSize" Size="150, 32"/>
+      <Size Name="ContentMaxSize" Size="150, 32"/>
+      <Size Name="TextMinSize" Size="0, 30"/>
+      <Inset Name="ContentMargins" Inset="5, 7, 5, 7"/>
+      <Inset Name="LabelMargins" Inset="15, 5, 10, 5"/>
+      <Image Name="NoFocusImage" Source="resx://Library/Library.Resources/V3_Controls_Common_Find_EditBox_NoFocus" NineGrid="4,4,4,4"/>
+      <Image Name="FocusImage" Source="resx://Library/Library.Resources/V3_Controls_Common_Find_EditBox" NineGrid="4,4,4,4"/>
+      <Image Name="DisabledImage" Source="resx://Library/Library.Resources/V3_Controls_Common_Find_EditBox_NoFocus" NineGrid="4,4,4,4"/>
+      <Color Name="NoFocusColor" Color="color://comm:LightBlue"/>
+      <Color Name="FocusColor" Color="color://comm:OffWhite"/>
+      <Color Name="DisabledColor" Color="color://comm:LightBlue40Percent"/>
+      <cor:String Name="AccessibilityName" String="null"/>
+      <cor:String Name="AccessibilityDesc" String="null"/>
+      <cor:Int32 Name="MaxLength" Int32="32000" />
+      <cor:Boolean Name="UseTripleTap" Boolean="true" />
+    </Properties>
+    <Locals>
+      <TypingHandler Name="Typer"/>
+    </Locals>
+    <Rules>
+      <Binding Target="[Accessible.IsFocusable]" Source="[Input.KeyInteractive]"/>
+      <Binding Target="[Accessible.IsFocused]" Source="[Input.KeyFocus]"/>
+      <Binding Target="[Accessible.Value]" Source="[Typer.DisplayValue]"/>
+      <Default Target="[Accessible.Role]" Value="Text"/>
+      <Default Target="[Accessible.Name]" Value="[AccessibilityName]"/>
+      <Binding Target="[Accessible.Description]" Source="[AccessibilityDesc]"/>
+      <Condition Source="[UseTripleTap]" SourceValue="false" Target="[Typer.TypingPolicy]" Value="Default"/>
+      <Condition Source="[UseTripleTap]" SourceValue="true" Target="[Typer.TypingPolicy]" Value="TripleTap"/>
+      <Condition Source="[Input.Enabled]" SourceValue="false" Target="[Label.Color]" Value="[DisabledColor]"/>
+      <Condition Source="[Input.KeyFocus]" SourceValue="true" Target="[Label.Color]" Value="[FocusColor]"/>
+      <Condition Source="[Input.Enabled]" SourceValue="false" Target="[Background.Content]" Value="[DisabledImage]"/>
+      <Condition Source="[Input.KeyFocus]" SourceValue="true" Target="[Background.Content]" Value="[FocusImage]"/>
+      <Rule>
+        <Conditions>
+          <Equality Source="[Model.Overtype]" Value="false"/>
+          <Equality Source="[Input.KeyFocus]" Value="true"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[Caret.Visible]" Value="true"/>
+        </Actions>
+      </Rule>
+      <!--Changed Source="[Input.KeyFocus]">
+        <Conditions>
+          <Equality Source="[Input.KeyFocus]" Value="false"/>
+        </Conditions>
+        <Actions>
+          <Invoke Target="[Typer.Submit]" />
+        </Actions>
+      </Changed-->
+      <Binding Source="[Model.Overtype]" Target="[Overtype.Visible]"/>
+      <Binding Source="[Typer.DisplayValue]" Target="[Value.Content]"/>
+      <Binding Source="[Typer.DisplayValue]" Target="[Overtype.Content]"/>
+      <Binding Source="[Model.Description]" Target="[Label.Content]"/>
+      <Binding Target="[Typer.EditableText]" Source="[Model]"/>
+      <Binding Target="[Typer.PasswordMasked]" Source="[PasswordMasked]"/>
+      <Binding Target="[Typer.MaxLength]" Source="[MaxLength]" />
+      <Binding Target ="[Model.Overtype]" Source ="[Input.DeepKeyFocus]"/>
+    </Rules>
+    <Content>
+      <Panel Layout="HorizontalFlow">
+        <Children>
+          <!--FancyText Name="Label" Color="[NoFocusColor]" HorizontalAlignment="Near" Font="[LabelFont]" Margins="[LabelMargins]"/-->
+          <Text Name="Label" Color="[NoFocusColor]" HorizontalAlignment="Near" Font="[LabelFont]" Margins="[LabelMargins]"/>
+          <!--Graphic Name="Background" Image="[NoFocusImage]" Padding="[ContentMargins]" SizingPolicy="SizeToChildren"-->
+          <Graphic Name="Background" Content="[NoFocusImage]" Padding="[ContentMargins]" SizingPolicy="SizeToChildren">
+            <Children>
+              <Panel MinimumSize="[ContentMinSize]" MaximumSize="[ContentMaxSize]" >
+                <Layout>
+                  <FlowLayout Orientation="Horizontal" ItemAlignment="Far"/>
+                </Layout>
+                <Children>
+                  <Panel MinimumSize="[TextMinSize]">
+                    <!--Layout>
+                      <StageLayout/>
+                    </Layout-->
+                    <Children>
+                      <Text Name="Value" Color="color://comm:Black" HorizontalAlignment="Far" Font="[Font]">
+                        <!--LayoutInput>
+                          <StageLayoutInput Stage="Primary"/>
+                        </LayoutInput-->
+                      </Text>
+                      <!--ColorFill Name="Overtype" Layout="LegacyFill" Content="255, 126, 185, 227"/-->
+                      <!--ColorFill Name="Overtype" Layout="LegacyFill" Content="255, 126, 185, 227"/-->
+                      <Text Name="Overtype" BackColor="255, 126, 185, 227" Color="Transparent" HorizontalAlignment="Far" Font="[Font]"/>
+                    </Children>
+                  </Panel>
+                  <!--Graphic Name="Caret" Visible="false" Image="res://ehres!Edit.Mirror.Caret.png" MaximumSize="[CaretSize]"-->
+                  <Graphic Name="Caret" Visible="false" Content="resx://Library/Library.Resources/V3_Controls_Common_Edit_Caret" MaximumSize="[CaretSize]">
+                    <!--Animation>
+                      animation://comm:CaretBlink.Show
+                    </Animation>
+                    <Animation>
+                      animation://comm:StandardFade.Hide
+                    </Animation-->
+                    <Animations>
+                      <Animation Name="CaretBlink.Show" Type="Show" Loop="-1">
+                        <Keyframes>
+                          <AlphaKeyframe Time="0.0" Value="0.0" Interpolation="SCurve" RelativeTo="Absolute"/>
+                          <AlphaKeyframe Time="0.5" Value="0.0" Interpolation="SCurve" RelativeTo="Absolute"/>
+                          <AlphaKeyframe Time="0.6" Value="1.0" Interpolation="SCurve" RelativeTo="Absolute"/>
+                          <AlphaKeyframe Time="1.1" Value="1.0" Interpolation="SCurve" RelativeTo="Absolute"/>
+                          <AlphaKeyframe Time="1.2" Value="0.0" RelativeTo="Absolute"/>
+                        </Keyframes>
+                      </Animation>
+                      <Animation Name="StandardFade.Hide" Type="Hide">
+                        <Keyframes>
+                          <AlphaKeyframe Time="0.00" RelativeTo="Current" Interpolation="SCurve"/>
+                          <AlphaKeyframe Time="0.25" Value="0.0" RelativeTo="Absolute"/>
+                        </Keyframes>
+                      </Animation>
+                    </Animations>
+                  </Graphic>
+                </Children>
+              </Panel>
+            </Children>
+          </Graphic>
+        </Children>
+      </Panel>
+    </Content>
+  </UI>
+</Mcml>
