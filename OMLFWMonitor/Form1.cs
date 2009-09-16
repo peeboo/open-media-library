@@ -75,11 +75,11 @@ namespace OMLFWMonitor
 
         private void WatchOMLdat()
         {
-            /*TitleCollection tc;
+            TitleCollection tc;
             tc = new TitleCollection();
-            //fw.AddWatch(tc.DBFilename);
+            fw.AddWatch(tc.DBFilename);
             tc.loadTitleCollection();
-            foreach (Title t in tc.Source)
+            foreach (Title t in tc)
             {
                 foreach (Disk d in t.Disks)
                 {
@@ -89,7 +89,7 @@ namespace OMLFWMonitor
                         DiskDirs.Add(sDiskPath);
                     }
                 }
-            }*/
+            }
         }
 
         public bool logging

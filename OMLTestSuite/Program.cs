@@ -14,42 +14,6 @@ namespace OMLTestSuite
     {
         static void Main(string[] args)
         {
-            FileDownloaderTest fdt = new FileDownloaderTest();
-            fdt.TestDownload();
-
-            NetworkPathFix nfp = new NetworkPathFix();
-            nfp.Test();
-            
-    
-            //TVDBMetaDataTest tvdb = new TVDBMetaDataTest();
-            //tvdb.Test();
-
-
-            /*CreateTestTitles ctt = new CreateTestTitles();
-            ctt.CreateTitles();
-            Console.ReadKey();
-            return;
-
-            TitleCollectionManagerTest tcm = new TitleCollectionManagerTest();
-            
-            Console.WriteLine("Testing: Title Collection Manager SQL");*/
-            //tcm.TEST_DELETE_ALL_DATA();
-            //tcm.TEST_IMPORT_INTO_DATABASE();
-            //tcm.TEST_GETTING_ALL_TITLES();
-            //tcm.TEST_GET_ALL_GENRES();
-            //tcm.TEST_GET_ALL_MOVIES_FOR_ACTOR();
-            //tcm.TEST_GET_ALL_MOVIES_FOR_ACTOR_WITH_GENRE();
-            //tcm.TEST_GET_ALL_PEOPLE();
-            //tcm.TEST_GET_ALL_GENRES_GIVEN_FILTER();
-            //tcm.TEST_GET_ACTORS_UNWATCHED();
-            //tcm.TEST_DISK_ALREADY_EXISTS();
-            //tcm.TEST_SAVE_SETTINGS();
-            //tcm.TEST_CLEANUP_IMAGES();
-            //tcm.TEST_USER_FILTERS();
-
-            Console.ReadLine();
-            return;
-
             DiskInfoTest dit = new DiskInfoTest();
             //dit.TestLookup("AVI", @"G:\Films\Father Ted\Series 1\FatherTed Episode 5.divx", OMLEngine.VideoFormat.AVI);
             //dit.TestLookup("AVI", @"G:\Films\Star Wars 1 - mkv\Star Wars Episode I - The Phontom Menace (1080p).mkv", OMLEngine.VideoFormat.AVI);
@@ -125,11 +89,11 @@ namespace OMLTestSuite
             tt.TEST_BASE_CASE();
             tt.TEST_LOAD_FROM_XML();
 
-            //TitleCollectionTest tct = new TitleCollectionTest();
-            //Console.WriteLine("Testing: TitleCollection");
-            //tct.TEST_BASE_CASE();
-            //tct.TEST_FIND_FOR_ID();
-            //tct.TEST_SOURCE_DATABASE_TO_USE();
+            TitleCollectionTest tct = new TitleCollectionTest();
+            Console.WriteLine("Testing: TitleCollection");
+            tct.TEST_BASE_CASE();
+            tct.TEST_FIND_FOR_ID();
+            tct.TEST_SOURCE_DATABASE_TO_USE();
 #endif
 
             MEncoderCommandBuilderTest mecbt = new MEncoderCommandBuilderTest();
@@ -138,14 +102,14 @@ namespace OMLTestSuite
             mecbt.TEST_DVD_IFO_PARSING();
             mecbt.TEST_COMMAND_BUILDER_A_S();
             //mecbt.EXECUTE_COMMAND_BUILDER_A_S();
-//#if !CUSTOM
-//            mecbt.TEST_BASIC_COMMAND_BUILDER();
+#if !CUSTOM
+            mecbt.TEST_BASIC_COMMAND_BUILDER();
 
-//            VirtualDirectoryTest vdt = new VirtualDirectoryTest();
-//            Console.WriteLine("Testing: VirtualDirectory");
-//            vdt.TEST_CREATE_VIRTUAL_FOLDER();
-//            vdt.TEST_MULTIPLE_BASE_FOLDERS_WORK();
-//#endif
+            VirtualDirectoryTest vdt = new VirtualDirectoryTest();
+            Console.WriteLine("Testing: VirtualDirectory");
+            vdt.TEST_CREATE_VIRTUAL_FOLDER();
+            vdt.TEST_MULTIPLE_BASE_FOLDERS_WORK();
+#endif
         }
     }
 }

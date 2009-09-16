@@ -25,40 +25,25 @@ namespace TheMovieDbMetadata
 
     public class TheMovieDbMetadata : IOMLMetadataPlugin
     {
-        List<string> BackDrops = null;
+        IList<string> BackDrops = null;
         private const string API_KEY = "1376bf98794bda0c2495bd500a37f689";
         private const string API_URL_SEARCH = "http://api.themoviedb.org/2.0/Movie.search";
         private const string API_URL_INFO = "http://api.themoviedb.org/2.0/Movie.getInfo";
 
         private List<TheMovieDbResult> results = null;
 
+        public string PluginName { get { return "themoviedb.org"; } }
 
-        public List<MetaDataPluginDescriptor> GetProviders
-        {
-            get
-            {
-                List<MetaDataPluginDescriptor> descriptors = new List<MetaDataPluginDescriptor>();
-
-                MetaDataPluginDescriptor descriptor = new MetaDataPluginDescriptor();
-                descriptor.DataProviderName = "themoviedb.org";
-                descriptor.DataProviderMessage = "Data provided by themoviedb.org";
-                descriptor.DataProviderLink = "http://www.themoviedb.org/";
-                descriptor.DataProviderCapabilities = MetadataPluginCapabilities.SupportsMovieSearch | MetadataPluginCapabilities.SupportsBackDrops;
-                descriptor.PluginDLL = null;
-                descriptors.Add(descriptor);
-                return descriptors;
-            }
-        }
 
         // these 2 methods must be called in sequence
-        public bool Initialize(string provider, Dictionary<string, string> parameters)
+        public bool Initialize(Dictionary<string, string> parameters)
         {
             return true;
         }
 
-        public bool SearchForMovie(string movieName, int maxResults)
+        public bool SearchForMovie(string movieName)
         {
-            SearchForMovies(movieName, maxResults);
+            SearchForMovies(movieName);
 
             return (results != null && results.Count != 0);
         }
@@ -117,9 +102,6 @@ namespace TheMovieDbMetadata
 
             while (reader.Read())
             {
-                if (reader.Value == "Your query didn't return any results.")
-                    return null;
-
                 if (reader.NodeType == XmlNodeType.Element)
                 {
                     switch (reader.Name)
@@ -237,7 +219,7 @@ namespace TheMovieDbMetadata
                                             break;                                        
 
                                         case "producer":
-                                            result.Title.AddProducer(new Person(GetElementValue(reader)));
+                                            result.Title.AddProducer(GetElementValue(reader));
                                             break;                                        
 
                                         case "original_music_composer":
@@ -323,7 +305,7 @@ namespace TheMovieDbMetadata
         /// Fills the local results with movies
         /// </summary>
         /// <param name="searchQuery"></param>
-        private void SearchForMovies(string searchQuery, int maxResults)
+        private void SearchForMovies(string searchQuery)
         {
             UriBuilder uri = new UriBuilder(API_URL_SEARCH);
             uri.Query = "api_key=" + API_KEY + "&title=" + searchQuery;
@@ -351,8 +333,6 @@ namespace TheMovieDbMetadata
 
                                 if (title != null)
                                     results.Add(title);
-
-                                if (results.Count >= maxResults) break;
                             }
                         }
                     }
@@ -362,14 +342,7 @@ namespace TheMovieDbMetadata
             // load up all the titles with images
             foreach (TheMovieDbResult title in results)
             {
-                if (title != null)
-                {
-                    if (title.ImageUrlThumb != null)
-                    {
-                        title.Title.FrontCoverPath = title.ImageUrlThumb;
-                    }
-                }
-                //DownloadImage(title.Title, title.ImageUrlThumb);
+                DownloadImage(title.Title, title.ImageUrlThumb);
             }
         }
 
@@ -439,10 +412,13 @@ namespace TheMovieDbMetadata
             }
         }
 
-        public List<string> GetBackDropUrlsForTitle()
+        public bool SupportsBackDrops()
         {
-            return BackDrops;
-            /*
+            return true;
+        }
+
+        public void DownloadBackDropsForTitle(Title t, int index)
+        {
             if (results.Count >= index)
             {
                 if (this.BackDrops == null)
@@ -455,27 +431,20 @@ namespace TheMovieDbMetadata
                     try
                     {
                         if (!string.IsNullOrEmpty(backDropUrl))
-                        {                            
-                            string filename = Path.Combine(FileSystemWalker.ImageDownloadDirectory, Guid.NewGuid().ToString());                            
-                            web.DownloadFile(backDropUrl, filename);
-
-                            t.AddFanArtImage(filename);
+                        {
+                            string[] folders = backDropUrl.Split('/');
+                            string filename = folders[folders.Length - 2] + folders[folders.Length - 1];
+                            if (!File.Exists(Path.Combine(t.BackDropFolder, filename).ToString()))
+                            {
+                                web.DownloadFile(backDropUrl, Path.Combine(t.BackDropFolder, filename).ToString());
+                            }
                         }
                     }
                     catch
                     {
                     }
                 }
-            }*/
-        }
-
-        public bool SearchForTVSeries(string SeriesName, string EpisodeName, int? SeriesNo, int? EpisodeNo, int maxResults, bool SearchTVShowOnly)
-        {
-            return false;
-        }
-        public bool SearchForTVDrillDown(int id, string EpisodeName, int? SeriesNo, int? EpisodeNo, int maxResults)
-        {
-            return false;
+            }
         }
     }
 }

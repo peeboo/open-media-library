@@ -55,13 +55,13 @@ namespace MovieCollectorzPlugin
                 newTitle.MetadataSourceID = GetChildNodesValue(nav, "id");
                 if (nav.MoveToChild("coverfront", ""))
                 {
-                    newTitle.FrontCoverPath = nav.Value;
+                    SetFrontCoverImage(ref newTitle, nav.Value);
                     nav.MoveToParent();
                 }
 
                 if (nav.MoveToChild("coverback", ""))
                 {
-                    newTitle.BackCoverPath = nav.Value;
+                    SetBackCoverImage(ref newTitle, nav.Value);
                     nav.MoveToParent();
                 }
 
@@ -120,8 +120,7 @@ namespace MovieCollectorzPlugin
 
                 if (nav.MoveToChild("runtimeminutes", ""))
                 {
-                    //newTitle.Runtime = nav.ValueAsInt;
-                    newTitle.Runtime = ConvertStringToInt(nav.Value);
+                    newTitle.Runtime = nav.ValueAsInt;
                     nav.MoveToParent();
                 }
 
@@ -135,7 +134,7 @@ namespace MovieCollectorzPlugin
 
                         for (int i = 0; i < genreIter.Count; i++)
                         {
-                            newTitle.AddGenre(GetChildNodesValue(localNav, "displayname"));
+                            newTitle.Genres.Add(GetChildNodesValue(localNav, "displayname"));
                             localNav.MoveToNext("genre", "");
                         }
                     }
@@ -214,7 +213,7 @@ namespace MovieCollectorzPlugin
 
                         for (int i = 0; i < subtitleIter.Count; i++)
                         {
-                            newTitle.AddSubtitle(GetChildNodesValue(localNav, "displayname"));
+                            newTitle.Subtitles.Add(GetChildNodesValue(localNav, "displayname"));
                             localNav.MoveToNext("subtitle", "");
                         }
                     }
@@ -231,7 +230,7 @@ namespace MovieCollectorzPlugin
 
                         for (int i = 0; i < audioIter.Count; i++)
                         {
-                            newTitle.AddAudioTrack(GetChildNodesValue(localNav, "displayname"));
+                            newTitle.AudioTracks.Add(GetChildNodesValue(localNav, "displayname"));
                             localNav.MoveToNext("audio", "");
                         }
                     }
@@ -287,7 +286,7 @@ namespace MovieCollectorzPlugin
                                                         disk.Format = (VideoFormat)Enum.Parse(typeof(VideoFormat), ext, true);
                                                         disk.Path = path;
                                                         disk.Name = GetChildNodesValue(localNav, "description");
-                                                        newTitle.AddDisk(disk);
+                                                        newTitle.Disks.Add(disk);
                                                     }
                                                 }
                                             }
@@ -358,14 +357,6 @@ namespace MovieCollectorzPlugin
                 nav.MoveToParent();
             }
             return value;
-        }
-
-        private int ConvertStringToInt(string str)
-        {
-            if (string.IsNullOrEmpty(str)) return 0;
-            int result = 0;
-            int.TryParse(Regex.Replace(str, @"\D+", ""), out result);
-            return result;
         }
     }
 }

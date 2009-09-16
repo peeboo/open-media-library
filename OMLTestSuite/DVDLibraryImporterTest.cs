@@ -15,7 +15,7 @@ namespace OMLTestSuite
         [Test]
         public void TEST_HONORS_OMLENGINE_SETTING_FOLDER_IS_TITLE()
         {
-            OMLEngine.Settings.OMLSettings.TreatFoldersAsTitles = true;
+            OMLEngine.Properties.Settings.Default.FoldersAreTitles = true;
             DVDLibraryImporter importer = new DVDLibraryImporter();
             importer.DoWork(new string[] { @"..\..\..\sample files\vmcdvdlibraryimporterfiles\" });
 

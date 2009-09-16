@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using OMLSDK;
 using OMLEngine;
 using NUnit.Framework;
-using System.Linq;
 
 namespace OMLTestSuite
 {
@@ -45,9 +44,9 @@ namespace OMLTestSuite
             t.AddNonActingRole("Chris", "crew");
             t.AddDirector(new Person("Tim"));
             t.AddGenre("Comedy");
-            t.AddAudioTrack("English");
-            t.AddAudioTrack("French");
-            t.AddProducer(new Person("Sony"));
+            t.AddLanguageFormat("English");
+            t.AddLanguageFormat("French");
+            t.AddProducer("Sony");
             t.AddWriter(new Person("Timothy"));
 
             Assert.AreEqual("Widescreen", t.AspectRatio);
@@ -72,7 +71,7 @@ namespace OMLTestSuite
             Assert.AreEqual(VideoFormat.WPL, t.Disks[0].Format);
             Assert.AreEqual("NTSC", t.VideoStandard);
             Assert.AreEqual(2, t.ActingRoles.Count);
-            IEnumerable<string> actors = t.ActingRoles.Select(a => a.PersonName);
+            ICollection<string> actors = t.ActingRoles.Keys;
             Assert.That(actors.Contains("Translucent"));
             Assert.That(actors.Contains("taranu"));
             //Assert.AreEqual("KingManon", ((Person)t.Crew[0]).full_name);
@@ -95,7 +94,7 @@ namespace OMLTestSuite
         {
             string xml_file = @"..\..\..\Sample Files\sample-oml.xml";
 
-            Title t = Title.CreateFromXML(xml_file);
+            Title t = Title.CreateFromXML(xml_file, false);
 
             Assert.IsInstanceOfType(typeof(Title), t);
             Assert.AreEqual("GoldenEye", t.OriginalName);

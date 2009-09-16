@@ -4,15 +4,16 @@ using System.IO;
 using System.Windows.Forms;
 using OMLSDK;
 using OMLEngine;
-using System.Linq;
+using System.Drawing;
 
 namespace OMLImporter
 {
     class Program
     {
         public static double VERSION = 0.1;
-        //private static TitleCollection mainTitleCollection = new TitleCollection();
-        //private static Boolean isDirty = false;        
+        private static TitleCollection mainTitleCollection = new TitleCollection();
+        private static Boolean isDirty = false;
+        public static bool _copyImages = true;
         private static List<OMLPlugin> plugins = new List<OMLPlugin>();
         private const string COPY_IMAGES_KEY = "copyimages=";
         private const string CLEAR_BEFORE_IMPORT_KEY = "clearallbeforeimport=";
@@ -62,14 +63,13 @@ namespace OMLImporter
             OMLPlugin plugin = null;
             string file_to_import = string.Empty;
             Console.WriteLine("Loading current titles...");
-            //mainTitleCollection.loadTitleCollection();
-            IEnumerable<Title> allTitles = TitleCollectionManager.GetAllTitles();
+            mainTitleCollection.loadTitleCollection();
             while (true)
             {
                 plugin = null;
                 Console.Clear();
                 PrintHeader();
-                Console.WriteLine("OML Importer: Current {0} titles in the database", allTitles.Count());
+                Console.WriteLine("OML Importer: Current {0} titles in the database", mainTitleCollection.Count);
                 Console.WriteLine("Which Importer would you like to use:");
                 int ii;
                 for (ii = 0; ii < plugins.Count; ii++)
@@ -83,8 +83,8 @@ namespace OMLImporter
                 //    Console.WriteLine(string.Format("{0}) {1} (v{2})", ii++, pi.Name, pi.Version));
                 //}
                 ii++;
-                //Console.WriteLine(String.Format("{0}) Save the New Titles", ii++));
-                Console.WriteLine(String.Format("{0}) Quit", ii++));
+                Console.WriteLine(String.Format("{0}) Save the New Titles", ii++));
+                Console.WriteLine(String.Format("{0}) Quit (No Saving)", ii++));
                 Console.WriteLine(String.Format("{0}) Remove all titles from the database (be carefull!!!)", ii++));
                 Console.WriteLine();
                 Console.Write("Choice: ");
@@ -100,19 +100,14 @@ namespace OMLImporter
                 if (iResp < plugins.Count)
                 {
                     plugin = plugins[iResp];
-
-                    DateTime startTime = DateTime.Now;
-                    Console.WriteLine("Begin time: " + startTime);
-
-                    plugin.DoWork(plugin.GetWork());                                        
-                    LoadTitlesIntoDatabase(plugin, true, true);
-
-                    Console.WriteLine("End time: " + DateTime.Now.ToString() + " Total seconds: " + (DateTime.Now - startTime).TotalSeconds);
-
+                    if (plugin.CanCopyImages) AskIfShouldCopyImages();
+                    plugin.CopyImages = Program._copyImages;
+                    plugin.DoWork(plugin.GetWork());
+                    LoadTitlesIntoDatabase(plugin, true, false);
                     Console.WriteLine("Done!");
                     Console.ReadLine();
                 } 
-                /*else if (iResp == (plugins.Count))
+                else if (iResp == (plugins.Count))
                 {               
                     if (isDirty) 
                     {
@@ -120,10 +115,10 @@ namespace OMLImporter
                         isDirty = !mainTitleCollection.saveTitleCollection();
                     }
                     Console.WriteLine("Complete!");
-                } */
-                else if (iResp == (plugins.Count))
+                } 
+                else if (iResp == (plugins.Count + 1))
                 {
-                    /*if (isDirty)
+                    if (isDirty)
                     {
                         Console.WriteLine("You have not saved your changes. Do you want to save before quitting? (y/n)");
                         string answer = Console.ReadLine();
@@ -133,22 +128,21 @@ namespace OMLImporter
                             mainTitleCollection.saveTitleCollection();
                             isDirty = false;
                         }
-                    }*/
+                    }
                     Console.WriteLine("Complete!");
                     return;
                 } 
-                else if (iResp == (plugins.Count + 1))
+                else if (iResp == (plugins.Count + 2))
                 {
                     Console.WriteLine("This option will delete all titles from the database immediately! This operation CANNOT be undone!");
                     Console.WriteLine("Are you sure you want to delete all the titles from the database? (please type YES)");
                     string deleteAllAnswer = Console.ReadLine();
                     if (deleteAllAnswer == "YES")
                     {
-                        Console.WriteLine("Removing all entries...(this can take awhile)");
-                        //mainTitleCollection = new TitleCollection();
-                        //mainTitleCollection.saveTitleCollection();
-                        TitleCollectionManager.DeleteAllDBData();
-                        //isDirty = false;
+                        Console.WriteLine("Removing all entries...");
+                        mainTitleCollection = new TitleCollection();
+                        mainTitleCollection.saveTitleCollection();
+                        isDirty = false;
                         Console.WriteLine("Done!");
                     }
                     else
@@ -222,7 +216,10 @@ namespace OMLImporter
             }
             else
             {
-                // use the found plugin                
+                // use the found plugin
+                if (pluginToUse.CanCopyImages)
+                    pluginToUse.CopyImages = copyImages;
+
                 if (pluginToUse.IsSingleFileImporter() && !File.Exists(path))
                 {
                     Console.WriteLine(pluginToUse.Name + " requires an import file which it can't find (" + path + ")");
@@ -233,16 +230,12 @@ namespace OMLImporter
                 }
                 else
                 {
-                    if (clearBeforeImport)
-                    {
-                        Console.WriteLine("Clearing out old data before import ( this can take awhile )");
-                        TitleCollectionManager.DeleteAllDBData();
-                    }
-
-                    Console.WriteLine("Beginning to import titles...");
+                    if (!clearBeforeImport)                    
+                        mainTitleCollection.loadTitleCollection();
 
                     pluginToUse.DoWork(new string[] { path });
                     LoadTitlesIntoDatabase(pluginToUse, false, true);
+                    mainTitleCollection.saveTitleCollection();
                 }
             }
 
@@ -253,10 +246,29 @@ namespace OMLImporter
         {
             OMLPlugin plugin = (OMLPlugin) sender;
             Console.WriteLine("Loading file " + e.FileName + " using " + plugin.Name + " importer");
-        }       
+        }
+
+        public static void AskIfShouldCopyImages()
+        {
+            Console.WriteLine("Should we copy images to the OML images directory? (y/n)");
+            string response = Console.ReadLine();
+            response = response.Substring(0, 1);
+            switch (response.ToUpper())
+            {
+                case "N":
+                    Program._copyImages = false;
+                    break;
+                case "Y":
+                    Program._copyImages = true;
+                    break;
+                default:
+                    break;
+            }
+        }
 
         public static bool ImportFile(OMLPlugin plugin, string fileName)
         {
+            plugin.CopyImages = Program._copyImages;
             return plugin.Load(fileName);
         }
 
@@ -291,7 +303,7 @@ namespace OMLImporter
 
                 foreach (Title t in titles)
                 {
-                    if (TitleCollectionManager.ContainsDisks(t.Disks))
+                    if (mainTitleCollection.ContainsDisks(t.Disks))
                     {
                         Console.WriteLine("Title {0} skipped because already in the collection", t.Name);
                         numberOfTitlesSkipped++;
@@ -307,7 +319,7 @@ namespace OMLImporter
                         switch (response.ToUpper())
                         {
                             case "Y":
-                                TitleCollectionManager.AddTitle(t);                                
+                                mainTitleCollection.Add(t);
                                 numberOfTitlesAdded++;
                                 break;
                             case "N":
@@ -315,7 +327,7 @@ namespace OMLImporter
                                 break;
                             case "A":
                                 YesToAll = true;
-                                TitleCollectionManager.AddTitle(t);                                
+                                mainTitleCollection.Add(t);
                                 numberOfTitlesAdded++;
                                 break;
                             default:
@@ -324,24 +336,21 @@ namespace OMLImporter
                     }
                     else
                     {
-                        TitleCollectionManager.AddTitle(t);                        
+                        mainTitleCollection.Add(t);
                         numberOfTitlesAdded++;
                     }
                 }
 
-                // save all the image updates
-                TitleCollectionManager.SaveTitleUpdates();
-
                 plugin.GetTitles().Clear();
 
-                //if (numberOfTitlesAdded > 0) isDirty = true;
+                if (numberOfTitlesAdded > 0) isDirty = true;
                 Console.WriteLine();
                 Console.WriteLine("Added " + numberOfTitlesAdded + " titles");
                 Console.WriteLine("Skipped " + numberOfTitlesSkipped + " titles");
             }
             catch (Exception e)
             {
-                Console.WriteLine("Exception in LoadTitlesIntoDatabase: {0}", e.Message);
+                Console.WriteLine("Exception in LoadTitlesIntoDatabase: %1", e.Message);
             }
             //tc.saveTitleCollection();
             //Console.WriteLine("Complete");

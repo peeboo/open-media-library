@@ -1,6 +1,5 @@
 ﻿using System;
 using OMLEngine;
-using OMLEngine.FileSystem;
 using Microsoft.MediaCenter.Hosting;
 using Microsoft.MediaCenter;
 using Microsoft.MediaCenter.UI;
@@ -30,7 +29,6 @@ namespace Library
                 {
                     OMLApplication.Current.NowPlayingMovieName = _source.Name;
                     OMLApplication.Current.NowPlayingStatus = PlayState.Playing;
-                    AddInHost.Current.MediaCenterEnvironment.MediaExperience.Transport.PropertyChanged -= MoviePlayerFactory.Transport_PropertyChanged;
                     AddInHost.Current.MediaCenterEnvironment.MediaExperience.Transport.PropertyChanged += MoviePlayerFactory.Transport_PropertyChanged;
                     AddInHost.Current.MediaCenterEnvironment.MediaExperience.GoToFullScreen();
                 }
@@ -41,26 +39,17 @@ namespace Library
 
         public bool PlayMovie()
         {
-            if (FileScanner.IsDVD(_mediaPath))
+            if (MediaData.IsDVD(_mediaPath))
             {
-                bool isUNC = false;
-                string path = FileScanner.GetPlayStringForPath(_mediaPath);
+                string path = MediaData.GetPlayStringForPath(_mediaPath);
 
                 // the unc path requires that it start with // so remove \\ if it exists
-                //http://discuss.mediacentersandbox.com/forums/thread/9307.aspx
                 if (path.StartsWith("\\\\"))
-                {
                     path = path.Substring(2);
-                    isUNC = true;
-                }
 
                 path = path.Replace("\\", "/");
 
-                if(OMLApplication.IsWindows7 && isUNC)
-                    path = string.Format("//{0}", path);
-                else
-                    path = string.Format("DVD://{0}", path);
-
+                path = string.Format("DVD://{0}", path);
                 OMLApplication.DebugLine("[MoviePlayerDVD] Actual play string being passed to PlayMovie: {0}", path);
                 return PlayMovie(path);
             }
@@ -69,13 +58,13 @@ namespace Library
 
         public bool PlayMovie(int titleNumber, int chapterNumber, DateTime startTime)
         {
-            return FileScanner.IsDVD(_source.MediaPath) == false;
+            return MediaData.IsDVD(_source.MediaPath) == false;
         }
 
         public static string GeneratePlayString(string path, int titleNumber, int chapterNumber)
         {
             string playString = string.Empty;
-            playString = string.Format("DVD://{0}", FileScanner.GetPlayStringForPath(path));
+            playString = string.Format("DVD://{0}", MediaData.GetPlayStringForPath(path));
             playString = playString.Replace("\\", "/");
 
             if (titleNumber > 0)
@@ -91,7 +80,7 @@ namespace Library
         public static string GeneratePlayString(string path, int titleNumber, DateTime startTime)
         {
             string playString = string.Empty;
-            playString = string.Format("DVD://{0}", FileScanner.GetPlayStringForPath(path));
+            playString = string.Format("DVD://{0}", MediaData.GetPlayStringForPath(path));
             playString = playString.Replace("\\", "/");
 
             if (titleNumber < 1)

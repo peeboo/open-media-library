@@ -6,7 +6,6 @@ using System.IO;
 using Microsoft.MediaCenter.UI;
 
 using OMLEngine;
-using OMLEngine.Settings;
 
 namespace Library
 {
@@ -86,19 +85,13 @@ namespace Library
         public Command QuickPlay
         {
             get { return _quickPlay; }
-        }        
-
-        public GalleryItem(MovieGallery owner, string name, string caption, Filter browseCategory, int forcedCount)
-            : this(owner, name, caption, browseCategory)
-        {
-            _forcedCount = forcedCount;
         }
 
         public bool Watched
         {
             get 
             {
-                return OMLSettings.ShowWatchedIcon ? _watched : false;
+                return Properties.Settings.Default.ShowWatchedIcon ? _watched : false;
             }
         }
 
@@ -118,7 +111,7 @@ namespace Library
             _owner = owner;
             _category = browseCategory;
             MenuCoverArt = NoCoverImage; // default to NoCoverImage
-            //Invoked += ItemSelected;
+            Invoked += ItemSelected;
 
             _quickPlay = new Command();
             _quickPlay.Invoked += new EventHandler(QuickPlayClicked);
@@ -150,7 +143,22 @@ namespace Library
                     movie.PlayMovie();
                 }
             });
-        }       
+        }
+
+        virtual public int ItemCount
+        {
+            get
+            {
+                if (Gallery != null && Category != null && Category.ItemMovieRelation.ContainsKey(Name))
+                {
+                    return Category.ItemMovieRelation[Name].Count;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+        }
 
         /// <summary>
         /// Gets the description.
@@ -160,9 +168,10 @@ namespace Library
         {
             get 
             {
-                if (_forcedCount > 0 )
+                int itemCount = ItemCount;
+                if (itemCount > 0 )
                 {
-                    return Name + " (" + Convert.ToString( _forcedCount ) + ")";
+                    return Name + " (" + Convert.ToString( itemCount ) + ")";
                 }
                 else
                 {
@@ -215,25 +224,25 @@ namespace Library
         /// </summary>
         /// <param name="sender">The sender is a MovieItem.</param>
         /// <param name="args">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        //public virtual void ItemSelected(object sender, EventArgs args)
-        //{
-        //    OMLApplication.ExecuteSafe(delegate
-        //    {
-        //        GalleryItem galleryItem = (GalleryItem)sender;
+        public virtual void ItemSelected(object sender, EventArgs args)
+        {
+            OMLApplication.ExecuteSafe(delegate
+            {
+                GalleryItem galleryItem = (GalleryItem)sender;
 
-        //        if (Gallery != null)
-        //        {
-        //            if (galleryItem.Name == Filter.AllItems)
-        //            {
-        //                OMLApplication.Current.GoToMenu(Gallery);
-        //            }
-        //            else
-        //            {
-        //                OMLApplication.Current.GoToMenu(Category.CreateGallery(galleryItem.Name));
-        //            }
-        //        }
-        //    });
-        //}
+                if (Gallery != null)
+                {
+                    if (galleryItem.Name == Filter.AllItems)
+                    {
+                        OMLApplication.Current.GoToMenu(Gallery);
+                    }
+                    else
+                    {
+                        OMLApplication.Current.GoToMenu(Category.CreateGallery(galleryItem.Name));
+                    }
+                }
+            });
+        }
 
         public virtual GalleryItem Clone(MovieGallery newOwner)
         {
@@ -254,8 +263,6 @@ namespace Library
             }
         }
 
-        public int ForcedCount { get { return _forcedCount; } }
-
         private string _name;
         private string _sortName;
         private string _caption;
@@ -265,7 +272,6 @@ namespace Library
         private MovieGallery _owner;
         private Filter _category;
         private Command _quickPlay;
-        private int _forcedCount = -1;
         private bool _watched;
     }
 
@@ -308,7 +314,7 @@ namespace Library
             if (_titleObj.UserStarRating > 0)
             {
                 if (SubCaption.Length > 0) SubCaption += " / ";
-                SubCaption += (((double)_titleObj.UserStarRating / 10)).ToString("0.0");
+                SubCaption += ((double)(_titleObj.UserStarRating / 10)).ToString("0.0");
             }
 
 //            if (_titleObj.Directors.Count > 0 && ((Person)_titleObj.Directors[0]).full_name.Trim().Length > 0)
@@ -366,7 +372,7 @@ namespace Library
             //}
 
             Details = _titleObj.Synopsis;
-            /*_actingRoles = new List<string>();
+            _actingRoles = new List<string>();
 
             if (title.ActingRoles.Count > 0)
             {
@@ -378,7 +384,7 @@ namespace Library
                     else
                         _actingRoles.Add(kvp.Key);
                 }
-            }*/
+            }
         }
 
         /// <summary>
@@ -386,36 +392,37 @@ namespace Library
         /// </summary>
         /// <param name="sender">The sender is a MovieItem.</param>
         /// <param name="args">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        //public override void ItemSelected(object sender, EventArgs args)
-        //{            
-        //    OMLApplication.ExecuteSafe(delegate
-        //    {
-        //        MovieItem galleryItem = (MovieItem)sender;
+        public override void ItemSelected(object sender, EventArgs args)
+        {            
+            OMLApplication.ExecuteSafe(delegate
+            {
+                MovieItem galleryItem = (MovieItem)sender;
 
-        //        // Navigate to a details page for this item.
-        //        MovieDetailsPage page = CreateDetailsPage(galleryItem);
-        //        Gallery.JumpInListText.Value = "";
-        //        Gallery.ClearJumpValue = true;
-        //        OMLApplication.Current.GoToDetails(page);
-        //    });
-        //}
+                // Navigate to a details page for this item.
+                MovieDetailsPage page = CreateDetailsPage(galleryItem);
+                Gallery.JumpInListText.Value = "";
+                Gallery.ClearJumpValue = true;
+                OMLApplication.Current.GoToDetails(page);
+            });
+        }
 
         /// <summary>
         /// Creates the details page for this movie
         /// </summary>
         /// <param name="item">The movie item.</param>
         /// <returns></returns>
-        //public MovieDetailsPage CreateDetailsPage(MovieItem item)
-        //{
-        //    OMLApplication.DebugLine("[MovieItem] Creating a detailspage for {0}", item);
-        //    return new MovieDetailsPage(item);
-        //}
+        public MovieDetailsPage CreateDetailsPage(MovieItem item)
+        {
+            OMLApplication.DebugLine("[MovieItem] Creating a detailspage for {0}", item);
+            return new MovieDetailsPage(item);
+        }
 
         private void IncrementPlayCount()
         {
             OMLApplication.ExecuteSafe(delegate
             {
-                TitleCollectionManager.IncrementWatchedCount(this.TitleObject);
+                this.TitleObject.WatchedCount++;
+                OMLApplication.Current.SaveTitles();
             });
         }
 
@@ -449,7 +456,7 @@ namespace Library
 
             WindowsPlayListManager playlist = new WindowsPlayListManager();
 
-            string playlistFile = Path.Combine(FileSystemWalker.TempPlayListDirectory, "AllDisks_" + this.TitleObject.Id + ".WPL");
+            string playlistFile = Path.Combine(FileSystemWalker.TempPlayListDirectory, "AllDisks_" + this.TitleObject.InternalItemID + ".WPL");
 
             foreach (Disk disk in this.TitleObject.Disks)
             {
@@ -470,8 +477,7 @@ namespace Library
                 if (d == ms.Disk)
                 {
                     d.ExtraOptions = ms.UpdateExtraOptions(d.ExtraOptions);
-                    //OMLApplication.Current.SaveTitles();
-                    TitleCollectionManager.SaveTitleUpdates();
+                    OMLApplication.Current.SaveTitles();
                     break;
                 }
         }
@@ -482,9 +488,10 @@ namespace Library
         /// <value>The title object.</value>
         public Title TitleObject { get { return _titleObj; } }
 
-        public IList<Disk> Disks
+        public List<Disk> Disks
         {
             get { return _titleObj.Disks; }
+            set { _titleObj.Disks = value; }
         }
 
         public List<Disk> FriendlyNamedDisks
@@ -494,18 +501,14 @@ namespace Library
                 if (_friendlyNamedDisks == null)
                 {
                     _friendlyNamedDisks = new List<Disk>();
-                    IList<Disk> disks = this._titleObj.Disks;
+                    List<Disk> disks = this._titleObj.Disks;
                     
                     bool isExtender = OMLApplication.Current.IsExtender;
                     if (isExtender)
-                    {
                         for (int i = 0; i < disks.Count; ++i)
                             foreach (MediaSource ms in (MediaSource.GetSourcesFromOptions(disks[i].Path, disks[i].ExtraOptions, true)))
                                 if (disks.Contains(ms.Disk) == false)
-                                {
-                                    _titleObj.AddTempDisk(ms.Disk);
-                                }
-                    }
+                                    disks.Insert(i + 1, ms.Disk);
 
                     foreach (Disk d in disks)
                     {
@@ -527,7 +530,7 @@ namespace Library
 
         public int itemId
         {
-            get { return _titleObj.Id; }
+            get { return _titleObj.InternalItemID; }
         }
 
         /// <summary>
@@ -536,7 +539,7 @@ namespace Library
         /// <value>The use star rating.</value>
         public int UseStarRating
         {
-            get { return _titleObj.UserStarRating.HasValue ? _titleObj.UserStarRating.Value : 0; }
+            get { return _titleObj.UserStarRating; }
         }
 
         /// <summary>
@@ -617,9 +620,9 @@ namespace Library
             get
             {
                 List<string> actor_names = new List<string>();
-                foreach (Role kvp  in _titleObj.ActingRoles)
+                foreach (KeyValuePair<string,string> kvp  in _titleObj.ActingRoles)
                 {
-                    actor_names.Add(kvp.PersonName);
+                    actor_names.Add(kvp.Key);
                 }
                 return actor_names;
             }
@@ -650,16 +653,7 @@ namespace Library
         /// <value>The producers.</value>
         public IList Producers
         {
-            get
-            {
-                List<string> producer_names = new List<string>();
-                foreach (Person p in _titleObj.Producers)
-                {
-                    producer_names.Add(p.full_name);
-                }
-                return producer_names;
-            }
-            //get { return _titleObj.Producers; }
+            get { return _titleObj.Producers; }
             //set { _titleObj.Producers = value; }
         }
 
@@ -692,11 +686,36 @@ namespace Library
             {
                 try
                 {
-                    if (_titleObj.FanArtPaths != null && _titleObj.FanArtPaths.Count != 0)
+                    string folder = string.Empty;
+                    if (!string.IsNullOrEmpty(_titleObj.FileLocation))
                     {
-                        return _titleObj.FanArtPaths[0];
+                        folder = (Directory.Exists(_titleObj.FileLocation))
+                            ? _titleObj.FileLocation
+                            : Path.GetDirectoryName(_titleObj.FileLocation);
                     }
-                    
+                    else
+                    {
+                        if (_titleObj.Disks.Count > 0 && !string.IsNullOrEmpty(_titleObj.Disks[0].Path))
+                        {
+                            folder = (Directory.Exists(_titleObj.Disks[0].Path))
+                                ? _titleObj.Disks[0].Path
+                                : Path.GetDirectoryName(_titleObj.Disks[0].Path);
+                        }
+                    }
+
+                    if (folder.Length > 0)
+                    {
+                        OMLApplication.DebugLine("[MovieItem] Checking for fanart file: {0}",
+                            Path.Combine(folder, "fanart.jpg"));
+
+                        if (File.Exists(Path.Combine(folder, "fanart.jpg")))
+                            return Path.Combine(folder, "fanart.jpg");
+
+                        if (File.Exists(Path.Combine(folder, "backdrop.jpg")))
+                            return Path.Combine(folder, "backdrop.jpg");
+                    }
+                    else
+                        OMLApplication.DebugLine("[MovieItem] No valid path found to look for fanart in");
                 }
                 catch (Exception e)
                 {

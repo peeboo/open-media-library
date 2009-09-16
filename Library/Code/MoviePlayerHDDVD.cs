@@ -1,6 +1,5 @@
 ﻿using System;
 using OMLEngine;
-using OMLEngine.FileSystem;
 using Microsoft.MediaCenter.Hosting;
 using Microsoft.MediaCenter;
 using Microsoft.MediaCenter.UI;
@@ -21,9 +20,9 @@ namespace Library
 
         public bool PlayMovie()
         {
-            if (FileScanner.IsHDDVD(_mediaPath))
+            if (MediaData.IsHDDVD(_mediaPath))
             {
-                string media = FileScanner.GetPlayStringForPath(_mediaPath);
+                string media = MediaData.GetPlayStringForPath(_mediaPath);
                 media = "HDDVD://" + media;
                 media.Replace('\\', '/');
                 if (AddInHost.Current.MediaCenterEnvironment.PlayMedia(MediaType.Video, media, false))
@@ -33,7 +32,6 @@ namespace Library
                         Utilities.DebugLine("HDDVDPlayer.PlayMovie: movie {0} Playing", _source);
                         OMLApplication.Current.NowPlayingMovieName = _source.Name;
                         OMLApplication.Current.NowPlayingStatus = PlayState.Playing;
-                        AddInHost.Current.MediaCenterEnvironment.MediaExperience.Transport.PropertyChanged -= MoviePlayerFactory.Transport_PropertyChanged;
                         AddInHost.Current.MediaCenterEnvironment.MediaExperience.Transport.PropertyChanged += MoviePlayerFactory.Transport_PropertyChanged;
                         AddInHost.Current.MediaCenterEnvironment.MediaExperience.GoToFullScreen();
                     }

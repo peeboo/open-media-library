@@ -13,12 +13,10 @@ using Microsoft.MediaCenter.Hosting;
 using Microsoft.MediaCenter.UI;
 using OMLEngine;
 using OMLSDK;
-using OMLEngine.Settings;
-using OMLEngine.FileSystem;
 
 namespace Library
 {
-    public class Settings : BaseModelItem
+    public class Settings : ModelItem
     {
         public void ShowSampleLayout()
         {
@@ -49,22 +47,21 @@ namespace Library
         {
             OMLApplication.ExecuteSafe(delegate
             {
-                OMLSettings.MountingToolPath = _mountingToolPath.Value;
-                
+                _omlSettings.MountingToolPath = _mountingToolPath.Value;
 
                 try
                 {
                     MountingTool.Tool tool;
                     string ChosenMountingSelection = _ImageMountingSelection.Chosen as string;
                     tool = (MountingTool.Tool)Enum.Parse(typeof(MountingTool.Tool), ChosenMountingSelection);
-                    OMLSettings.MountingToolSelection = tool;
+                    _omlSettings.MountingToolSelection = (int)tool;
                 }
                 catch (Exception ex)
                 {
                     Utilities.DebugLine("[Settings] Error saving Mounting selection: {0}", ex);
                 }
 
-                OMLSettings.VirtualDiscDrive = _virtualDrive.Chosen as string;
+                _omlSettings.VirtualDiscDrive = _virtualDrive.Chosen as string;
             });
         }
 
@@ -72,7 +69,7 @@ namespace Library
         {
             OMLApplication.ExecuteSafe(delegate
             {
-                List<string> mappings = new List<string>();
+                StringCollection mappings = new StringCollection();
 
                 try
                 {
@@ -111,8 +108,8 @@ namespace Library
                             mappings.Add(VideoFormat.ALL.ToString() + "|" + ((int)allPlayer).ToString() + "|" + _externalPlayerPathAll.Value.Trim());
                         }
                     }
-
-                    OMLSettings.ExternalPlayerMapping = mappings;
+                    
+                    _omlSettings.ExternalPlayerMapping = mappings;
                     ExternalPlayer.RefreshExternalPlayerList();
                 }
                 catch (Exception ex)
@@ -126,67 +123,67 @@ namespace Library
         {
             OMLApplication.ExecuteSafe(delegate
             {
-                OMLSettings.ShowFilterUnwatched = (bool)_showFilterUnwatched.Chosen;
-                OMLSettings.ShowFilterActors = (bool)_showFilterActors.Chosen;
-                OMLSettings.ShowFilterCountry = (bool)_showFilterCountry.Chosen;
-                OMLSettings.ShowFilterDateAdded = (bool)_showFilterDateAdded.Chosen;
-                OMLSettings.ShowFilterDirectors = (bool)_showFilterDirectors.Chosen;
-                OMLSettings.ShowFilterFormat = (bool)_showFilterFormat.Chosen;
-                OMLSettings.ShowFilterGenres = (bool)_showFilterGenres.Chosen;
-                OMLSettings.ShowFilterParentalRating = (bool)_showFilterParentalRating.Chosen;
-                OMLSettings.ShowFilterRuntime = (bool)_showFilterRuntime.Chosen;
-                OMLSettings.ShowFilterTags = (bool)_showFilterTags.Chosen;
-                OMLSettings.ShowFilterUserRating = (bool)_showFilterUserRating.Chosen;
-                OMLSettings.ShowFilterYear = (bool)_showFilterYear.Chosen;
-                OMLSettings.ShowFilterTrailers = (bool)_showFilterTrailers.Chosen;                
+                _omlSettings.ShowFilterUnwatched = (bool)_showFilterUnwatched.Chosen;
+                _omlSettings.ShowFilterActors = (bool)_showFilterActors.Chosen;
+                _omlSettings.ShowFilterCountry = (bool)_showFilterCountry.Chosen;
+                _omlSettings.ShowFilterDateAdded = (bool)_showFilterDateAdded.Chosen;
+                _omlSettings.ShowFilterDirectors = (bool)_showFilterDirectors.Chosen;
+                _omlSettings.ShowFilterFormat = (bool)_showFilterFormat.Chosen;
+                _omlSettings.ShowFilterGenres = (bool)_showFilterGenres.Chosen;
+                _omlSettings.ShowFilterParentalRating = (bool)_showFilterParentalRating.Chosen;
+                _omlSettings.ShowFilterRuntime = (bool)_showFilterRuntime.Chosen;
+                _omlSettings.ShowFilterTags = (bool)_showFilterTags.Chosen;
+                _omlSettings.ShowFilterUserRating = (bool)_showFilterUserRating.Chosen;
+                _omlSettings.ShowFilterYear = (bool)_showFilterYear.Chosen;
+                _omlSettings.ShowFilterTrailers = (bool)_showFilterTrailers.Chosen;                
             });
         }
         private void SaveMovieSettings()
         {
             OMLApplication.ExecuteSafe(delegate
             {
-                OMLSettings.MovieSort = _movieSort.Chosen as string;
-                OMLSettings.StartPage = _startPage.Chosen as string;
-                OMLSettings.StartPageSubFilter = _startPageSubFilter.Chosen as string;
-                OMLSettings.GalleryCoverArtRows = System.Convert.ToInt32(_coverArtRows.Chosen as string);
-                OMLSettings.CoverArtSpacingVertical = System.Convert.ToInt32(_coverArtSpacing.Chosen as string);
-                OMLSettings.CoverArtSpacingHorizontal = System.Convert.ToInt32(_coverArtSpacing.Chosen as string);
-                OMLSettings.MovieView = _movieView.Chosen as string;
-                OMLSettings.DetailsView = _detailsView.Chosen as string;
-                OMLSettings.ShowMovieDetails = (bool)_showMovieDetails.Chosen;
-                OMLSettings.DimUnselectedCovers = (bool)_dimUnselectedCovers.Chosen;
-                OMLSettings.UseOriginalCoverArt = (bool)_useOriginalCoverArt.Chosen;
-                OMLSettings.UseOnScreenAlphaJumper = (bool)_useOnScreenAlpha.Chosen;
-                OMLSettings.ShowWatchedIcon = (bool)_showWatchedIcon.Chosen;
-                OMLSettings.MainPageBackDropAlphaValue = (float)_mainPageBackDropAlpha.Chosen;
-                OMLSettings.MainPageBackDropIntervalValue = (int)_mainPageBackDropInterval.Chosen;
-                OMLSettings.DetailsPageBackDropAlphaValue = (float)_detailsPageBackDropAlpha.Chosen;
+                _omlSettings.MovieSort = _movieSort.Chosen as string;
+                _omlSettings.StartPage = _startPage.Chosen as string;
+                _omlSettings.StartPageSubFilter = _startPageSubFilter.Chosen as string;
+                _omlSettings.GalleryCoverArtRows = System.Convert.ToInt32(_coverArtRows.Chosen as string);
+                _omlSettings.CoverArtSpacingVertical = System.Convert.ToInt32(_coverArtSpacing.Chosen as string);
+                _omlSettings.CoverArtSpacingHorizontal = System.Convert.ToInt32(_coverArtSpacing.Chosen as string);
+                _omlSettings.MovieView = _movieView.Chosen as string;
+                _omlSettings.DetailsView = _detailsView.Chosen as string;
+                _omlSettings.ShowMovieDetails = (bool)_showMovieDetails.Chosen;
+                _omlSettings.DimUnselectedCovers = (bool)_dimUnselectedCovers.Chosen;
+                _omlSettings.UseOriginalCoverArt = (bool)_useOriginalCoverArt.Chosen;
+                _omlSettings.UseOnScreenAlphaJumper = (bool)_useOnScreenAlpha.Chosen;
+                _omlSettings.ShowWatchedIcon = (bool)_showWatchedIcon.Chosen;
+                _omlSettings.MainPageBackDropAlphaValue = (float)_mainPageBackDropAlpha.Chosen;
+                _omlSettings.MainPageBackDropIntervalValue = (int)_mainPageBackDropInterval.Chosen;
+                _omlSettings.DetailsPageBackDropAlphaValue = (float)_detailsPageBackDropAlpha.Chosen;
             });
         }
         private void SaveUILanguage()
         {
             OMLApplication.ExecuteSafe(delegate
             {
-                OMLSettings.UILanguage = CultureIdFromDisplayName(_uiLanguage.Chosen as string);
+                _omlSettings.UILanguage = CultureIdFromDisplayName(_uiLanguage.Chosen as string);
             });
         }
         private void SaveTrailers()
         {
             OMLApplication.ExecuteSafe(delegate
             {
-                OMLSettings.TrailersDefinition = _trailersDefinition.Chosen as string;
+                _omlSettings.TrailersDefinition = _trailersDefinition.Chosen as string;
             });
         }
         private void SaveTranscoding()
         {
             OMLApplication.ExecuteSafe(delegate
             {
-                OMLSettings.TranscodeAVIFiles = (bool)_transcodeAVIFiles.Chosen;
-                OMLSettings.TranscodeMKVFiles = (bool)_transcodeMKVFiles.Chosen;
-                OMLSettings.TranscodeOGMFiles = (bool)_transcodeOGMFiles.Chosen;
-                OMLSettings.PreserveAudioOnTranscode = (bool)_preserveAudioOnTranscode.Chosen;
-                OMLSettings.DebugTranscoding = (bool)_debugTranscoding.Chosen;
-                OMLSettings.FlipFourCCCode = (bool)_flipFourCCCode.Chosen;
+                _omlSettings.TranscodeAVIFiles = (bool)_transcodeAVIFiles.Chosen;
+                _omlSettings.TranscodeMKVFiles = (bool)_transcodeMKVFiles.Chosen;
+                _omlSettings.TranscodeOGMFiles = (bool)_transcodeOGMFiles.Chosen;
+                _omlSettings.PreserveAudioOnTranscode = (bool)_preserveAudioOnTranscode.Chosen;
+                _omlSettings.DebugTranscoding = (bool)_debugTranscoding.Chosen;
+                _omlSettings.FlipFourCCCode = (bool)_flipFourCCCode.Chosen;
                 int transcodeBufferDelay = 7;
                 try
                 {
@@ -194,15 +191,16 @@ namespace Library
                 }
                 catch { }
                 if (transcodeBufferDelay != 7)
-                    OMLSettings.TranscodeBufferDelay = transcodeBufferDelay;
+                    _omlSettings.TranscodeBufferDelay = transcodeBufferDelay;
             });
         }
         private void SaveImpersonationSettings()
         {
             OMLApplication.ExecuteSafe(delegate
             {
-                OMLSettings.ImpersonationUsername = _impersonationUsername.Value;
-                OMLSettings.ImpersonationPassword = _impersonationPassword.Value;
+                OMLEngine.Properties.Settings.Default.ImpersonationUsername = _impersonationUsername.Value;
+                OMLEngine.Properties.Settings.Default.ImpersonationPassword = _impersonationPassword.Value;
+                OMLEngine.Properties.Settings.Default.Save();
             });
         }
         public void SaveSettings()
@@ -233,54 +231,39 @@ namespace Library
             }
             _ImageMountingSelection.Options = _MountingToolSelection;
 
-            _mountingToolPath.Value = OMLSettings.MountingToolPath;
+            _mountingToolPath.Value = _omlSettings.MountingToolPath;
 
-            _ImageMountingSelection.Chosen = ((MountingTool.Tool)OMLSettings.MountingToolSelection).ToString();
+            _ImageMountingSelection.Chosen = ((MountingTool.Tool)_omlSettings.MountingToolSelection).ToString();
 
             List<string> items = new List<string>();
             for (char c = 'A'; c <= 'Z'; c++)
                 items.Add(new string(c, 1));
 
             _virtualDrive.Options = items;
-            _virtualDrive.Chosen = OMLSettings.VirtualDiscDrive;
+            _virtualDrive.Chosen = _omlSettings.VirtualDiscDrive;
         }
         
 
-        public void BuildSubFilterOptions()
-        {            
-            TitleFilterType filterType = Filter.FilterStringToTitleType(_startPage.Chosen.ToString());
-
-            if (filterType == TitleFilterType.Unwatched ||
-                filterType == TitleFilterType.All)
-            {
-                _startPageSubFilter.Options = new List<string>() { "" };
-                return;
-            }
+        public Choice BuildSubFilterOptions()
+        {
+            Choice subFilterChoice = new Choice();
 
             List<string> subFilters = new List<string>();
 
-            subFilters.Add("");            
+            subFilters.Add("");
 
-            // todo : solomon : make this less costly - every new movie gallery
-            // instance gets a full list of movies
-            MovieGallery gallery = new MovieGallery();           
+            MovieGallery gallery = new MovieGallery(OMLApplication.Current.Titles, "Temp");
 
-            // get all subfilters for option
-            Filter filter = new Filter(gallery, filterType, null);
-
-            IList<GalleryItem> items = filter.GetGalleryItems();
-
-            foreach (GalleryItem item in items)
+            if (gallery.Filters.ContainsKey(_startPage.Chosen.ToString()))
             {
-                subFilters.Add(item.Name);
+                Filter filter = gallery.Filters[_startPage.Chosen.ToString()];
+                foreach (GalleryItem item in filter.Items)
+                    subFilters.Add(item.Name);
             }
 
-            _startPageSubFilter = new Choice();
+            subFilterChoice.Options = subFilters;
 
-            _startPageSubFilter.Options = subFilters;
-            _startPageSubFilter.Chosen = _startPageSubFilter.Options[0];                       
-
-            FirePropertyChanged("StartPageSubFilter");
+            return subFilterChoice;
         }
 
         private void SetupMovieSettings()
@@ -289,7 +272,6 @@ namespace Library
             viewItems.Add(GalleryView.CoverArt);
             viewItems.Add(GalleryView.CoverArtWithAlpha);
             viewItems.Add(GalleryView.List);
-            viewItems.Add(GalleryView.ListWithCovers);
 #if LAYOUT_V2
             viewItems.Add("Folder View");
 #endif
@@ -297,7 +279,7 @@ namespace Library
             viewItems.Add("Carousel");
 #endif
             _movieView.Options = viewItems;
-            _movieView.Chosen = OMLSettings.MovieView;
+            _movieView.Chosen = _omlSettings.MovieView;
 
             List<string> items = new List<string>();
             items.Add("Name Ascending");
@@ -314,14 +296,14 @@ namespace Library
             items.Add("Date Added Descending");
 
             _movieSort.Options = items;
-            _movieSort.Chosen = OMLSettings.MovieSort;
+            _movieSort.Chosen = _omlSettings.MovieSort;
 
             List<string> detailViews = new List<string>();
             detailViews.Add("Original");
             detailViews.Add("Background Boxes");
 
             _detailsView.Options = detailViews;
-            _detailsView.Chosen = OMLSettings.DetailsView;
+            _detailsView.Chosen = _omlSettings.DetailsView;
 
             List<string> starPageItems = new List<string>();
             starPageItems.Add(Filter.Home);
@@ -333,15 +315,14 @@ namespace Library
 
 
             _startPage.Options = starPageItems;
-            _startPage.Chosen = OMLSettings.StartPage;
+            _startPage.Chosen = _omlSettings.StartPage;
 
-            BuildSubFilterOptions();
+            _startPageSubFilter = BuildSubFilterOptions();
 
-            if (!string.IsNullOrEmpty(OMLSettings.StartPageSubFilter) &&
-                _startPageSubFilter.Options != null &&
-                _startPageSubFilter.Options.Contains(OMLSettings.StartPageSubFilter))
+            if (!string.IsNullOrEmpty(_omlSettings.StartPageSubFilter) &&
+                _startPageSubFilter.Options.Contains(_omlSettings.StartPageSubFilter))
             {
-                _startPageSubFilter.Chosen = OMLSettings.StartPageSubFilter;
+                _startPageSubFilter.Chosen = _omlSettings.StartPageSubFilter;
             }
 
             List<string> rowItems = new List<string>();
@@ -349,27 +330,34 @@ namespace Library
                 rowItems.Add(ndx.ToString());
 
             _coverArtRows.Options = rowItems;
-            _coverArtRows.Chosen = OMLSettings.GalleryCoverArtRows.ToString();
+            _coverArtRows.Chosen = _omlSettings.GalleryCoverArtRows.ToString();
 
             List<string> spaceItems = new List<string>();
             for (int ndx = 0; ndx <= 20; ndx += 2)
                 spaceItems.Add(ndx.ToString());
 
             _coverArtSpacing.Options = spaceItems;
-            _coverArtSpacing.Chosen = OMLSettings.CoverArtSpacingVertical.ToString();
+            _coverArtSpacing.Chosen = _omlSettings.CoverArtSpacingVertical.ToString();
 
-            _showMovieDetails.Chosen = OMLSettings.ShowMovieDetails;
-            _dimUnselectedCovers.Chosen = OMLSettings.DimUnselectedCovers;
-            _useOriginalCoverArt.Chosen = OMLSettings.UseOriginalCoverArt;
-            _useOnScreenAlpha.Chosen = OMLSettings.UseOnScreenAlphaJumper;
-            _showWatchedIcon.Chosen = OMLSettings.ShowWatchedIcon;
-            
+            _showMovieDetails.Chosen = _omlSettings.ShowMovieDetails;
+            _dimUnselectedCovers.Chosen = _omlSettings.DimUnselectedCovers;
+            _useOriginalCoverArt.Chosen = _omlSettings.UseOriginalCoverArt;
+            _useOnScreenAlpha.Chosen = _omlSettings.UseOnScreenAlphaJumper;
+            _showWatchedIcon.Chosen = _omlSettings.ShowWatchedIcon;
+
+            List<string> transitionTypes = new List<string>(3);
+            transitionTypes.Add("None");
+            transitionTypes.Add("Zoom");
+            transitionTypes.Add("Zoom and Spin");
+
+            //_mountingToolPath.Value = _omlSettings.MountingTool;
+
             List<string> trailerDefinitionOptions = new List<string>();
             trailerDefinitionOptions.Add("Std");
             trailerDefinitionOptions.Add("Hi");
 
             _trailersDefinition.Options = trailerDefinitionOptions;
-            _trailersDefinition.Chosen = OMLSettings.TrailersDefinition.ToString();
+            _trailersDefinition.Chosen = _omlSettings.TrailersDefinition.ToString();
 
             SetupMainPageBackDropAlpha();
             SetupDetailsPageBackDropAlpha();
@@ -378,26 +366,26 @@ namespace Library
 
         private void SetupFilters()
         {
-            _showFilterUnwatched.Chosen = OMLSettings.ShowFilterUnwatched;
-            _showFilterActors.Chosen = OMLSettings.ShowFilterActors;
-            _showFilterCountry.Chosen = OMLSettings.ShowFilterCountry;
-            _showFilterDateAdded.Chosen = OMLSettings.ShowFilterDateAdded;
-            _showFilterDirectors.Chosen = OMLSettings.ShowFilterDirectors;
-            _showFilterFormat.Chosen = OMLSettings.ShowFilterFormat;
-            _showFilterGenres.Chosen = OMLSettings.ShowFilterGenres;
-            _showFilterParentalRating.Chosen = OMLSettings.ShowFilterParentalRating;
-            _showFilterRuntime.Chosen = OMLSettings.ShowFilterRuntime;
-            _showFilterTags.Chosen = OMLSettings.ShowFilterTags;
-            _showFilterUserRating.Chosen = OMLSettings.ShowFilterUserRating;
-            _showFilterYear.Chosen = OMLSettings.ShowFilterYear;
-            _showFilterTrailers.Chosen = OMLSettings.ShowFilterTrailers;
+            _showFilterUnwatched.Chosen = _omlSettings.ShowFilterUnwatched;
+            _showFilterActors.Chosen = _omlSettings.ShowFilterActors;
+            _showFilterCountry.Chosen = _omlSettings.ShowFilterCountry;
+            _showFilterDateAdded.Chosen = _omlSettings.ShowFilterDateAdded;
+            _showFilterDirectors.Chosen = _omlSettings.ShowFilterDirectors;
+            _showFilterFormat.Chosen = _omlSettings.ShowFilterFormat;
+            _showFilterGenres.Chosen = _omlSettings.ShowFilterGenres;
+            _showFilterParentalRating.Chosen = _omlSettings.ShowFilterParentalRating;
+            _showFilterRuntime.Chosen = _omlSettings.ShowFilterRuntime;
+            _showFilterTags.Chosen = _omlSettings.ShowFilterTags;
+            _showFilterUserRating.Chosen = _omlSettings.ShowFilterUserRating;
+            _showFilterYear.Chosen = _omlSettings.ShowFilterYear;
+            _showFilterTrailers.Chosen = _omlSettings.ShowFilterTrailers;
         }
 
         private void SetupUILanguage()
         {
             string selected = null;
             List<string> list = new List<string>();
-            string configuredLangId = OMLSettings.UILanguage;
+            string configuredLangId = _omlSettings.UILanguage;
 
             foreach (var availableCulture in I18n.AvailableCultures)
             {
@@ -433,7 +421,7 @@ namespace Library
             alphaOptions.Add(1.0F);
 
             _mainPageBackDropAlpha.Options = alphaOptions;
-            _mainPageBackDropAlpha.Chosen = OMLSettings.MainPageBackDropAlphaValue;
+            _mainPageBackDropAlpha.Chosen = _omlSettings.MainPageBackDropAlphaValue;
         }
 
         private void SetupMainPageBackDropInterval()
@@ -444,7 +432,7 @@ namespace Library
             intervalOptions.Add(15);
             intervalOptions.Add(20);
             _mainPageBackDropInterval.Options = intervalOptions;
-            _mainPageBackDropInterval.Chosen = OMLSettings.MainPageBackDropIntervalValue;
+            _mainPageBackDropInterval.Chosen = _omlSettings.MainPageBackDropIntervalValue;
         }
 
         private void SetupDetailsPageBackDropAlpha()
@@ -462,7 +450,7 @@ namespace Library
             alphaOptions.Add(1.0F);
 
             _detailsPageBackDropAlpha.Options = alphaOptions;
-            _detailsPageBackDropAlpha.Chosen = OMLSettings.DetailsPageBackDropAlphaValue;
+            _detailsPageBackDropAlpha.Chosen = _omlSettings.DetailsPageBackDropAlphaValue;
         }
 
         private void SetupTrailers()
@@ -471,18 +459,18 @@ namespace Library
             trailerFormats.Add("Hi");
             trailerFormats.Add("Std");
             _trailersDefinition.Options = trailerFormats;
-            _trailersDefinition.Chosen = OMLSettings.TrailersDefinition;
+            _trailersDefinition.Chosen = _omlSettings.TrailersDefinition;
         }
 
         private void SetupTranscoding()
         {
-            _transcodeBufferDelay.Value = OMLSettings.TranscodeBufferDelay.ToString();
-            _transcodeAVIFiles.Chosen = OMLSettings.TranscodeAVIFiles;
-            _transcodeMKVFiles.Chosen = OMLSettings.TranscodeMKVFiles;
-            _transcodeOGMFiles.Chosen = OMLSettings.TranscodeOGMFiles;
-            _preserveAudioOnTranscode.Chosen = OMLSettings.PreserveAudioOnTranscode;
-            _debugTranscoding.Chosen = OMLSettings.DebugTranscoding;
-            _flipFourCCCode.Chosen = OMLSettings.FlipFourCCCode;
+            _transcodeBufferDelay.Value = _omlSettings.TranscodeBufferDelay.ToString();
+            _transcodeAVIFiles.Chosen = _omlSettings.TranscodeAVIFiles;
+            _transcodeMKVFiles.Chosen = _omlSettings.TranscodeMKVFiles;
+            _transcodeOGMFiles.Chosen = _omlSettings.TranscodeOGMFiles;
+            _preserveAudioOnTranscode.Chosen = _omlSettings.PreserveAudioOnTranscode;
+            _debugTranscoding.Chosen = _omlSettings.DebugTranscoding;
+            _flipFourCCCode.Chosen = _omlSettings.FlipFourCCCode;
         }
 
         private static String CultureIdFromDisplayName(string displayName)
@@ -542,8 +530,8 @@ namespace Library
         }
         private void SetupImpersonationSettings()
         {
-            _impersonationUsername.Value = OMLSettings.ImpersonationUsername;
-            _impersonationPassword.Value = OMLSettings.ImpersonationPassword;
+            _impersonationUsername.Value = OMLEngine.Properties.Settings.Default.ImpersonationUsername;
+            _impersonationPassword.Value = OMLEngine.Properties.Settings.Default.ImpersonationPassword;
         }
 
         #region properties
@@ -909,44 +897,11 @@ namespace Library
             }
         }
 
-        //private const string DefaultDaemonToolsPath = @"Program Files\DAEMON Tools Lite\daemon.exe";
-        //private const string DefaultVirtualCloneDrivePath = @"Program Files\Elaborate Bytes\VirtualCloneDrive\VCDMount.exe";        
+        private const string DefaultDaemonToolsPath = @"Program Files\DAEMON Tools Lite\daemon.exe";
+        private const string DefaultVirtualCloneDrivePath = @"Program Files\Elaborate Bytes\VirtualCloneDrive\VCDMount.exe";        
 
         public void LocateSelectedMounter()
-        {
-            OMLApplication.Current.IsBusy = true;
-
-            MountingTool mnt = new MountingTool();
-            
-            string driveLetterToScan = LocalFixedDrives.Chosen as String;
-
-            MountingTool.Tool tool = (MountingTool.Tool)Enum.Parse(typeof(MountingTool.Tool), _ImageMountingSelection.Chosen.ToString());
-
-            Application.DeferredInvokeOnWorkerThread(delegate
-            {
-                exePath = mnt.ScanForMountTool(tool, driveLetterToScan);
-
-            }, delegate
-            {
-                OMLApplication.Current.IsBusy = false;
-                if (exePath.Length > 0)
-                {
-                    OMLApplication.DebugLine("[Settings] Found Image Mounter: {0}", exePath);
-                    MountingToolPath.Value = exePath;
-                }
-                else
-                {
-                    AddInHost.Current.MediaCenterEnvironment.Dialog(
-                        string.Format("The image mounter was not" +
-                                      " found on the [{0}] drive.", driveLetterToScan),
-                        "Failed to Find Image Mounter",
-                        Microsoft.MediaCenter.DialogButtons.Ok,
-                        5, true);
-                }
-            }, null);
-
-
-            /*
+        {           
             string driveLetterToScan = LocalFixedDrives.Chosen as String;
             DriveInfo dInfo = new DriveInfo(driveLetterToScan);
 
@@ -1000,7 +955,7 @@ namespace Library
                             5, true);
                     }
                 }, null);
-            }*/
+            }
         }
 
         private const string DefaultTMTPath = @"Program Files\Arcsoft\umcedvdplayer.exe";
@@ -1074,7 +1029,7 @@ namespace Library
             OMLApplication.Current.IsBusy = true;
             Application.DeferredInvokeOnWorkerThread(delegate
             {
-                bytesRemoved = ImageManager.CleanupCachedImages();
+                bytesRemoved = TitleCollection.CleanUnusedImages();
             }, delegate
             {
                 OMLApplication.Current.IsBusy = false;
@@ -1157,6 +1112,7 @@ namespace Library
         EditableText _externalPlayerPathHDDVD = new EditableText();
         EditableText _externalPlayerPathAll = new EditableText();
 
+        OMLSettings _omlSettings = new OMLSettings();
         Choice _virtualDrive = new Choice();
         Choice _movieView = new Choice();
         Choice _movieSort = new Choice();
@@ -1169,7 +1125,7 @@ namespace Library
         BooleanChoice _useOnScreenAlpha = new BooleanChoice();
         BooleanChoice _showWatchedIcon = new BooleanChoice();
         Choice _startPage = new Choice();
-        Choice _startPageSubFilter = new Choice();
+        Choice _startPageSubFilter;
         Choice _uiLanguage = new Choice();
         Choice _ImageMountingSelection = new Choice();       
         

@@ -36,6 +36,15 @@ namespace OMLTranslator
             }
         }
 
+
+        private void TargetTextChanged(object sender, TextChangedEventArgs e)
+        {
+            // Provide instant update on the text box changes
+            TextBox textBox = (TextBox)e.OriginalSource;
+            TranslatableString translatableString = (TranslatableString)textBox.DataContext;
+            translatableString.Target = textBox.Text;
+        }
+
         private void TargetLanguageChangedHandler(object sender, SelectionChangedEventArgs e)
         {
             if (domainModel.CurrentLanguage != languageSelectComboBox.SelectedItem)

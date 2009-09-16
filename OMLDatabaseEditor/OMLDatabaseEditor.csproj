@@ -1,0 +1,409 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{19F0B1F1-ADBC-493B-86F0-23B65E7D082D}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>OMLDatabaseEditor</RootNamespace>
+    <AssemblyName>OMLDatabaseEditor</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ApplicationIcon>Application.ico</ApplicationIcon>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>
+    </DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DevExpress.Data.v8.2, Version=8.2.6.0, Culture=neutral, PublicKeyToken=9b171c9fd64da1d1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\DevExpress.Data.v8.2.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DevExpress.Utils.v8.2, Version=8.2.6.0, Culture=neutral, PublicKeyToken=9b171c9fd64da1d1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\DevExpress.Utils.v8.2.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DevExpress.XtraEditors.v8.2, Version=8.2.6.0, Culture=neutral, PublicKeyToken=9b171c9fd64da1d1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\DevExpress.XtraEditors.v8.2.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DevExpress.XtraNavBar.v8.2, Version=8.2.6.0, Culture=neutral, PublicKeyToken=9b171c9fd64da1d1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\DevExpress.XtraNavBar.v8.2.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DirectShowLib-2005, Version=2.0.0.0, Culture=neutral, PublicKeyToken=67e7b740cdfc2d3f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DVDMediaInfo\DirectShowLib-2005.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="PresentationFramework">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System">
+      <Aliases>global,system</Aliases>
+    </Reference>
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="UIAutomationProvider">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsFormsIntegration">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AboutOML.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AboutOML.Designer.cs">
+      <DependentUpon>AboutOML.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ComponentResourceManager.cs" />
+    <Compile Include="Controls\DiskEditorCtrl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\DiskEditorCtrl.Designer.cs">
+      <DependentUpon>DiskEditorCtrl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\DiskEditorFrm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\DiskEditorFrm.Designer.cs">
+      <DependentUpon>DiskEditorFrm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\DiskInfoFrm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\DiskInfoFrm.Designer.cs">
+      <DependentUpon>DiskInfoFrm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\DiskMoverFrm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\DiskMoverFrm.Designer.cs">
+      <DependentUpon>DiskMoverFrm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ExtenderDVDMenu.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\ExtenderDVDMenu.Designer.cs">
+      <DependentUpon>ExtenderDVDMenu.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\NonFatalErrors.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\NonFatalErrors.Designer.cs">
+      <DependentUpon>NonFatalErrors.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\PersonEditorFrm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\PersonEditorFrm.Designer.cs">
+      <DependentUpon>PersonEditorFrm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\TitleEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\TitleEditor.Designer.cs">
+      <DependentUpon>TitleEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DownloadingBackDropsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DownloadingBackDropsForm.Designer.cs">
+      <DependentUpon>DownloadingBackDropsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ListEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ListEditor.Designer.cs">
+      <DependentUpon>ListEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MetadataMappings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MetadataMappings.Designer.cs">
+      <DependentUpon>MetadataMappings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MetadataSelect.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MetadataSelect.Designer.cs">
+      <DependentUpon>MetadataSelect.cs</DependentUpon>
+    </Compile>
+    <Compile Include="NewMovieName.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NewMovieName.Designer.cs">
+      <DependentUpon>NewMovieName.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EditorSettings.cs" />
+    <Compile Include="MainEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainEditor.Designer.cs">
+      <DependentUpon>MainEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MetaDataPluginSelect.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MetaDataPluginSelect.Designer.cs">
+      <DependentUpon>MetaDataPluginSelect.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MetaDataSearch.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MetaDataSearch.Designer.cs">
+      <DependentUpon>MetaDataSearch.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MetaDataSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MetaDataSettings.Designer.cs">
+      <DependentUpon>MetaDataSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OptionList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OptionList.Designer.cs">
+      <DependentUpon>OptionList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Options.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Options.Designer.cs">
+      <DependentUpon>Options.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="AboutOML.resx">
+      <DependentUpon>AboutOML.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\DiskEditorCtrl.resx">
+      <DependentUpon>DiskEditorCtrl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\DiskEditorFrm.resx">
+      <DependentUpon>DiskEditorFrm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ExtenderDVDMenu.resx">
+      <DependentUpon>ExtenderDVDMenu.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\NonFatalErrors.resx">
+      <DependentUpon>NonFatalErrors.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\PersonEditorFrm.resx">
+      <DependentUpon>PersonEditorFrm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\TitleEditor.resx">
+      <DependentUpon>TitleEditor.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ListEditor.resx">
+      <DependentUpon>ListEditor.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NewMovieName.resx">
+      <DependentUpon>NewMovieName.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MainEditor.resx">
+      <DependentUpon>MainEditor.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MetaDataPluginSelect.resx">
+      <DependentUpon>MetaDataPluginSelect.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MetaDataSearch.resx">
+      <DependentUpon>MetaDataSearch.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MetaDataSettings.resx">
+      <DependentUpon>MetaDataSettings.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OptionList.resx">
+      <DependentUpon>OptionList.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Options.resx">
+      <DependentUpon>Options.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\licenses.licx" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="ResolveGenres.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ResolveGenres.Designer.cs">
+      <DependentUpon>ResolveGenres.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Settings.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\OMLEngine\OMLEngine.csproj">
+      <Project>{047E39DC-BB9E-42CD-9AB2-CFA4D4387F6C}</Project>
+      <Name>OMLEngine</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OMLSDK\OMLSDK.csproj">
+      <Project>{84BDBB4C-50AA-4D92-9DD3-8CDFD7DFD7D4}</Project>
+      <Name>OMLSDK</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\saveHS.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\NewDocumentHS.BMP" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ClosePreviewHS.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="library.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Application.ico" />
+    <Content Include="Resources\Application.png" />
+    <Content Include="Resources\applications-multimedia.png" />
+    <Content Include="Resources\emblem-symbolic-link.png" />
+    <Content Include="Resources\movieheader.jpg" />
+    <Content Include="Resources\text-html.png" />
+    <Content Include="Resources\video-x-generic.png" />
+    <EmbeddedResource Include="Controls\DiskInfoFrm.resx">
+      <DependentUpon>DiskInfoFrm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\DiskMoverFrm.resx">
+      <DependentUpon>DiskMoverFrm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DownloadingBackDropsForm.resx">
+      <DependentUpon>DownloadingBackDropsForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MetadataMappings.resx">
+      <DependentUpon>MetadataMappings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MetadataSelect.resx">
+      <DependentUpon>MetadataSelect.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ResolveGenres.resx">
+      <DependentUpon>ResolveGenres.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Revision.txt" />
+    <None Include="Properties\DataSources\OMLEngine.Disk.datasource" />
+    <None Include="Properties\DataSources\OMLEngine.Title.datasource" />
+    <None Include="Resources\movieheader1.jpg" />
+    <None Include="app.config" />
+    <None Include="Resources\SaveAllHS.bmp" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>

@@ -43,9 +43,7 @@ namespace Library
                             player.PlayMovie();
 
                             // the MediaExperience object isn't loaded until a media file is playing
-                            AddInHost.Current.MediaCenterEnvironment.MediaExperience.Transport.PropertyChanged -= MoviePlayerFactory.Transport_PropertyChanged;
                             AddInHost.Current.MediaCenterEnvironment.MediaExperience.Transport.PropertyChanged += MoviePlayerFactory.Transport_PropertyChanged;
-                            AddInHost.Current.MediaCenterEnvironment.MediaExperience.Transport.PropertyChanged -= Transport_PropertyChanged;
                             AddInHost.Current.MediaCenterEnvironment.MediaExperience.Transport.PropertyChanged += Transport_PropertyChanged;
                         }
 

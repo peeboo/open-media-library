@@ -37,21 +37,16 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="dssnap, Version=1.0.0.0, Culture=neutral, PublicKeyToken=be95517fa8951550, processorArchitecture=MSIL">
+    <Reference Include="DirectShowLib-2005, Version=2.0.0.0, Culture=neutral, PublicKeyToken=67e7b740cdfc2d3f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>.\dssnap.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\DVDMediaInfo\DirectShowLib-2005.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Data" />
-    <Reference Include="System.Data.Linq">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Management" />
     <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.Runtime.Serialization">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
@@ -63,61 +58,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BackgroundProcessor.cs" />
-    <Compile Include="BioData.cs" />
-    <Compile Include="DatabaseManagement\DatabaseIntegrityChecks.cs" />
-    <Compile Include="TrailersProxyService.cs" />
-    <Compile Include="OMLWebClient.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="WVXManager.cs" />
-    <Compile Include="Settings\StartMenuHelper.cs" />
-    <Compile Include="Settings\StartMenuItem.cs" />
-    <Compile Include="Settings\UserFilter.cs" />
-    <Compile Include="Trailers\AppleTrailer.cs" />
-    <Compile Include="Trailers\AppleTrailers.cs" />
     <Compile Include="AudioStream.cs" />
-    <Compile Include="Dao\DBContext.cs" />
-    <Compile Include="Dao\ImageManager.cs" />
-    <Compile Include="Dao\OMLData.cs">
-      <DependentUpon>OMLData.dbml</DependentUpon>
-    </Compile>
-    <Compile Include="Dao\OMLData.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>OMLData.dbml</DependentUpon>
-    </Compile>
-    <Compile Include="Dao\OMLDataSettings.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>OMLDataSettings.dbml</DependentUpon>
-    </Compile>
-    <Compile Include="Dao\TitleConfig.cs" />
-    <Compile Include="Dao\TitleDao.cs" />
-    <Compile Include="Dao\TitleCollectionDao.cs" />
-    <Compile Include="Dao\TitleCollectionManager.cs" />
-    <Compile Include="Dao\TitleFilter.cs" />
-    <Compile Include="DatabaseManagement\DatabaseInformation.cs" />
-    <Compile Include="DatabaseManagement\DatabaseManagement.cs" />
-    <Compile Include="FileSystem\MountingTool.cs" />
-    <Compile Include="MediaScanner\DiskInfo.cs" />
+    <Compile Include="DiskInfo.cs" />
     <Compile Include="DVDAudioTrack.cs" />
     <Compile Include="DVDChapter.cs" />
     <Compile Include="DVDDecrypterController.cs" />
     <Compile Include="DVDDisk.cs" />
     <Compile Include="DVDSubTitle.cs" />
     <Compile Include="DVDTitle.cs" />
-    <Compile Include="FileSystem\FileHelper.cs" />
-    <Compile Include="FileSystem\FileScanner.cs" />
-    <Compile Include="FileSystem\FileTypes.cs" />
-    <Compile Include="FileSystem\NetworkScanner.cs" />
     <Compile Include="I18nResourceManager.cs" />
     <Compile Include="Disk.cs" />
     <Compile Include="FileSystemWalker.cs" />
-    <Compile Include="GenreMetaData.cs" />
-    <Compile Include="MediaScanner\IFOUtilities.cs" />
+    <Compile Include="Genres.cs" />
+    <Compile Include="IFOUtilities.cs" />
     <Compile Include="ITranscodingService.cs" />
-    <Compile Include="MediaScanner\MediaInfoLib.cs" />
+    <Compile Include="MediaData.cs" />
+    <Compile Include="MediaInfo.cs" />
+    <Compile Include="MediaInfoLib.cs" />
     <Compile Include="MediaLanguage.cs" />
     <Compile Include="MediaSource.cs" />
     <Compile Include="NetHelper.cs" />
@@ -130,11 +87,6 @@
     </Compile>
     <Compile Include="RegexUtils.cs" />
     <Compile Include="Settings.cs" />
-    <Compile Include="Settings\Enums.cs" />
-    <Compile Include="Settings\MetaDataSettings.cs" />
-    <Compile Include="Settings\OMLSettings.cs" />
-    <Compile Include="Settings\SettingsManager.cs" />
-    <Compile Include="Settings\XMLSettingsManager.cs" />
     <Compile Include="SortedArrayList.cs" />
     <Compile Include="SubtitleStream.cs" />
     <Compile Include="Title.cs" />
@@ -148,39 +100,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="Dao\OMLData.dbml">
-      <Generator>MSLinqToSQLGenerator</Generator>
-      <SubType>Designer</SubType>
-      <LastGenOutput>OMLData.designer.cs</LastGenOutput>
-    </None>
     <None Include="library.snk" />
     <None Include="Properties\Settings.settings">
       <Generator>PublicSettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Dao\OMLData.dbml.layout">
-      <DependentUpon>OMLData.dbml</DependentUpon>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Dao\OMLDataSettings.dbml">
-      <Generator>MSLinqToSQLGenerator</Generator>
-      <LastGenOutput>OMLDataSettings.designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Dao\OMLDataSettings.dbml.layout">
-      <DependentUpon>OMLDataSettings.dbml</DependentUpon>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="dssnap.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

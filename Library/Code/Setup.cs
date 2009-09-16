@@ -12,7 +12,7 @@ using OMLSDK;
 
 namespace Library
 {
-    public class Setup : BaseModelItem
+    public class Setup : ModelItem
     {
         #region variables
         private Title _currentTitle;
@@ -38,7 +38,7 @@ namespace Library
 
         private BooleanChoice _shouldCopyImages = new BooleanChoice();
         private static List<OMLPlugin> availablePlugins = new List<OMLPlugin>();
-        //private TitleCollection _titleCollection = new TitleCollection();
+        private TitleCollection _titleCollection = new TitleCollection();
         #endregion
 
         #region Properties
@@ -281,7 +281,7 @@ namespace Library
 
         public void AddCurrentTitle()
         {
-            if (TitleCollectionManager.ContainsDisks(CurrentTitle.Disks))
+            if (_titleCollection.ContainsDisks(CurrentTitle.Disks))
             {
                 OMLApplication.DebugLine("[Setup UI] Skipping title: " + CurrentTitle.Name + " because already in the collection");
                 AddInHost.Current.MediaCenterEnvironment.Dialog(CurrentTitle.Name + " was found to already exist in your database and has been skipped.",
@@ -293,8 +293,9 @@ namespace Library
             }
             else
             {
-                OMLApplication.DebugLine("[Setup UI] Adding title: " + CurrentTitle.Id);                
-                //_titleCollection.Add(CurrentTitle);
+                OMLApplication.DebugLine("[Setup UI] Adding title: " + CurrentTitle.InternalItemID);
+                OMLPlugin.BuildResizedMenuImage(CurrentTitle);
+                _titleCollection.Add(CurrentTitle);
                 TotalTitlesAdded++;
             }
             CurrentTitleIndex++;
@@ -318,13 +319,13 @@ namespace Library
             _loadComplete = false;
             _loadStarted = false;
             _titles = null;
-            //_titleCollection.loadTitleCollection();
+            _titleCollection.loadTitleCollection();
             _treeView.CheckedNodes.Clear();
         }
         public void gotoMenu()
         {
-            //TitleCollection tc = OMLApplication.Current.ReloadTitleCollection();
-            OMLApplication.Current.GoToMenu(new MovieGallery());
+            TitleCollection tc = OMLApplication.Current.ReloadTitleCollection();
+            OMLApplication.Current.GoToMenu(new MovieGallery(tc, Filter.Home));
         }
         public void AddAllCurrentTitles()
         {
@@ -336,15 +337,16 @@ namespace Library
                 for (CurrentTitleIndex = CurrentTitleIndex; TotalTitlesFound > CurrentTitleIndex; CurrentTitleIndex++)
                 {
                     CurrentTitle = _titles[CurrentTitleIndex];
-                    if (TitleCollectionManager.ContainsDisks(CurrentTitle.Disks))
+                    if (_titleCollection.ContainsDisks(CurrentTitle.Disks))
                     {
                         OMLApplication.DebugLine("[Setup UI] Skipping title: " + CurrentTitle.Name + " because already in the collection");
                         TotalTitlesSkipped++;
                     }
                     else
                     {
-                        OMLApplication.DebugLine("[Setup UI] Adding title: " + CurrentTitle.Id);                        
-                        //_titleCollection.Add(CurrentTitle);
+                        OMLApplication.DebugLine("[Setup UI] Adding title: " + CurrentTitle.InternalItemID);
+                        OMLPlugin.BuildResizedMenuImage(CurrentTitle);
+                        _titleCollection.Add(CurrentTitle);
                         TotalTitlesAdded++;
                     }
                 }
@@ -390,6 +392,7 @@ namespace Library
                                             foreach (FileInfo fInfo in fileInfos)
                                             {
                                                 OMLApplication.DebugLine("[Setup UI] File Found: " + fInfo.Name);
+                                                plugin.CopyImages = ShouldCopyImages.Value;
                                                 plugin.DoWork(new string[] { fInfo.FullName });
                                             }
                                         }
@@ -398,7 +401,8 @@ namespace Library
                             }
                             else
                             {
-                                OMLApplication.DebugLine("[Setup UI] Processing path: " + node.FullPath);                                
+                                OMLApplication.DebugLine("[Setup UI] Processing path: " + node.FullPath);
+                                plugin.CopyImages = ShouldCopyImages.Value;
                                 plugin.DoWork(new string[] { node.FullPath });
                             }
                         }
@@ -468,7 +472,7 @@ namespace Library
             CurrentTitle = null;
             CurrentTitleIndex = 0;
             current = this;
-            //_titleCollection.loadTitleCollection();
+            _titleCollection.loadTitleCollection();
             _ImporterSelection = new Choice();
             List<string> _Importers = new List<string>();
             foreach (OMLPlugin _plugin in availablePlugins) {

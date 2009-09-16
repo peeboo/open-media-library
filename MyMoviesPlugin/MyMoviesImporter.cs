@@ -4,7 +4,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using OMLEngine;
-using OMLEngine.FileSystem;
 using OMLSDK;
 using System.IO;
 using System.Diagnostics;
@@ -37,7 +36,7 @@ namespace MyMoviesPlugin
         }
         public override void ProcessFile(string file)
         {            
-            Utilities.DebugLine("[MyMoviesImporter] created[filename("+file+")]");
+            Utilities.DebugLine("[MyMoviesImporter] created[filename("+file+"), ShouldCopyImages("+CopyImages+")]");
 
             currentFile = file;
             if (File.Exists(currentFile))
@@ -81,7 +80,11 @@ namespace MyMoviesPlugin
         protected override double GetVersionMinor()
         {
             return MinorVersion;
-        }        
+        }
+        protected override bool GetCanCopyImages()
+        {
+            return true;
+        }
         protected override string GetMenu()
         {
             return "MyMovies";
@@ -178,7 +181,7 @@ namespace MyMoviesPlugin
                     if (File.Exists(finalImagePath))
                     {
                         Utilities.DebugLine("[MyMoviesImporter] This file appears to be valid, we'll set it on the title");
-                        newTitle.FrontCoverPath = finalImagePath;
+                        SetFrontCoverImage(ref newTitle, finalImagePath);
                     }
                     navigator.MoveToParent();
                 }
@@ -189,7 +192,7 @@ namespace MyMoviesPlugin
                     if (File.Exists(imagePath))
                     {
                         Utilities.DebugLine("[MyMoviesImporter] Found Back cover image");
-                        newTitle.BackCoverPath = imagePath;
+                        SetBackCoverImage(ref newTitle, imagePath);
                     }
                     navigator.MoveToParent();
                 }
@@ -277,7 +280,7 @@ namespace MyMoviesPlugin
             }
             #endregion
 
-            newTitle.Runtime = Int32.Parse(GetChildNodesValue(navigator, "RunningTime"));            
+            newTitle.Runtime = Int32.Parse(GetChildNodesValue(navigator, "RunningTime"));
 
             #region persons
             if (navigator.MoveToChild("Persons", ""))
@@ -302,15 +305,13 @@ namespace MyMoviesPlugin
                                 {
                                     case "Actor":
                                         Utilities.DebugLine("[MyMoviesImporter] actor {0}, {1}", name, role);
-
                                         newTitle.AddActingRole(name, role);
                                         break;
                                     case "Director":
+                                        Person p = new Person(name);
                                         Utilities.DebugLine("[MyMoviesImporter] director {0}", name);
-                                        
-                                        newTitle.AddDirector(new Person(name));
+                                        newTitle.AddDirector(p);
                                         break;
-
                                     default:
                                         break;
                                 }
@@ -394,26 +395,12 @@ namespace MyMoviesPlugin
                                 audioTrackString += string.Format(", {0}", audioChannels);
 
                             Utilities.DebugLine("[MyMoviesImporter] Got one: {0}, {1}, {2}", audioLanguage, audioType, audioChannels);
-                            newTitle.AddAudioTrack(audioTrackString);
+                            newTitle.AddLanguageFormat(audioTrackString);
                         }
                         localNav.MoveToNext("AudioTrack", "");
                     }
                 }
                 navigator.MoveToParent();
-            }
-            #endregion
-
-            #region watched status (Submitted by yodine from our forums)
-            if (navigator.MoveToChild("Watched", ""))
-            {
-                navigator.MoveToParent(); // move back, we just wanted to know this field existed.
-                Utilities.DebugLine("[MyMoviesImporter] Found Watched status. Trying to decode");
-                string watched = GetChildNodesValue(navigator, "Watched");
-                if (!string.IsNullOrEmpty(watched))
-                {
-                    if (Boolean.Parse(watched))
-                        newTitle.WatchedCount++;
-                }
             }
             #endregion
 
@@ -493,7 +480,7 @@ namespace MyMoviesPlugin
                 foreach (Disk disk in sideAdisks)
                 {
                     disk.Name = string.Format(@"Disk{0}", j++);
-                    newTitle.AddDisk(disk);
+                    newTitle.Disks.Add(disk);
                 }
 
                 if (isDoubleSided)
@@ -504,7 +491,7 @@ namespace MyMoviesPlugin
                     foreach (Disk disk in sideBdisks)
                     {
                         disk.Name = string.Format(@"Disk{0}", j++);
-                        newTitle.AddDisk(disk);
+                        newTitle.Disks.Add(disk);
                     }
                 }
 
@@ -535,7 +522,7 @@ namespace MyMoviesPlugin
                         Utilities.DebugLine("[MyMoviesImporter] We think this is a directory");
                         if (Directory.Exists(fullPath))
                         {
-                            if (FileScanner.IsDVD(fullPath))
+                            if (MediaData.IsDVD(fullPath))
                             {
                                 Utilities.DebugLine("[MyMoviesImporter] its dvd");
                                 Disk disk = DiskForFormatAndLocation(VideoFormat.DVD, fullPath);
@@ -543,7 +530,7 @@ namespace MyMoviesPlugin
                                 break;
                             }
 
-                            if (FileScanner.IsBluRay(fullPath))
+                            if (MediaData.IsBluRay(fullPath))
                             {
                                 Utilities.DebugLine("[MyMoviesImporter] its bluray");
                                 Disk disk = DiskForFormatAndLocation(VideoFormat.BLURAY, fullPath);
@@ -551,7 +538,7 @@ namespace MyMoviesPlugin
                                 break;
                             }
 
-                            if (FileScanner.IsHDDVD(fullPath))
+                            if (MediaData.IsHDDVD(fullPath))
                             {
                                 Utilities.DebugLine("[MyMoviesImporter] its hddvd");
                                 Disk disk = DiskForFormatAndLocation(VideoFormat.HDDVD, fullPath);
@@ -680,19 +667,19 @@ namespace MyMoviesPlugin
                     //online folder
                     if (Directory.Exists(location))
                     {
-                        if (FileScanner.IsBluRay(location))
+                        if (MediaData.IsBluRay(location))
                         {
                             Utilities.DebugLine("[MyMoviesImporter] Nice.. you appear to have a bluray drive (or file, you sneaky dog)");
                             return VideoFormat.BLURAY;
                         }
 
-                        if (FileScanner.IsHDDVD(location))
+                        if (MediaData.IsHDDVD(location))
                         {
                             Utilities.DebugLine("[MyMoviesImporter] Ah.. hddvd nice (yeah last year... you know these lost the format war right?)");
                             return VideoFormat.HDDVD;
                         }
 
-                        if (FileScanner.IsDVD(location))
+                        if (MediaData.IsDVD(location))
                         {
                             Utilities.DebugLine("[MyMoviesImporter] Here be a dvd or video_ts folder (does it really matter which?)");
                             return VideoFormat.DVD;
@@ -742,24 +729,24 @@ namespace MyMoviesPlugin
                 string directoryName = Path.GetDirectoryName(file);
                 if (Directory.Exists(directoryName))
                 {
-                    if (FileScanner.IsBluRay(directoryName))
+                    if (MediaData.IsBluRay(directoryName))
                     {
                         Utilities.DebugLine("[MyMoviesImporter] its a bluray, adding a new disk");
-                        title_to_validate.AddDisk(new Disk("Disk1", directoryName, VideoFormat.BLURAY));
+                        title_to_validate.Disks.Add(new Disk("Disk1", directoryName, VideoFormat.BLURAY));
                         return true;
                     }
 
-                    if (FileScanner.IsHDDVD(directoryName))
+                    if (MediaData.IsHDDVD(directoryName))
                     {
                         Utilities.DebugLine("[MyMoviesImporter] its an hddvd, adding a new disk");
-                        title_to_validate.AddDisk(new Disk("Disk1", directoryName, VideoFormat.HDDVD));
+                        title_to_validate.Disks.Add(new Disk("Disk1", directoryName, VideoFormat.HDDVD));
                         return true;
                     }
 
-                    if (FileScanner.IsDVD(directoryName))
+                    if (MediaData.IsDVD(directoryName))
                     {
                         Utilities.DebugLine("[MyMoviesImporter] its a dvd, adding a new disk");
-                        title_to_validate.AddDisk(new Disk("Disk1", directoryName, VideoFormat.DVD));
+                        title_to_validate.Disks.Add(new Disk("Disk1", directoryName, VideoFormat.DVD));
                         return true;
                     }
 
@@ -796,7 +783,7 @@ namespace MyMoviesPlugin
                                     disk.Name = string.Format("Disk{0}", i + 1);
                                     disk.Path = Path.Combine(directoryName, files[i]);
                                     disk.Format = format;
-                                    title_to_validate.AddDisk(disk);
+                                    title_to_validate.Disks.Add(disk);
                                 }
                                 catch (Exception)
                                 {

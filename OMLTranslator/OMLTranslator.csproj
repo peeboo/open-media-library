@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{350B1D61-F5A8-4BCA-A92D-FBC6ACCB6D23}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -93,6 +93,22 @@
   <ItemGroup>
     <EmbeddedResource Include="..\Library\I18nResources.resx">
       <Link>TranslatableResources\Library\I18nResources.resx</Link>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\OMLDatabaseEditor\AboutOML.resx">
+      <Link>TranslatableResources\OMLDatabaseEditor\AboutOML.resx</Link>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\OMLDatabaseEditor\MetaDataSearch.resx">
+      <Link>TranslatableResources\OMLDatabaseEditor\MetaDataSearch.resx</Link>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\OMLDatabaseEditor\MetaDataSettings.resx">
+      <Link>TranslatableResources\OMLDatabaseEditor\MetaDataSettings.resx</Link>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\OMLDatabaseEditor\OptionList.resx">
+      <Link>TranslatableResources\OMLDatabaseEditor\OptionList.resx</Link>
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>

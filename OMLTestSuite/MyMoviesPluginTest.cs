@@ -23,21 +23,23 @@ namespace OMLTestSuite
         [Test]
         public void TEST_BASE_CASE()
         {
-            /*TitleCollection tc = new TitleCollection(@"..\..\..\Sample Files\testOML.dat");
-            MyMoviesImporter importer = new MyMoviesImporter();                        
+            TitleCollection tc = new TitleCollection(@"..\..\..\Sample Files\testOML.dat");
+            MyMoviesImporter importer = new MyMoviesImporter();
+            bool ShouldCopyImages = false;
+            importer.CopyImages = ShouldCopyImages;
             importer.ProcessFile(@"..\..\..\Sample Files\MyMovies.xml");
 
             foreach (Title t in importer.GetTitles())
                 tc.Add(t);
 
-            //tc.saveTitleCollection();
+            tc.saveTitleCollection();
             tc = null;
 
             tc = new TitleCollection(@"..\..\..\Sample Files\testOML.dat");
             tc.loadTitleCollection();
             Assert.IsNotNull(tc);
 
-            Assert.AreEqual(2, tc.Source.Count);*/
+            Assert.AreEqual(2, tc.Count);
         }
 
         [Test]

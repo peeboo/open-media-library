@@ -10,7 +10,7 @@ using Microsoft.MediaCenter.UI;
 
 namespace Library
 {
-    public class AppleTrailers : BaseModelItem
+    public class AppleTrailers : ModelItem
     {
         private static string LoFiUrl = @"http://www.apple.com/trailers/home/xml/current.xml";
         private static string HiFiUrl = @"http://www.apple.com/trailers/home/xml/current_720p.xml";
@@ -53,7 +53,7 @@ namespace Library
 
         public void LoadTrailers()
         {
-            string fidelity = OMLEngine.Settings.OMLSettings.AppleTrailerFidelity;
+            string fidelity = Properties.Settings.Default.AppleTrailerFidelity;
             if (string.IsNullOrEmpty(fidelity) == true)
                 fidelity = @"Low";
 
@@ -202,7 +202,7 @@ namespace Library
         }
     }
 
-    public class AppleTrailer : BaseModelItem
+    public class AppleTrailer : ModelItem
     {
         public string Title { get; set; }
         public string Runtime { get; set; }

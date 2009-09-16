@@ -15,7 +15,7 @@ namespace Library
     /// This object contains the standard set of information displayed in the 
     /// details page UI.
     /// </summary>
-    public class MovieDetailsPage : BaseModelItem
+    public class MovieDetailsPage : ModelItem
     {                
         #region Private Variables        
         private Choice _actors;
@@ -44,7 +44,7 @@ namespace Library
         public string UserRating { get { return ((double)_movieDetails.UseStarRating / 10).ToString(); } }
         public string Title { get { return _movieDetails.Name; } }
         public Image FullCover { get { return _fullCover; } }
-        public List<string> Languages { get { return new List<string>(_movieDetails.TitleObject.AudioTracks); } }
+        public List<string> Languages { get { return _movieDetails.TitleObject.AudioTracks; } }
         public Choice DiskChoice { get { return _diskChoice; } }
 
         /// <summary>
@@ -191,7 +191,7 @@ namespace Library
             }
         }
 
-        public IList<string> Genres
+        public IList Genres
         {
             get { return _movieDetails.TitleObject.Genres; }
         }
@@ -274,13 +274,8 @@ namespace Library
 
 
         private void LoadDetails(MovieItem item)
-        {            
-            // get the title from the db will full information
-            Title title = OMLEngine.TitleCollectionManager.GetTitle(item.TitleObject.Id);
-
-            // create a new movie item to use
-            _movieDetails = new MovieItem(title, item.Gallery);            
-
+        {
+            _movieDetails = item;
             //_localMedia = null;
 
             //DVDDiskInfo debug code
@@ -318,9 +313,9 @@ namespace Library
         {
             List<MovieCastCommand> actors = new List<MovieCastCommand>(_movieDetails.TitleObject.ActingRoles.Count);
 
-            foreach (Role actor in _movieDetails.TitleObject.ActingRoles)
+            foreach (string actor in _movieDetails.TitleObject.ActingRoles.Keys)
             {
-                actors.Add(new MovieCastCommand(actor.PersonName, actor.RoleName));
+                actors.Add(new MovieCastCommand(actor, _movieDetails.TitleObject.ActingRoles[actor]));
             }
 
             _actors = new Choice(this, "Actors", actors);
@@ -496,11 +491,13 @@ namespace Library
 
                 if (watched && _movieDetails.TitleObject.WatchedCount == 0)
                 {
-                    TitleCollectionManager.IncrementWatchedCount(_movieDetails.TitleObject);
+                    _movieDetails.TitleObject.WatchedCount = 1;
+                    OMLApplication.Current.SaveTitles();
                 }
                 else if (!watched && _movieDetails.TitleObject.WatchedCount != 0)
                 {
-                    TitleCollectionManager.ClearWatchedCount(_movieDetails.TitleObject);
+                    _movieDetails.TitleObject.WatchedCount = 0;
+                    OMLApplication.Current.SaveTitles();
                 }
             });
         }
@@ -511,19 +508,50 @@ namespace Library
             if (backgroundImages != null)
                 return;
 
-            backgroundImages = new List<Image>(1);            
+            backgroundImages = new List<Image>(1);
 
-            if (_movieDetails.TitleObject.FanArtPaths.Count != 0)
+            if (!string.IsNullOrEmpty(_movieDetails.TitleObject.BackDropImage))
             {                
-                foreach (string file in _movieDetails.TitleObject.FanArtPaths)
+                if (File.Exists(Path.GetFullPath(_movieDetails.TitleObject.BackDropImage)))
                 {
-                    OMLApplication.DebugLine("[MovieDetailsPage] loading fanart image {0}", file);
-                    backgroundImages.Add(new Image(string.Format("file://{0}", file)));
-                }
+                    backgroundImages.Add(new Image(
+                        string.Format("file://{0}", Path.GetFullPath(_movieDetails.TitleObject.BackDropImage))));
 
-                // set the background image
-                BackgroundImage = backgroundImages[0];
+                    // set the background image
+                    BackgroundImage = backgroundImages[0];
+                    
+                    return;
+                }                
             }
+
+            // a specific file was NOT found, time to go hunting
+
+            OMLApplication.DebugLine("[MovieDetailsPage] Looking for fanart!");
+
+            // if the /FanArt folder doesn't exist - that means no background images
+            string fanArtSrcDir = _movieDetails.TitleObject.BackDropFolder;
+            //string pdFanArtDir = @"C:\ProgramData\OpenMediaLibrary\FanArt\" + _movieDetails.TitleObject.Name.ToString();
+            if (string.IsNullOrEmpty(fanArtSrcDir)) //|| !Directory.Exists(fanArtSrcDir))
+            {
+            //    fanArtSrcDir = pdFanArtDir;
+            //    if (!Directory.Exists(pdFanArtDir))
+                    return;
+            }
+
+            foreach (string file in
+                Directory.GetFiles(fanArtSrcDir, "*.jpg", SearchOption.TopDirectoryOnly))
+            {
+                OMLApplication.DebugLine("[MovieDetailsPage] loading fanart image {0}", file);
+
+                backgroundImages.Add(new Image(string.Format("file://{0}", file)));
+            }
+
+            // oops - no images found in the fanart folder
+            if (backgroundImages.Count == 0)
+                return;
+
+            // set the background image
+            BackgroundImage = backgroundImages[0];            
         }
 
         public void RotateBackground()
@@ -567,10 +595,12 @@ namespace Library
         }
 
         private void MovieCastCommand_Invoked(object sender, EventArgs e)
-        {            
-            OMLApplication.Current.GoToMenu(new MovieGallery(new TitleFilter(TitleFilterType.Person, name)));
+        {
+            MovieGallery gallery = new MovieGallery(OMLApplication.Current.Titles, "Home");
+            OMLApplication.Current.GoToSelectionList(gallery, Filter.Participant, name);
         }        
     }
+
 
     // since for some reason Media Center's MCML engine will not load the OMLEngine Assembly 
     // This prevents me from casting the Disks Repeater items to Disk type.

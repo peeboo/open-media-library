@@ -11,7 +11,7 @@ using System.Xml.XPath;
 
 namespace Library
 {
-    public class TheMovieDbBackDropDownloader : BaseModelItem
+    public class TheMovieDbBackDropDownloader : ModelItem
     {
         private const string API_KEY = "1376bf98794bda0c2495bd500a37f689";
         private const string API_URL_SEARCH = "http://api.themoviedb.org/2.0/Movie.search";
@@ -92,15 +92,20 @@ namespace Library
         }
 
         public void DownloadBackDropsForTitle(Title t, IList<string> urls)
-        {            
+        {
+            if (string.IsNullOrEmpty(t.BackDropFolder)) return;
+
             foreach (string url in urls)
             {
                 WebClient web = new WebClient();
-                string filename = Path.Combine(FileSystemWalker.ImageDownloadDirectory, Guid.NewGuid().ToString());
+                string filename = url.Substring(url.LastIndexOf('/') + 1);
                 try
                 {
-                    web.DownloadFile(url, filename);
-                    t.AddFanArtImage(filename);
+                    if (!Directory.Exists(t.BackDropFolder))
+                        Directory.CreateDirectory(t.BackDropFolder);
+
+                    string localPath = Path.Combine(t.BackDropFolder, filename);
+                    web.DownloadFile(url, localPath);
                 }
                 catch (Exception e)
                 {

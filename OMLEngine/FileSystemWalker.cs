@@ -45,52 +45,12 @@ namespace OMLEngine
             get { return Path.Combine(PublicRootDirectory, @"FanArt"); }
         }
 
-        public static string DBBackupDirectory
-        {
-            get { return Path.Combine(PublicRootDirectory, @"Backups"); }
-        }
-
-        public static bool DBBackupDirectoryExists
-        {
-            get { return Directory.Exists(DBBackupDirectory); }
-        }
-
-        public static void createDBBackupDirectory()
-        {
-            Directory.CreateDirectory(DBBackupDirectory);
-        }
-
-        public static string ThirdPartyData
-        {
-            get { return Path.Combine(PublicRootDirectory, @"ThirdPartyData"); }
-        }
-
-        public static bool ThirdPartyDataExists
-        {
-            get { return Directory.Exists(ThirdPartyData); }
-        }
-
-        public static void createThirdPartyDatay()
-        {
-            Directory.CreateDirectory(ThirdPartyData);
-        }
-
         /// <summary>
         /// Location for cover art and other images to be stored
         /// </summary>
         public static string ImageDirectory
         {
             get { return Path.Combine(PublicRootDirectory, @"Images"); }
-        }
-
-        public static string ImageDownloadDirectory
-        {
-            get { return Path.Combine(PublicRootDirectory, @"DownloadImages"); }
-        }
-
-        public static string ExtenderCacheDirectory
-        {
-            get { return Path.Combine(PublicRootDirectory, @"ExtenderCache"); }
         }
 
         /// <summary>
@@ -160,16 +120,6 @@ namespace OMLEngine
         public static bool ImageDirExists
         {
             get { return Directory.Exists(ImageDirectory); }
-        }
-
-        public static bool ExtenderCacheDirectoryExists
-        {
-            get { return Directory.Exists(ExtenderCacheDirectory); }
-        }
-
-        public static bool ImageDownloadDirExists
-        {
-            get { return Directory.Exists(ImageDownloadDirectory); }
         }
 
         /// <summary>
@@ -242,16 +192,6 @@ namespace OMLEngine
         public static void createImageDirectory()
         {
             Directory.CreateDirectory(ImageDirectory);
-        }
-
-        public static void CreateExtenderCacheDirectory()
-        {
-            Directory.CreateDirectory(ExtenderCacheDirectory);
-        }
-
-        public static void createImageDownloadDirectory()
-        {
-            Directory.CreateDirectory(ImageDownloadDirectory);
         }
 
         /// <summary>

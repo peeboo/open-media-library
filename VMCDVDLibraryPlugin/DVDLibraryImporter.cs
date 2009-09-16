@@ -83,9 +83,6 @@ namespace VMCDVDLibraryPlugin
         {
             try
             {
-                List<string> moviePaths = new List<string>();
-
-
                 List<string> dirList = new List<string>();
                 List<string> fileList = new List<string>();
                 GetSubFolders(startFolder, dirList);
@@ -128,7 +125,7 @@ namespace VMCDVDLibraryPlugin
                                         {
                                             if (Enum.GetName(typeof(VideoFormat), format).ToLowerInvariant() == extension)
                                             {
-                                                dvd.AddTrailer(video);
+                                                dvd.Trailers.Add(video);
                                             }
                                         }
                                     }
@@ -140,14 +137,14 @@ namespace VMCDVDLibraryPlugin
                         {
                             if (fileNames != null && fileNames.Length > 0)
                             {
-                                if (OMLEngine.Settings.OMLSettings.TreatFoldersAsTitles)
+                                if (OMLEngine.Properties.Settings.Default.FoldersAreTitles)
                                 {
                                     Title newVideo = new Title();
 
                                     // Create the title name
                                     DirectoryInfo di = new DirectoryInfo(currentFolder);
                                     newVideo.Name = "";
-                                    if (OMLEngine.Settings.OMLSettings.AddParentFoldersToTitleName)
+                                    if (OMLEngine.Properties.Settings.Default.AddParentFoldersToTitleName)
                                     {
                                         // If AddParentFolderToTitleName is true then check if the parent folder
                                         // Is the startfolder. If not add parent folder to name
@@ -174,7 +171,7 @@ namespace VMCDVDLibraryPlugin
                                                 disk.Path = video;
                                                 disk.Format = (VideoFormat)Enum.Parse(typeof(VideoFormat), extension, true);
                                                 disk.Name = string.Format("Disk {0}", diskNumber++);
-                                                newVideo.AddDisk(disk);
+                                                newVideo.Disks.Add(disk);
                                             }
                                         }
                                         catch (Exception ex)
@@ -184,12 +181,12 @@ namespace VMCDVDLibraryPlugin
                                     }
 
                                     if (File.Exists(Path.Combine(currentFolder, "folder.jpg")))
-                                        newVideo.FrontCoverPath = Path.Combine(currentFolder, "folder.jpg");
+                                        SetFrontCoverImage(ref newVideo, Path.Combine(currentFolder, "folder.jpg"));
 
                                     if (newVideo.Disks.Count > 0)
                                     {
                                         // There is one or more valid disks for this title. Add it.
-                                        //string temp = newVideo.BackDropFolder; // This initialises the fanart folder forcing a search for fanart
+                                        string temp = newVideo.BackDropFolder; // This initialises the fanart folder forcing a search for fanart
                                         AddTitle(newVideo);
                                     }
                                 }
@@ -217,19 +214,19 @@ namespace VMCDVDLibraryPlugin
                                                 string pathWithNoExtension = Path.GetDirectoryName(video) + "\\" + Path.GetFileNameWithoutExtension(video);
                                                 if (File.Exists(pathWithNoExtension + ".jpg"))
                                                 {
-                                                    newVideo.FrontCoverPath = pathWithNoExtension + ".jpg";
+                                                    SetFrontCoverImage(ref newVideo, pathWithNoExtension + ".jpg");
                                                 }
                                                 else if (File.Exists(video + ".jpg"))
                                                 {
-                                                    newVideo.FrontCoverPath = video + ".jpg";
+                                                    SetFrontCoverImage(ref newVideo, video + ".jpg");
                                                 }
                                                 else if (File.Exists(Path.GetDirectoryName(video) + "\\folder.jpg"))
                                                 {
-                                                    newVideo.FrontCoverPath = Path.GetDirectoryName(video) + "\\folder.jpg";
+                                                    SetFrontCoverImage(ref newVideo, Path.GetDirectoryName(video) + "\\folder.jpg");
                                                 }
 
-                                                newVideo.AddDisk(disk);
-                                                //string temp = newVideo.BackDropFolder; // This initialises the fanart folder forcing a search for fanart
+                                                newVideo.Disks.Add(disk);
+                                                string temp = newVideo.BackDropFolder; // This initialises the fanart folder forcing a search for fanart
                                                 AddTitle(newVideo);
                                             }
                                         }
@@ -243,8 +240,6 @@ namespace VMCDVDLibraryPlugin
                         }
                     }
                 } // loop through the sub folders
-
-
             }
             catch (Exception ex)
             {
@@ -328,7 +323,7 @@ namespace VMCDVDLibraryPlugin
                             break;
                     }                    
 
-                    t.AddDisk(disk);
+                    t.Disks.Add(disk);
                     t.MetadataSourceName = "VMC DVD Library";
                     return t;
                 }
@@ -391,7 +386,7 @@ namespace VMCDVDLibraryPlugin
 
                         bFound = reader.ReadToFollowing("language");
                         if (bFound)
-                            t.AddAudioTrack(reader.ReadString().Trim());
+                            t.AddLanguageFormat(reader.ReadString().Trim());
 
                         bFound = reader.ReadToFollowing("releaseDate");
                         if (bFound)
@@ -430,7 +425,7 @@ namespace VMCDVDLibraryPlugin
                             imageFileName = movieFolder + "\\folder.jpg";
                         }
 
-                        t.FrontCoverPath = imageFileName;
+                        SetFrontCoverImage(ref t, imageFileName);
 
                         bFound = reader.ReadToFollowing("duration");
                         if (bFound)

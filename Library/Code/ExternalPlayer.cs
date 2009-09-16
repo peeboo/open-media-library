@@ -8,7 +8,6 @@ using Microsoft.MediaCenter.UI;
 using System.IO;
 using System.Diagnostics;
 using OMLGetDVDInfo;
-using OMLEngine.Settings;
 
 namespace Library
 {
@@ -48,12 +47,12 @@ namespace Library
                         if (_typeToExternalPlayer == null)
                         {
                             // generate dictionary
-                            if (OMLSettings.ExternalPlayerMapping != null)
+                            if (Properties.Settings.Default.ExternalPlayerMapping != null)
                             {
                                 _typeToExternalPlayer =
-                                    new Dictionary<VideoFormat, ExternalPlayerItem>(OMLSettings.ExternalPlayerMapping.Count);
+                                    new Dictionary<VideoFormat, ExternalPlayerItem>(Properties.Settings.Default.ExternalPlayerMapping.Count);
 
-                                foreach (string pair in OMLSettings.ExternalPlayerMapping)
+                                foreach (string pair in Properties.Settings.Default.ExternalPlayerMapping)
                                 {
                                     string[] parts = pair.Split('|');
 

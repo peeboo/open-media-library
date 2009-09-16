@@ -28,45 +28,20 @@ namespace NetFlixMetadata
 
     public class NetFlixDb : IOMLMetadataPlugin
     {
-        private const string DEFAULT_API_KEY = @"r548xb5mryvw2d9ewpzwh6bg";
-        private const string DEFAULT_SHARED_SECRET = @"udYADAm3W2";
-        private string API_KEY;
-        private string SHARED_SECRET;
-        private const string API_KEY_HIDDEN_TEXT = "[Enter your API key here to override the OML key]";
-        private const string SHARED_SECRET_HIDDEN_TEXT = "[Enter your API key here to override the OML secret]";
-
+        private const string API_KEY = @"8mfjpswhjxg7y4md35zs5ang";
+        private const string SHARED_SECRET = @"Q9J4DrqSZv";
         private const string HTML_TAG_PATTERN = @"<(.|\n)*?>";
 
         private List<NetFlixDbResult> results = null;
 
-        public List<MetaDataPluginDescriptor> GetProviders
+        public string PluginName
         {
-            get
-            {
-                List<MetaDataPluginDescriptor> descriptors = new List<MetaDataPluginDescriptor>();
-
-                MetaDataPluginDescriptor descriptor = new MetaDataPluginDescriptor();
-                descriptor.DataProviderName = "NetFlix";
-                descriptor.DataProviderMessage = "Data provided by NetFlix";
-                descriptor.DataProviderLink = "http://www.netflix.com";
-                descriptor.DataProviderCapabilities = MetadataPluginCapabilities.SupportsMovieSearch;
-                descriptor.PluginDLL = null;
-                descriptors.Add(descriptor);
-                return descriptors;
-            }
+            get { return "NetFlix"; }
         }
 
-        public bool Initialize(string provider, Dictionary<string, string> parameters)
+
+        public bool Initialize(Dictionary<string, string> parameters)
         {
-            // Set default api info
-            API_KEY = DEFAULT_API_KEY;
-            SHARED_SECRET = DEFAULT_SHARED_SECRET;
-
-            foreach (KeyValuePair<string, string> parameter in parameters)
-            {
-                SetOptionValue(parameter.Key, parameter.Value);
-            }
-
             return true;
         }
 
@@ -84,9 +59,9 @@ namespace NetFlixMetadata
             return finalUrl;
         }
 
-        public bool SearchForMovie(string movieName, int maxResults)
+        public bool SearchForMovie(string movieName)
         {
-            SearchForMovies(movieName, maxResults);
+            SearchForMovies(movieName);
             
             return (results != null && results.Count != 0);
         }
@@ -114,62 +89,11 @@ namespace NetFlixMetadata
 
         public List<OMLMetadataOption> GetOptions()
         {
-            List<OMLMetadataOption> options = new List<OMLMetadataOption>();
-
-            OMLMetadataOption apikey = null;
-            OMLMetadataOption sharedsecret = null;
-
-            if (API_KEY == DEFAULT_API_KEY)
-            {
-                apikey = new OMLMetadataOption("API Key", API_KEY_HIDDEN_TEXT, null, false);
-            }
-            else
-            {
-                apikey = new OMLMetadataOption("API Key", API_KEY, null, false);
-            }
-
-            if (SHARED_SECRET == DEFAULT_SHARED_SECRET)
-            {
-                sharedsecret = new OMLMetadataOption("Shared Secret", SHARED_SECRET_HIDDEN_TEXT, null, false);
-            }
-            else
-            {
-                sharedsecret = new OMLMetadataOption("Shared Secret", SHARED_SECRET, null, false);
-            }
-
-            options.Add(apikey);
-            options.Add(sharedsecret);
-
-            return options;
+            return null;
         }
 
         public bool SetOptionValue(string option, string value)
         {
-            if (string.Compare(option, "API Key", true) == 0)
-            {  
-                API_KEY = DEFAULT_API_KEY;
-
-                if (!string.IsNullOrEmpty(value))
-                {
-                    if (value != API_KEY_HIDDEN_TEXT)
-                    {
-                        API_KEY = value;
-                    }
-                }
-            }
-
-            if (string.Compare(option, "Shared Secret", true) == 0)
-            {
-                SHARED_SECRET = DEFAULT_SHARED_SECRET;
-
-                if (!string.IsNullOrEmpty(value))
-                {
-                    if (value != SHARED_SECRET_HIDDEN_TEXT)
-                    {
-                        SHARED_SECRET = value;
-                    }
-                }
-            }
             return true;
         }
 
@@ -388,7 +312,7 @@ namespace NetFlixMetadata
             return null;
         }
 
-        private void SearchForMovies(string query, int maxResults)
+        private void SearchForMovies(string query)
         {
             results = new List<NetFlixDbResult>();
 
@@ -413,7 +337,6 @@ namespace NetFlixMetadata
                             {
                                 NetFlixDbResult title = GetTitleFromMovieNode(reader);
                                 if (title != null)results.Add(title);
-                                if (results.Count >= maxResults) break;
                             }
                         }
                     }
@@ -423,11 +346,7 @@ namespace NetFlixMetadata
             // load up all the titles with images
             foreach (NetFlixDbResult title in results)
             {
-                if (title.ImageUrlThumb != null)
-                {
-                    title.Title.FrontCoverPath = title.ImageUrlThumb;
-                }
-                //DownloadImage(title.Title, title.ImageUrlThumb);
+                DownloadImage(title.Title, title.ImageUrlThumb);
             }
         }
 
@@ -506,24 +425,18 @@ namespace NetFlixMetadata
             }
         }
 
-        public List<string> GetBackDropUrlsForTitle()
+        public bool SupportsBackDrops()
         {
-            return null;
+            return false;
+        }
+
+        public void DownloadBackDropsForTitle(Title t, int index)
+        {
         }
 
         private static string getNonHTML(string inputString)
         {
             return Regex.Replace(inputString, HTML_TAG_PATTERN, string.Empty);
-        }
-
-
-        public bool SearchForTVSeries(string SeriesName, string EpisodeName, int? SeriesNo, int? EpisodeNo, int maxResults, bool SearchTVShowOnly)
-        {
-            return false;
-        }
-        public bool SearchForTVDrillDown(int id, string EpisodeName, int? SeriesNo, int? EpisodeNo, int maxResults)
-         {
-            return false;
         }
     }
 }

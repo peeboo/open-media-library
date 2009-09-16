@@ -14,8 +14,6 @@ using System.Runtime.Remoting.Channels;
 using System.Runtime.Remoting.Channels.Tcp;
 using System.IO;
 using System.Drawing;
-using System.Linq;
-using Dao = OMLEngine.Dao;
 
 namespace OMLEngine
 {
@@ -23,50 +21,80 @@ namespace OMLEngine
     [XmlRootAttribute("OMLTitle", Namespace = "http://www.openmedialibrary.org/", IsNullable = false)]
     public class Title : IComparable, ISerializable
     {
-        // Database field sizes
-        const int NameLength = 255;
-        const int SortNameLength = 255;
-        const int MetadataSourceLength = 200;
-        const int ParentalRatingLength = 80;
-        const int StudioLength = 255;
-        const int CountryOfOriginLength = 255;
-        const int WebsiteUrlLength = 255;
-        const int AudioTracksLength = 255;
-        const int AspectRatioLength = 10;
-        const int VideoStandardLength = 10;
-        const int UPCLength = 100;
-        const int TrailersLength = 255;
-        const int ParentalRatingReasonLength = 255;
-        const int SubtitlesLength = 255;
-        const int VideoResolutionLength = 20;
-        const int OriginalNameLength = 255;
-        const int ImporterSourceLength = 255;
-        const int MetaDataSourceItemIdLength = 255;
-
         #region locals
-        private static string XmlNameSpace = "http://www.openmedialibrary.org/";
-        //private bool _needsTranscode = false;        
-
-        private Disk _selectedDisk = null;
-        private Dao.Title _title;
-        private bool _peopleProcesed = false;
-        private string _frontCoverMenuPath = null;
-        private string _frontCoverPath = null;
-        private string _backCoverPath = null;
-        private Title _parentTitle = null;
-
-        private List<Disk> _disks = null;
-        private List<string> _audioTracks = null;
-        private List<string> _subtitles = null;
-        private List<string> _trailers = null;
-
+        private int _watchedCount;        
+        private string _fileLocation = "";
+        private VideoFormat _videoFormat = VideoFormat.DVD;
+        private bool _needsTranscode = false;
+        private string _name = "";
+        private int _itemId = -1;
+        private string _metadataSourceId = "";
+        private string _sourceName = "";
+        private string _frontCoverPath = "";
+        private string _frontCoverMenuPath = "";
+        private string _backCoverPath = "";
+        private int _runtime = 0;
+        private string _parentalRating = "";
+        private string _synopsis = "";
+        private string _studio = "";
+        private string _countryOfOrigin = "";
+        private string _officialWebsiteURL = "";
+        private DateTime _releaseDate = DateTime.MinValue;
+        private DateTime _dateAdded = DateTime.MinValue;
+        private string _importerSource = "";
+        private List<Person> _actors = new List<Person>();
+        private List<Person> _directors = new List<Person>();
+        private List<Person> _writers = new List<Person>();
+        private List<string> _producers = new List<string>();
+        private List<string> _audioTracks = new List<string>();
+        private List<string> _genres = new List<string>();
+        private int _userStarRating = 0;
+        private string _aspectRatio = "";    // Widescreen, 1.33, 1.66, 
+        private string _videoStandard = "";  // NTSC, PAL
+        private string _UPC = "";
+        private string _originalName = "";
+        private List<string> _tags = new List<string>();
+        private Dictionary<string, string> _actingRoles = new Dictionary<string, string>(); // actor, role
+        private Dictionary<string, string> _nonActingRoles = new Dictionary<string, string>(); // name, role (ie. Vangelis, Music)
+        private Dictionary<string, string> _additionalFields = new Dictionary<string, string>();
+        private List<string> _photos = new List<string>();
+        private List<string> _trailers = new List<string>();
+        private List<int> _children = new List<int>();
+        private int _parent = 0;
+        private string _sortName = "";
+        private string _parentalRatingReason = "";
+        private string _videoDetails = "";
+        private List<string> _subtitles = new List<string>();
+        private string _videoResolution = "";
         private List<string> _extraFeatures = new List<string>();
+        private List<Disk> _disks = new List<Disk>();
+        private Disk _selectedDisk = null;
+        private string _backDropImage = string.Empty;
+        private int _productionYear = 0;
+        private string _fanartfolder = string.Empty;
+
+        private static string XmlNameSpace = "http://www.openmedialibrary.org/";
 
         #endregion
 
-        #region properties
+        #region properties       
 
-        #region Unknown Properties
+        public int ProductionYear
+        {
+            get { return _productionYear; }
+            set { _productionYear = value; }
+        }
+
+        public string BackDropImage
+        {
+            get
+            {
+                if (_backDropImage == string.Empty)
+                    return NoCoverPath;
+                return _backDropImage;
+            }
+            set { _backDropImage = value; }
+        }
 
         public Disk SelectedDisk
         {
@@ -74,192 +102,159 @@ namespace OMLEngine
             set { _selectedDisk = value; }
         }
 
-        /// <summary>
-        /// Does this still make sense ?
-        /// </summary>
         public List<string> ExtraFeatures
         {
             get { return _extraFeatures; }
             set { _extraFeatures = value; }
         }
 
-        #endregion
-
-
-        internal Dao.Title DaoTitle
-        {
-            get { return _title; }
-        }
-
-        public void ReloadTitle()
-        {
-            Dao.DBContext.Instance.Refresh(System.Data.Linq.RefreshMode.OverwriteCurrentValues, _title);
-           // _title.Disks.Clear();
-           // _disks = null;
-           // Dao.DBContext.Instance.Refresh(System.Data.Linq.RefreshMode.OverwriteCurrentValues, _title);
-
-            DaoTitle.UpdatedActors = null;
-            DaoTitle.UpdatedBackCoverPath = null;
-            DaoTitle.UpdatedDirectors = null;
-            DaoTitle.UpdatedFanArtPaths = null;
-            DaoTitle.UpdatedFrontCoverPath = null;
-            DaoTitle.UpdatedGenres = null;
-            DaoTitle.UpdatedNonActingRoles = null;
-            DaoTitle.UpdatedProducers = null;
-            DaoTitle.UpdatedTags = null;
-            DaoTitle.UpdatedWriters = null;
-            _peopleProcesed = false;
-        }
-
-
         public string VideoResolution
         {
-            get { return _title.VideoResolution; }
-            set
-            {
-                if (value.Length > VideoResolutionLength)
-                    throw new FormatException("VideoResolution must be " + VideoResolutionLength.ToString() + " characters or less.");
-                _title.VideoResolution = value;
-            }
+            get { return _videoResolution; }
+            set { _videoResolution = value; }
         }
-        public string VideoResolutionTrimmed
+        
+        public List<string> Subtitles
         {
-            set
-            {
-                VideoResolution = value.Substring(0, Math.Min(value.Length, VideoResolutionLength));
-            }
-        }
-
-        public int ProductionYear
-        {
-            get
-            {
-                if (_title.ProductionYear == null)
-                {
-                    return 0;
-                }
-                else
-                {
-                    return (int)_title.ProductionYear;
-                }
-            }
-            set
-            {
-                _title.ProductionYear = value;
-            }
+            get { return _subtitles; }
+            set { _subtitles = value; }
         }
 
         public string VideoDetails
         {
-            get { return _title.VideoDetails; }
-            set { _title.VideoDetails = value; }
-        }
-
-        public short? SeasonNumber {
-            get
-            {
-                return _title.SeasonNumber;
-            }
-            set
-            {
-                _title.SeasonNumber = value;
-            }
-        }
-        public short? EpisodeNumber
-        {
-            get
-            {
-                return _title.EpisodeNumber;
-            }
-            set
-            {
-                _title.EpisodeNumber = value;
-            }
+            get { return _videoDetails; }
+            set { _videoDetails = value; }
         }
 
         public string ParentalRatingReason
         {
-            get { return _title.ParentalRatingReason; }
-            set
-            {
-                if (value.Length > ParentalRatingReasonLength)
-                    throw new FormatException("ParentalRatingReason must be " + ParentalRatingReasonLength.ToString() + " characters or less.");
-                _title.ParentalRatingReason = value;
-            }
+            get { return _parentalRatingReason; }
+            set { _parentalRatingReason = value; }
         }
-        public string ParentalRatingReasonTrimmed
-        {
-            set
-            {
-                ParentalRatingReason = value.Substring(0, Math.Min(value.Length, ParentalRatingReasonLength));
-            }
-        }
+
 
         public string SortName
         {
+            get 
+            {
+                if (String.IsNullOrEmpty(_sortName))
+                    return Name;
+                else
+                    return _sortName; 
+            }
+            set { _sortName = value.Trim(); }
+        }
+
+        public List<Role> NonActingRolesBinding
+        {
             get
             {
-                return _title.SortName;
-            }
-            set
-            {
-                if (string.IsNullOrEmpty(value)) 
+                List<Role> roles = new List<Role>();
+                foreach (string person in _nonActingRoles.Keys)
                 {
-                    _title.SortName = _title.Name;
-                    return;
+                    roles.Add(new Role(person, _nonActingRoles[person]));
                 }
-                if (value.Length > SortNameLength)
-                    throw new FormatException("SortName must be " + SortNameLength.ToString() + " characters or less.");
-                _title.SortName = value;
+                return roles;
             }
         }
-        public string SortNameTrimmed
+
+        public Dictionary<string, string> NonActingRoles
         {
-            set
+            get { return _nonActingRoles; }
+            set { _nonActingRoles = value; }
+        }
+
+        public List<Role> ActingRolesBinding
+        {
+            get
             {
-                SortName = value.Substring(0, Math.Min(value.Length, SortNameLength));
+                List<Role> roles = new List<Role>();
+                foreach (string person in _actingRoles.Keys)
+                {
+                    roles.Add(new Role(person, _actingRoles[person]));
+                }
+                return roles;
             }
         }
+
+        public Dictionary<string, string> ActingRoles
+        {
+            get { return _actingRoles; }
+            set { _actingRoles = value; }
+        }
+
+        public void AddActingRole(string actor, string role)
+        {
+            if (actor == null || role == null) return;
+            if (!_actingRoles.ContainsKey(actor))
+            {
+                _actingRoles.Add(actor, role);
+            }
+        }
+
+        public void AddNonActingRole(string name, string role)
+        {
+            if (name == null || role == null) return;
+            if (!_nonActingRoles.ContainsKey(name))
+            {
+                _nonActingRoles.Add(name, role);
+            }
+        }
+
+
+        public int Parent
+        {
+            get { return _parent; }
+            set { _parent = value; }
+        }
+
+        public List<int> Children
+        {
+            get { return _children; }
+            set { _children = value; }
+        }
+
+        public List<string> Photos
+        {
+            get { return _photos; }
+            set { _photos = value; }
+        }
+
+        public List<string> Trailers
+        {
+            get { return _trailers; }
+            set { _trailers = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the additional fields (for future expansion).
+        /// </summary>
+        /// <value>The additional fields.</value>
+        public Dictionary<string, string> AdditionalFields
+        {
+            get { return _additionalFields; }
+            set { _additionalFields = value; }
+        }
+
+
+        /// <summary>
+        /// A user can add tags to movies
+        /// </summary>
+        /// <value>The tags.</value>
+        public List<string> Tags
+        {
+            get { return _tags; }
+            set { _tags = value; }
+        }
+
         /// <summary>
         /// Gets or sets the name of the original name (especially for foreign movies)
         /// </summary>
         /// <value>The name of the original name.</value>
         public string OriginalName
         {
-            get { return _title.OriginalName; }
-            set
-            {
-                if (value.Length > OriginalNameLength)
-                    throw new FormatException("OriginalName must be " + OriginalNameLength.ToString() + " characters or less.");
-                _title.OriginalName = value;
-            }
-        }
-        public string OriginalNameTrimmed
-        {
-            set
-            {
-                OriginalName = value.Substring(0, Math.Min(value.Length, OriginalNameLength));
-            }
-        }
-        /// <summary>
-        /// A user can add tags to movies
-        /// </summary>
-        /// <value>The tags.</value>
-        public IList<string> Tags
-        {
-            get
-            {
-                // lazy load the tags
-                if (DaoTitle.UpdatedTags == null)
-                {
-                    DaoTitle.UpdatedTags = new List<string>(_title.Tags.Count);
-
-                    foreach (Dao.Tag tag in _title.Tags)
-                        DaoTitle.UpdatedTags.Add(tag.Name);
-                }
-
-                return DaoTitle.UpdatedTags.AsReadOnly();
-            }
+            get { return _originalName; }
+            set { _originalName = value; }
         }
 
         /// <summary>
@@ -268,20 +263,8 @@ namespace OMLEngine
         /// <value>The video standard.</value>
         public string VideoStandard
         {
-            get { return _title.VideoStandard; }
-            set
-            {
-                if (value.Length > VideoStandardLength)
-                    throw new FormatException("VideoStandard must be " + VideoStandardLength.ToString() + " characters or less.");
-                _title.VideoStandard = value;
-            }
-        }
-        public string VideoStandardTrimmed
-        {
-            set
-            {
-                VideoStandard = value.Substring(0, Math.Min(value.Length, VideoStandardLength));
-            }
+            get { return _videoStandard; }
+            set { _videoStandard = value; }
         }
 
         /// <summary>
@@ -290,60 +273,28 @@ namespace OMLEngine
         /// <value>The aspect ratio.</value>
         public string AspectRatio
         {
-            get { return _title.AspectRatio; }
-            set
-            {
-                if (value.Length > AspectRatioLength)
-                    throw new FormatException("AspectRatio must be " + AspectRatioLength + " characters or less.");
-                _title.AspectRatio = value;
-            }
+            get { return _aspectRatio; }
+            set { _aspectRatio = value; }
         }
-        public string AspectRatioTrimmed
-        {
-            set
-            {
-                AspectRatio = value.Substring(0, Math.Min(value.Length, AspectRatioLength));
-            }
-        }
-        
+
         /// <summary>
         /// Gets or sets the UPC.
         /// </summary>
         /// <value>The UPC.</value>
         public string UPC
         {
-            get { return _title.UPC; }
-            set
-            {
-                if (value.Length > UPCLength)
-                    throw new FormatException("UPC must be " + UPCLength.ToString() + " characters or less.");
-                _title.UPC = value;
-            }
+            get { return _UPC; }
+            set { _UPC = value; }
         }
-        public string UPCTrimmed
-        {
-            set
-            {
-                UPC = value.Substring(0, Math.Min(value.Length, UPCLength));
-            }
-        }
+
         /// <summary>
-        /// Gets or sets the user star rating (0 to 100) - null will make the item unrated
+        /// Gets or sets the user star rating (0 to 100)
         /// </summary>
         /// <value>The user star rating.</value>
-        public int? UserStarRating
+        public int UserStarRating
         {
-            get { return _title.UserRating ?? 0; }
-            set
-            {
-                _title.UserRating = (value == null)
-                                            ? (byte?)null
-                                            : (value > 100) ?
-                                                (byte)100
-                                                : (value < 0)
-                                                    ? (byte)0
-                                                    : (byte)value;
-            }
+            get { return _userStarRating; }
+            set { _userStarRating = value; }
         }
 
         /// <summary>
@@ -351,8 +302,11 @@ namespace OMLEngine
         /// </summary>
         public int WatchedCount
         {
-            get { return _title.WatchedCount ?? 0; }
-            set { _title.WatchedCount = value; }
+            get { return _watchedCount; }
+            set
+            {
+                _watchedCount = value;
+            }
         }
 
         /// <summary>
@@ -360,32 +314,21 @@ namespace OMLEngine
         /// </summary>
         public string FileLocation
         {
-            get
+            get 
             {
-                if (_title.Disks.Count == 1)
-                    return (_title.Disks[0].Path);
+                if (this._disks.Count == 1)
+                    return (this._disks[0].Path);
                 else
                     return (String.Empty);
-
+            
             }
         }
 
-        /// <summary>
-        /// disks for the title
-        /// </summary>
-        public IList<Disk> Disks
+        // To Support Multi-Disk!
+        public List<Disk> Disks
         {
-            get
-            {
-                if (_disks == null)
-                {
-                    _disks = new List<Disk>(_title.Disks.Count);
-                    foreach (Dao.Disk disk in _title.Disks)
-                        _disks.Add(new Disk(disk));
-                }
-
-                return _disks.AsReadOnly();
-            }
+            get { return _disks; }
+            set { _disks = value; }
         }
 
         /// <summary>
@@ -395,10 +338,10 @@ namespace OMLEngine
         {
             get
             {
-                if (_title.Disks.Count > 0)
-                    return (VideoFormat)_title.Disks[0].VideoFormat;
+                if (this.Disks.Count > 0)
+                    return _disks[0].Format;
                 else
-                    return VideoFormat.UNKNOWN;
+                    return VideoFormat.DVD;
             }
         }
 
@@ -407,782 +350,513 @@ namespace OMLEngine
         /// </summary>
         public string Name
         {
-            get { return _title.Name; }
-            set
-            {
-                if (value.Length > NameLength)
-                    throw new FormatException("Name must be " + NameLength.ToString() + " characters or less.");
-                _title.Name = value;
+            get { return _name; }
+            set {
+                if (value != null)
+                    _name = value;
             }
         }
-        public string NameTrimmed
-        {
-            set
-            {
-                Name = value.Substring(0, Math.Min(value.Length, NameLength));
-            }
-        }
-        /// <summary>
-        /// Internal id of the Title
-        /// </summary>
-        public int Id
-        {
-            get { return _title.Id; }
-            private set { _title.Id = value; }
-        }
 
-        public int? ParentTitleId
-        {
-            get { return _title.ParentTitleId; }
-            set { _title.ParentTitleId = value; }
-        }
-
-        public Title ParentTitle
+        public string PathSafeName
         {
             get
             {
-                if (_parentTitle != null)
-                    return _parentTitle;
-
-                if (ParentTitleId != null)
+                string chars = string.Empty;
+                foreach (Char ch in Path.GetInvalidFileNameChars())
                 {
-                    _parentTitle = TitleCollectionManager.GetTitle((int)ParentTitleId);
-                    return _parentTitle;
+                    int ach = (int)ch;
+                    chars += String.Format(@"\x{0}|", ach.ToString(@"x").PadLeft(2, '0'));
                 }
-                return null;
+                if (chars.Length > 0)
+                    chars = chars.Remove(chars.Length - 1);
+                string rslt = System.Text.RegularExpressions.Regex.Replace(Name, chars, "");
+                return rslt;
             }
-            set
-            {
-                _parentTitle = value;
-                ParentTitleId = value.Id;
-            }
-        }
-
-
-        public TitleTypes TitleType
-        {
-            get { return (TitleTypes)_title.TitleType; }
-            set { _title.TitleType = (int)value; }
         }
 
         /// <summary>
-        /// The id that this title is a group member of
+        /// Internal id of the Title
         /// </summary>
-        public int GroupId
+        public int InternalItemID
         {
-            get { return _title.GroupId ?? _title.Id; }
-            set { _title.GroupId = value; }
+            get { return _itemId; }
         }
-
-        /// <summary>
-        /// Name of the source for our info (MyMovies, DVD Profiler, etc)
-        /// </summary>
-        public string MetadataSourceName
-        {
-            get { return _title.MetaDataSource; }
-            set
-            {
-                if (value.Length > MetadataSourceLength)
-                    throw new FormatException("MetaDataSourceName must be " + MetadataSourceLength.ToString() + " characters or less.");
-                _title.MetaDataSource = value;
-            }
-        }
-        public string MetadataSourceNameTrimmed
-        {
-            set
-            {
-                MetadataSourceName = value.Substring(0, Math.Min(value.Length, MetadataSourceLength));
-            }
-        }
-
         /// <summary>
         /// Unique id from the Source of our title info (MyMovies, DVD Profiler, etc).
         /// </summary>
         public string MetadataSourceID
         {
-            get { return _title.MetaDataSourceItemId ?? string.Empty; }
+            get { return _metadataSourceId; }
             set
             {
-                if (value.Length > MetaDataSourceItemIdLength)
-                    throw new FormatException("MetadataSourceID must be " + MetaDataSourceItemIdLength.ToString() + " characters or less.");
-                _title.MetaDataSourceItemId = value;
+                if (value != null)
+                    _metadataSourceId = value;
             }
         }
-        public string MetadataSourceIDTrimmed
-        {
-            set
-            {
-                MetadataSourceID = value.Substring(0, Math.Min(value.Length, MetaDataSourceItemIdLength));
-            }
-        }
-
-        public DateTime? ModifiedDate
-        {
-            get { return _title.ModifiedDate; }
-            set { _title.ModifiedDate = value; }
-        }
-
         /// <summary>
-        /// Name of the source from which meta-data was gathered (MyMovies, DVD Profiler, etc.)
+        /// Name of the source for our info (MyMovies, DVD Profiler, etc)
         /// </summary>
-        public string ImporterSource
+        public string MetadataSourceName
         {
-            get { return _title.ImporterSource; }
+            get { return _sourceName; }
             set
             {
-                if (value.Length > ImporterSourceLength)
-                    throw new FormatException("ImporterSource must be " + ImporterSourceLength.ToString() + " characters or less.");
-                _title.ImporterSource = value;
-            }
-        }
-        public string ImporterSourceTrimmed
-        {
-            set
-            {
-                ImporterSource = value.Substring(0, Math.Min(value.Length, ImporterSourceLength));
+                if (value != null)
+                    _sourceName = value;
             }
         }
 
+        public string NoCoverPath
+        {
+            get { return OMLEngine.FileSystemWalker.ImageDirectory + "\\nocover.jpg"; }
+        }
         /// <summary>
         /// Pull path to the cover art image, 
         /// default the the front cover menu art image to this as well
         /// </summary>
         public string FrontCoverPath
         {
-            get
-            {
-                if (_title.UpdatedFrontCoverPath != null)
-                    return _title.UpdatedFrontCoverPath;
-
-                if (_frontCoverPath == null)
-                {
-                    Dao.ImageMapping frontCover = _title.Images.FirstOrDefault(i => i.ImageType == (byte)ImageType.FrontCoverImage);
-                    _frontCoverPath = ImageManager.GetImagePathById((frontCover == null) ? (int?)null : frontCover.ImageId, ImageSize.Original);
-                }
-
-                return _frontCoverPath;
-            }
-            set
-            {
-                if (value.Length > 255)
-                    throw new FormatException("FrontCoverPath must be 255 characters or less.");
-
-                if ((value == "") || (File.Exists(value)) || (string.Compare(value.Substring(0, 4), "http", true) == 0))
-                {
-                    _title.UpdatedFrontCoverPath = value;
-                    _frontCoverPath = null;
-                    DaoTitle.ModifiedDate = DateTime.Now;
-                }
-            }
-        }
-
-
-        #region Async Menu Cover Art
-
-        public delegate void DelegateFrontCoverPath(Title title);        
-        private static BackgroundProcessor<Title> imageProcessor;
-        private static object threadLocker = new object();
-        private object pathUpdateLocker = new object();
-        private DelegateFrontCoverPath callback;        
-
-        private static void FrontCoverProcessorCallback(Title title)
-        {
-            if (title._frontCoverMenuPath == null)
-            {
-                lock (title.pathUpdateLocker)
-                {
-                    //need to find a better way to do this
-                    if (title._thumbnailMenuPath == null && title.TitleType == TitleTypes.Episode)
-                    {
-                        title.GetThumbnailMenuPathSlow();
-                    }
-                    else
-                    {
-                        if (title._frontCoverMenuPath == null)
-                        {
-                            title.GetFrontCoverMenuPathSlow();
-                        }
-                    }
-                }
-            }
-
-            if (title.callback != null)
-                title.callback.Invoke(title);
-        }        
-
-        public void BeginGetFrontCoverMenuPath(DelegateFrontCoverPath callback)
-        {
-            if (imageProcessor == null)
-            {
-                lock (threadLocker)
-                {
-                    if (imageProcessor == null)
-                    {
-                        imageProcessor = new BackgroundProcessor<Title>(4, Title.FrontCoverProcessorCallback, "ImageProcessor");
-                    }
-                }
-            }
-
-            imageProcessor.Enqueue(this);
-            this.callback += callback;            
-        }
-
-        public void BeginGetThumbnailMenuPath(DelegateFrontCoverPath callback)
-        {
-            if (imageProcessor == null)
-            {
-                lock (threadLocker)
-                {
-                    if (imageProcessor == null)
-                    {
-                        imageProcessor = new BackgroundProcessor<Title>(4, Title.FrontCoverProcessorCallback, "ImageProcessor");
-                    }
-                }
-            }
-
-            imageProcessor.Enqueue(this);
-            this.callback += callback;
-        }        
-
-        #endregion
-
-
-        /// <summary>
-        /// Will returns the front cover menu path and roundtrip to the database if need be.
-        /// Thread Safe.
-        /// </summary>
-        /// <returns></returns>
-        public string GetFrontCoverMenuPathSlow()
-        {
-            if (_frontCoverMenuPath == null)
-            {                                
-                int? frontCoverId = ImageManager.GetImageIdForTitleThreadSafe(this.Id, ImageType.FrontCoverImage);
-                _frontCoverMenuPath = ImageManager.GetImagePathById(frontCoverId, ImageSize.Small);                             
-            }
-
-            return _frontCoverMenuPath;
-        }
-
-        /// <summary>
-        /// Will returns the thumbnail and roundtrip to the database if need be.
-        /// Thread Safe.
-        /// </summary>
-        /// <returns></returns>
-        public string GetThumbnailMenuPathSlow()
-        {
-            if (_thumbnailMenuPath == null)
-            {
-                //int? thumbnailId = ImageManager.GetImageIdForTitleThreadSafe(this.Id, ImageType.ThumbnailImage);
-                int? thumbnailId = ImageManager.GetImageIdForTitleThreadSafe(this.Id, ImageType.FrontCoverImage);
-                _thumbnailMenuPath = ImageManager.GetImagePathById(thumbnailId, ImageSize.Small);
-
-                if(string.IsNullOrEmpty(_thumbnailMenuPath) && this.Disks!=null && this.Disks.Count>0)
-                {
-                    //render the image and stick it in the db
-                    string diskPath=this.Disks[0].Path;
-                    if (this.Disks[0].Format == VideoFormat.DVD)
-                    {
-                        //get the first VOB
-                        DirectoryInfo di = new DirectoryInfo(this.Disks[0].Path);
-                        if (di.Exists)
-                        {
-                            FileInfo[] files = di.GetFiles("*.vob");
-                            if (files.Length > 0)
-                                diskPath = files[0].FullName;
-                        }
-                    }
-                    //string imageNamePath=ImageManager.ConstructImagePathById(
-                    //create a temp filename
-                    string imageNamePath = Path.Combine(FileSystemWalker.ImageDirectory, System.Guid.NewGuid().ToString() + ".png");
-                    
-                    babgvant.DSSnap.DSThumbnail.GrabWithSG(diskPath, 10999999999999999, imageNamePath, System.Drawing.Imaging.ImageFormat.Png);
-                    if (imageNamePath != null)
-                    {
-                         //add the new one
-                        int? id = ImageManager.AddImageToDB(imageNamePath);
-                        //delete the temp image
-                        FileInfo tmpFile = new FileInfo(imageNamePath);
-                        tmpFile.Delete();
-
-                        // if we got an id back let's associate it
-                        if (id != null)
-                        {
-                            Dao.ImageMapping image = new OMLEngine.Dao.ImageMapping();
-                            image.ImageId = id.Value;
-                            //image.ImageType = (byte)ImageType.ThumbnailImage;
-                            image.ImageType = (byte)ImageType.FrontCoverImage;
-                            TitleCollectionManager.AddThumbnailImage(this, image);
-                            //tmp need to change filename
-                            //_thumbnailMenuPath = imageNamePath;
-                            _thumbnailMenuPath = ImageManager.GetImagePathById(id, ImageSize.Small);
-                        }
-                    }
-
-                }
-            }
-
-            return _thumbnailMenuPath;
-        }
-        /// <summary>
-        /// The small version of the Thumbnail image
-        /// 
-        /// </summary>
-        private string _thumbnailMenuPath = null;
-        public string ThumbnailMenuPath
-        {
-            get
-            {
-                if (_thumbnailMenuPath == null)
-                {
-                    //Dao.ImageMapping thumbnail = _title.Images.FirstOrDefault(i => i.ImageType == (byte)ImageType.ThumbnailImage);
-                    Dao.ImageMapping thumbnail = _title.Images.FirstOrDefault(i => i.ImageType == (byte)ImageType.FrontCoverImage);
-                    string path = ImageManager.ConstructImagePathById((thumbnail == null) ? (int?)null : thumbnail.ImageId, ImageSize.Small);
-
-                    if (File.Exists(path))
-                        _thumbnailMenuPath = path;
-                }
-
-                return _thumbnailMenuPath;
-            }
-        }
-
-        /// <summary>
-        /// The small version of the front cover image.  Will be NULL if the image hasn't been retrieved from the database yet.
-        /// 
-        /// </summary>
-        public string FrontCoverMenuPath
-        {
             get 
             {
-                if (_frontCoverMenuPath == null)
-                {
-                    Dao.ImageMapping frontCover = _title.Images.FirstOrDefault(i => i.ImageType == (byte)ImageType.FrontCoverImage);
-                    string path = ImageManager.ConstructImagePathById((frontCover == null) ? (int?)null : frontCover.ImageId, ImageSize.Small);
-
-                    if (File.Exists(path))
-                        _frontCoverMenuPath = path;
-                }
-
-                return _frontCoverMenuPath; 
+                if (_frontCoverPath == string.Empty)
+                    return NoCoverPath;
+                return _frontCoverPath; 
+            }
+            set 
+            { 
+                _frontCoverPath = value;
+                if (string.IsNullOrEmpty(_frontCoverMenuPath))
+                    _frontCoverMenuPath = value;
             }
         }
 
+        public string FrontCoverMenuPath
+        {
+            get { return _frontCoverMenuPath; }
+            set { _frontCoverMenuPath = value; }
+        }
         /// <summary>
         /// Full path to the rear cover art image
         /// </summary>
         public string BackCoverPath
         {
-            get
+            get 
             {
-                if (_title.UpdatedBackCoverPath != null)
-                    return _title.UpdatedBackCoverPath;
-
-                if (_backCoverPath == null)
-                {
-                    Dao.ImageMapping backCover = _title.Images.FirstOrDefault(i => i.ImageType == (byte)ImageType.BackCoverImage);
-                    _backCoverPath = ImageManager.GetImagePathById((backCover == null) ? (int?)null : backCover.ImageId, ImageSize.Original);
-                }
-
-                return _backCoverPath;
+                if (_backCoverPath == string.Empty)
+                    return NoCoverPath;
+                return _backCoverPath; 
             }
-            set
-            {
-                if (value.Length > 255)
-                    throw new FormatException("BackCoverPath must be 255 characters or less.");
-
-                if ((value == "") || (File.Exists(value)))
-                {
-                    _title.UpdatedBackCoverPath = value;
-                    _backCoverPath = null;
-                    DaoTitle.ModifiedDate = DateTime.Now;
-                }
-            }
+            set { _backCoverPath = value; }
         }
-
-        public IList<string> FanArtPaths
-        {
-            get
-            {
-                if (DaoTitle.UpdatedFanArtPaths == null)
-                {
-                    DaoTitle.UpdatedFanArtPaths = new List<string>();
-
-                    foreach (Dao.ImageMapping mapping in _title.Images.Where(t => t.ImageType == (byte)ImageType.FanartImage))
-                    {
-                        DaoTitle.UpdatedFanArtPaths.Add(ImageManager.GetImagePathById(mapping.ImageId, ImageSize.Original));
-                    }
-                }
-
-                return DaoTitle.UpdatedFanArtPaths.AsReadOnly();
-            }
-        }
-
         /// <summary>
         /// Runtime in minutes of the title
         /// </summary>
         public int Runtime
         {
-            get { return _title.Runtime ?? 0; }
-            set { _title.Runtime = (short)value; }
+            get { return _runtime; }
+            set { _runtime = value; }
         }
-
         /// <summary>
         /// Rating of the film 
         /// </summary>
         public string ParentalRating
         {
-            get { return _title.ParentalRating ?? string.Empty; }
-            set
-            {
-                if (value.Length > ParentalRatingLength)
-                    throw new FormatException("ParentalRating must be " + ParentalRatingLength.ToString() + " characters or less.");
-                _title.ParentalRating = value;
-            }
-        }
-        public string ParentalRatingTrimmed
-        {
-            set
-            {
-                ParentalRating = value.Substring(0, Math.Min(value.Length, ParentalRatingLength));
-            }
+            get { return _parentalRating; }
+            set { _parentalRating = value; }
         }
         /// <summary>
         /// Long description of title
         /// </summary>
         public string Synopsis
         {
-            get { return _title.Synopsis ?? string.Empty; }
-            set { _title.Synopsis = value; }
+            get { return _synopsis; }
+            set { _synopsis = value; }
         }
-
         /// <summary>
         /// Name of studio company
         /// </summary>
         public string Studio
         {
-            get { return _title.Studio ?? string.Empty; }
-            set
-            {
-                if (value.Length > StudioLength)
-                    throw new FormatException("Studio must be " + StudioLength.ToString() + " characters or less.");
-                _title.Studio = value;
-            }
+            get { return _studio; }
+            set { _studio = value; }
         }
-        public string StudioTrimmed
-        {
-            set
-            {
-                Studio = value.Substring(0, Math.Min(value.Length, StudioLength));
-            }
-        }
-
         /// <summary>
         /// Country where the title was created/first released
         /// </summary>
         public string CountryOfOrigin
         {
-            get { return _title.CountryOfOrigin ?? string.Empty; }
-            set
-            {
-                if (value.Length > CountryOfOriginLength)
-                    throw new FormatException("CountryOfOrigin must be " + CountryOfOriginLength.ToString() + " characters or less.");
-                _title.CountryOfOrigin = value;
-            }
+            get { return _countryOfOrigin; }
+            set { _countryOfOrigin = value; }
         }
-        public string CountryOfOriginTrimmed
-        {
-            set
-            {
-                CountryOfOrigin = value.Substring(0, Math.Min(value.Length, CountryOfOriginLength));
-            }
-        }
-
         /// <summary>
         /// website for title (if it has one)
         /// </summary>
         public string OfficialWebsiteURL
         {
-            get { return _title.WebsiteUrl ?? string.Empty; }
-            set
-            {
-                if (value.Length > WebsiteUrlLength)
-                    throw new FormatException("OfficialWebsiteURL must be " + WebsiteUrlLength.ToString() + " characters or less.");
-                _title.WebsiteUrl = value;
-            }
-        }
-        public string OfficialWebsiteURLTrimmed
-        {
-            set
-            {
-                OfficialWebsiteURL = value.Substring(0, Math.Min(value.Length, WebsiteUrlLength));
-            }
+            get { return _officialWebsiteURL; }
+            set { _officialWebsiteURL = value; }
         }
         /// <summary>
         /// Original date of release (or re-release)
         /// </summary>
         public DateTime ReleaseDate
         {
-            get { return _title.ReleaseDate ?? DateTime.MinValue; }
-            set { _title.ReleaseDate = value; }
+            get { return _releaseDate; }
+            set
+            {
+                if (value != null)
+                    _releaseDate = value;
+            }
         }
-
         /// <summary>
         /// Date that this title was added to the database
         /// </summary>
         public DateTime DateAdded
         {
-            get { return _title.DateAdded ?? DateTime.MinValue; }
-            set { _title.DateAdded = value; }
+            get { return _dateAdded; }
+            set { _dateAdded = value; }
         }
-
+        /// <summary>
+        /// Name of the source from which meta-data was gathered (MyMovies, DVD Profiler, etc.)
+        /// </summary>
+        public string ImporterSource
+        {
+            get { return _importerSource; }
+            set { _importerSource = value; }
+        }
         /// <summary>
         /// List of languages (English, Spanish, French, DTS, DD5.1, DD2.0, etc)
         /// </summary>
-        public IList<string> AudioTracks
+        public List<string> AudioTracks
         {
-            get
-            {
-                // lazy load the audio tracks
-                if (_audioTracks == null)
-                    _audioTracks = Dao.TitleDao.DelimitedDBStringToCollection(_title.AudioTracks);
-
-                return _audioTracks.AsReadOnly();
-            }
+            get { return _audioTracks; }
         }
-
-        public IList<string> Subtitles
-        {
-            get
-            {
-                // lazy load the subtitles
-                if (_subtitles == null)
-                    _subtitles = Dao.TitleDao.DelimitedDBStringToCollection(_title.Subtitles);
-
-                return _subtitles.AsReadOnly();
-            }
-        }
-
-        public IList<string> Trailers
-        {
-            get
-            {
-                // lazy load the trailers
-                if (_trailers == null)
-                    _trailers = Dao.TitleDao.DelimitedDBStringToCollection(_title.Trailers);
-
-                return _trailers.AsReadOnly();
-            }
-        }
-
         /// <summary>
         /// List of Genres
         /// </summary>
-        public IList<string> Genres
+        public List<string> Genres
         {
-            get
-            {
-                // lazy load the genres
-                if (DaoTitle.UpdatedGenres == null)
-                {
-                    DaoTitle.UpdatedGenres = new List<string>(_title.Genres.Count);
-                    foreach (Dao.Genre genre in _title.Genres)
-                        DaoTitle.UpdatedGenres.Add(genre.MetaData.Name);
-                }
-
-                return DaoTitle.UpdatedGenres.AsReadOnly();
-            }
+            get { return _genres; }
         }
-
-        public IList<Role> NonActingRoles
-        {
-            get
-            {
-                SetupPeopleCollections();
-
-                return DaoTitle.UpdatedNonActingRoles.AsReadOnly();
-            }
-        }
-
-        public IList<Role> ActingRoles
-        {
-            get
-            {
-                SetupPeopleCollections();
-
-                return DaoTitle.UpdatedActors.AsReadOnly();
-            }
-        }
-
+        ///// <summary>
+        ///// List of actors (Person objects)
+        ///// </summary>
+        //public List<Person> Actors
+        //{
+        //    get { return _actors; }
+        //}
         /// <summary>
         /// List of Person objects that directed the title (usually one Person)
         /// </summary>
-        public IList<Person> Directors
+        public List<Person> Directors
         {
-            get
-            {
-                SetupPeopleCollections();
-
-                return DaoTitle.UpdatedDirectors.AsReadOnly();
-            }
+            get { return _directors; }
+            set { _directors = value; }
         }
         /// <summary>
         /// List of Person objects that wrote the title
         /// </summary>
-        public IList<Person> Writers
+        public List<Person> Writers
         {
-            get
-            {
-                SetupPeopleCollections();
-
-                return DaoTitle.UpdatedWriters.AsReadOnly();
-            }
+            get { return _writers; }
+            set { _writers = value; }
         }
-
         /// <summary>
         /// List of people/companies that produced the title
         /// </summary>
-        public IList<Person> Producers
+        public List<string> Producers
         {
-            get
-            {
-                SetupPeopleCollections();
-
-                return DaoTitle.UpdatedProducers.AsReadOnly();
-            }
+            get { return _producers; }
+            set { _producers = value; }
         }
 
         public decimal PercentComplete
         {
-            get { return _title.PercentComplete; }
-        }
+            get
+            {
+                decimal score = 0;
+                decimal possible = 12;
 
+                if (!String.IsNullOrEmpty(Studio.Trim())) score++;
+                if (Runtime > 0) score++;
+                if (ReleaseDate != DateTime.MinValue) score++;
+                if (!String.IsNullOrEmpty(Synopsis.Trim())) score++;
+                if (Genres.Count > 0) score++;
+                if (!String.IsNullOrEmpty(FrontCoverPath.Trim())) score++;
+                if (!String.IsNullOrEmpty(AspectRatio.Trim())) score++;
+                if (!String.IsNullOrEmpty(CountryOfOrigin.Trim())) score++;
+                if (!String.IsNullOrEmpty(VideoResolution.Trim())) score++;
+                if (!String.IsNullOrEmpty(VideoStandard.Trim())) score++;
+                if (ActingRoles.Count > 0) score++;
+                if (Directors.Count > 0) score++;
+
+                return score / possible;
+            }
+        }
         #endregion
 
-        private void SetupPeopleCollections()
+        #region serialization methods
+
+        private DateTime GetSerializedDateTime(SerializationInfo info, string id)
         {
-            if (_peopleProcesed)
-                return;
-
-            DaoTitle.UpdatedActors = new List<Role>();
-            DaoTitle.UpdatedDirectors = new List<Person>();
-            DaoTitle.UpdatedWriters = new List<Person>();
-            DaoTitle.UpdatedProducers = new List<Person>();
-            DaoTitle.UpdatedNonActingRoles = new List<Role>();
-
-            foreach (Dao.Person person in _title.People)
+            try
             {
-                switch ((PeopleRole)person.Role)
-                {
-                    case PeopleRole.Actor:
-                        DaoTitle.UpdatedActors.Add(new Role(person.MetaData.FullName, person.CharacterName));
-                        break;
-
-                    case PeopleRole.Director:
-                        DaoTitle.UpdatedDirectors.Add(new Person(person.MetaData.FullName));
-                        break;
-
-                    case PeopleRole.Producers:
-                        DaoTitle.UpdatedProducers.Add(new Person(person.MetaData.FullName));
-                        break;
-
-                    case PeopleRole.Writer:
-                        DaoTitle.UpdatedWriters.Add(new Person(person.MetaData.FullName));
-                        break;
-
-                    case PeopleRole.NonActing:
-                        DaoTitle.UpdatedNonActingRoles.Add(new Role(person.MetaData.FullName, person.CharacterName));
-                        break;
-                }
+                return info.GetDateTime(id);
             }
+            catch (Exception e)
+            {
+                Trace.WriteLine("Exception in GetSerializedDateTime: " + e.Message);
+                return new DateTime(0);
+            }
+        }
 
-            _peopleProcesed = true;
+        private VideoFormat GetSerializedVideoFormat(SerializationInfo info, string id)
+        {
+            try
+            {
+                return (VideoFormat)info.GetValue(id, typeof(VideoFormat));
+            }
+            catch (Exception e)
+            {
+                Trace.WriteLine("Exception in GetSerializedVideoFormat: " + e.Message);
+                return VideoFormat.DVD;
+            }
+        }
+
+        private bool GetSerializedBoolean(SerializationInfo info, string id)
+        {
+            try
+            {
+                return info.GetBoolean(id);
+            }
+            catch (Exception e)
+            {
+                Trace.WriteLine("Exception in GetSerializedBoolean: " + e.Message);
+                return false;
+            }
+        }
+
+        private int GetSerializedInt(SerializationInfo info, string id)
+        {
+            try
+            {
+                return (int)info.GetValue(id, typeof(int));
+            }
+            catch (Exception e)
+            {
+                Trace.WriteLine("Exception in GetSerializedInt: " + e.Message);
+                return 0;
+            }
+        }
+
+        private string GetSerializedString(SerializationInfo info, string id)
+        {
+            try
+            {
+                string result = info.GetString(id);
+                return (result == null ? String.Empty : result.Trim());
+            }
+            catch (Exception e)
+            {
+                Trace.WriteLine("Exception in GetSerializedString: " + e.Message);
+                return String.Empty;
+            }
+        }
+
+        private  T GetSerializedList<T>(SerializationInfo info, string id) where T : new()
+        {
+            try
+            {
+                T result = (T)info.GetValue(id, typeof(T));
+                return (result == null ? new T() : result);
+            }
+            catch (Exception e)
+            {
+                Trace.WriteLine("Exception in GetSerializedList: " + e.Message);
+                return new T();
+            }
         }
 
         /// <summary>
-        /// Generic Constructor - used to add a new title to the db
+        /// Constructor used for loading from database file
         /// </summary>
-        public Title()
+        /// <param name="info">SerializationInfo object</param>
+        /// <param name="ctxt">StreamingContext object</param>
+        public Title(SerializationInfo info, StreamingContext ctxt)
         {
-            _title = new OMLEngine.Dao.Title();
+            //Utilities.DebugLine("[Title] Loading Title from Serialization");
+            _fileLocation = GetSerializedString(info, "file_location");
+            _videoFormat = GetSerializedVideoFormat(info, "video_format");
+            _needsTranscode = GetSerializedBoolean(info, "transcode_to_extender");
+            _name = GetSerializedString(info,"name");
+            _itemId = GetSerializedInt( info,"itemid");
+            _metadataSourceId = GetSerializedString(info,"sourceid");
+            _sourceName = GetSerializedString(info,"sourcename");
+            _frontCoverPath = GetSerializedString(info,"front_boxart_path");
+            _frontCoverMenuPath = GetSerializedString(info, "front_boxart_menu_path");
+            _backCoverPath = GetSerializedString(info,"back_boxart_path");
+            _synopsis = GetSerializedString(info,"synopsis");
+            _studio = GetSerializedString(info,"distributor");
+            _countryOfOrigin = GetSerializedString(info,"country_of_origin");
+            _officialWebsiteURL = GetSerializedString(info,"official_website_url");
+            _dateAdded = GetSerializedDateTime(info, "date_added");
+            _importerSource = GetSerializedString(info,"importer_source");
+            _runtime = GetSerializedInt(info, "runtime");
+            _parentalRating = GetSerializedString(info, "mpaa_rating");
+            
 
-            DaoTitle.ModifiedDate = DateTime.Now;
-            // todo : solomon : this went wonky here 
-            /*
+            _releaseDate = GetSerializedDateTime(info, "release_date");
+            _actors = GetSerializedList<List<Person>>(info, "actors");
+            _producers = GetSerializedList<List<string>>(info, "producers");
+            _writers = GetSerializedList<List<Person>>(info, "writers");
+            _directors = GetSerializedList<List<Person>>(info, "directors");
+            _audioTracks = GetSerializedList<List<string>>(info, "language_formats");
+            _genres = GetSerializedList<List<string>>(info, "genres");
+
+            _userStarRating = GetSerializedInt(info,"user_star_rating");
+            _aspectRatio = GetSerializedString(info,"aspect_ratio");
+            _videoStandard = GetSerializedString(info,"video_standard");
+            _UPC = GetSerializedString(info,"upc");
+            _originalName = GetSerializedString(info,"original_name");
+            _tags = GetSerializedList<List<string>>(info, "tags");
+            _additionalFields = GetSerializedList<Dictionary<string, string>>(info, "additional_fields");
+            _actingRoles = GetSerializedList<Dictionary<string, string>>(info, "acting_roles");
+            _nonActingRoles = GetSerializedList<Dictionary<string, string>>(info, "nonacting_roles");
+            _photos = GetSerializedList<List<string>>(info, "photos");
+            _trailers = GetSerializedList<List<string>>(info, "trailers");
+            _children = GetSerializedList<List<int>>(info, "children");
+            _parent = GetSerializedInt( info,"parent");
+            _sortName = GetSerializedString(info, "sort_name");
+            _parentalRatingReason = GetSerializedString(info, "mpaa_rating_reason");
+            _videoDetails = GetSerializedString(info, "video_details");
+            _subtitles = GetSerializedList<List<string>>(info, "subtitles");
+            _disks = GetSerializedList<List<Disk>>(info, "disks");
+            CleanDuplicateDisks();
+            if (_videoFormat == VideoFormat.DVD)
+            {
+                if (_videoStandard == "PAL")
+                    _videoResolution = "720x576";
+                else
+                    _videoResolution = "720x480";
+            }
+            _videoResolution = GetSerializedString(info, "video_resolution");
+            _extraFeatures = GetSerializedList<List<string>>(info, "extra_features");
+            _watchedCount = GetSerializedInt(info, "watched_count");
+            _backDropImage = GetSerializedString(info, "backdrop_boxart_path");
+            _productionYear = GetSerializedInt(info, "production_year");
+            _fanartfolder = GetSerializedString(info, "fan_art_folder");
+        }
+
+        void CleanDuplicateDisks()
+        {
+            foreach (Disk d in new List<Disk>(this._disks))
+            {
+                int i = _disks.IndexOf(d);
+                if (i < 0)
+                    continue;
+                while (true) {
+                    int oi = _disks.IndexOf(d, i+1);
+                    if (oi < 0)
+                        break;
+                    _disks.RemoveAt(oi);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Used for serializing the title object (required for the ISerializable interface)
+        /// </summary>
+        /// <param name="info"></param>
+        /// <param name="ctxt"></param>
+        public void GetObjectData(SerializationInfo info, StreamingContext ctxt)
+        {
+            //Utilities.DebugLine("[Title] Adding Title ("+_name+") to Serialization data");
+            info.AddValue("file_location", _fileLocation);
+            info.AddValue("disks", _disks);
+            info.AddValue("video_format", _videoFormat);
+            info.AddValue("transcode_to_extender", _needsTranscode);
+            info.AddValue("name", _name);
+            info.AddValue("itemid", _itemId);
+            info.AddValue("sourceid", _metadataSourceId);
+            info.AddValue("sourcename", _sourceName);
+            info.AddValue("front_boxart_path", _frontCoverPath);
+            info.AddValue("front_boxart_menu_path", _frontCoverMenuPath);
+            info.AddValue("back_boxart_path", _backCoverPath);
+            info.AddValue("synopsis", _synopsis);
+            info.AddValue("distributor", _studio);
+            info.AddValue("country_of_origin", _countryOfOrigin);
+            info.AddValue("official_website_url", _officialWebsiteURL);
+            info.AddValue("date_added", _dateAdded);
+            info.AddValue("importer_source", _importerSource);
+            info.AddValue("runtime", _runtime);
+            info.AddValue("mpaa_rating", _parentalRating);
+            info.AddValue("release_date", _releaseDate);
+            info.AddValue("actors", _actors);
+            info.AddValue("producers", _producers);
+            info.AddValue("writers", _writers);
+            info.AddValue("directors", _directors);
+            info.AddValue("language_formats", _audioTracks);
+            info.AddValue("genres", _genres);
+            info.AddValue("user_star_rating", _userStarRating);
+            info.AddValue("aspect_ratio", _aspectRatio);
+            info.AddValue("video_standard", _videoStandard);
+            info.AddValue("upc", _UPC);
+            info.AddValue("original_name", _originalName);
+            info.AddValue("tags", _tags);
+            info.AddValue("additional_fields", _additionalFields);
+            info.AddValue("acting_roles", _actingRoles);
+            info.AddValue("nonacting_roles", _nonActingRoles);
+            info.AddValue("photos", _photos);
+            info.AddValue("trailers", _trailers);
+            info.AddValue("children", _children);
+            info.AddValue("parent", _parent);
+            info.AddValue("sort_name", _sortName);
+            info.AddValue("mpaa_rating_reason", _parentalRatingReason);
+            info.AddValue("video_details", _videoDetails);
+            info.AddValue("subtitles", _subtitles);
+            info.AddValue("video_resolution", _videoResolution);
+            info.AddValue("extra_features", _extraFeatures);
+            info.AddValue("watched_count", _watchedCount);
             info.AddValue("backdrop_boxart_path", _backDropImage);
             info.AddValue("production_year", _productionYear);
             info.AddValue("fan_art_folder", _fanartfolder);
-             */
+        }
+        #endregion
+
+        /// <summary>
+        /// Generic Constructor, inits all the IList items
+        /// </summary>
+        public Title()
+        {
+            Utilities.DebugLine("[Title] Creating new Empty Title object");
+            _actors = new List<Person>();
+            _directors = new List<Person>();
+            _writers = new List<Person>();
+            _producers = new List<string>();
+            _audioTracks = new List<string>();
+            _genres = new List<string>();
+            _itemId = Utilities.NewRandomNumber();
         }
 
         /// <summary>
-        /// Constructor to base a title object off a db title object
+        /// Default destructor
         /// </summary>
-        /// <param name="title"></param>
-        internal Title(OMLEngine.Dao.Title title)
+        ~Title()
         {
-            _title = title;
+            // Unless this becomes a problem, it just clutters the log
+            //Utilities.DebugLine("[Title] Title destroyed");
         }
 
-        #region People Management
-        public void AddActingRole(string actor, string role)
-        {
-            SetupPeopleCollections();
-
-            if (!DaoTitle.UpdatedActors.Exists(p => p.PersonName.Equals(actor, StringComparison.OrdinalIgnoreCase)))
-            {
-                DaoTitle.UpdatedActors.Add(new Role(actor, role));
-                DaoTitle.ModifiedDate = DateTime.Now;
-            }
-        }
-
-        public void RemoveActingRole(string actor)
-        {
-            SetupPeopleCollections();
-
-            Role role = DaoTitle.UpdatedActors.Find(p => p.PersonName == actor);
-
-            if (role != null)
-            {
-                DaoTitle.UpdatedActors.Remove(role);
-                DaoTitle.ModifiedDate = DateTime.Now;
-            }
-        }
-
-        public void RemoveAllActingRoles()
-        {
-            DaoTitle.UpdatedActors = new List<Role>();
-            DaoTitle.ModifiedDate = DateTime.Now;
-        }
-
-        public void AddNonActingRole(string name, string role)
-        {
-            SetupPeopleCollections();
-
-            if (!DaoTitle.UpdatedNonActingRoles.Exists(p => p.PersonName.Equals(name, StringComparison.OrdinalIgnoreCase)))
-            {
-                DaoTitle.UpdatedActors.Add(new Role(name, role));
-                DaoTitle.ModifiedDate = DateTime.Now;
-            }
-        }
-
-        public void RemoveNonActingRole(string actor)
-        {
-            SetupPeopleCollections();
-
-            Role role = DaoTitle.UpdatedNonActingRoles.Find(p => p.PersonName == actor);
-
-            if (role != null)
-            {
-                DaoTitle.UpdatedNonActingRoles.Remove(role);
-                DaoTitle.ModifiedDate = DateTime.Now;
-            }
-        }
-
-        public void RemoveAllNonActingRoles()
-        {
-            DaoTitle.UpdatedNonActingRoles = new List<Role>();
-            DaoTitle.ModifiedDate = DateTime.Now;
-        }
+        ///// <summary>
+        ///// Add a Person object to the actors list
+        ///// </summary>
+        ///// <param name="actor">Person object to add</param>
+        //public void AddActor(Person actor)
+        //{
+        //    if (actor == null) return;
+        //    if (!_actors.Contains(actor))
+        //        _actors.Add(actor);
+        //}
 
         /// <summary>
         /// Add a Person object to the directors list
@@ -1190,354 +864,62 @@ namespace OMLEngine
         /// <param name="director">Person object to add</param>
         public void AddDirector(Person director)
         {
-            SetupPeopleCollections();
-
-            if (!(DaoTitle.UpdatedDirectors.Exists(p => p.full_name.Equals(director.full_name, StringComparison.OrdinalIgnoreCase))))
-            {
-                DaoTitle.UpdatedDirectors.Add(director);
-                DaoTitle.ModifiedDate = DateTime.Now;
-            }
+            if (director == null) return;
+            _directors.Add(director);
         }
-
-        public void RemoveDirector(string name)
-        {
-            SetupPeopleCollections();
-
-            Person person = DaoTitle.UpdatedDirectors.Find(p => p.full_name == name);
-
-            if (person != null)
-            {
-                DaoTitle.UpdatedDirectors.Remove(person);
-                DaoTitle.ModifiedDate = DateTime.Now;
-            }
-        }
-
-        public void RemoveAllDirectors()
-        {
-            DaoTitle.UpdatedDirectors = new List<Person>();
-            DaoTitle.ModifiedDate = DateTime.Now;
-        }
-
         /// <summary>
         /// Add a Person object to the writers list
         /// </summary>
         /// <param name="writer">Person object to add</param>
         public void AddWriter(Person writer)
         {
-            SetupPeopleCollections();
-
-            if (!(DaoTitle.UpdatedWriters.Exists(p => p.full_name.Equals(writer.full_name, StringComparison.OrdinalIgnoreCase))))
-            {
-                DaoTitle.UpdatedWriters.Add(writer);
-                DaoTitle.ModifiedDate = DateTime.Now;
-            }
+            if (writer == null) return;
+            _writers.Add(writer);
         }
-
-        public void RemoveWriter(string name)
-        {
-            SetupPeopleCollections();
-
-            Person person = DaoTitle.UpdatedWriters.Find(p => p.full_name == name);
-
-            if (person != null)
-            {
-                DaoTitle.UpdatedWriters.Remove(person);
-                DaoTitle.ModifiedDate = DateTime.Now;
-            }
-        }
-
-        public void RemoveAllWriters()
-        {
-            DaoTitle.UpdatedWriters = new List<Person>();
-            DaoTitle.ModifiedDate = DateTime.Now;
-        }
-
         /// <summary>
         /// Add a string (person name or company name) to the producers list
         /// </summary>
         /// <param name="producer">string name to add</param>
-        public void AddProducer(Person producer)
+        public void AddProducer(string producer)
         {
-            SetupPeopleCollections();
-
-            if (!(DaoTitle.UpdatedProducers.Exists(p => p.full_name.Equals(producer.full_name, StringComparison.OrdinalIgnoreCase))))
-            {
-                DaoTitle.UpdatedProducers.Add(producer);
-                DaoTitle.ModifiedDate = DateTime.Now;
-            }
+            if (producer == null) return;
+            _producers.Add(producer);
         }
-
-        public void RemoveProducer(string name)
-        {
-            SetupPeopleCollections();
-
-            Person person = DaoTitle.UpdatedProducers.Find(p => p.full_name == name);
-
-            if (person != null)
-            {
-                DaoTitle.UpdatedProducers.Remove(person);
-                DaoTitle.ModifiedDate = DateTime.Now;
-            }
-        }
-
-        public void RemoveAllProducers()
-        {
-            DaoTitle.UpdatedProducers = new List<Person>();
-            DaoTitle.ModifiedDate = DateTime.Now;
-        }
-        #endregion
-
-        /// <summary>
-        /// Adds a fanart image to the title
-        /// </summary>
-        /// <param name="path"></param>
-        public void AddFanArtImage(string path)
-        {
-            if (string.IsNullOrEmpty(path))
-                return;
-
-            if (FanArtPaths.Contains(path))
-                return;
-
-            if (File.Exists(path))
-            {
-                DaoTitle.UpdatedFanArtPaths.Add(path);
-                DaoTitle.ModifiedDate = DateTime.Now;
-            }
-        }
-
-        /// <summary>
-        /// Removes a fanart image from the title
-        /// </summary>
-        /// <param name="path"></param>
-        public void RemoveFanArtImage(string path)
-        {
-            if (string.IsNullOrEmpty(path))
-                return;
-
-            if (!FanArtPaths.Contains(path))
-                return;
-
-            DaoTitle.UpdatedFanArtPaths.Remove(path);
-            DaoTitle.ModifiedDate = DateTime.Now;
-        }
-
-        /// <summary>
-        /// Add an audio track
-        /// </summary>
-        /// <param name="audioTrack"></param>
-        public void AddAudioTrack(string audioTrack)
-        {
-            if (string.IsNullOrEmpty(audioTrack))
-                return;
-
-            if (_audioTracks == null)
-                _audioTracks = Dao.TitleDao.DelimitedDBStringToCollection(_title.AudioTracks);
-
-            _audioTracks.Add(audioTrack);
-
-            string tracks = Dao.TitleDao.GetDelimitedStringFromCollection(_audioTracks);
-            if (tracks.Length > 255)
-            {
-                _audioTracks = null;
-                throw new FormatException("Too many audio tracks have been added.");
-            }
-            _title.AudioTracks = tracks;
-            _audioTracks = null;
-        }
-
-        /// <summary>
-        /// Adds a subtitle
-        /// </summary>
-        /// <param name="subtitle"></param>
-        public void AddSubtitle(string subtitle)
-        {
-            if (string.IsNullOrEmpty(subtitle))
-                return;
-
-            if (_subtitles == null)
-                _subtitles = Dao.TitleDao.DelimitedDBStringToCollection(_title.Subtitles);
-
-            _subtitles.Add(subtitle);
-            string subtitles = Dao.TitleDao.GetDelimitedStringFromCollection(_subtitles);
-            if (subtitles.Length > 255)
-            {
-                _subtitles = null;
-                throw new FormatException("Too many audio tracks have been added.");
-            }
-            _title.Subtitles = subtitles;
-
-            _subtitles = null;
-        }
-
-        /// <summary>
-        /// Adds a trailer to the title
-        /// </summary>
-        /// <param name="trailer"></param>
-        public void AddTrailer(string trailer)
-        {
-            if (string.IsNullOrEmpty(trailer))
-                return;
-
-            if (_trailers == null)
-                _trailers = Dao.TitleDao.DelimitedDBStringToCollection(_title.Trailers);
-
-            _trailers.Add(trailer);
-
-            string trailers = Dao.TitleDao.GetDelimitedStringFromCollection(_trailers);
-            if (trailers.Length > 255)
-            {
-                _trailers = null;
-                throw new FormatException("Too many audio tracks have been added.");
-            }
-            _title.Trailers = trailers;
-
-            _trailers = null;
-        }
-
         /// <summary>
         /// Add a Genre to the genres list
         /// </summary>
         /// <param name="genre">A Genre from the Genre enum</param>
         public void AddGenre(string genre)
         {
-            if (genre.Length > 255)
-                throw new FormatException("Genre must be 255 characters or less.");
-            if (string.IsNullOrEmpty(genre))
-                return;
-
-            if (Genres.Contains(genre))
-                return;
-
-            // add the genre to the local collection
-            DaoTitle.UpdatedGenres.Add(genre);
-            DaoTitle.ModifiedDate = DateTime.Now;
+            if (genre == null) return;
+            _genres.Add(genre);
         }
 
         /// <summary>
-        /// Removes a genre from the title
+        /// Add a subtitle
         /// </summary>
-        /// <param name="genre"></param>
-        public void RemoveGenre(string genre)
+        /// <param name="language_format">string name to add</param>
+        public void AddSubtitle(string subtitle)
         {
-            if (string.IsNullOrEmpty(genre))
-                return;
-
-            if (!Genres.Contains(genre))
-                return;
-
-            DaoTitle.UpdatedGenres.Remove(genre);
-            DaoTitle.ModifiedDate = DateTime.Now;
+            if (subtitle == null) return;
+            _subtitles.Add(subtitle);
         }
-
         /// <summary>
-        /// Removes all the genres from the title
+        /// Add a string language to the language formats list
         /// </summary>
-        public void RemoveAllGenres()
+        /// <param name="language_format">string name to add</param>
+        public void AddLanguageFormat(string language_format)
         {
-            DaoTitle.UpdatedGenres = new List<string>();
-            DaoTitle.ModifiedDate = DateTime.Now;
+            if (language_format == null) return;
+            _audioTracks.Add(language_format);
         }
-
-        /// <summary>
-        /// Adds a disk to the collection
-        /// </summary>
-        /// <param name="disk"></param>
-        public void AddDisk(Disk disk)
-        {
-            if (disk == null)
-                return;
-
-            if (Disks.Contains(disk))
-                return;
-
-            _title.Disks.Add(disk.DaoDisk);
-
-            _disks = null;
-        }
-
-        public void RemoveDisk(Disk disk)
-        {
-            if (disk == null)
-                return;
-
-            if (!Disks.Contains(disk))
-                return;
-
-            _title.Disks.Remove(disk.DaoDisk);
-
-            _disks = null;
-        }
-
-        /// <summary>
-        /// Add a disk that won't be persisted to the database
-        /// </summary>
-        /// <param name="disk"></param>
-        public void AddTempDisk(Disk disk)
-        {
-            if (disk == null)
-                return;
-
-            if (Disks.Contains(disk))
-                return;
-
-            if (_disks == null)
-                _disks = new List<Disk>(1);
-
-            _disks.Add(disk);
-        }
-
-        /// <summary>
-        /// Sets a tag to be added
-        /// </summary>
-        /// <param name="tag"></param>
-        public void AddTag(string tag)
-        {
-            if (tag.Length > 255)
-                throw new FormatException("Tag must be 255 characters or less.");
-
-            if (string.IsNullOrEmpty(tag))
-                return;
-
-            if (Tags.Contains(tag))
-                return;
-
-            DaoTitle.UpdatedTags.Add(tag);
-            DaoTitle.ModifiedDate = DateTime.Now;
-        }
-
-        /// <summary>
-        /// Removes the tag from the collection
-        /// </summary>
-        /// <param name="tag"></param>
-        public void RemoveTag(string tag)
-        {
-            if (string.IsNullOrEmpty(tag))
-                return;
-
-            if (!Tags.Contains(tag))
-                return;
-
-            DaoTitle.UpdatedTags.Remove(tag);
-            DaoTitle.ModifiedDate = DateTime.Now;
-        }
-
-        public void RemoveAllTags()
-        {
-            DaoTitle.UpdatedTags = new List<string>();
-            DaoTitle.ModifiedDate = DateTime.Now;
-        }
-
 
         public override bool Equals(object obj)
         {
             Title otherT = obj as Title;
-
             if (otherT == null)
                 return false;
-            if (otherT._title == null)
-                return false;
-            if (this.Id == otherT.Id)
+            if (this.InternalItemID == otherT.InternalItemID)
                 return true;
             if (this.Name == otherT.Name)
                 return true;
@@ -1557,13 +939,9 @@ namespace OMLEngine
             return Name.CompareTo(otherT.Name);
         }
 
-        static public Title CreateFromXML(string fileName)
+        static public Title CreateFromXML(string fileName, bool copyImages)
         {
-            //return new Title();
-            
             Title t = new Title();
-
-            t.DateAdded = DateTime.Now;
 
             try
             {
@@ -1578,7 +956,7 @@ namespace OMLEngine
                     {
                         if (navigator.MoveToChild("Name", XmlNameSpace))
                         {
-                            t.NameTrimmed = navigator.Value;
+                            t.Name = navigator.Value;
                             navigator.MoveToParent();
                         }
                         else
@@ -1589,18 +967,18 @@ namespace OMLEngine
                         if (navigator.MoveToChild("OriginalName", XmlNameSpace))
                         {
                             if (String.IsNullOrEmpty(navigator.Value))
-                                t.OriginalNameTrimmed = t.Name;
+                                t.OriginalName = t.Name;
                             else
-                                t.OriginalNameTrimmed = navigator.Value;
+                                t.OriginalName = navigator.Value;
                             navigator.MoveToParent();
                         }
                         
                         if (navigator.MoveToChild("SortName", XmlNameSpace))
                         {
                             if (String.IsNullOrEmpty(navigator.Value))
-                                t.SortNameTrimmed = t.Name;
+                                t.SortName = t.Name;
                             else
-                                t.SortNameTrimmed = navigator.Value;
+                                t.SortName = navigator.Value;
                             navigator.MoveToParent();
                         }
                         
@@ -1611,11 +989,11 @@ namespace OMLEngine
                         }
 
                         
-                        /*if (navigator.MoveToChild("FrontCoverMenuPath", XmlNameSpace))
+                        if (navigator.MoveToChild("FrontCoverMenuPath", XmlNameSpace))
                         {
                             if (!String.IsNullOrEmpty(navigator.Value)) t.FrontCoverMenuPath = navigator.Value;
                             navigator.MoveToParent();
-                        }*/
+                        }
 
                         if (navigator.MoveToChild("BackCoverPath", XmlNameSpace))
                         {
@@ -1661,7 +1039,7 @@ namespace OMLEngine
                                         }
                                         navigator.MoveToParent();
 
-                                        t.AddDisk(new Disk(diskName, path, format));
+                                        t.Disks.Add(new Disk(diskName, path, format));
 
                                         if (!navigator.MoveToNext()) break;
                                     }
@@ -1690,7 +1068,7 @@ namespace OMLEngine
                         {
                             if (!String.IsNullOrEmpty(navigator.Value))
                             {
-                                t.StudioTrimmed = navigator.Value;
+                                t.Studio = navigator.Value;
                             }
                             navigator.MoveToParent();
                         }
@@ -1700,7 +1078,7 @@ namespace OMLEngine
                         {
                             if (!String.IsNullOrEmpty(navigator.Value))
                             {
-                                t.CountryOfOriginTrimmed = navigator.Value;
+                                t.CountryOfOrigin = navigator.Value;
                             }
                             navigator.MoveToParent();
                         }
@@ -1711,7 +1089,7 @@ namespace OMLEngine
                         {
                             if (!String.IsNullOrEmpty(navigator.Value))
                             {
-                                t.OfficialWebsiteURLTrimmed = navigator.Value;
+                                t.OfficialWebsiteURL = navigator.Value;
                             }
                             navigator.MoveToParent();
                         }
@@ -1734,7 +1112,7 @@ namespace OMLEngine
                         {
                             if (!String.IsNullOrEmpty(navigator.Value))
                             {
-                                t.ParentalRatingTrimmed = navigator.Value;
+                                t.ParentalRating = navigator.Value;
                             }
                             navigator.MoveToParent();
                         }
@@ -1744,7 +1122,7 @@ namespace OMLEngine
                         {
                             if (!String.IsNullOrEmpty(navigator.Value))
                             {
-                                t.ParentalRatingReasonTrimmed = navigator.Value;
+                                t.ParentalRatingReason = navigator.Value;
                             }
                             navigator.MoveToParent();
                         }
@@ -1757,13 +1135,9 @@ namespace OMLEngine
                                 DateTime releaseDate;
                                 if (DateTime.TryParse(navigator.Value, out releaseDate))
                                 {
-                                    if (releaseDate >= DateTime.Parse("1 Jan 1900"))
-                                    {
-                                        t.ReleaseDate = releaseDate;
-                                    }
+                                    t.ReleaseDate = releaseDate;
                                 }
                             }
-
                             navigator.MoveToParent();
                         }
 
@@ -1810,7 +1184,7 @@ namespace OMLEngine
                                 {
                                     if (navigator.Name == "Tag")
                                     {
-                                        t.AddTag(navigator.Value);
+                                        t.Tags.Add(navigator.Value);
                                         if (!navigator.MoveToNext()) break;
                                     }
                                     else
@@ -1833,7 +1207,7 @@ namespace OMLEngine
                                 {
                                     if (navigator.Name == "Trailer")
                                     {
-                                        t.AddTrailer(navigator.Value);
+                                        t.Trailers.Add(navigator.Value);
                                         if (!navigator.MoveToNext()) break;
                                     }
                                     else
@@ -1856,8 +1230,7 @@ namespace OMLEngine
                                 {
                                     if (navigator.Name == "Photo")
                                     {
-                                        t.FanArtPaths.Add(navigator.Value);
-                                        //t.Photos.Add(navigator.Value);
+                                        t.Photos.Add(navigator.Value);
                                         if (!navigator.MoveToNext()) break;
                                     }
                                     else
@@ -1880,7 +1253,7 @@ namespace OMLEngine
                                 {
                                     if (navigator.Name == "Subtitle")
                                     {
-                                        t.AddSubtitle(navigator.Value);
+                                        t.Subtitles.Add(navigator.Value);
                                         if (!navigator.MoveToNext()) break;
                                     }
                                     else break;
@@ -1900,7 +1273,7 @@ namespace OMLEngine
                                 {
                                     if (navigator.Name == "AudioTrack")
                                     {
-                                        t.AddAudioTrack(navigator.Value);
+                                        t.AudioTracks.Add(navigator.Value);
                                         if (!navigator.MoveToNext()) break;
                                     }
                                     else break;
@@ -1938,9 +1311,7 @@ namespace OMLEngine
                                 {
                                     if (navigator.Name == "Producer")
                                     {
-                                        Person producer = new Person();
-                                        producer.full_name = navigator.Value;
-                                        t.AddProducer(producer);
+                                        t.AddProducer(navigator.Value);
                                         if (!navigator.MoveToNext()) break;
                                     }
                                     else break;
@@ -1993,7 +1364,7 @@ namespace OMLEngine
                         {
                             if (!String.IsNullOrEmpty(navigator.Value))
                             {
-                                t.AspectRatioTrimmed = navigator.Value;
+                                t.AspectRatio = navigator.Value;
                             }
                             navigator.MoveToParent();
                         }
@@ -2003,7 +1374,7 @@ namespace OMLEngine
                         {
                             if (!String.IsNullOrEmpty(navigator.Value))
                             {
-                                t.VideoStandardTrimmed = navigator.Value.Substring(0, Math.Min(navigator.Value.Length, 10));
+                                t.VideoStandard = navigator.Value;
                             }
                             navigator.MoveToParent();
                         }
@@ -2013,7 +1384,7 @@ namespace OMLEngine
                         {
                             if (!String.IsNullOrEmpty(navigator.Value))
                             {
-                                t.VideoResolutionTrimmed = navigator.Value;
+                                t.VideoResolution = navigator.Value;
                             }
                             navigator.MoveToParent();
                         }
@@ -2133,31 +1504,7 @@ namespace OMLEngine
 
                         }
 
-
-                        // Don't know how much mileage there is in this
-                        // Check for fanart
-                        string fanartfolder = Path.Combine(t.FileLocation, "Fanart");
-                        if (!Directory.Exists(fanartfolder))
-                        {
-                            fanartfolder = Path.Combine(Path.GetDirectoryName(t.FileLocation), "Fanart");
-                        }
-                        if (Directory.Exists(fanartfolder))
-                        {
-                            foreach (string imagefile in Directory.GetFiles(fanartfolder))
-                            {
-                                string extension = Path.GetExtension(imagefile);
-                                if (!string.IsNullOrEmpty(extension))
-                                {
-                                    if ((string.Compare(extension, ".jpg", true) == 0) ||
-                                        (string.Compare(extension, ".png", true) == 0) ||
-                                        (string.Compare(extension, ".bmp", true) == 0))
-                                    {
-                                        t.AddFanArtImage(imagefile);
-                                    }
-                                }
-                            }
-                        }
-                        /*if (navigator.MoveToChild("CustomFields", XmlNameSpace))
+                        if (navigator.MoveToChild("CustomFields", XmlNameSpace))
                         {
                             if (navigator.MoveToFirstChild())
                             {
@@ -2197,11 +1544,13 @@ namespace OMLEngine
                                 navigator.MoveToParent();
                             }
                             navigator.MoveToParent();
-                        }*/
+
+                        }
+
                     }
                 }
             }
-            catch (Exception ex)
+            catch
             {
                 return null;
             }
@@ -2219,18 +1568,17 @@ namespace OMLEngine
             }
 
             // tries to guess the right file names if file not found. Try several alternatives
-            /*t.FrontCoverPath = FixupImagePath(t.FrontCoverPath.ToUpper(), fileName.ToUpper(), ".JPG");
+            t.FrontCoverPath = FixupImagePath(t.FrontCoverPath.ToUpper(), fileName.ToUpper(), ".JPG");
             t.BackCoverPath = FixupImagePath(t.BackCoverPath.ToUpper(), fileName.ToUpper(), ".BACK.JPG");
 
             if (copyImages)
             {
                 t.CopyFrontCoverFromFile(t.FrontCoverPath, false);
                 t.CopyBackCoverFromFile(t.BackCoverPath, false);
-            }*/
+            }
 
             return t;
         }
-
 
         // for paths that don't exist, try to guess
         // replace the folder for the path with the folder where oml.xml file was found
@@ -2253,12 +1601,49 @@ namespace OMLEngine
                     return fixedPath;
                 }
             }
+
             return path;
         }
 
-        //<?xml version="1.0" encoding="utf-8"?>
-        //<OMLTitle xmlns="http://www.openmedialibrary.org/">
+        // for paths that don't exist, try to guess
+        // replace the folder for the path with the folder where oml.xml file was found
+        private static string FixupImagePath(string path, string omlXmlFile, string suffix)
+        {
+            path = path.Trim();
+            if (File.Exists(path)) return path;
 
+            string omlxmlFileFolder = Path.GetDirectoryName(omlXmlFile);
+            string omlxmlFileStripped = omlXmlFile.Replace(".OML.XML", "");
+            string omlxmlFileStrippedTwice = omlxmlFileFolder + "\\" + Path.GetFileNameWithoutExtension(omlxmlFileStripped);
+
+            // try just the filename + the folder of the oml.xml file
+            if (path.Length > 0)
+            {
+                string pathFilename = Path.GetFileName(path);
+
+                string fixedPath = omlxmlFileFolder + "\\" + pathFilename;
+                if (File.Exists(fixedPath))
+                {
+                    return fixedPath;
+                }
+            }
+
+            // now try the standard folder.jpg, moviename.jpg, moviename.extension.jpg
+            // in the oml.xml file directory. The moviename is everything before .oml.xml
+            if (File.Exists(omlxmlFileStripped + suffix))
+                return omlxmlFileStripped + suffix;
+            else if (File.Exists(omlxmlFileStrippedTwice + suffix))
+                return omlxmlFileStrippedTwice + suffix;
+            else if (File.Exists(omlxmlFileFolder + "\\folder" + suffix))
+                return omlxmlFileFolder + "\\folder" + suffix;
+
+
+            return path;
+        }
+        
+//<?xml version="1.0" encoding="utf-8"?>
+//<OMLTitle xmlns="http://www.openmedialibrary.org/">
+        
         public bool SerializeToXMLFile(string fileName)
         {
             fileName = fileName.ToUpper();
@@ -2279,10 +1664,10 @@ namespace OMLEngine
                 writer.WriteStartElement("OMLTitle", XmlNameSpace);
 
                 writer.WriteElementString("Name", Name);
-                writer.WriteElementString("SortName", this.SortName);
-                writer.WriteElementString("OriginalName", this.OriginalName);
+                writer.WriteElementString("SortName", _sortName);
+                writer.WriteElementString("OriginalName", _originalName);
 
-                /*string newFrontCoverPath = fileName.Replace(".OML.XML", ".JPG");
+                string newFrontCoverPath = fileName.Replace(".OML.XML", ".JPG");
                 string newBackCoverPath = fileName.Replace(".OML.XML", ".BACK.JPG");
 
                 if (newFrontCoverPath.EndsWith(@"\VIDEO_TS.JPG"))
@@ -2310,7 +1695,7 @@ namespace OMLEngine
                 // this will be created when imported
                 //writer.WriteElementString("FrontCoverMenuPath", FrontCoverMenuPath);
                 writer.WriteElementString("FrontCoverMenuPath", "");
-                */
+
 
                 // should be relative path so it can be loaded on any computer
                 writer.WriteStartElement("Disks");
@@ -2327,18 +1712,18 @@ namespace OMLEngine
                 writer.WriteEndElement();
 
                 ////writer.WriteElementString("VideoFormat", _videoFormat.ToString());
-                //writer.WriteElementString("TranscodeToExtender", _needsTranscode.ToString());
+                writer.WriteElementString("TranscodeToExtender", _needsTranscode.ToString());
 
-                writer.WriteElementString("Synopsis", this.Synopsis);
-                writer.WriteElementString("Studio", this.Studio);
-                writer.WriteElementString("Country", this.CountryOfOrigin);
-                writer.WriteElementString("OfficialWebSiteURL", this.OfficialWebsiteURL);
+                writer.WriteElementString("Synopsis", _synopsis);
+                writer.WriteElementString("Studio", _studio);
+                writer.WriteElementString("Country", _countryOfOrigin);
+                writer.WriteElementString("OfficialWebSiteURL", _officialWebsiteURL);
 
-                writer.WriteElementString("Runtime", this.Runtime.ToString());
-                writer.WriteElementString("ParentalRating", this.ParentalRating);
-                writer.WriteElementString("ParentalRatingReason", this.ParentalRatingReason);
-                writer.WriteElementString("ReleaseDate", this.ReleaseDate.ToString());
-                writer.WriteElementString("ProductionYear", this.ProductionYear.ToString());
+                writer.WriteElementString("Runtime", _runtime.ToString());
+                writer.WriteElementString("ParentalRating", _parentalRating);
+                writer.WriteElementString("ParentalRatingReason", _parentalRatingReason);
+                writer.WriteElementString("ReleaseDate", _releaseDate.ToString());
+                writer.WriteElementString("ProductionYear", _productionYear.ToString());
 
 
 
@@ -2371,27 +1756,27 @@ namespace OMLEngine
                 writer.WriteEndElement();
 
 
-                writer.WriteElementString("UserRating", this.UserStarRating.ToString());
-                writer.WriteElementString("AspectRatio", this.AspectRatio);
-                writer.WriteElementString("VideoStandard", this.VideoStandard);
+                writer.WriteElementString("UserRating", _userStarRating.ToString());
+                writer.WriteElementString("AspectRatio", _aspectRatio.ToString());
+                writer.WriteElementString("VideoStandard", _videoStandard);
 
 
                 writer.WriteStartElement("ActingRoles");
-                foreach (Role actingRole in ActingRoles)
+                foreach (KeyValuePair<string, string> actingRole in ActingRoles)
                 {
                     writer.WriteStartElement("Actor");
-                    writer.WriteAttributeString("Name", actingRole.PersonName);
-                    writer.WriteAttributeString("Role", actingRole.RoleName);
+                    writer.WriteAttributeString("Name", actingRole.Key);
+                    writer.WriteAttributeString("Role", actingRole.Value);
                     writer.WriteEndElement();
                 }
                 writer.WriteEndElement();
 
                 writer.WriteStartElement("NonActingRoles");
-                foreach (Role nonactingRole in NonActingRoles)
+                foreach (KeyValuePair<string, string> actingRole in NonActingRoles)
                 {
                     writer.WriteStartElement("Person");
-                    writer.WriteAttributeString("Name", nonactingRole.PersonName);
-                    writer.WriteAttributeString("Role", nonactingRole.RoleName);
+                    writer.WriteAttributeString("Name", actingRole.Key);
+                    writer.WriteAttributeString("Role", actingRole.Value);
                     writer.WriteEndElement();
                 }
                 writer.WriteEndElement();
@@ -2419,22 +1804,22 @@ namespace OMLEngine
                 writer.WriteEndElement();
 
 
-                /*writer.WriteStartElement("CustomFields");
+                writer.WriteStartElement("CustomFields");
                 foreach (KeyValuePair<string, string> field in AdditionalFields)
                 {
                     writer.WriteStartElement("CustomField");
                     writer.WriteAttributeString("Name", field.Key);
                     writer.WriteAttributeString("Value", field.Key);
                 }
-                writer.WriteEndElement();*/
+                writer.WriteEndElement();
 
 
-                /*writer.WriteStartElement("Photos");
+                writer.WriteStartElement("Photos");
                 foreach (string photo in Photos)
                 {
                     writer.WriteElementString("Photo", photo);
                 }
-                writer.WriteEndElement();*/
+                writer.WriteEndElement();
 
                 writer.WriteStartElement("Trailers");
                 foreach (string trailer in Trailers)
@@ -2451,9 +1836,9 @@ namespace OMLEngine
                 writer.WriteEndElement();
 
 
-                writer.WriteElementString("VideoDetails", this.VideoDetails);
+                writer.WriteElementString("VideoDetails", _videoDetails);
 
-                writer.WriteElementString("VideoResolution", this.VideoResolution);
+                writer.WriteElementString("VideoResolution", _videoResolution);
 
                 writer.WriteEndElement();
                 writer.WriteEndDocument();
@@ -2475,54 +1860,47 @@ namespace OMLEngine
                 if (!String.IsNullOrEmpty(src))
                     return src;
                 else
-                    if (!String.IsNullOrEmpty(dest))
-                        return dest;
-                    else return "";
+                    return dest;
             }
             else
             {
                 if (!String.IsNullOrEmpty(src) && String.IsNullOrEmpty(dest))
                     return src;
                 else
-                    return dest ?? "";
+                    return dest;
             }
         }
 
-        public void CopyMetadata(Title t, bool overWrite, bool overWriteName, bool overWriteSortName)
+        public void CopyMetadata(Title t, bool overWrite)
         {
-            Name = CopyStringValue(t.Name, Name, overWriteName);
-            SortName = CopyStringValue(t.SortName, SortName, overWriteSortName);
-           
-            MetadataSourceID = CopyStringValue(t.MetadataSourceID, MetadataSourceID, overWrite);
-            MetadataSourceName = CopyStringValue(t.MetadataSourceName, MetadataSourceName, overWrite);
+            _name = CopyStringValue(t._name, _name, overWrite);
+            _metadataSourceId = CopyStringValue(t._metadataSourceId, _metadataSourceId, overWrite);
 
-            ParentalRating = CopyStringValue(t.ParentalRating, ParentalRating, overWrite);
-            Synopsis = CopyStringValue(t.Synopsis, Synopsis, overWrite);
-            Studio = CopyStringValue(t.Studio, Studio, overWrite);
-            CountryOfOrigin = CopyStringValue(t.CountryOfOrigin, CountryOfOrigin, overWrite);
-            OfficialWebsiteURL = CopyStringValue(t.OfficialWebsiteURL, OfficialWebsiteURL, overWrite);
-            AspectRatio = CopyStringValue(t.AspectRatio, AspectRatio, overWrite);
-            VideoStandard = CopyStringValue(t.VideoStandard, VideoStandard, overWrite);
-            UPC = CopyStringValue(t.UPC, UPC, overWrite);
-            OriginalName = CopyStringValue(t.OriginalName, OriginalName, overWrite);
-            ParentalRatingReason = CopyStringValue(t.ParentalRatingReason, ParentalRatingReason, overWrite);
-            VideoDetails = CopyStringValue(t.VideoDetails, VideoDetails, overWrite);
-            ReleaseDate = CheckDateRange(t.ReleaseDate);
-
-            if (t.SeasonNumber > 0) SeasonNumber = t.SeasonNumber;
-            if (t.EpisodeNumber > 0) EpisodeNumber = t.EpisodeNumber;
-            if (t.Runtime > 0) Runtime = t.Runtime;
+            _parentalRating = CopyStringValue(t._parentalRating, _parentalRating, overWrite);
+            _synopsis = CopyStringValue(t._synopsis, _synopsis, overWrite);
+            _studio = CopyStringValue(t._studio, _studio, overWrite);
+            _countryOfOrigin = CopyStringValue(t._countryOfOrigin, _countryOfOrigin, overWrite);
+            _officialWebsiteURL = CopyStringValue(t._officialWebsiteURL, _officialWebsiteURL, overWrite);
+            _aspectRatio = CopyStringValue(t._aspectRatio, _aspectRatio, overWrite);
+            _videoStandard = CopyStringValue(t._videoStandard, _videoStandard, overWrite);
+            _UPC = CopyStringValue(t._UPC, _UPC, overWrite);
+            _originalName = CopyStringValue(t._originalName, _originalName, overWrite);
+            _sortName = CopyStringValue(t._sortName, _sortName, overWrite);
+            _parentalRatingReason = CopyStringValue(t._parentalRatingReason, _parentalRatingReason, overWrite);
+            _videoDetails = CopyStringValue(t._videoDetails, _videoDetails, overWrite);
+            
+            if ( t.Runtime > 0) Runtime = t.Runtime;
+            if (t.ReleaseDate != null) ReleaseDate = t.ReleaseDate;
             if (t.UserStarRating > 0) UserStarRating = t.UserStarRating;
-            
             if (t.ProductionYear > 0) ProductionYear = t.ProductionYear;
-            if (ProductionYear == 0) ProductionYear = ReleaseDate.Year;
-            
-            if (t.Directors != null && t.Directors.Count > 0)
+
+            if (t._directors != null && t._directors.Count > 0)
             {
-                if (overWrite || Directors.Count == 0)
+                if (_directors == null) _directors = new List<Person>();
+                if (overWrite || _directors.Count == 0)
                 {
-                    RemoveAllDirectors();
-                    foreach (Person p in t.Directors)
+                    _directors.Clear();
+                    foreach (Person p in t._directors)
                     {
                         AddDirector(new Person(p.full_name));
                     }
@@ -2530,24 +1908,27 @@ namespace OMLEngine
             }
 
 
-            if (t.Writers != null && t.Writers.Count > 0)
+            if (t._writers != null && t._writers.Count > 0)
             {
-                if (overWrite || Writers.Count == 0)
+                if (_writers == null) _writers = new List<Person>();
+                if (overWrite || _writers.Count == 0)
                 {
-                    RemoveAllWriters();
-                    foreach (Person p in t.Writers)
+                    _writers.Clear();
+                    foreach (Person p in t._writers)
                     {
                         AddWriter(new Person(p.full_name));
                     }
                 }
+
             }
 
-            if (t.Producers != null && t.Producers.Count > 0)
+            if (t._producers != null && t._producers.Count > 0)
             {
-                if (overWrite || Producers.Count == 0)
+                if (_producers == null) _producers = new List<string>();
+                if (overWrite || _producers.Count == 0)
                 {
-                    RemoveAllProducers();
-                    foreach (Person p in t.Producers)
+                    _producers.Clear();
+                    foreach (string p in t._producers)
                     {
                         AddProducer(p);
                     }
@@ -2567,52 +1948,86 @@ namespace OMLEngine
                 }
             }
 
-            if (t.Genres != null && t.Genres.Count > 0)
+            if (t._genres != null && t._genres.Count > 0)
             {
-                if (overWrite || Genres.Count == 0)
+                if (_genres == null) _genres = new List<string>();
+                if (overWrite || _genres.Count == 0)
                 {
-                    RemoveAllGenres();
-                    foreach (string p in t.Genres)
+
+                    _genres.Clear();
+                    foreach (string p in t._genres)
                     {
-                        AddGenre(p);
+                        _genres.Add(p);
                     }
                 }
             }
 
-            if (t.Tags != null && t.Tags.Count > 0)
+            if (t._tags != null && t._tags.Count > 0)
             {
-                if (null == DaoTitle.UpdatedTags) DaoTitle.UpdatedTags = new List<string>();
-
-                if (overWrite || DaoTitle.UpdatedTags.Count == 0)
+                if (_tags == null) _tags = new List<string>();
+                if (overWrite || _tags.Count == 0)
                 {
-                    RemoveAllTags();
-                    foreach (string p in t.DaoTitle.UpdatedTags)
+
+                    _tags.Clear();
+                    foreach (string p in t._tags)
                     {
-                        DaoTitle.UpdatedTags.Add(p);
+                        _tags.Add(p);
                     }
                 }
             }
 
-            if (t.ActingRoles != null && t.ActingRoles.Count > 0)
+
+            if (t._actingRoles != null && t._actingRoles.Count > 0)
             {
-                if (overWrite || ActingRoles.Count == 0)
+                if (_actingRoles == null) _actingRoles = new Dictionary<string, string>();
+                if (overWrite || _actingRoles.Count == 0)
                 {
-                    RemoveAllActingRoles();
-                    foreach (Role p in t.ActingRoles)
+                    _actingRoles.Clear();
+                    foreach (KeyValuePair<string, string> p in t._actingRoles)
                     {
-                        AddActingRole(p.PersonName, p.RoleName);
+                        _actingRoles.Add(p.Key, p.Value);
                     }
                 }
             }
 
-            if (t.NonActingRoles != null && t.NonActingRoles.Count > 0)
+            if (t._nonActingRoles != null && t._nonActingRoles.Count > 0)
             {
-                if (overWrite || NonActingRoles.Count == 0)
+                if (_nonActingRoles == null) _nonActingRoles = new Dictionary<string, string>();
+                if (overWrite || _nonActingRoles.Count == 0)
                 {
-                    RemoveAllNonActingRoles();
-                    foreach (Role p in t.NonActingRoles)
+
+                    _nonActingRoles.Clear();
+                    foreach (KeyValuePair<string, string> p in t._nonActingRoles)
                     {
-                        AddNonActingRole(p.PersonName, p.RoleName);
+                        _nonActingRoles.Add(p.Key, p.Value);
+                    }
+                }
+            }
+
+            if (t._additionalFields != null && t._additionalFields.Count > 0)
+            {
+                if (_additionalFields == null) _additionalFields = new Dictionary<string, string>();
+                if (overWrite || _additionalFields.Count == 0)
+                {
+
+                    _additionalFields.Clear();
+                    foreach (KeyValuePair<string, string> p in t._additionalFields)
+                    {
+                        _additionalFields.Add(p.Key, p.Value);
+                    }
+                }
+            }
+
+            if (t._photos != null && t._photos.Count > 0)
+            {
+                if (_photos == null) _photos = new List<string>();
+                if (overWrite || _photos.Count == 0)
+                {
+
+                    _photos.Clear();
+                    foreach (string p in t._photos)
+                    {
+                        _photos.Add(p);
                     }
                 }
             }
@@ -2659,254 +2074,290 @@ namespace OMLEngine
                 }
             }
 
-            if (!String.IsNullOrEmpty(t.DaoTitle.UpdatedFrontCoverPath))
+            if (!String.IsNullOrEmpty(t.FrontCoverPath))
             {
-                if (overWrite || String.IsNullOrEmpty(FrontCoverPath) || FrontCoverPath == ImageManager.NoCoverPath)
+                if (overWrite || String.IsNullOrEmpty(FrontCoverPath) || FrontCoverPath == GetDefaultNoCoverName())
                 {
-                    FrontCoverPath = t.DaoTitle.UpdatedFrontCoverPath;
+                    CopyFrontCoverFromFile(t.FrontCoverPath, true);
                 }
             }
 
-            if (!String.IsNullOrEmpty(t.DaoTitle.UpdatedBackCoverPath))
+            if (!String.IsNullOrEmpty(t.BackCoverPath))
             {
-                if (overWrite || String.IsNullOrEmpty(BackCoverPath) || BackCoverPath == ImageManager.NoCoverPath)
+                if (overWrite || String.IsNullOrEmpty(BackCoverPath) || BackCoverPath == GetDefaultNoCoverName())
                 {
-                    BackCoverPath = t.DaoTitle.UpdatedBackCoverPath;
+                    CopyBackCoverFromFile(t.BackCoverPath, true);
                 }
             }
 
         }
 
-        public override string ToString()
-        {
-            return "Title:" + this.Name + " (" + this.Id + ")";
-        }
-
-        #region serialization methods
-
-        private DateTime GetSerializedDateTime(SerializationInfo info, string id)
+        public bool SaveFrontCoverToFile(string dest)
         {
             try
             {
-                return info.GetDateTime(id);
+                if (!String.IsNullOrEmpty(FrontCoverPath) && File.Exists(FrontCoverPath))
+                {
+                    if (!FrontCoverPath.Equals(dest, StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        File.Copy(FrontCoverPath, dest, true);
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+               
             }
-            catch (Exception e)
+            catch
             {
-                Trace.WriteLine("Exception in GetSerializedDateTime: " + e.Message);
-                return new DateTime(0);
-            }
-        }
-
-        private VideoFormat GetSerializedVideoFormat(SerializationInfo info, string id)
-        {
-            try
-            {
-                return (VideoFormat)info.GetValue(id, typeof(VideoFormat));
-            }
-            catch (Exception e)
-            {
-                Trace.WriteLine("Exception in GetSerializedVideoFormat: " + e.Message);
-                return VideoFormat.DVD;
-            }
-        }
-
-        private bool GetSerializedBoolean(SerializationInfo info, string id)
-        {
-            try
-            {
-                return info.GetBoolean(id);
-            }
-            catch (Exception e)
-            {
-                Trace.WriteLine("Exception in GetSerializedBoolean: " + e.Message);
                 return false;
             }
         }
 
-        private int GetSerializedInt(SerializationInfo info, string id)
+        public bool SaveBackCoverToFile(string dest)
         {
             try
             {
-                return (int)info.GetValue(id, typeof(int));
-            }
-            catch (Exception e)
-            {
-                Trace.WriteLine("Exception in GetSerializedInt: " + e.Message);
-                return 0;
-            }
-        }
-
-        private string GetSerializedString(SerializationInfo info, string id)
-        {
-            try
-            {
-                string result = info.GetString(id);
-                return (result == null ? String.Empty : result.Trim());
-            }
-            catch (Exception e)
-            {
-                Trace.WriteLine("Exception in GetSerializedString: " + e.Message);
-                return String.Empty;
-            }
-        }
-
-        private T GetSerializedList<T>(SerializationInfo info, string id) where T : new()
-        {
-            try
-            {
-                T result = (T)info.GetValue(id, typeof(T));
-                return (result == null ? new T() : result);
-            }
-            catch (Exception e)
-            {
-                Trace.WriteLine("Exception in GetSerializedList: " + e.Message);
-                return new T();
-            }
-        }
-
-        /// <summary>
-        /// Constructor used for loading from database file
-        /// </summary>
-        /// <param name="info">SerializationInfo object</param>
-        /// <param name="ctxt">StreamingContext object</param>
-        public Title(SerializationInfo info, StreamingContext ctxt)
-        {
-            _title = new OMLEngine.Dao.Title();
-            //Utilities.DebugLine("[Title] Loading Title from Serialization");
-            NameTrimmed = GetSerializedString(info, "name");
-            //Id = GetSerializedInt( info,"itemid");
-            MetadataSourceIDTrimmed = GetSerializedString(info, "sourceid");
-            MetadataSourceNameTrimmed = GetSerializedString(info, "sourcename");
-            FrontCoverPath = GetSerializedString(info, "front_boxart_path");
-            //FrontCoverMenuPath = GetSerializedString(info, "front_boxart_menu_path");
-            BackCoverPath = GetSerializedString(info, "back_boxart_path");
-            Synopsis = GetSerializedString(info, "synopsis");
-            StudioTrimmed = GetSerializedString(info, "distributor");
-            CountryOfOriginTrimmed = GetSerializedString(info, "country_of_origin");
-            OfficialWebsiteURLTrimmed = GetSerializedString(info, "official_website_url");
-            DateAdded = CheckDateRange(GetSerializedDateTime(info, "date_added"));
-            ImporterSourceTrimmed = GetSerializedString(info, "importer_source");
-            Runtime = GetSerializedInt(info, "runtime");
-            ParentalRatingTrimmed = GetSerializedString(info, "mpaa_rating");
-
-
-            ReleaseDate = CheckDateRange(GetSerializedDateTime(info, "release_date"));
-
-            DaoTitle.UpdatedProducers = new List<Person>();
-            List<string> producers = GetSerializedList<List<string>>(info, "producers");
-            producers.ForEach(p => DaoTitle.UpdatedProducers.Add(new Person(p)));
-
-            DaoTitle.UpdatedWriters = GetSerializedList<List<Person>>(info, "writers");
-
-            DaoTitle.UpdatedDirectors = GetSerializedList<List<Person>>(info, "directors");
-
-            _audioTracks = GetSerializedList<List<string>>(info, "language_formats");
-            _title.AudioTracks = Dao.TitleDao.GetDelimitedStringFromCollection(_audioTracks);
-            DaoTitle.UpdatedGenres = GetSerializedList<List<string>>(info, "genres");
-
-            UserStarRating = GetSerializedInt(info, "user_star_rating");
-            AspectRatioTrimmed = GetSerializedString(info, "aspect_ratio");
-            VideoStandardTrimmed = GetSerializedString(info, "video_standard");
-            UPCTrimmed = GetSerializedString(info, "upc");
-            OriginalNameTrimmed = GetSerializedString(info, "original_name");
-            DaoTitle.UpdatedTags = GetSerializedList<List<string>>(info, "tags");
-
-            Dictionary<string, string> actors = GetSerializedList<Dictionary<string, string>>(info, "acting_roles");
-
-            DaoTitle.UpdatedActors = new List<Role>();
-            foreach (string actor in actors.Keys)
-                DaoTitle.UpdatedActors.Add(new Role(actor, actors[actor]));
-
-            Dictionary<string, string> nonActingRoles = GetSerializedList<Dictionary<string, string>>(info, "nonacting_roles");
-
-            DaoTitle.UpdatedNonActingRoles = new List<Role>();
-            foreach (string key in nonActingRoles.Keys)
-                DaoTitle.UpdatedNonActingRoles.Add(new Role(key, nonActingRoles[key]));
-
-            _trailers = GetSerializedList<List<string>>(info, "trailers");
-            _title.Trailers = Dao.TitleDao.GetDelimitedStringFromCollection(_trailers);
-            SortNameTrimmed = GetSerializedString(info, "sort_name");
-            ParentalRatingReasonTrimmed = GetSerializedString(info, "mpaa_rating_reason");
-            VideoDetails = GetSerializedString(info, "video_details");
-            _subtitles = GetSerializedList<List<string>>(info, "subtitles");
-            _title.Subtitles = Dao.TitleDao.GetDelimitedStringFromCollection(_subtitles);
-            _disks = GetSerializedList<List<Disk>>(info, "disks");
-            foreach (Disk d in _disks)
-                _title.Disks.Add(d.DaoDisk);
-
-            CleanDuplicateDisks();
-            if (VideoFormat == VideoFormat.DVD)
-            {
-                if (VideoStandard == "PAL")
-                    VideoResolution = "720x576";
-                else
-                    VideoResolution = "720x480";
-            }
-            VideoResolutionTrimmed = GetSerializedString(info, "video_resolution");
-            ExtraFeatures = GetSerializedList<List<string>>(info, "extra_features");
-            WatchedCount = GetSerializedInt(info, "watched_count");
-
-            // Don't know how much mileage there is in this
-            // Check for fanart
-            string fanartfolder = Path.Combine(FileLocation, "Fanart");
-            if (!Directory.Exists(fanartfolder))
-            {
-                fanartfolder = Path.Combine(Path.GetDirectoryName(FileLocation), "Fanart");
-            }
-            if (Directory.Exists(fanartfolder))
-            {
-                foreach (string imagefile in Directory.GetFiles(fanartfolder))
+                if (!String.IsNullOrEmpty(BackCoverPath) && File.Exists(BackCoverPath))
                 {
-                    string extension = Path.GetExtension(imagefile);
-                    if (!string.IsNullOrEmpty(extension))
+                    if (!BackCoverPath.Equals(dest, StringComparison.CurrentCultureIgnoreCase))
                     {
-                        if ((string.Compare(extension, ".jpg", true) == 0) ||
-                            (string.Compare(extension, ".png", true) == 0) ||
-                            (string.Compare(extension, ".bmp", true) == 0))
+                        File.Copy(BackCoverPath, dest, true);
+                        return false;
+                    }
+                    else
+                    {
+                        return true;
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+
+        // copy front cover image and set the menu cover too (resized version)
+        public bool CopyFrontCoverFromFile(string source, bool deleteSource)
+        {
+            if (!string.IsNullOrEmpty(source))
+            {
+                try
+                {
+                    File.Copy(source, GetDefaultFrontCoverName(), true);
+                    if (deleteSource) File.Delete(source);
+                    FrontCoverPath = GetDefaultFrontCoverName();
+                    BuildResizedMenuImage();
+                    return true;
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+            return false;
+        }
+
+        public bool CopyBackCoverFromFile(string source, bool deleteSource)
+        {
+            if (!string.IsNullOrEmpty(source))
+            {
+                try
+                {
+                    File.Copy(source, GetDefaultBackCoverName(), true);
+                    if (deleteSource) File.Delete(source);
+                    BackCoverPath = GetDefaultBackCoverName();
+
+                    return true;
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+            return false;
+        }
+
+        public string GetDefaultNoCoverName()
+        {
+            return OMLEngine.FileSystemWalker.ImageDirectory + "\\nocover.jpg";
+        }
+        
+        public string GetDefaultFrontCoverName()
+        {
+            return OMLEngine.FileSystemWalker.ImageDirectory + "\\F" + InternalItemID + ".jpg";
+        }
+
+        public string GetDefaultBackCoverName()
+        {
+            return OMLEngine.FileSystemWalker.ImageDirectory + "\\B" + InternalItemID + ".jpg";
+        }
+
+        public string GetDefaultFrontCoverMenuName()
+        {
+            return OMLEngine.FileSystemWalker.ImageDirectory + "\\MF" + InternalItemID + ".jpg";
+        }
+
+        public void BuildResizedMenuImage()
+        {
+            try
+            {
+                if ( !String.IsNullOrEmpty(FrontCoverPath) && File.Exists(FrontCoverPath) )
+                {
+                    using (Image coverArtImage = Utilities.ReadImageFromFile(FrontCoverPath))
+                    {
+                        if (coverArtImage != null)
                         {
-                            AddFanArtImage(imagefile);
+                            using (Image menuCoverArtImage = Utilities.ScaleImageByHeight(coverArtImage, 200))
+                            {
+                                string img_path = GetDefaultFrontCoverMenuName();
+                                menuCoverArtImage.Save(img_path, System.Drawing.Imaging.ImageFormat.Jpeg);
+                                FrontCoverMenuPath = img_path;
+                            }
                         }
                     }
                 }
             }
-        }
-
-        public DateTime CheckDateRange(DateTime dt)
-        {
-            if ((dt >= DateTime.Parse("1 Jan 1900")) && (dt<= DateTime.Parse("6 June 2079")))
+            catch (Exception ex)
             {
-                return dt;
+                Utilities.DebugLine("[Title.BuildResizedMenuImage] Exception: " + ex.Message);
             }
-            return DateTime.Parse("1 Jan 1900");
         }
 
-        void CleanDuplicateDisks()
+        public override string ToString()
         {
-            foreach (Disk d in new List<Disk>(this._disks))
+            return "Title:" + this._name + " (" + this._itemId + ")";
+        }
+
+        public string BasePath()
+        {
+            string folder = string.Empty;
+            if (!string.IsNullOrEmpty(FileLocation))
+                if (Directory.Exists(FileLocation))
+                    folder = FileLocation;
+                else
+                    folder = Path.GetDirectoryName(FileLocation);
+            else
             {
-                int i = _disks.IndexOf(d);
-                if (i < 0)
-                    continue;
-                while (true)
+                if (Disks.Count > 0)
                 {
-                    int oi = _disks.IndexOf(d, i + 1);
-                    if (oi < 0)
-                        break;
-                    _disks.RemoveAt(oi);
+                    if (Disks[0].Path.Length > 0)
+                        if (Directory.Exists(Disks[0].Path))
+                            folder = Disks[0].Path;
+                        else
+                            folder = Path.GetDirectoryName(Disks[0].Path);
                 }
             }
+
+            if (folder.Length > 0)
+            {
+                try
+                {
+                    if (Directory.Exists(folder))
+                    {
+                        if (folder.ToUpperInvariant().EndsWith("VIDEO_TS"))
+                            folder = Path.GetDirectoryName(folder);
+                        return folder;
+                    }
+
+                    return null;
+                }
+                catch (Exception e)
+                {
+                    Utilities.DebugLine("[Title] Error Looking for folder: {0}", e.Message);
+                }
+            }
+            return null;
         }
 
         /// <summary>
-        /// Used for serializing the title object (required for the ISerializable interface)
+        /// This returns the fanartfolder if _fanartfolder is defined. If not it will try to see
+        /// if there is a fanart folder allready in existance under the movie folder first then
+        /// the centralised folder. _fanartfolder is then set to this ready for serialisation.
+        /// 
+        /// This routine uses a primitive token to represent basepath of the movie and this is
+        /// substituted when required. This means if the movie is moved and the basepath changed,
+        /// this will return the correct fanart folder.
+        /// 
         /// </summary>
-        /// <param name="info"></param>
-        /// <param name="ctxt"></param>
-        public void GetObjectData(SerializationInfo info, StreamingContext ctxt)
+        public string BackDropFolder
         {
+            get {
+                // Is there allready a fan art folder defined
+                if (!string.IsNullOrEmpty(_fanartfolder))
+                {
+                    if (!string.IsNullOrEmpty(this.BasePath()))
+                    {
+                        // Perform token substitution.
+                        return _fanartfolder.Replace("{basepath}", this.BasePath());
+                    }
+                    else
+                    {
+                        return _fanartfolder;
+                    }
+                }
 
+                // Check for an existing fanart folder under the movie/disk folder
+                if (!string.IsNullOrEmpty(this.BasePath()))
+                {
+                    if (Directory.Exists(Path.Combine(this.BasePath(), @"FanArt")))
+                    {
+                        _fanartfolder = @"{basepath}\FanArt";
+                        return _fanartfolder.Replace("{basepath}", this.BasePath());
+                    }
+                }
+
+                // Check for an existing fanart folder under the centralised folder
+                if (!string.IsNullOrEmpty(Properties.Settings.Default.gsTitledFanArtPath))
+                {
+                    string MainFanArtDir = System.IO.Path.Combine(Properties.Settings.Default.gsTitledFanArtPath, PathSafeName);
+                    if (Directory.Exists(MainFanArtDir))
+                    {
+                        _fanartfolder = MainFanArtDir;
+                        return _fanartfolder;
+                    }
+                }
+                return null;
+
+            }
+            set { _fanartfolder = value; }
         }
-        #endregion
+
+        public string CreateFanArtFolder(string basepath)
+        {
+            if (string.IsNullOrEmpty(_fanartfolder))
+            {
+                if (Properties.Settings.Default.gbTitledFanArtFolder)
+                {
+                    // Centralised Fan Art
+                    string MainFanArtDir = Properties.Settings.Default.gsTitledFanArtPath;
+                    if (!Directory.Exists(MainFanArtDir)) Directory.CreateDirectory(MainFanArtDir);
+                    _fanartfolder = System.IO.Path.Combine(MainFanArtDir, PathSafeName);
+                }
+                else
+                {
+                    // Fan art local to movie
+                    if (string.IsNullOrEmpty(basepath))
+                    {
+                        return null;
+                    }
+                    _fanartfolder = Path.Combine(basepath, @"FanArt");
+                }
+            }
+            if (!Directory.Exists(_fanartfolder)) Directory.CreateDirectory(_fanartfolder);
+            return _fanartfolder;
+        }       
     }
 
     public class Role
@@ -2922,14 +2373,7 @@ namespace OMLEngine
 
         public override string ToString()
         {
-            if (string.IsNullOrEmpty(RoleName))
-            {
-                return PersonName;
-            }
-            else
-            {
-                return PersonName + " as " + RoleName;
-            }
+            return PersonName + " as " + RoleName;
         }
 
         public string Display

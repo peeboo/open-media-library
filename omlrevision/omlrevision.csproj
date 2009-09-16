@@ -61,7 +61,6 @@
   -->
   <PropertyGroup>
     <PostBuildEvent>$(TargetPath) &gt; $(SolutionDir)Library\Revision.txt
-$(TargetPath) &gt; $(SolutionDir)OMLDatabaseEditor\Revision.txt
-$(TargetPath) &gt; $(SolutionDir)OMLDatabaseEditor2\Revision.txt</PostBuildEvent>
+$(TargetPath) &gt; $(SolutionDir)OMLDatabaseEditor\Revision.txt</PostBuildEvent>
   </PropertyGroup>
 </Project>

@@ -15,7 +15,7 @@ namespace OMLEngine
         const string DVDDirectoryName = @"VIDEO_TS";
         const string DVDFileName = @"VIDEO_TS.IFO";
         const string DVDFileName2 = @"VIDEO_TS\VIDEO_TS.IFO";
-        const string HDDVDDirectoryName = @"HVDVD_TS";        
+        const string HDDVDDirectoryName = @"HVDVD_TS";
 
         static public bool IsBluRay(string path)
         {

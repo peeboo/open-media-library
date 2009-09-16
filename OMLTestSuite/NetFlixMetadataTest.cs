@@ -12,7 +12,7 @@ namespace OMLTestSuite
         public void TEST_LOGIN()
         {
             NetFlixDb netFlix = new NetFlixDb();
-            netFlix.Initialize("", null);
+            netFlix.Initialize(null);
         }
     }
 }

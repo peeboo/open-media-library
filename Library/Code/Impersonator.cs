@@ -7,8 +7,6 @@ using System.Security.Principal;
 using System.ComponentModel;
 using System.Security.Permissions;
 
-using OMLEngine.Settings;
-
 namespace Library
 {
     public class Impersonator
@@ -40,8 +38,8 @@ namespace Library
                 try
                 {
                     string domain = System.Environment.UserDomainName;
-                    string username = OMLSettings.ImpersonationUsername;
-                    string password = OMLSettings.ImpersonationPassword;
+                    string username = OMLEngine.Properties.Settings.Default.ImpersonationUsername;
+                    string password = OMLEngine.Properties.Settings.Default.ImpersonationPassword;
 
                     this._token = IntPtr.Zero;
                     if (!LogonUser(username, domain, password, LOGON32_LOGON_INTERACTIVE, LOGON32_PROVIDER_DEFAULT, ref this._token))

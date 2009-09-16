@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections;
 
 using OMLEngine;
 
@@ -29,44 +28,17 @@ using OMLEngine;
 
 namespace OMLSDK
 {
-
-    public enum MetadataPluginCapabilities : int
-    {
-        SupportsBackDrops = 0x0001,
-        SupportsMovieSearch = 0x0002,
-        SupportsTVSearch = 0x0004,
-    };
-
-    public class MetaDataPluginDescriptor
-    {
-        public string DataProviderName { get; set; }
-        public string DataProviderMessage { get; set; }
-        public string DataProviderLink { get; set; }
-        public MetadataPluginCapabilities DataProviderCapabilities { get; set; }
-        public IOMLMetadataPlugin PluginDLL { get; set; }
-    }
-
     public interface IOMLMetadataPlugin
     {
-        List<MetaDataPluginDescriptor> GetProviders { get; }
+        string PluginName { get; }
 
-        // Obsolete methods & Properties
-        // string PluginName { get; }
         // string MainFanArtDir { get; set; }
+
         // bool UseMainFanArtDir { set; }
-        //MetadataPluginCapabilities GetPluginCapabilities { get; }
-        //string ProviderMessage { get; }
-        //string ProviderLink { get; }
-        //void DownloadBackDropsForTitle(Title t, int index);
 
         // these 2 methods must be called in sequence
-        bool Initialize(string provider, Dictionary<string,string> parameters );
-        bool SearchForMovie( string movieName, int maxResults );
-
-
-        // TV Metadata support
-        bool SearchForTVSeries(string SeriesName, string EpisodeName, int? SeriesNo, int? EpisodeNo, int maxResults, bool SearchTVShowOnly);
-        bool SearchForTVDrillDown(int id, string EpisodeName, int? SeriesNo, int? EpisodeNo, int maxResults);
+        bool Initialize( Dictionary<string,string> parameters );
+        bool SearchForMovie( string movieName );
 
         // these methods are to be called after the 2 methods above
 
@@ -82,9 +54,9 @@ namespace OMLSDK
         List<OMLMetadataOption> GetOptions();
         bool SetOptionValue(string option, string value);
 
-        //bool SupportsBackDrops();
+        bool SupportsBackDrops();
 
-        List<string> GetBackDropUrlsForTitle();
+        void DownloadBackDropsForTitle(Title t, int index);
     }
 
     /*

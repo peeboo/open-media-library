@@ -39,23 +39,9 @@ namespace DVDProfilerMetaData
         String _imgPath = null;
         DVDProfilerSearchResult _searchResult = null;
 
-        public string PluginName { get { return "DVDProfiler (DVDProfilerMetaData)"; } }
-        
-        public List<MetaDataPluginDescriptor> GetProviders
+        public string PluginName
         {
-            get
-            {
-                List<MetaDataPluginDescriptor> descriptors = new List<MetaDataPluginDescriptor>();
-
-                MetaDataPluginDescriptor descriptor = new MetaDataPluginDescriptor();
-                descriptor.DataProviderName = PluginName;
-                descriptor.DataProviderMessage = "";
-                descriptor.DataProviderLink = "";
-                descriptor.DataProviderCapabilities = MetadataPluginCapabilities.SupportsMovieSearch;
-                descriptor.PluginDLL = null;
-                descriptors.Add(descriptor);
-                return descriptors;
-            }
+            get { return "DVDProfiler"; }
         }
 
 
@@ -73,7 +59,7 @@ namespace DVDProfilerMetaData
             set { _imgPath = value; }
         }
 
-        public bool Initialize(string provider, Dictionary<string, string> parameters)
+        public bool Initialize(Dictionary<string, string> parameters)
         {
             //AppImages += @"\DVD Profiler\Databases\Default\Images";
             _xmlFile = Properties.Settings.Default.xmlFile;
@@ -89,9 +75,9 @@ namespace DVDProfilerMetaData
             return true;
         }
 
-        public bool SearchForMovie(string movieName, int maxResults)
+        public bool SearchForMovie(string movieName)
         {
-            if (_xmlFile == null) Initialize(PluginName, null);
+            if (_xmlFile == null) Initialize(null);
             if (_xmlFile == null) return false;
 
             if (!File.Exists(_xmlFile)) return false;
@@ -172,7 +158,7 @@ namespace DVDProfilerMetaData
                         }
                         else if (CreditType == "Production")
                         {
-                            t.AddProducer(new Person(fullName));
+                            t.AddProducer(fullName);
                         }
                     }
                 }
@@ -253,20 +239,16 @@ namespace DVDProfilerMetaData
             }
         }
 
-        public List<string> GetBackDropUrlsForTitle()
+        public bool SupportsBackDrops()
         {
-            return null;
-            //throw new NotImplementedException();
+            return false;
         }
 
-        public bool SearchForTVSeries(string SeriesName, string EpisodeName, int? SeriesNo, int? EpisodeNo, int maxResults, bool SearchTVShowOnly)
+        public void DownloadBackDropsForTitle(Title t, int index)
         {
-            return false;
+            throw new NotImplementedException();
         }
-        public bool SearchForTVDrillDown(int id, string EpisodeName, int? SeasonNo, int? EpisodeNo, int maxResults)
-        {
-            return false;
-        }
+
         #endregion
     }
 

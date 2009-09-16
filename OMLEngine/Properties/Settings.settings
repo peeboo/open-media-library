@@ -2,11 +2,35 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="OMLEngine.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
+    <Setting Name="MountingToolPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:\Program Files\DAEMON Tools Lite\daemon.exe</Value>
+    </Setting>
+    <Setting Name="VirtualDiscDrive" Type="System.String" Scope="User">
+      <Value Profile="(Default)">M</Value>
+    </Setting>
+    <Setting Name="VirtualDiscDriveNumber" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
     <Setting Name="CopyImages" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
+    <Setting Name="MyMoviesServerName" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="MountingToolSelection" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">1</Value>
+    </Setting>
     <Setting Name="FoldersAreTitles" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="UseImpersonation" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="ImpersonationUsername" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="ImpersonationPassword" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
     </Setting>
     <Setting Name="AddParentFoldersToTitleName" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
@@ -15,29 +39,6 @@
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="gsTitledFanArtPath" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="OMLConnectionString" Type="(Connection string)" Scope="Application">
-      <DesignTimeValue Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
-&lt;SerializableConnectionString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
-  &lt;ConnectionString&gt;Data Source=localhost\OML;Initial Catalog=OML;Integrated Security=SSPI&lt;/ConnectionString&gt;
-  &lt;ProviderName&gt;System.Data.SqlClient&lt;/ProviderName&gt;
-&lt;/SerializableConnectionString&gt;</DesignTimeValue>
-      <Value Profile="(Default)">Data Source=localhost\OML;Initial Catalog=OML;Integrated Security=SSPI</Value>
-    </Setting>
-    <Setting Name="StartMenuCustom1" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="StartMenuCustom2" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="StartMenuCustom3" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="StartMenuCustom4" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="StartMenuCustom5" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
   </Settings>

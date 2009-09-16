@@ -101,7 +101,7 @@ namespace DVDProfilerPlugin
 
         private void HandleDvd(XPathNavigator dvdNavigator)
         {
-            Title title = LoadTitle(dvdNavigator, true);
+            Title title = LoadTitle(dvdNavigator);
             GetImagesForNewTitle(title);
             if (ValidateTitle(title))
             {
@@ -109,9 +109,10 @@ namespace DVDProfilerPlugin
                 catch (Exception e) { Trace.WriteLine("Error adding row: " + e.Message); }
             }
             else Trace.WriteLine("Error saving row");
+
         }
 
-        public Title LoadTitle(XPathNavigator dvdNavigator, bool lookForDiskInfo)
+        private Title LoadTitle(XPathNavigator dvdNavigator)
         {
             Title title = new Title();
             VideoFormat videoFormat = VideoFormat.DVD;
@@ -164,7 +165,7 @@ namespace DVDProfilerPlugin
                     case "Genres":
                         foreach (XPathNavigator genreNavigator in dvdElement.Select("Genre[. != '']"))
                         {
-                            title.AddGenre(genreNavigator.Value);
+                            title.Genres.Add(genreNavigator.Value);
                         }
                         break;
                     case "Format":
@@ -180,7 +181,7 @@ namespace DVDProfilerPlugin
                     case "Subtitles":
                         foreach (XPathNavigator subtitleNavigator in dvdElement.SelectChildren("Subtitle", string.Empty))
                         {
-                            title.AddSubtitle(subtitleNavigator.Value);
+                            title.Subtitles.Add(subtitleNavigator.Value);
                         }
                         break;
                     case "Actors":
@@ -207,9 +208,7 @@ namespace DVDProfilerPlugin
                         break;
                 }
             }
-            if (lookForDiskInfo)
-                MergeDiscInfo(title, videoFormat, discs, notes);
-
+            MergeDiscInfo(title, videoFormat, discs, notes);
             ApplyTags(title, dvdNavigator);
             return title;
         }
@@ -255,8 +254,25 @@ namespace DVDProfilerPlugin
                 string role = actorNavigator.GetAttribute("Role", string.Empty) ?? string.Empty;
                 string fullName = ReadFullName(actorNavigator);
                 if (!string.IsNullOrEmpty(fullName)) // Skip dividers
-                {                    
-                    title.AddActingRole(fullName, role);                    
+                {
+                    if (title.ActingRoles.ContainsKey(fullName))
+                    {
+                        string currentRole = title.ActingRoles[fullName];
+                        string newRole = currentRole;
+                        if (string.IsNullOrEmpty(currentRole))
+                        {
+                            newRole = role;
+                        }
+                        else if (!currentRole.Contains(role))
+                        {
+                            newRole = currentRole + "/" + role;
+                        }
+                        title.ActingRoles[fullName] = newRole;
+                    }
+                    else
+                    {
+                        title.ActingRoles.Add(fullName, role);
+                    }
                 }
             }
         }
@@ -264,6 +280,7 @@ namespace DVDProfilerPlugin
         // Collection/DVD/Credits/*
         private void HandleCredits(Title title, XPathNavigator creditsNavigator)
         {
+            List<string> directorsAlreadyAdded = new List<string>();
             List<string> writersAlreadyAdded = new List<string>();
             List<string> producersAlreadyAdded = new List<string>();
 
@@ -273,14 +290,26 @@ namespace DVDProfilerPlugin
                 Person person = new Person(ReadFullName(creditNavigator));
                 switch (creditType)
                 {
-                    case "Direction":                        
-                        title.AddDirector(person);                                                    
+                    case "Direction":
+                        if (!directorsAlreadyAdded.Contains(person.full_name.ToUpperInvariant()))
+                        {
+                            title.Directors.Add(person);
+                            directorsAlreadyAdded.Add(person.full_name.ToUpperInvariant());
+                        }
                         break;
                     case "Writing":
-                        title.AddWriter(person);                        
+                        if (!writersAlreadyAdded.Contains(person.full_name.ToUpperInvariant()))
+                        {
+                            title.Writers.Add(person);
+                            writersAlreadyAdded.Add(person.full_name.ToUpperInvariant());
+                        }
                         break;
                     case "Production":
-                        title.AddProducer(person);                        
+                        if (!producersAlreadyAdded.Contains(person.full_name.ToUpperInvariant()))
+                        {
+                            title.Producers.Add(person.full_name);
+                            producersAlreadyAdded.Add(person.full_name.ToUpperInvariant());
+                        }
                         break;
                 }
             }
@@ -311,7 +340,7 @@ namespace DVDProfilerPlugin
                 if (string.IsNullOrEmpty(content)) content = format;
                 else if (!string.IsNullOrEmpty(format)) content += " (" + format + ")";
 
-                if (!string.IsNullOrEmpty(content)) title.AddAudioTrack(content);
+                if (!string.IsNullOrEmpty(content)) title.AudioTracks.Add(content);
             }
         }
 
@@ -460,7 +489,7 @@ namespace DVDProfilerPlugin
                     }
                 }
 
-                title.AddDisk(new Disk(description, path, discVideoFormat));
+                title.Disks.Add(new Disk(description, path, discVideoFormat));
                 lastDiskNumber++;
             }
         }
@@ -470,8 +499,8 @@ namespace DVDProfilerPlugin
             foreach (TagDefinition tagDefinition in tagDefinitions)
             {
                 bool match = dvdNavigator.SelectSingleNode(tagDefinition.XPath) != null;
-                if (match && !string.IsNullOrEmpty(tagDefinition.Name)) title.AddTag(tagDefinition.Name);
-                if (!match && !string.IsNullOrEmpty(tagDefinition.ExcludedName)) title.AddTag(tagDefinition.ExcludedName);
+                if (match && !string.IsNullOrEmpty(tagDefinition.Name)) title.Tags.Add(tagDefinition.Name);
+                if (!match && !string.IsNullOrEmpty(tagDefinition.ExcludedName)) title.Tags.Add(tagDefinition.ExcludedName);
             }
         }
 
@@ -491,7 +520,7 @@ namespace DVDProfilerPlugin
             return defaultFormat;
         }
 
-        public void GetImagesForNewTitle(Title newTitle)
+        private void GetImagesForNewTitle(Title newTitle)
         {
             string id = newTitle.MetadataSourceID;
             if (!string.IsNullOrEmpty(id))

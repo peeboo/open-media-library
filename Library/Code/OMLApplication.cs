@@ -1,6 +1,5 @@
 //#define DEBUG_EXT
 //#define LAYOUT_V2
-#define LAYOUT_V3
 //#define CAROUSEL
 
 using System.Collections;
@@ -12,142 +11,79 @@ using Microsoft.MediaCenter.UI;
 using System.IO;
 using System.Reflection;
 using System.Threading;
+using System.Timers;
 
 using OMLEngine;
-using OMLEngine.Settings;
 using System;
 
 namespace Library
 {
-    public class TitleEventArgs : EventArgs
-    {
-        public TitleEventArgs(OMLEngine.Title title)
-        {
-            this.Title = title;
-        }
-        public OMLEngine.Title Title;
-    }
-
-    public delegate void DeleteTitleEventHandler(object sender, TitleEventArgs e);
-    public delegate void UnwatchedTitleEventHandler(object sender, TitleEventArgs e);
     /// <summary>
     /// Starting point for the OML
     /// </summary>
-    public class OMLApplication : BaseModelItem
+    public class OMLApplication : ModelItem
     {
-        public event DeleteTitleEventHandler TitleDeleted;
-        public event UnwatchedTitleEventHandler TitleWatched;
-
-        public ParentalControlManager parentalControlManager;
         private bool isBusy = false;
         private bool isStartingTranscodingJob = false;
         private string transcodeStatus = string.Empty;
+        private int currentFocusedItemIndex = 0;
+        private int currentItemIndexPosition = 0;
+        private int currentAngleDegrees;
         private Image primaryBackgroundImage;
         private int iCurrentBackgroundImage = 0;
         private int iTotalBackgroundImages = 0;
-        public Microsoft.MediaCenter.UI.Timer mainBackgroundTimer;
-        //v3 temp
-        private Library.Code.V3.MoreInfoHooker2 hooker;
-        private Library.Code.V3.IsMouseActiveHooker mouseActiveHooker;
-
-        //v3 temp
-        private MoviePlayerFactory _factory;
-        public MoviePlayerFactory PlaybackFactory
-        {
-            get
-            {
-                if (this._factory == null)
-                    this._factory = new MoviePlayerFactory();
-                return this._factory;
-            }
-        }
-
-        public bool ParentalControlsActive
-        {
-            get {
-                return parentalControlManager.Enabled;
-            }
-        }
-
-        public void FixRepeatRate(object scroller, uint val)
-        {
-            PropertyInfo pi = scroller.GetType().GetProperty("View", BindingFlags.Public | BindingFlags.Instance);
-            object view = pi.GetValue(scroller, null);
-            pi = view.GetType().GetProperty("Control", BindingFlags.Public | BindingFlags.Instance);
-            object control = pi.GetValue(view, null);
-
-            pi = control.GetType().GetProperty("KeyRepeatThreshold", BindingFlags.NonPublic | BindingFlags.Instance);
-            pi.SetValue(control, val, null);
-
-        }
+        public System.Timers.Timer mainBackgroundTimer;
 
         private void SetPrimaryBackgroundImage()
         {
-            this.primaryBackgroundImageAlpha = Properties.Settings.Default.MainPageBackDropAlpha;
-            if (Properties.Settings.Default.EnableMainPageBackDrop)
+            if (!string.IsNullOrEmpty(Properties.Settings.Default.MainPageBackDropFile))
             {
-                if (!string.IsNullOrEmpty(Properties.Settings.Default.MainPageBackDropFile))
+                if (primaryBackgroundImage == null)
                 {
-                    if (primaryBackgroundImage == null)
+                    string lockedFileName = Properties.Settings.Default.MainPageBackDropFile;
+                    if (File.Exists(Path.Combine(FileSystemWalker.MainBackDropDirectory, lockedFileName)))
                     {
-                        string lockedFileName = Properties.Settings.Default.MainPageBackDropFile;
-                        if (File.Exists(Path.Combine(FileSystemWalker.MainBackDropDirectory, lockedFileName)))
-                        {
-                            primaryBackgroundImage = new Image(
-                                string.Format("file://{0}", Path.Combine(FileSystemWalker.MainBackDropDirectory, lockedFileName))
-                            );
-                            return;
-                        }
+                        primaryBackgroundImage = new Image(
+                            string.Format("file://{0}", Path.Combine(FileSystemWalker.MainBackDropDirectory, lockedFileName))
+                        );
+                        return;
                     }
                 }
+            }
 
-                // a specific file is NOT set for the main backdrop, lets see how many we find.
-                DirectoryInfo dirInfo = new DirectoryInfo(FileSystemWalker.MainBackDropDirectory);
-                FileInfo[] files = dirInfo.GetFiles("*.jpg", SearchOption.TopDirectoryOnly);
-                iTotalBackgroundImages = files.Length;
-                if (iTotalBackgroundImages > 0)
+            // a specific file is NOT set for the main backdrop, lets see how many we find.
+            DirectoryInfo dirInfo = new DirectoryInfo(FileSystemWalker.MainBackDropDirectory);
+            FileInfo[] files = dirInfo.GetFiles("*.jpg", SearchOption.TopDirectoryOnly);
+            iTotalBackgroundImages = files.Length;
+            if (iTotalBackgroundImages > 0)
+            {
+                if (iCurrentBackgroundImage >= iTotalBackgroundImages)
+                    iCurrentBackgroundImage = 0;
+
+                PrimaryBackgroundImage = new Image(string.Format("file://{0}",
+                        Path.Combine(FileSystemWalker.MainBackDropDirectory,
+                        files[iCurrentBackgroundImage].FullName)));
+                iCurrentBackgroundImage++;
+                if (mainBackgroundTimer == null)
                 {
-                    if (iCurrentBackgroundImage >= iTotalBackgroundImages)
-                        iCurrentBackgroundImage = 0;
-
-                    PrimaryBackgroundImage = new Image(string.Format("file://{0}",
-                            Path.Combine(FileSystemWalker.MainBackDropDirectory,
-                            files[iCurrentBackgroundImage].FullName)));
-                    iCurrentBackgroundImage++;
-                    if (mainBackgroundTimer == null && iTotalBackgroundImages>1)
-                    {
-                        mainBackgroundTimer = new Microsoft.MediaCenter.UI.Timer();
-                        mainBackgroundTimer.AutoRepeat = true;
-                        mainBackgroundTimer.Tick += new EventHandler(mainBackgroundTimer_Tick);
-                        int rotationInSeconds = Properties.Settings.Default.MainPageBackDropRotationInSeconds;
-                        int rotationInMilliseconds = rotationInSeconds * 1000;
-                        mainBackgroundTimer.Interval = rotationInMilliseconds;
-                        mainBackgroundTimer.Enabled = true;
-                        mainBackgroundTimer.Start();
-                    }
-
-                    return;
+                    mainBackgroundTimer = new System.Timers.Timer();
+                    mainBackgroundTimer.AutoReset = true;
+                    mainBackgroundTimer.Elapsed += new ElapsedEventHandler(mainBackgroundTimer_Elapsed);
+                    int rotationInSeconds = Properties.Settings.Default.MainPageBackDropRotationInSeconds;
+                    double rotationInMilliseconds = rotationInSeconds * 1000;
+                    mainBackgroundTimer.Interval = rotationInMilliseconds;
+                    mainBackgroundTimer.Enabled = true;
+                    mainBackgroundTimer.Start();
+                    GC.KeepAlive(mainBackgroundTimer);
                 }
+
+                return;
             }
         }
 
-        void mainBackgroundTimer_Tick(object sender, EventArgs e)
+        void mainBackgroundTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
             SetPrimaryBackgroundImage();
-        }
-
-        private float primaryBackgroundImageAlpha = 1;
-        public float PrimaryBackgroundImageAlpha
-        {
-            get { return primaryBackgroundImageAlpha; }
-            set
-            {
-                if (this.primaryBackgroundImageAlpha != value)
-                {
-                    this.primaryBackgroundImageAlpha = value;
-                    FirePropertyChanged("PrimaryBackgroundImageAlpha");
-                }
-            }
         }
 
         public Image PrimaryBackgroundImage
@@ -181,6 +117,41 @@ namespace Library
             }
         }
 
+        public int DistanceToMoveCloserBasedOnAngleOrRotation
+        {
+            get
+            {
+                int originalHeight = Properties.Settings.Default.CarouselItemWidth;
+                double newWidth = originalHeight * Math.Cos(Convert.ToDouble(currentAngleDegrees));
+                int distanceToMove = originalHeight - Convert.ToInt32(newWidth);
+
+                return distanceToMove;
+            }
+        }
+
+        public Inset MoveToInset
+        {
+            get { return new Inset(0, 0, DistanceToMoveCloserBasedOnAngleOrRotation, 0); }
+        }
+
+        public int CurrentAngleDegrees
+        {
+            get { return currentAngleDegrees; }
+            set { currentAngleDegrees = value; }
+        }
+
+        public int CurrentFocusedItemIndex
+        {
+            get { return currentFocusedItemIndex; }
+            set { currentFocusedItemIndex = value; }
+        }
+
+        public int CurrentItemIndexPosition
+        {
+            get { return currentItemIndexPosition; }
+            set { currentItemIndexPosition = value; }
+        }
+
         public string TranscodeStatus
         {
             get { return transcodeStatus; }
@@ -211,16 +182,9 @@ namespace Library
             }
         }
 
-        static public bool IsWindows7
+        public TitleCollection Titles
         {
-            get
-            {
-                return Properties.Settings.Default.IsWindows7;
-            }
-            set{
-                Properties.Settings.Default.IsWindows7 = value;
-                Properties.Settings.Default.Save();
-            }
+            get { return _titles; }
         }
 
         public OMLApplication()
@@ -239,33 +203,10 @@ namespace Library
             }
         }
 
-
-        private Library.Code.V3.MediaChangeManager mediaChangers;
-        public Library.Code.V3.MediaChangeManager MediaChangers
-        {
-            get
-            { 
-                if(this.mediaChangers==null)
-                    this.mediaChangers = new Library.Code.V3.MediaChangeManager();
-                return this.mediaChangers; 
-            }
-        }
-
         public OMLApplication(HistoryOrientedPageSession session, AddInHost host)
         {
-            #if LAYOUT_V3
-            //sets up the hooks for context menu
-            this.hooker = new Library.Code.V3.MoreInfoHooker2();
-            this.mouseActiveHooker = new Library.Code.V3.IsMouseActiveHooker();
-            this.mouseActiveHooker.MouseActive += new Library.Code.V3.IsMouseActiveHooker.MouseActiveHandler(mouseActiveHooker_MouseActive);
-            #endif
-
-            this.parentalControlManager = new ParentalControlManager();
             this._session = session;
             AddInHost.Current.MediaCenterEnvironment.PropertyChanged +=new PropertyChangedEventHandler(MediaCenterEnvironment_PropertyChanged);
-            
-            //I know its a factory
-            //this._factory = new MoviePlayerFactory();
 
             try { // borrowed from vmcNetFlix project on google-code
                 bool isConsole = false;
@@ -302,28 +243,11 @@ namespace Library
             this._host = host;
             _singleApplicationInstance = this;
             I18n.InitializeResourceManager();
-            string uiCulture = OMLSettings.UILanguage;
+            string uiCulture = Properties.Settings.Default.UILanguage;
             if (!string.IsNullOrEmpty(uiCulture)) I18n.SetCulture(new CultureInfo(uiCulture));
+            _titles = new TitleCollection();
+            _titles.loadTitleCollection();
             _nowPlayingMovieName = "Playing an unknown movie";
-        }
-
-        private Boolean isMouseActive = false;
-        public Boolean IsMouseActive
-        {
-            get { return isMouseActive; }
-            set
-            {
-                if (isMouseActive != value)
-                {
-                    isMouseActive = value;
-                    FirePropertyChanged("IsMouseActive");
-                }
-            }
-        }
-
-        void mouseActiveHooker_MouseActive(Library.Code.V3.IsMouseActiveHooker m, Library.Code.V3.MouseActiveEventArgs e)
-        {
-            this.IsMouseActive = e.MouseActive;
         }
 
         void MediaExperience_PropertyChanged(IPropertyObject sender, string property)
@@ -333,315 +257,81 @@ namespace Library
 
         // this is the context from the Media Center menu
         public void Startup(string context)
-        {            
-            OMLApplication.DebugLine("[OMLApplication] Startup({0}) {1}", context, IsExtender ? "Extender" : "Native");
-            // DISABLE THIS UNTIL ITS READY -- DJShultz 01/13/2009
-
-            if (!IsExtender) {
-                OperatingSystem os = Environment.OSVersion;
-                if (os.Version.Major >= 6 && os.Version.Minor >= 1)
-                    Properties.Settings.Default.IsWindows7 = true;
-                else
-                    Properties.Settings.Default.IsWindows7 = false;
-
-                Properties.Settings.Default.Save();
-            }
-            //should we update?
-            if (OMLSettings.EnableAutomaticUpdates)
-            {
-                bool enableBetaUpdates = OMLSettings.EnableAutomaticUpdatesDailyBuilds;
-                OMLUpdater updater = new OMLUpdater();
-                ThreadPool.QueueUserWorkItem(new WaitCallback(updater.checkUpdate), enableBetaUpdates);
-            }
-
-#if LAYOUT_V3
-
-            #region v3POC
-
-            SetPrimaryBackgroundImage();
-
-            switch (context)
-            {
-                case "Settings":
-                    {
-                        Dictionary<string, object> properties = new Dictionary<string, object>();
-
-                        Library.Code.V3.SettingsManager page = new Library.Code.V3.SettingsManager();
-                        properties["Page"] = page;
-                        properties["Application"] = OMLApplication.Current;
-
-                        OMLApplication.Current.Session.GoToPage("resx://Library/Library.Resources/V3_Settings_SettingsManager", properties);
-                        return;
-                    }
-                case "Search":
-                    {
-                        Dictionary<string, object> properties = new Dictionary<string, object>();
-
-                        Library.Code.V3.MoviesSearchPage page = new Library.Code.V3.MoviesSearchPage();
-                        properties["Page"] = page;
-                        properties["Application"] = OMLApplication.Current;
-
-                        OMLApplication.Current.Session.GoToPage("resx://Library/Library.Resources/V3_MoviesSearchPage", properties);
-                        return;
-                    }
-                case "Trailers":
-                    {
-                        OMLProperties properties = new OMLProperties();
-                        properties.Add("Application", this);
-                        properties.Add("I18n", I18n.Instance);
-                        Library.Code.V3.TrailerPage gallery = new Library.Code.V3.TrailerPage("trailers");
-                        Command CommandContextPopOverlay = new Command();
-                        properties.Add("CommandContextPopOverlay", CommandContextPopOverlay);
-                        properties.Add("Page", gallery);
-                        _session.GoToPage(@"resx://Library/Library.Resources/V3_GalleryPage", properties);
-                        return;
-                    }
-                case "Custom1":
-                    {
-                        UserFilter filt = new UserFilter(OMLEngine.Properties.Settings.Default.StartMenuCustom1);
-                        this.GoHome(filt.Filters, filt.Name);
-                        return;
-                    }
-                case "Custom2":
-                    {
-                        UserFilter filt = new UserFilter(OMLEngine.Properties.Settings.Default.StartMenuCustom1);
-                        this.GoHome(filt.Filters, filt.Name);
-                        return;
-                    }
-                case "Custom3":
-                    {
-                        UserFilter filt = new UserFilter(OMLEngine.Properties.Settings.Default.StartMenuCustom1);
-                        this.GoHome(filt.Filters, filt.Name);
-                        return;
-                    }
-                case "Custom4":
-                    {
-                        UserFilter filt = new UserFilter(OMLEngine.Properties.Settings.Default.StartMenuCustom1);
-                        this.GoHome(filt.Filters, filt.Name);
-                        return;
-                    }
-                case "Custom5":
-                    {
-                        UserFilter filt = new UserFilter(OMLEngine.Properties.Settings.Default.StartMenuCustom1);
-                        this.GoHome(filt.Filters, filt.Name);
-                        return;
-                    }
-                case "FirstRun":
-                    {
-                        Dictionary<string, object> properties = new Dictionary<string, object>();
-
-                        Library.Code.V3.FirstRun page = new Library.Code.V3.FirstRun();
-                        properties["Page"] = page;
-
-                        OMLApplication.Current.Session.GoToPage("resx://Library/Library.Resources/V3_FirstRunBackground", properties);
-                        return;
-                    }
-                case "TV":
-                    {
-                        this.GoHome(new List<OMLEngine.TitleFilter>(), "TV");
-                        return;
-                    }
-                case "Movies":
-                    {
-                        this.GoHome(new List<OMLEngine.TitleFilter>(), "Movies");
-                        return;
-                    }
-                default:
-                    {
-                        ////everything else for now
-                        //OMLProperties properties = new OMLProperties();
-                        //properties.Add("Application", this);
-                        ////properties.Add("UISettings", new UISettings());
-                        ////properties.Add("Settings", new Settings());
-                        //properties.Add("I18n", I18n.Instance);
-                        ////v3 main gallery
-                        //Library.Code.V3.GalleryPage gallery = new Library.Code.V3.GalleryPage(new List<OMLEngine.TitleFilter>(), "OML");
-                        ////description
-                        //gallery.Description = "OML";
-                        //Command CommandContextPopOverlay = new Command();
-                        //properties.Add("CommandContextPopOverlay", CommandContextPopOverlay);
-                        //properties.Add("Page", gallery);
-                        //_session.GoToPage(@"resx://Library/Library.Resources/V3_GalleryPage", properties);
-                        ////this.mediaChangers = new Library.Code.V3.MediaChangeManager();
-                        if (Properties.Settings.Default.CompletedFirstRun == false)
-                        {
-                            Dictionary<string, object> properties = new Dictionary<string, object>();
-
-                            Library.Code.V3.FirstRun page = new Library.Code.V3.FirstRun();
-                            properties["Page"] = page;
-
-                            OMLApplication.Current.Session.GoToPage("resx://Library/Library.Resources/V3_FirstRunBackground", properties);
-                        }
-                        else
-                            this.GoHome(new List<OMLEngine.TitleFilter>(), "OML");
-                        return;
-                    }
-            }
-            #endregion v3POC
-            //return;
-#endif
-
-        }
-
-        private void GoHome(List<OMLEngine.TitleFilter> filters, string name)
         {
+            OMLApplication.DebugLine("[OMLApplication] Startup({0}) {1}", context, IsExtender ? "Extender" : "Native");
+#if CAROUSEL
+            _session.GoToPage(@"resx://Library/Library.Resources/Trailers");
+            return;
+#endif
+#if LAYOUT_V2
             OMLProperties properties = new OMLProperties();
             properties.Add("Application", this);
+            properties.Add("UISettings", new UISettings());
+            properties.Add("Settings", new Settings());
             properties.Add("I18n", I18n.Instance);
-            //v3 main gallery
-            Library.Code.V3.GalleryPage gallery = new Library.Code.V3.GalleryPage(filters, name);
-            //description
-            gallery.Description = name;
-            Command CommandContextPopOverlay = new Command();
-            properties.Add("CommandContextPopOverlay", CommandContextPopOverlay);
-            properties.Add("Page", gallery);
-            _session.GoToPage(@"resx://Library/Library.Resources/V3_GalleryPage", properties);
-        }
+            properties.Add("Gallery", new GalleryV2(properties, _titles));
+            //properties.Add("Gallery", new BaseGallery(properties, _titles));
+            _session.GoToPage(@"resx://Library/Library.Resources/NewMenu", properties);
+            return;
+#endif
 
-        public void GoToSettings_AboutPage()
-        {
-            DebugLine("[OMLApplication] GoToSettings_AboutPage()");
-            if (_session != null)
+            // DISABLE THIS UNTIL ITS READY -- DJShultz 01/13/2009
+            //OMLUpdater updater = new OMLUpdater();
+            //ThreadPool.QueueUserWorkItem(new WaitCallback(updater.checkUpdate));
+
+            //TheMovieDbBackDropDownloader downloader = new TheMovieDbBackDropDownloader();
+            //foreach (Title t in Titles)
+            //{
+            //    downloader.SearchForTitle(t);
+            //}
+            SetPrimaryBackgroundImage();
+            switch (context)
             {
-                Dictionary<string, object> properties = new Dictionary<string, object>();
-                properties["Application"] = this;
-
-                _session.GoToPage("resx://Library/Library.Resources/Settings_About", properties);
-            }
-        }
-
-        public void CatchMoreInfo()
-        {
-            if (this._moreInfo == true)
-                this._moreInfo = false;
-            else
-                this._moreInfo = true;
-            base.FirePropertyChanged("MoreInfo");
-        }
-
-        public bool _reallydeleteFile(string path, out string status)
-        {
-            status = string.Empty;
-            return false;
-        }
-
-        private bool _reallydeleteFolder(string path, out string status)
-        {
-            status = string.Empty;
-            return false;
-        }
-
-        public string deleteDisk(Disk d)
-        {
-            string status = string.Empty;
-            if (File.Exists(d.Path))
-                _reallydeleteFile(d.Path, out status);
-
-            if (Directory.Exists(d.Path))
-                _reallydeleteFolder(d.Path, out status);
-
-            return status;
-        }
-
-        public void DeleteTitle(Library.Code.V3.MovieItem item)
-        {
-            foreach (Disk d in item.TitleObject.Disks)
-            {
-                string status = deleteDisk(d);
-                if (!string.IsNullOrEmpty(status))
-                {
-                    this.MediaCenterEnvironment.Dialog(
-                        string.Format("Unable to delete this movie: {0}", status),
-                        "Failed", DialogButtons.Ok, 5, false);
+                case "Menu":
+                    // we want the movie library - check the startup page
+                    if (Properties.Settings.Default.StartPage == Filter.Home)
+                    {
+                        OMLApplication.DebugLine("[OMLApplication] going to Menu Page");
+                        GoToMenu(new MovieGallery(_titles, Filter.Home));
+                    }
+                    else
+                    {
+                        // see if they've selected a subfilter
+                        if (!string.IsNullOrEmpty(Properties.Settings.Default.StartPageSubFilter))
+                        {
+                            GoToSelectionList(new MovieGallery(_titles, Filter.Home), 
+                                                Properties.Settings.Default.StartPage,
+                                                Properties.Settings.Default.StartPageSubFilter);
+                        }
+                        else
+                        {                                              
+                            // assume it's a filter page (Genre, Actor, etc)
+                            GoToSelectionList(new MovieGallery(_titles, Filter.Home), Properties.Settings.Default.StartPage);
+                        }
+                    }
                     return;
-                }
-                else
-                {
-                    TitleCollectionManager.DeleteTitle(item.TitleObject);
-                }
-            }
-        }
-
-        protected virtual void OnTitleDeleted(TitleEventArgs e)
-        {
-            if (TitleDeleted != null)
-                TitleDeleted(this, e);
-        }
-
-        public void DeleteTitle(Library.MovieItem item)
-        {
-            foreach (Disk d in item.TitleObject.Disks)
-            {
-                string status = deleteDisk(d);
-                if (!string.IsNullOrEmpty(status))
-                {
-                    this.MediaCenterEnvironment.Dialog(
-                        string.Format("Unable to delete this movie: {0}", status),
-                        "Failed", DialogButtons.Ok, 5, false);
+                case "Settings":
+                    OMLApplication.DebugLine("[OMLApplication] going to Settings Page");
+                    GoToSettingsPage(new MovieGallery(_titles, Filter.Settings));
                     return;
-                }
-                else
-                {
-                    TitleCollectionManager.DeleteTitle(item.TitleObject);
-                }
-            }
-        }
-
-        public void DeleteTitle(OMLEngine.Title item)
-        {
-            foreach (Disk d in item.Disks)
-            {
-                string status = deleteDisk(d);
-                if (!string.IsNullOrEmpty(status))
-                {
-                    this.MediaCenterEnvironment.Dialog(
-                        string.Format("Unable to delete this movie: {0}", status),
-                        "Failed", DialogButtons.Ok, 5, false);
+                case "Trailers":
+                    OMLApplication.DebugLine("[OMLApplication] going to Trailers Page");
+                    GoToTrailersPage();
                     return;
-                }
-                else
-                {
-                    TitleCollectionManager.DeleteTitle(item);
-                }
+                case "About":
+                    OMLApplication.DebugLine("[OMLApplication] going to About Page");
+                    GoToAboutPage(new MovieGallery(_titles, Filter.About));
+                    return;
+                default:
+                    OMLApplication.DebugLine("[OMLApplication] going to Default (Menu) Page");
+                    GoToMenu(new MovieGallery(_titles, Filter.Home));
+                    return;
             }
-            TitleEventArgs t = new TitleEventArgs(item);
-            this.OnTitleDeleted(t);
-        }
-
-        public void WatchTitle(OMLEngine.Title item)
-        {
-            TitleEventArgs t = new TitleEventArgs(item);
-            this.OnTitleWatched(t);
-        }
-
-        protected virtual void OnTitleWatched(TitleEventArgs e)
-        {
-            if (this.TitleWatched != null)
-                this.TitleWatched(this, e);
-        }
-
-        private bool _moreInfo = false;
-        public bool MoreInfo
-        {
-            get { return this._moreInfo; }
-            set { this._moreInfo = value; }
         }
 
         public void Uninitialize()
         {
-            try
-            {
-                ExtenderDVDPlayer.Uninitialize();
-            }
-            catch (Exception err)
-            {
-                DebugLine("Unhandled Exception: {0}", err);
-            }
-            finally
-            {
-                // close the db connections
-                TitleCollectionManager.CloseDBConnection();                
-            }            
+            ExtenderDVDPlayer.Uninitialize(_titles);
         }
 
         public static OMLApplication Current
@@ -660,6 +350,150 @@ namespace Library
             {
                 if (_host == null) return null;
                 return _host.MediaCenterEnvironment;
+            }
+        }
+
+        public void GoToSetup(MovieGallery gallery)
+        {
+            DebugLine("[OMLApplication] GoToSetup()");
+            if (_session != null)
+            {
+                _session.GoToPage("resx://Library/Library.Resources/Setup", CreateProperties(true, false, gallery));
+            }
+        }
+
+        public void GoToSettingsPage(MovieGallery gallery)
+        {
+            DebugLine("[OMLApplication] GoToSettingsPage()");
+            if (_session != null)
+            {
+                _session.GoToPage("resx://Library/Library.Resources/Settings", CreateProperties(true, true, gallery));
+            }
+        }
+
+        public void GoToTrailersPage()
+        {
+            DebugLine("[OMLApplication] GoToTrailersPage()");
+            if (_session != null)
+            {
+                _session.GoToPage("resx://Library/Library.Resources/Trailers", CreateProperties(true, true, null));
+            }
+        }
+
+        public void GoToAboutPage(MovieGallery gallery)
+        {
+            DebugLine("[OMLApplication] GotoAboutPage()");
+            if (_session != null)
+                _session.GoToPage("resx://Library/Library.Resources/About", CreateProperties(true, false, gallery));
+        }
+
+        public void GoToMenu(MovieGallery gallery)
+        {
+            DebugLine("[OMLApplication] GoToMenu(Gallery, #{0} Movies)", gallery.Movies.Count);
+            Dictionary<string, object> properties = CreateProperties(true, false, gallery);
+
+            if (Properties.Settings.Default.MovieView == GalleryView.CoverArtWithAlpha &&
+                gallery.Movies.Count < 30)
+            {
+                // alpha falls back to cover art view if there's not enough items
+                properties["GalleryView"] = GalleryView.CoverArt;
+            }
+            else
+            {
+                properties["GalleryView"] = Properties.Settings.Default.MovieView;
+            }
+
+            if (_session != null)
+            {
+                _session.GoToPage("resx://Library/Library.Resources/Menu", properties);
+            }
+            //IsBusy = true; why do this?
+        }
+
+        public void GoToSelectionList(MovieGallery gallery, string filterName)
+        {
+            GoToSelectionList(gallery, filterName, null);
+        }        
+        
+        public void GoToSelectionList(MovieGallery gallery, string filterName, string subFilter)
+        {
+            Filter filter = null;
+
+            // if the filter doesn't exist we'll need to create it            
+            // todo : solomon : i'm only going to do this for the perticipant filter now 
+            // but it should be considered for everything
+            if (!gallery.Filters.TryGetValue(filterName, out filter))
+            {
+                filter = gallery.CreateFilter(filterName);
+            }
+
+            // if there's only one item in the subfilter - just go there
+            // the ALL filter is always first so ignore that
+            if (filter != null && filter.Items.Count <= 2 && filter.Items.Count > 0)
+                subFilter = filter.Items[filter.Items.Count - 1].Name;
+
+            // see if we're a top level filter
+            if (string.IsNullOrEmpty(subFilter) &&
+                filter != null )
+            {                                
+                string listName = gallery.Title + " > " + filter.Name;
+                IList list = filter.Items;
+                string galleryView = filter.GalleryView;
+
+                // reset the index
+                gallery.FocusIndex.Value = 0;
+
+                DebugLine("[OMLApplication] GoToSelectionList(#{0} items, list name: {1}, gallery: {2})", list.Count, listName, galleryView);
+                Dictionary<string, object> properties = CreateProperties(true, false, gallery);
+                properties["MovieBrowser"] = gallery;
+                properties["List"] = list;
+                properties["ListName"] = listName;
+                properties["GalleryView"] = galleryView;
+
+                if (_session != null)
+                {
+                    _session.GoToPage("resx://Library/Library.Resources/SelectionList", properties);
+                }
+            }
+            else  if (filter != null &&
+                !string.IsNullOrEmpty(subFilter))
+            {                                                
+                GoToMenu(filter.CreateGallery(subFilter));
+            }                        
+            else
+            {
+                OMLApplication.DebugLine("[OMLApplication] GoToSelectionList - filter {0} not found - going to Menu Page", filterName);
+                GoToMenu(new MovieGallery(_titles, Filter.Home));
+            }
+        }
+
+        public void GoToDetails(MovieDetailsPage page)
+        {
+            DebugLine("[OMLApplication] GoToDetails({0})", page);
+            if (page == null)
+                throw new System.Exception("The method or operation is not implemented.");
+
+            //
+            // Construct the arguments dictionary and then navigate to the
+            // details page template.
+            //
+            Dictionary<string, object> properties = CreateProperties(true, false, null);
+            properties["DetailsPage"] = page;
+
+            // If we have no page session, just spit out a trace statement.
+            if (_session != null)
+            {
+                switch (Properties.Settings.Default.DetailsView)
+                {
+                    case "Background Boxes":
+                        _session.GoToPage("resx://Library/Library.Resources/DetailsPage_Boxes", properties);
+                        break;
+
+                    case "Original":
+                    default:
+                        _session.GoToPage("resx://Library/Library.Resources/DetailsPage", properties);
+                        break;
+                }                
             }
         }
 
@@ -705,6 +539,18 @@ namespace Library
             get { return NowPlayingStatus.ToString() + ": " + NowPlayingMovieName; }
         }
 
+        public TitleCollection ReloadTitleCollection()
+        {
+            DebugLine("[OMLApplication] ReloadTitleCollection()");
+            _titles.loadTitleCollection();
+            return _titles;
+        }
+
+        public void SaveTitles()
+        {
+            _titles.saveTitleCollection();
+        }
+
         public static void ExecuteSafe(Action action)
         {
             try
@@ -721,6 +567,20 @@ namespace Library
             }
         }
 
+        private Dictionary<string, object> CreateProperties(bool uiSettings, bool settings, MovieGallery gallery)
+        {
+            Dictionary<string, object> properties = new Dictionary<string, object>();
+            properties["Application"] = this;
+            properties["I18n"] = I18n.Instance;
+            if (uiSettings)
+                properties["UISettings"] = new UISettings();
+            if (settings)
+                properties["Settings"] = new Settings();
+            if (gallery != null)
+                properties["MovieBrowser"] = gallery;
+            return properties;
+        }
+
         static public void MediaCenterEnvironment_PropertyChanged(IPropertyObject sender, string property)
         {
             DebugLine("[OMLApplication] Property {0} changed on the MediaCenterEnvironment", property);
@@ -730,15 +590,6 @@ namespace Library
         {
             DebugLine("[OMLApplication] Property {0} changed on the AddInHost", property);
         }
-
-        public static string AssemblyName
-        {
-            get
-            {
-                //gotta format it this way
-                return string.Format("Library.MyAddIn, Library,Culture=Neutral,Version={0},PublicKeyToken=74d3b407d6cf16f1", Assembly.GetExecutingAssembly().GetName().Version.ToString());
-            }
-        }
         // private data
         private string _nowPlayingMovieName;
         private PlayState _nowPlayingStatus;
@@ -746,6 +597,7 @@ namespace Library
         private static OMLApplication _singleApplicationInstance;
         private AddInHost _host;
         private HistoryOrientedPageSession _session;
+        private TitleCollection _titles;
 
         private bool _isExtender;
     }

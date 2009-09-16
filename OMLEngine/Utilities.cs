@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text;
 using System.IO;
 using System.Diagnostics;
 using System.Data;
@@ -13,7 +12,6 @@ using System.Drawing.Drawing2D;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
 using System.ComponentModel;
-using OMLEngine.Settings;
 
 namespace OMLEngine
 {
@@ -36,7 +34,62 @@ namespace OMLEngine
         MyMovies,
         DVDProfiler,
         MovieCollectorz
-    };   
+    };
+
+    /// <summary>
+    /// Enumerator for Video Fromats
+    /// </summary>
+    public enum VideoFormat
+    {
+        // DO NOT MODIFY ORDER, INSERT IN THE MIDDLE, OR REMOVE ENTRIES, JUST ADD TO THE END!
+        // All items in this list MUST be uppercase
+
+        ASF, // WMV style
+        AVC, // AVC H264
+        AVI, // DivX, Xvid, etc
+        B5T, // BlindWrite image
+        B6T, // BlindWrite image
+        BIN, // using an image loader lib and load/play this as a DVD
+        BLURAY, // detect which drive supports this and request the disc
+        BWT, // BlindWrite image
+        CCD, // CloneCD image
+        CDI, // DiscJuggler Image
+        CUE, // cue sheet
+        DVD, // detect which drive supports this and request the disc
+        DVRMS, // MPG
+        H264, // AVC OR MP4
+        HDDVD, // detect which drive supports this and request the disc
+        IFO, // Online DVD
+        IMG, // using an image loader lib and load/play this as a DVD
+        ISO, // Standard ISO image
+        ISZ, // Compressed ISO image
+        MDF, // using an image loader lib and load/play this as a DVD
+        MDS, // Media Descriptor file
+        MKV, // Likely h264
+        MOV, // Quicktime
+        MPG,
+        MPEG,
+        MP4, // DivX, AVC, or H264
+        NRG, // Nero image
+        OFFLINEBLURAY, // detect which drive supports this and request the disc
+        OFFLINEDVD, // detect which drive supports this and request the disc
+        OFFLINEHDDVD, // detect which drive supports this and request the disc
+        OGM, // Similar to MKV
+        PDI, // Instant CD/DVD image
+        TS, // MPEG2
+        UIF,
+        UNKNOWN,
+        URL, // this is used for online content (such as streaming trailers)
+        WMV,
+        VOB, // MPEG2
+        WVX, // wtf is this?
+        ASX, // like WPL
+        WPL, // playlist file?
+        WTV, // new dvr format in vista (introduced in the tv pack 2008)
+        M2TS, // mpeg2 transport stream (moved, since it got inserted in the middle, and all new types have to be inserted at the end)
+
+        ALL, // meaning all format types - used for setting video format to external player
+    };
 
     /// <summary>
     /// Enumerator for various TitleCollection errors
@@ -124,12 +177,11 @@ namespace OMLEngine
             return plugins;
         }
 
-        /*public static string FileSearchPattern()
+        public static string FileSearchPattern()
         {
             return "*.asf,*.avc,*.avi,*.bin,*.cue,*.dvr-ms,*.h264,*.img,*.iso,*.mdf,*.mkv" +
                    "*.mov,*.mpg,*.mpeg,*.mp4,*.ogm,*.ts,*.wmv,*.vob,video_ts,*.wtv";
-        }*/
-         
+        }
         /// <summary>
         /// Loads all valid plugins into memory
         /// </summary>
@@ -194,33 +246,17 @@ namespace OMLEngine
         /// <returns>True on success</returns>
         public static bool RawSetup()
         {
-            try
-            {
-                if (!FileSystemWalker.RootDirExists)
-                    FileSystemWalker.createRootDirectory();
-            }
-            catch (Exception ex)
-            {
-                Utilities.DebugLine("[Utilities] Setup Error in createRootDirectory: " + ex.Message);
-            }
-            /*try
-            {
-                if (!FileSystemWalker.PluginsDirExists)
-                    FileSystemWalker.createPluginsDirectory();
-            }
-            catch (Exception ex)
-            {
-                Utilities.DebugLine("[Utilities] Setup Error in createPluginsDirectory: " + ex.Message);
-            }*/
+            if (!FileSystemWalker.RootDirExists)
+                FileSystemWalker.createRootDirectory();
+
+            if (!FileSystemWalker.PluginsDirExists)
+                FileSystemWalker.createPluginsDirectory();
 
             if (!FileSystemWalker.PublicRootDirExists)
                 FileSystemWalker.createPublicRootDirectory();
 
             if (!FileSystemWalker.ImageDirExists)
                 FileSystemWalker.createImageDirectory();
-
-            if (!FileSystemWalker.ImageDownloadDirExists)
-                FileSystemWalker.createImageDownloadDirectory();
 
             if (!FileSystemWalker.LogDirExists)
                 FileSystemWalker.createLogDirectory();
@@ -233,15 +269,9 @@ namespace OMLEngine
 
             if (!FileSystemWalker.MainBackDropDirExists)
                 FileSystemWalker.createMainBackDropDirectory();
-
+            
             if (!FileSystemWalker.FanArtDirectoryExists)
                 FileSystemWalker.createFanArtDirectory();
-
-            if (!FileSystemWalker.DBBackupDirectoryExists)
-                FileSystemWalker.createDBBackupDirectory();
-
-            if (!FileSystemWalker.ExtenderCacheDirectoryExists)
-                FileSystemWalker.CreateExtenderCacheDirectory();
 
             return true;
         }
@@ -277,6 +307,48 @@ namespace OMLEngine
             return rand_num;
         }
 
+        public static bool HasDaemonTools()
+        {
+            string daemontools_path = OMLEngine.Properties.Settings.Default.MountingToolPath;
+            if (daemontools_path != null && daemontools_path.Length > 0)
+                return true;
+
+            return false;
+        }
+
+        public static DriveInfo DriveInfoForDrive(string VirtualDiscDrive)
+        {
+            if (VirtualDiscDrive == null || VirtualDiscDrive.Length < 1)
+                return null;
+
+            DriveInfo[] drives = DriveInfo.GetDrives();
+            foreach (DriveInfo drive in drives)
+            {
+                string driveName = drive.Name.Substring(0, 1);
+                if (driveName.ToUpper().Substring(0, 1).CompareTo(VirtualDiscDrive.ToUpper()) == 0)
+                {
+                    return drive;
+                }
+            }
+            return null;
+        }
+
+        public static void UnmountVirtualDrive(int VirtualDiscDriveNumber)
+        {
+            string mount_util_path = OMLEngine.Properties.Settings.Default.MountingToolPath;
+
+            Process cmd = new Process();
+            cmd.StartInfo.FileName = "\"" + mount_util_path + "\"";
+            cmd.StartInfo.Arguments = @"-unmount " + VirtualDiscDriveNumber.ToString();
+            cmd.StartInfo.CreateNoWindow = true;
+            cmd.StartInfo.RedirectStandardError = true;
+            cmd.StartInfo.RedirectStandardOutput = true;
+            cmd.StartInfo.UseShellExecute = false;
+
+            cmd.Start();
+            Thread.Sleep(10);
+        }
+
         public static void DebugLine(string msg, params object[] paramArray)
         {
             try
@@ -295,7 +367,7 @@ namespace OMLEngine
                         Trace.Listeners.Add(new TextWriterTraceListener(Log, "debug.txt"));
                         Trace.AutoFlush = true;
                         Trace.WriteLine(new string('=', 80));
-                        Trace.TraceInformation(DateTime.Now.ToString() + " OML Version: 0.4b ({0}, PID:{1})", File.GetLastWriteTime(typeof(Utilities).Assembly.Location), Process.GetCurrentProcess().Id);
+                        Trace.TraceInformation(DateTime.Now.ToString() + " OML Version: 0.21b ({0}, PID:{1})", File.GetLastWriteTime(typeof(Utilities).Assembly.Location), Process.GetCurrentProcess().Id);
                     }
                     catch
                     { }
@@ -307,6 +379,120 @@ namespace OMLEngine
             {
             }
         }
+
+        // Image resizing methods taken from a public post on forums.msdn.microsoft.com
+        // Written by user: PeacError on Wed. Nov 1st, 2006
+        // Link: http://forums.msdn.microsoft.com/en-US/csharpgeneral/thread/33d0acc4-bf4c-475b-9b43-0fa1093c1e19/
+        public static Image ScaleImageByPercentage(Image img, double percent)
+        {
+            double fractionalPercentage = (percent / 100.0);
+            int outputWidth = (int)(img.Width * fractionalPercentage);
+            int outputHeight = (int)(img.Height * fractionalPercentage);
+
+            return ScaleImage(img, outputWidth, outputHeight);
+        }
+
+        public static Image ScaleImage(Image img, int outputWidth, int outputHeight)
+        {
+            Bitmap outputImage = new Bitmap(outputWidth, outputHeight, img.PixelFormat);
+            outputImage.SetResolution(img.HorizontalResolution, img.VerticalResolution);
+
+            using (Graphics graphics = Graphics.FromImage(outputImage))
+            {
+                graphics.CompositingQuality = CompositingQuality.Default;
+                graphics.InterpolationMode = InterpolationMode.High;
+                graphics.SmoothingMode = SmoothingMode.Default;
+                graphics.DrawImage(img,
+                                   new Rectangle(0, 0, outputWidth, outputHeight),
+                                   new Rectangle(0, 0, img.Width, img.Height),
+                                   GraphicsUnit.Pixel);
+
+                graphics.Dispose();
+            }
+
+            return outputImage;
+        }
+
+        public static Image ScaleImageByHeight(Image img, int height)
+        {
+            if (img != null)
+            {
+                double fractionalPercentage = ((double)height / (double)img.Height);
+                int outputWidth = (int)(img.Width * fractionalPercentage);
+                int outputHeight = height;
+
+                return ScaleImage(img, outputWidth, outputHeight);
+            }
+            else
+            {
+                return img;
+            }
+        }
+
+        public static Image ScaleImageByWidth(Image img, int width)
+        {
+            if (img != null)
+            {
+                double fractionalPercentage = ((double)width / (double)img.Width);
+                int outputWidth = width;
+                int outputHeight = (int)(img.Height * fractionalPercentage);
+
+                return ScaleImage(img, outputWidth, outputHeight);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public static Image ScaleImageDownTillFits(Image img, Size size)
+        {
+            Image ret = img;
+            bool bFound = false;
+
+            if (img != null && (img.Width > size.Width) || (img.Height > size.Height))
+            {
+                for (double percent = 100; percent > 0; percent--)
+                {
+                    double fractionalPercentage = (percent / 100.0);
+                    int outputWidth = (int)(img.Width * fractionalPercentage);
+                    int outputHeight = (int)(img.Height * fractionalPercentage);
+
+                    if ((outputWidth < size.Width) && (outputHeight < size.Height))
+                    {
+                        bFound = true;
+                        ret = ScaleImage(img, outputWidth, outputHeight);
+                        break;
+                    }
+                }
+
+                if (!bFound)
+                {
+                    ret = ScaleImage(img, size.Width, size.Height);
+                }
+            }
+            return ret;
+        }
+
+        /*
+        public static Size ResolutionOfVideoFile(string fileName)
+        {
+            Size size = new Size(0, 0);
+            Utilities.DebugLine("Determining Resolution of: " + fileName);
+            Microsoft.DirectX.AudioVideoPlayback.Video video;
+
+            if (File.Exists(fileName))
+            {
+                video = Microsoft.DirectX.AudioVideoPlayback.Video.FromFile(fileName);
+                if (video != null)
+                {
+                    Utilities.DebugLine("Resolution found: " + video.DefaultSize.Width + "x" + video.DefaultSize.Height);
+                    size = video.DefaultSize;
+                }
+            }
+            return size;
+        }
+        */
 
         [DllImport("shell32.dll", EntryPoint = "#680", CharSet = CharSet.Unicode)]
         public static extern bool IsUserAnAdmin();
@@ -353,8 +539,8 @@ namespace OMLEngine
         {
             // Call LogonUser to get a token for the user
             IntPtr _Token = IntPtr.Zero;
-            string username = OMLSettings.ImpersonationUsername;
-            string password = OMLSettings.ImpersonationPassword;
+            string username = Properties.Settings.Default.ImpersonationUsername;
+            string password = Properties.Settings.Default.ImpersonationPassword;
             bool loggedOn = LogonUser(
                 username,
                 System.Environment.UserDomainName,
@@ -414,5 +600,38 @@ namespace OMLEngine
         public static extern bool DuplicateToken(IntPtr ExistingTokenHandle,
 
         int SECURITY_IMPERSONATION_LEVEL, ref IntPtr DuplicateTokenHandle);
+
+        //private bool ImpersonateUser(string UserName, string Password, string DomainName)
+        //{
+        //    try
+        //    {
+        //        WindowsIdentity _WinIdent;
+        //        IntPtr _Token = IntPtr.Zero,
+        //        _DuplicateToken = IntPtr.Zero;
+        //        int l_token1;
+        //        bool results = LogonUser(UserName, DomainName, Password, LOGON32_LOGON_NETWORK, LOGON32_PROVIDER_DEFAULT, ref _Token);
+        //        if (results == false)
+        //        {
+        //            Win32Exception _ex = new Win32Exception(Marshal.GetLastWin32Error());
+        //            Console.WriteLine(_ex.Message + "\r\n" + _ex.ErrorCode + "\r\n" + _ex.StackTrace);
+        //            return false;
+        //        }
+
+        //        if (!DuplicateToken(_Token, (int)SECURITY_IMPERSONATION_LEVEL.SecurityImpersonation, ref _DuplicateToken))
+        //        {
+        //            Win32Exception _ex = new Win32Exception(Marshal.GetLastWin32Error());
+        //            Console.WriteLine(_ex.Message + "\r\n" + _ex.ErrorCode + "\r\n" + _ex.StackTrace);
+        //            return false;
+        //        }
+
+        //        _WinIdent = new WindowsIdentity(_DuplicateToken);
+        //        m_ImpersonationContext = _WinIdent.Impersonate();
+        //        return true;
+        //    }
+        //    catch
+        //    {
+        //        return false;
+        //    }
+        //}
     }
 }

@@ -79,7 +79,6 @@ namespace Library
                             Utilities.DebugLine("TranscodePlayer.PlayMovie: movie '{0}', Playing file '{1}'", _source.Name, _source.GetTranscodingFileName());
                             OMLApplication.Current.NowPlayingMovieName = _source.Key;
                             OMLApplication.Current.NowPlayingStatus = PlayState.Playing;
-                            AddInHost.Current.MediaCenterEnvironment.MediaExperience.Transport.PropertyChanged -= this.Transport_PropertyChanged;
                             AddInHost.Current.MediaCenterEnvironment.MediaExperience.Transport.PropertyChanged += this.Transport_PropertyChanged;
                             AddInHost.Current.MediaCenterEnvironment.MediaExperience.GoToFullScreen();
                         }

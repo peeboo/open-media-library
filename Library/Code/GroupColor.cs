@@ -8,7 +8,7 @@ using System.Diagnostics;
 
 namespace Library
 {
-    public class GroupColor : BaseModelItem
+    public class GroupColor : ModelItem
     {
         Color _currentColor = new Color(255,0,0);
 
