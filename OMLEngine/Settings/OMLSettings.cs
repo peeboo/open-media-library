@@ -405,6 +405,24 @@ namespace OMLEngine.Settings
 
         #endregion
 
+        #region Auto Disk Scanning
+
+        public static bool AutoScanDiskOnAdding
+        {
+            // Only applies to DBEditor
+            get { return SettingsManager.GetSettingByNameBool("AutoScanDiskOnAdding", InstanceName) ?? false; }
+            set { SettingsManager.SaveSettingByName("AutoScanDiskOnAdding", value.ToString(), InstanceName); }
+        }
+
+        public static bool ScanDiskRollInfoToTitle
+        {
+            // On scanning disk file to get res, aspect ratio etc, roll these up into the title record
+            get { return SettingsManager.GetSettingByNameBool("ScanDiskRollInfoToTitle", InstanceName) ?? false; }
+            set { SettingsManager.SaveSettingByName("ScanDiskRollInfoToTitle", value.ToString(), InstanceName); }
+        }
+
+        #endregion
+
         #region Scanner
         public static bool ScannerEnabled
         {

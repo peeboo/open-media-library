@@ -117,6 +117,7 @@
     <Compile Include="GenreMetaData.cs" />
     <Compile Include="MediaScanner\IFOUtilities.cs" />
     <Compile Include="ITranscodingService.cs" />
+    <Compile Include="MediaInfo.cs" />
     <Compile Include="MediaScanner\MediaInfoLib.cs" />
     <Compile Include="MediaLanguage.cs" />
     <Compile Include="MediaSource.cs" />

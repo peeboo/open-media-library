@@ -107,6 +107,8 @@ namespace OMLDatabaseEditor
             beTitledFanArtPath.MaskBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
             beTitledFanArtPath.MaskBox.AutoCompleteSource = AutoCompleteSource.FileSystemDirectories;
 
+            ceAutoScanDiskOnAdd.Checked = OMLSettings.AutoScanDiskOnAdding;
+            ceScanDiskRollInfoToTitle.Checked = OMLSettings.ScanDiskRollInfoToTitle;
             ceStSanaCreateTLFolder.Checked = OMLSettings.StSanaCreateTLFolder;
             ceStSanaAlwaysCreateMovieFolder.Checked = OMLSettings.StSanaAlwaysCreateMovieFolder;
             ceDBEStSanaAutoLookupMeta.Checked = OMLEngine.Settings.OMLSettings.StSanaAutoLookupMeta;
@@ -201,6 +203,11 @@ namespace OMLDatabaseEditor
                 {
                     OMLSettings.AddParentFoldersToTitleName = this.cePrependParentFolder.Checked;
                 }
+
+
+                OMLSettings.AutoScanDiskOnAdding = ceAutoScanDiskOnAdd.Checked;
+                OMLSettings.ScanDiskRollInfoToTitle = ceScanDiskRollInfoToTitle.Checked;
+
 
                 MountingTool.Tool tool = (MountingTool.Tool)Enum.Parse(typeof(MountingTool.Tool), rgMountingTool.Text);
                 OMLSettings.MountingToolSelection = tool;
