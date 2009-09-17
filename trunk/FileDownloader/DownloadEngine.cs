@@ -74,7 +74,8 @@ namespace FileDownloader {
                         } while (bytesRead > 0);
                     }
                 }
-            } catch (Exception) {
+            } catch (Exception ex) {
+                FireEvent(ex.Message);
                 bytesDone = 0;
             } finally {
                 if (res != null)
