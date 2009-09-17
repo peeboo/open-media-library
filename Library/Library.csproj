@@ -542,6 +542,7 @@
     <Content Include="Setupx64\SetupServer.wxs" />
     <Content Include="Setup\SetupClient.wxs" />
     <Content Include="Setup\SetupServer.wxs" />
+    <Content Include="Wix Fragments\OMLCustomActions.wxs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="I18nResources.resx">

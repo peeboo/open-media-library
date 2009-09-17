@@ -76,11 +76,6 @@
             <File Name="Settings.png"
                   Source="..\..\Library\Images\Settings.png" Checksum="no" />
           </Component>
-
-          <!--<Component Id="ComponentFactory.Krypton.Toolkit.DLL" Guid="ACDECE2C-B066-415e-AD42-0B63D341300F" Win64="yes" DiskId="1">
-                        <File Name="ComponentFactory.Krypton.Toolkit.DLL"
-                              Source="..\..\..\OMLDatabaseEditor2\bin\$(var.BuildType)\ComponentFactory.Krypton.Toolkit.DLL" Checksum="no" />
-                    </Component>-->
           <Component Id="DevExpress.Data.v8.2.dll" Guid="5268f9d7-2529-4af0-b5fb-6b94079a7f74" Win64="yes" DiskId="1">
             <File Name="DevExpress.Data.v8.2.dll"
                   Source="..\..\..\OMLDatabaseEditor2\bin\$(var.BuildType)\DevExpress.Data.v8.2.dll" Checksum="no" />
@@ -164,8 +159,6 @@
             <util:ServiceConfig ServiceName="OMLEngineService" FirstFailureActionType="restart" SecondFailureActionType="restart"
                                 ThirdFailureActionType="restart" ResetPeriodInDays="7" RestartServiceDelayInSeconds="60"/>
             </ServiceInstall>
-            <!--<ServiceControl Id="OMLEngineServiceControl" Name="OMLEngineService"
-                                        Start="install" Stop="both" Wait="yes" Remove="uninstall"/>-->
           </Component>
 
           <Component Id="OMLFWService.exe" Guid="8f57190c-0489-40b4-9c46-5e9b09ec0dec" DiskId="1" Win64="yes">
@@ -181,8 +174,6 @@
             <util:ServiceConfig ServiceName="OMLFWService" FirstFailureActionType="restart" SecondFailureActionType="restart"
                                 ThirdFailureActionType="restart" ResetPeriodInDays="7" RestartServiceDelayInSeconds="60"/>
             </ServiceInstall>
-            <!--<ServiceControl Id="OMLFWServiceControl" Name="OMLFWService"
-                                        Start="install" Stop="both" Wait="yes" Remove="uninstall"/>-->
           </Component>
 
           <Directory Id="SQLDBSCRIPTS" Name="SQLInstaller">
@@ -276,11 +267,6 @@
                     KeyPath="yes" Source="..\..\OMLSDK\bin\$(var.BuildType)\OMLSDK.dll"
                     Checksum="yes" Vital="yes" Assembly=".net"/>
             </Component>
-            <!--<Component Id="OMLGetDVDInfo.dll" Guid="d69b2e44-0e10-4081-9628-4db9a9ba7c0c" Win64="yes" DiskId="1">
-                            <File Name="OMLGetDVDInfo.dll"
-                                  KeyPath="yes" Source="..\..\OMLGetDVDInfo\bin\$(var.BuildType)\OMLGetDVDInfo.dll"
-                                  Checksum="yes" Vital="yes" Assembly=".net"/>
-                        </Component>-->
           </Directory>
         </Directory>
       </Directory>
@@ -482,7 +468,6 @@
         <![CDATA[NEWERVERSIONDETECTED]]>
       </Custom>
       <RemoveExistingProducts After="InstallInitialize" />
-      <!--<Custom Action="LaunchApplication" After="InstallFinalize" />-->
       <LaunchConditions After="AppSearch"/>
 
       <!-- This custom action searches for Windows version 6.0, the Windows Media Center Ident registry  -->
@@ -587,28 +572,6 @@
     <WixVariable Id="WixUILicenseRtf" Value="License.rtf" />
 
     <PropertyRef Id="NETFRAMEWORK35"/>
-
-    <!-- OML Custom Managed Actions -->
-    <CustomAction Id="ReserveTrailersUrlAction"
-                  BinaryKey="OMLCALib"
-                  DllEntry="ReserveTrailersUrl"
-                  Execute="deferred"
-                  Impersonate="no"
-                  Return="check" />
-
-    <CustomAction Id="StartOMLEngineServiceAction"
-                BinaryKey="OMLCALib"
-                DllEntry="StartOMLEngineService"
-                Return="ignore" />
-
-    <CustomAction Id="ActivateNetTcpPortSharing"
-                BinaryKey="OMLCALib"
-                DllEntry="ActivateNetTcpPortSharing"
-                Execute="deferred"
-                Return="check" />
-
-    <Binary Id="OMLCALib"
-            SourceFile="..\..\OMLCustomWiXAction\bin\$(var.BuildType)\OMLWiXActionsCAsPackage.dll" />
 
   </Fragment>
 </Wix>
