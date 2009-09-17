@@ -1,23 +1,22 @@
 ﻿using System;
-using System.Text;
 using System.IO;
-using System.Diagnostics;
-using System.Management;
-using System.ServiceModel;
 using System.ServiceProcess;
 using System.Security.Principal;
 using Microsoft.Deployment.WindowsInstaller;
-
-using OMLEngine;
+using FileDownloader;
 
 namespace OMLCustomWiXAction {
     public class CustomActions {
-        private static StringBuilder prOutput = null;
-        private static StringBuilder prError = null;
-        private string ScriptsPath = string.Empty;
-        private string servername = string.Empty;
-        private string sapassword = string.Empty;
-        private string instancename = string.Empty;
+        private static string MediaInfoX64Url = @"http://www.openmedialibrary.org/OMLInstallerFiles/MediaInfox64.dll";
+        private static string MediaInfoX86Url = @"http://www.openmedialibrary.org/OMLInstallerFiles/MediaInfoi386.dll";
+        private static string MediaInfoLocalPath = @"c:\program files\openmedialibrary\MediaInfo.dll";
+
+        private static string MEncoderUrl = @"http://www.openmedialibrary.org/OMLInstallerFiles/mencoder-1.0rc2-4.2.1.exe";
+        private static string MEncoderPath = @"c:\program files\openmedialibrary\MEncoder.exe";
+
+        private static string UserManualUrl = @"http://www.openmedialibrary.org/OMLInstallerFiles/Open_Media_Library_User_Manual.pdf";
+        private static string UserManualHelpPath = @"c:\program files\openmedialibrary\Help";
+        private static string UserManualPath = @"c:\program files\openmedialibrary\Help\Open_Media_Library_User_Manual.pdf";
 
         [CustomAction]
         public static ActionResult StartOMLEngineService(Session session) {
@@ -48,11 +47,6 @@ namespace OMLCustomWiXAction {
                 session.Log(string.Format("An error occured starting the OMLFW Service: {0}", e.Message));
                 return ActionResult.Failure;
             }
-            return ActionResult.Success;
-        }
-
-        [CustomAction]
-        public static ActionResult ValidateDatabase(Session session) {
             return ActionResult.Success;
         }
 
@@ -92,163 +86,92 @@ namespace OMLCustomWiXAction {
                 return ActionResult.Failure;
             }
         }
-        #region private methods
-        private bool CheckSQLExists(Session session) {
-            const string instance = "MSSQL$OML";
-            //const string instance = "MSSQLSERVER";
 
+        [CustomAction]
+        public static ActionResult DownloadAndInstallMediaInfo(Session session) {
+            string type = Environment.GetEnvironmentVariable(@"PROCESSOR_ARCHITECTURE");
+            string miUrl = type.ToUpperInvariant().Contains("86")
+                ? CustomActions.MediaInfoX86Url
+                : CustomActions.MediaInfoX64Url;
+
+            DownloadEngine miEngine = new DownloadEngine(miUrl);
+
+            miEngine.Log += (s) => {
+                int pct = Convert.ToInt32((Convert.ToDouble(Int32.Parse(s)) / Convert.ToDouble(miEngine.TotalBytes)) * 100);
+                session.Log(string.Format("MediaInfo: {0}", pct));
+            };
+            bool miDownloaded = miEngine.Download();
+            if (!miDownloaded) {
+                session.Log("MediaInfo Failed to download");
+                return ActionResult.Failure;
+            }
+            session.Log("File is: {0}", miEngine.DownloadedFile);
             try {
-                // Enumerate all SQL instances on system
-                ManagementObjectSearcher getAllSQLInstances =
-                    new ManagementObjectSearcher("root\\Microsoft\\SqlServer\\ComputerManagement10",
-                    "select * from SqlServiceAdvancedProperty where SQLServiceType = 1 " +
-                    " and (PropertyName = 'SKUNAME' or PropertyName = 'SPLEVEL')");
+                File.Copy(miEngine.DownloadedFile, CustomActions.MediaInfoLocalPath, true);
+            } catch (Exception ex) {
+                session.Log("MediaInfo Error: {0}", ex.Message);
+                return ActionResult.Failure;
+            }
 
-                ManagementObjectCollection resultsAll = getAllSQLInstances.Get();
+            return ActionResult.Success;
+        }
 
-                foreach (ManagementObject service in resultsAll) {
-                    session.Log("[PostInstallerWizard] Emumerating SQL Server Instance : " + service.ToString());
+        [CustomAction]
+        public static ActionResult DownloadAndInstallMEncoder(Session session) {
+            DownloadEngine meEngine = new DownloadEngine(CustomActions.MEncoderUrl);
+            meEngine.Log += (s) => {
+                int pct = Convert.ToInt32((Convert.ToDouble(Int32.Parse(s)) / Convert.ToDouble(meEngine.TotalBytes)) * 100);
+                session.Log(string.Format("MEncoder: {0}", pct));
+            };
+            bool meDownloaded = meEngine.Download();
+            if (!meDownloaded) {
+                session.Log("MEncoder Failed to download");
+                return ActionResult.Failure;
+            }
+            session.Log("File is: {0}", meEngine.DownloadedFile);
+            try {
+                File.Copy(meEngine.DownloadedFile, CustomActions.MEncoderPath, true);
+            } catch (Exception ex) {
+                session.Log("MEncoder Error: {0}", ex.Message);
+                return ActionResult.Failure;
+            }
+
+            return ActionResult.Success;
+        }
+
+        [CustomAction]
+        public static ActionResult DownloadAndInstallUserManual(Session session) {
+            DownloadEngine umEngine = new DownloadEngine(CustomActions.UserManualUrl);
+            umEngine.Log += (s) => {
+                int pct = Convert.ToInt32((Convert.ToDouble(Int32.Parse(s)) / Convert.ToDouble(umEngine.TotalBytes)) * 100);
+                session.Log(string.Format("PDF: {0}", pct));
+            };
+            bool umDownloaded = umEngine.Download();
+            if (!umDownloaded) {
+                session.Log("Open_Media_Library_User_Manual Failed to download");
+                return ActionResult.Failure;
+            }
+            session.Log("File is: {0}", umEngine.DownloadedFile);
+            try {
+                if (Directory.Exists(CustomActions.UserManualHelpPath)) {
+                    session.Log(@"Creating folder: {0}", CustomActions.UserManualHelpPath);
+                    Directory.CreateDirectory(CustomActions.UserManualHelpPath);
+                    session.Log("setting access controls");
+                //    DirectoryInfo dInfo = new DirectoryInfo(CustomActions.UserManualHelpPath);
+                //    System.Security.AccessControl.DirectorySecurity dSec = dInfo.GetAccessControl();
+                //    dSec.AddAccessRule(new System.Security.AccessControl.FileSystemAccessRule(
+                //        "Users", System.Security.AccessControl.FileSystemRights.FullControl, System.Security.AccessControl.AccessControlType.Allow
+                //        ));
+                //    dInfo.SetAccessControl(dSec);
                 }
-
-
-                // Enumerate OML Names instance
-
-                ManagementObjectSearcher getOMLInstance =
-                   new ManagementObjectSearcher("root\\Microsoft\\SqlServer\\ComputerManagement10",
-                   "select * from SqlServiceAdvancedProperty where SQLServiceType = 1 " +
-                   " and ServiceName = '" + instance + "'" +
-                   " and (PropertyName = 'SKUNAME' or PropertyName = 'SPLEVEL')");
-
-                ManagementObjectCollection resultsOML = getOMLInstance.Get();
-
-                // If nothing is returned, SQL isn't installed.
-                if (resultsOML.Count == 0) {
-                    session.Log("[PostInstallerWizard] No OML SQL Servers Not Found");
-                    return false;
-                }
-
-                foreach (ManagementObject service in resultsOML) {
-                    session.Log("[PostInstallerWizard] Found OML SQL Server Instance : " + service.ToString());
-                }
-
-                return true;
-            } catch (ManagementException e) {
-                return false;
+                session.Log("Copying file");
+                File.Copy(umEngine.DownloadedFile, CustomActions.UserManualPath, true);
+            } catch (Exception ex) {
+                session.Log("Open_Media_Library_User_Manual Error: {0}", ex.Message);
+                return ActionResult.Failure;
             }
+
+            return ActionResult.Success;
         }
-
-        private bool RunSQLSetup(Session session) {
-            Process pr = new Process();
-
-            if (File.Exists(session.GetSourcePath("\\SQLInstaller\\SQLEXPR_x86_ENU.exe"))) {
-                pr.StartInfo.FileName = session.GetSourcePath("\\SQLInstaller\\") + "SQLEXPR_x86_ENU.exe";
-                pr.StartInfo.Arguments = "/CONFIGURATIONFILE=\"" + session.GetSourcePath("\\SQLInstaller\\") + "SQLConfigNoTools_x32.ini";
-            } else {
-
-                if (File.Exists(session.GetSourcePath("\\SQLInstaller\\") + "SQLEXPR_x64_ENU.exe")) {
-                    pr.StartInfo.FileName = session.GetSourcePath("\\SQLInstaller\\") + "SQLEXPR_x64_ENU.exe";
-                    pr.StartInfo.Arguments = "/CONFIGURATIONFILE=\"" + session.GetSourcePath("\\SQLInstaller\\SQLConfigNoTools_x64.ini");
-                } else {
-                    session.Log("Cannot find the SQL installers!", "Error");
-                    return false;
-                }
-            }
-
-            // Attempt to capture stdout & stderr, doesn't seem to work but leaving code in
-            // just incase it works but is buggy
-
-            // Set UseShellExecute to false for redirection.
-            pr.StartInfo.UseShellExecute = false;
-
-            // Setup stdout capture
-            pr.StartInfo.RedirectStandardOutput = true;
-            pr.OutputDataReceived += new DataReceivedEventHandler(NetOutputDataHandler);
-            prOutput = new StringBuilder();
-
-            // Setup stderr capture
-            pr.StartInfo.RedirectStandardError = true;
-            pr.ErrorDataReceived += new DataReceivedEventHandler(NetErrorDataHandler);
-            prError = new StringBuilder();
-
-            pr.Start();
-
-            // Start the asynchronous read of the standard output & stderr stream.
-            pr.BeginOutputReadLine();
-            pr.BeginErrorReadLine();
-
-            pr.WaitForExit();
-
-            int ExitCode = pr.ExitCode;
-
-            if (ExitCode == 0)
-                return true;
-            else {
-                session.Log("SQL installer reported error code " + ExitCode.ToString(), "Error");
-                return false;
-            }
-
-        }
-
-        private static void NetOutputDataHandler(object sendingProcess, DataReceivedEventArgs outLine) {
-            // Collect the net view command output.
-            if (!String.IsNullOrEmpty(outLine.Data)) {
-                // Add the text to the collected output.
-                prOutput.Append(Environment.NewLine + "  " + outLine.Data);
-            }
-        }
-
-        private static void NetErrorDataHandler(object sendingProcess, DataReceivedEventArgs errLine) {
-            // Write the error text to the file if there is something
-            // to write and an error file has been specified.
-
-            if (!String.IsNullOrEmpty(errLine.Data)) {
-                prError.Append(Environment.NewLine + "  " + errLine.Data);
-            }
-        }
-
-        private void CheckAndUpgradeSchema(Session session) {
-            OMLEngine.DatabaseManagement.DatabaseManagement dbm = new OMLEngine.DatabaseManagement.DatabaseManagement();
-
-            OMLEngine.DatabaseManagement.DatabaseInformation.SQLState state = dbm.CheckDatabase();
-
-            if (state == OMLEngine.DatabaseManagement.DatabaseInformation.SQLState.OMLDBNotFound) {
-                session.Log("Detected SQL Server but cannot find the database. Click OK to create the database.");
-                // OML Instance but OML database does not exist
-                dbm.ConfigureSQL(ScriptsPath);
-                dbm.UpgradeSchemaVersion(ScriptsPath);
-
-                // Retest the connection
-                state = dbm.CheckDatabase();
-            }
-
-            if (state == OMLEngine.DatabaseManagement.DatabaseInformation.SQLState.OMLDBVersionUpgradeRequired) {
-                session.Log("Detected the OML Database but it requires updating. Click OK to update the database.");
-                dbm.UpgradeSchemaVersion(ScriptsPath);
-
-                // Retest the connection
-                state = dbm.CheckDatabase();
-            }
-
-            if (state == OMLEngine.DatabaseManagement.DatabaseInformation.SQLState.OK) {
-                session.Log("The database appears all fine.");
-                return;
-            }
-        }
-
-        private void ConfigureSQL() {
-            OMLEngine.DatabaseManagement.DatabaseManagement dbm = new OMLEngine.DatabaseManagement.DatabaseManagement();
-            dbm.ConfigureSQL(ScriptsPath);
-        }
-
-        private void WriteSettings() {
-            OMLEngine.DatabaseManagement.DatabaseInformation.DatabaseName = "oml";
-            OMLEngine.DatabaseManagement.DatabaseInformation.OMLUserAcct = "oml";
-            OMLEngine.DatabaseManagement.DatabaseInformation.OMLUserPassword = "oml";
-            OMLEngine.DatabaseManagement.DatabaseInformation.SAPassword = sapassword;
-            OMLEngine.DatabaseManagement.DatabaseInformation.SQLInstanceName = instancename;
-            OMLEngine.DatabaseManagement.DatabaseInformation.SQLServerName = servername;
-            OMLEngine.DatabaseManagement.DatabaseInformation.SaveSettings();
-        }
-        #endregion private methods
     }
 }
