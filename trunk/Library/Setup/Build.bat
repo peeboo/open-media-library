@@ -35,7 +35,7 @@ if exist "%OUTPUTNAMESERVER%" del /f /q "%OUTPUTNAMESERVER%"
 
 REM Build the MSI for the client package
 echo Building Client installer
-"%WIX_BUILD_LOCATION%\candle.exe" -ext WiXNetFxExtension -ext WiXUtilExtension setupclient.wxs setup.wxs -dBuildType=%BUILD_TYPE% -out %APP_INTERMEDIATE_PATH%\
+"%WIX_BUILD_LOCATION%\candle.exe" -ext WiXNetFxExtension -ext WiXUtilExtension "..\Wix Fragments\OMLCustomActions.wxs" setupclient.wxs setup.wxs -dBuildType=%BUILD_TYPE% -out %APP_INTERMEDIATE_PATH%\
 "%WIX_BUILD_LOCATION%\light.exe" -ext WiXNetFxExtension -ext WixUIExtension -ext WiXUtilExtension "%APP_INTERMEDIATE_PATH%\setupclient.wixobj" "%APP_INTERMEDIATE_PATH%\setup.wixobj" -cultures:en-US -loc setup-en-us.wxl -out "%OUTPUTNAMECLIENT%"
 
 echo Building Bootstrapper file
@@ -52,7 +52,7 @@ GOTO EXIT
 :BUILDSERVER
 REM Build the MSI for the server package
 echo Building Server installer
-"%WIX_BUILD_LOCATION%\candle.exe" -ext WiXNetFxExtension -ext WiXUtilExtension -ext WiXFirewallExtension setupserver.wxs setup.wxs -dBuildType=%BUILD_TYPE% -out %APP_INTERMEDIATE_PATH%\
+"%WIX_BUILD_LOCATION%\candle.exe" -ext WiXNetFxExtension -ext WiXUtilExtension -ext WiXFirewallExtension "..\Wix Fragments\OMLCustomActions.wxs" setupserver.wxs setup.wxs -dBuildType=%BUILD_TYPE% -out %APP_INTERMEDIATE_PATH%\
 "%WIX_BUILD_LOCATION%\light.exe" -ext WiXNetFxExtension -ext WixUIExtension -ext WiXUtilExtension -ext WiXFirewallExtension "%APP_INTERMEDIATE_PATH%\setupserver.wixobj" "%APP_INTERMEDIATE_PATH%\setup.wixobj" -cultures:en-US -loc setup-en-us.wxl -out "%OUTPUTNAMESERVER%"
 
 echo Copying "%OUTPUTNAMESERVER%" to the Builds folder
