@@ -355,6 +355,12 @@ namespace OMLEngine.Settings
             set { SettingsManager.SaveSettingByName("PreserveAudioOnTranscode", value.ToString(), InstanceName); }
         }
 
+        public static bool TranscodeDVD
+        {
+            get { return SettingsManager.GetSettingByNameBool("TranscodeDVD", InstanceName) ?? false; }
+            set { SettingsManager.SaveSettingByName("TranscodeDVD", value.ToString(), InstanceName); }
+        }
+
         public static bool TranscodeAVIFiles
         {
             get { return SettingsManager.GetSettingByNameBool("TranscodeAVIFiles", InstanceName) ?? true; }
@@ -393,13 +399,13 @@ namespace OMLEngine.Settings
 
         public static bool Extender_UseAsx
         {
-            get { return SettingsManager.GetSettingByNameBool("Extender_UseAsx", InstanceName) ?? false; }
+            get { return SettingsManager.GetSettingByNameBool("Extender_UseAsx", InstanceName) ?? true; }
             set { SettingsManager.SaveSettingByName("Extender_UseAsx", value.ToString(), InstanceName); }
         }
 
         public static bool Extender_MergeVOB
         {
-            get { return SettingsManager.GetSettingByNameBool("Extender_MergeVOB", InstanceName) ?? true; }
+            get { return SettingsManager.GetSettingByNameBool("Extender_MergeVOB", InstanceName) ?? false; }
             set { SettingsManager.SaveSettingByName("Extender_MergeVOB", value.ToString(), InstanceName); }
         }
 

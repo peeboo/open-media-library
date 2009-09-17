@@ -35,11 +35,12 @@ namespace Library
 
         public static bool CanPlay(MediaSource source)
         {
-            if (FindMPeg(source) != null)
-                return true;
+            return true;
+            //if (FindMPeg(source) != null)
+            //    return true;
 
-            // TODO: allow to play auto-merging VOBs, asx, and other handings below
-            return false;
+            //// TODO: allow to play auto-merging VOBs, asx, and other handings below
+            //return false;
         }
 
         [DllImport("Kernel32.Dll", CharSet = CharSet.Unicode)]
@@ -168,17 +169,6 @@ namespace Library
                             videoFile = mpegFile;
                         }
                     }
-                    else if (OMLSettings.Extender_UseAsx)
-                    {
-                        OMLApplication.DebugLine("[MoviePlayerExtenderDVD] Multiple VOB files, and Extender_UseAsx == true, trying to use a hard-link and asx playlist approach ");
-                        foreach (string vob in vobs) {
-                            OMLApplication.DebugLine("[MoviePlayerExtenderDVD] Calling MakeMPEGLink on WCF Transcoder Service");
-                            transcoder.MakeMPEGLink(mpegFolder, vob);
-                        }
-
-                        if (File.Exists(GetMPEGName(mpegFolder, vobs[0])))
-                            videoFile = CreateASX(mpegFolder, vts, _source.Name, vobs);
-                    }
                     else if (OMLSettings.Extender_MergeVOB)
                     {
                         OMLApplication.DebugLine("[MoviePlayerExtenderDVD] Multiple VOB files, and Extender_MergeVOB == true, trying to use a hard-link and auto-merge into single large .VOB file approach ");
@@ -228,6 +218,18 @@ namespace Library
                                 }
                             }
                         }, null);
+                    }
+                    //else if (OMLSettings.Extender_UseAsx)
+                    else
+                    {
+                        OMLApplication.DebugLine("[MoviePlayerExtenderDVD] Multiple VOB files, and Extender_UseAsx == true, trying to use a hard-link and asx playlist approach ");
+                        foreach (string vob in vobs) {
+                            OMLApplication.DebugLine("[MoviePlayerExtenderDVD] Calling MakeMPEGLink on WCF Transcoder Service");
+                            transcoder.MakeMPEGLink(mpegFolder, vob);
+                        }
+
+                        if (File.Exists(GetMPEGName(mpegFolder, vobs[0])))
+                            videoFile = CreateASX(mpegFolder, vts, _source.Name, vobs);
                     }
                 }
                 else
