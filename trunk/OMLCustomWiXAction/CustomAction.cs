@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Sql;
 using System.IO;
 using System.ServiceProcess;
 using System.Security.Principal;
 using Microsoft.Deployment.WindowsInstaller;
 using FileDownloader;
+using System.Data.Sql;
 
 namespace OMLCustomWiXAction {
     public class CustomActions {
@@ -172,6 +176,16 @@ namespace OMLCustomWiXAction {
             }
 
             return ActionResult.Success;
+        }
+
+        [CustomAction]
+        public static ActionResult ScanNetworkForSqlServers(Session session) {
+            IList<string> servers = new List<string>();
+            DataTable dt = SqlDataSourceEnumerator.Instance.GetDataSources();
+            foreach (DataRow row in dt.Rows)
+                servers.Add(string.Format("{0} ({1})", row["ServerName"], row["InstanceName"]));
+
+                return ActionResult.Success;
         }
     }
 }
