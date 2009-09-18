@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Fragment>
+    <!-- This sets the icon used for the Add/Remove Programs screen -->
+    <Property Id="ARPPRODUCTICON" Value="icon.ico" />
+
+    <!-- These properties define links that will appear in the Add/Remove Programs control panel when    -->
+    <!-- this product is installed on the system.                                                        -->
+    <Property Id="ARPHELPLINK" Value="!(loc.Property_ArpHelpLink)" />
+    <Property Id="ARPURLINFOABOUT" Value="!(loc.Property_ArpUrlInfoAbout)" />
+
+    <!-- This property defines the ALLUSERS property to be 1, which indicates that this product will be  -->
+    <!-- installed per-machine instead of per-user.                                                      -->
+    <Property Id="ALLUSERS">
+      <![CDATA[1]]>
+    </Property>
+
+    <!-- This property uses a registry locator to determine the version of Windows Media Center present  -->
+    <!-- on the system (if any). This registry-based version detection algorithm is documented in the    -->
+    <!-- Windows Media Center SDK for Windows Vista.                                                     -->
+    <Property Id="MCEINSTALLVERSION" Secure="yes">
+      <RegistrySearch Id="MceInstallRegKey" Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Media Center" Name="Ident" Type="raw"/>
+    </Property>
+
+    <!-- This property uses an AppSearch to attempt to locate the file %windir\eHome\ehShell.exe  on the -->
+    <!-- system. If it is found, the property is set to the fully qualified path to this file, and this  -->
+    <!-- path is used to create a desktop shortcut to launch the application in Windows Media Center.    -->
+    <Property Id="EHSHELLEXE" Secure="yes">
+      <DirectorySearch Id="EhomeDirectory" Path="[WindowsFolder]\ehome">
+        <FileSearch Id="EhShellExe" Name="ehShell.exe" MinVersion="6.0.0.0" />
+      </DirectorySearch>
+    </Property>
+    <!-- This property uses an AppSearch to attempt to locate the file %windir\eHome\RegisterMceApp.exe  -->
+    <!-- on the system. If it is found, the property is set to the fully qualified path to this file,    -->
+    <!-- and this path is used to call RegisterMceApp.exe in several custom actions listed above to      -->
+    <!-- register this application with Windows Media Center.                                            -->
+    <Property Id="REGISTERMCEAPP" Secure="yes">
+      <DirectorySearch Id="EhomeDirectory2" Path="[WindowsFolder]\ehome">
+        <FileSearch Id="RegisterMceAppExe" Name="RegisterMceApp.exe" />
+      </DirectorySearch>
+    </Property>
+
+    <!-- This property is used as the default installation directory, and the user can change this path  -->
+    <!-- during setup. The Id must be set to WIXUI_INSTALLDIR and the value must match the directory Id  -->
+    <!-- defined above that represents the root installation directory.                                  -->
+    <Property Id="WIXUI_INSTALLDIR" Value="APPLICATIONROOTDIRECTORY"/>
+
+    <!-- In WiX v3.0, this variable is used to override the default license agreement text that is       -->
+    <!-- included in the WixUIExtension with a custom file.                                              -->
+    <WixVariable Id="WixUILicenseRtf" Value="License.rtf" />
+
+    <PropertyRef Id="NETFRAMEWORK35"/>
+
+    <Icon Id="icon.ico" SourceFile="..\Library\Resources\Application.ico"/>
+
+    <Property Id="WixShellExecTarget" Value="[#PostInstallerWizard.exe]" />
+  </Fragment>
+</Wix>

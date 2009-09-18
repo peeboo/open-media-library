@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Fragment>
+    <!-- Set the status text to be displayed during each custom action as its run -->
+    <UI>
+      <ProgressText Action="ReserveTrailersUrlAction">Reserving Url for Trailers Proxy Server</ProgressText>
+      <ProgressText Action="ActivateNetTcpPortSharingAction">Activating NetTcpPortSharing for Transcoding Services</ProgressText>
+      <ProgressText Action="StartOMLEngineServiceAction">Starting the OMLEngine Service</ProgressText>
+      <ProgressText Action="ScanNetworkForSqlServersAction">Scanning your network for instances of Microsoft Sql Server</ProgressText>
+    </UI>
+
+    <!-- These custom actions are used to register the application with Media Center using the utility   -->
+    <!-- RegisterMceApp.exe that is instnaalled as a part of the Windows Media Center feature. Each custom -->
+    <!-- action is defined as a pair in order to leverage the WiX QtExec custom action to suppress the   -->
+    <!-- pop-up UI that would ordinarily appear when running RegisterMceApp.exe. Registering a Windows   -->
+    <!-- Media Center application will fail if it is already registered, so this setup will first        -->
+    <!-- unregister the application and then attempt to re-register it. This setup ignores the return    -->
+    <!-- code from the unregistration custom action but checks the return code of the registration       -->
+    <!-- action. If registration fails, setup will fail and roll back. These custom actions use the      -->
+    <!-- REGISTERMCEAPP property that is defined below in order to find the exact location of the file   -->
+    <!-- RegisterMceApp.exe on the system.                                                               -->
+    <CustomAction Id="CA_RegisterMceApp_Unregister_Install_Cmd" Property="CA_RegisterMceApp_Unregister_Install" Value="&quot;[REGISTERMCEAPP]&quot; /u /allusers &quot;[#Registration.xml]&quot;"/>
+    <CustomAction Id="CA_RegisterMceApp_Unregister_Uninstall_Cmd" Property="CA_RegisterMceApp_Unregister_Uninstall" Value="&quot;[REGISTERMCEAPP]&quot; /u /allusers &quot;[#Registration.xml]&quot;"/>
+    <CustomAction Id="CA_RegisterMceApp_Register_Cmd" Property="CA_RegisterMceApp_Register" Value="&quot;[REGISTERMCEAPP]&quot; /allusers &quot;[#Registration.xml]&quot;"/>
+    <CustomAction Id="CA_RegisterMceApp_Rollback_Cmd" Property="CA_RegisterMceApp_Rollback" Value="&quot;[REGISTERMCEAPP]&quot; /u /allusers &quot;[#Registration.xml]&quot;"/>
+
+    <CustomAction Id="CA_RegisterMceApp_Unregister_Install" BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
+    <CustomAction Id="CA_RegisterMceApp_Unregister_Uninstall" BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
+    <CustomAction Id="CA_RegisterMceApp_Register" BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="check" Impersonate="no"/>
+    <CustomAction Id="CA_RegisterMceApp_Rollback" BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="rollback" Return="ignore" Impersonate="no"/>
+
+    <!-- This custom action prevents users from installing if a newer version of this product is already -->
+    <!-- installed on the system. This is a part of Windows Installer major upgrade functionality.       -->
+    <CustomAction Id="CA_BlockOlderVersionInstall"
+                  Error="!(loc.LaunchCondition_LaterVersion)" />
+
+    <!-- This custom action prevents users from installing this product on unsupported operating system  -->
+    <!-- versions. The conditions that are checked for operating system version are defined below.       -->
+    <CustomAction Id="CA_ErrWrongWindowsVersion"
+                  Error="!(loc.LaunchCondition_WrongOSVersion)" />
+
+    <!-- OML Custom Managed Actions -->
+    <CustomAction Id="ReserveTrailersUrlAction"
+                  BinaryKey="OMLCALib"
+                  DllEntry="ReserveTrailersUrl"
+                  Execute="deferred"
+                  Impersonate="no"
+                  Return="check" />
+
+    <CustomAction Id="StartOMLEngineServiceAction"
+                BinaryKey="OMLCALib"
+                DllEntry="StartOMLEngineService"
+                Return="ignore" />
+
+    <CustomAction Id="ActivateNetTcpPortSharingAction"
+                BinaryKey="OMLCALib"
+                DllEntry="ActivateNetTcpPortSharing"
+                Execute="deferred"
+                Return="check" />
+
+    <CustomAction Id="ScanNetworkForSqlServersAction"
+                  BinaryKey="OMLCALib"
+                  DllEntry="ScanNetworkForSqlServers"
+                  Execute="deferred"
+                  Return="check" />
+
+    <!-- The binary to include that contains managed custom actions -->
+    <Binary Id="OMLCALib"
+            SourceFile="..\OMLCustomWiXAction\bin\$(var.Configuration)\OMLWiXActionsCAsPackage.dll" />
+
+    <!-- Run these custom actions -->
+    <InstallExecuteSequence>
+      <Custom Action="CA_BlockOlderVersionInstall" After="FindRelatedProducts">
+        <![CDATA[NEWERVERSIONDETECTED]]>
+      </Custom>
+      <!-- This custom action searches for Windows version 6.0, the Windows Media Center Ident registry  -->
+      <!-- value 5.0 and the presence of the file %windir%\eHome\RegisterMceApp.exe. If all of these     -->
+      <!-- conditions are met, the system is a Windows Vista Home Premium or Ultimate Edition operating  -->
+      <!-- system and the product will be allowed to install.                                            -->
+      <Custom Action="CA_ErrWrongWindowsVersion" Before="CostInitialize"><![CDATA[(NOT VersionNT >= 500) AND NOT Installed]]></Custom>
+
+      <Custom Action="CA_RegisterMceApp_Unregister_Install_Cmd" After="CostFinalize">
+        <![CDATA[NOT REMOVE]]>
+      </Custom>
+      <Custom Action="CA_RegisterMceApp_Unregister_Uninstall_Cmd" After="CA_RegisterMceApp_Unregister_Install_Cmd">
+        <![CDATA[REMOVE AND ($Registration.xml = 2)]]>
+      </Custom>
+      <Custom Action="CA_RegisterMceApp_Register_Cmd" After="CA_RegisterMceApp_Unregister_Uninstall_Cmd">
+        <![CDATA[NOT REMOVE]]>
+      </Custom>
+      <Custom Action="CA_RegisterMceApp_Rollback_Cmd" After="CA_RegisterMceApp_Register_Cmd">
+        <![CDATA[NOT REMOVE]]>
+      </Custom>
+
+      <!-- This unregistration custom action must occur before files are removed during uninstall of the -->
+      <!-- product because the custom action requires the registration XML file in order to run          -->
+      <!-- correctly. It is conditioned to only run during uninstall using the REMOVE condition.         -->
+      <Custom Action="CA_RegisterMceApp_Unregister_Uninstall" Before="RemoveFiles">
+        <![CDATA[REMOVE AND ($Registration.xml = 2)]]>
+      </Custom>
+
+      <!-- This sequence of actions is important. In order to allow the roll back custom action to run   -->
+      <!-- at the correct time in case the setup fails, it must be scheduled before the other actions    -->
+      <!-- because Windows Installer pushes each action onto a stack and then pops them off of the stack -->
+      <!-- in case of any failure in order to accomplish the roll back.                                  -->
+      <Custom Action="CA_RegisterMceApp_Rollback" After="InstallFiles">
+        <![CDATA[NOT REMOVE AND (&CLIENTFEATUREUI=3 OR !CLIENTFEATUREUI=3)]]>
+      </Custom>
+      <Custom Action="CA_RegisterMceApp_Unregister_Install" After="CA_RegisterMceApp_Rollback">
+        <![CDATA[NOT REMOVE AND (&CLIENTFEATUREUI=3 OR !CLIENTFEATUREUI=3)]]>
+      </Custom>
+      <Custom Action="CA_RegisterMceApp_Register" After="CA_RegisterMceApp_Unregister_Install">
+        <![CDATA[NOT REMOVE AND (&CLIENTFEATUREUI=3)]]>
+      </Custom>
+      <Custom Action="ScanNetworkForSqlServersAction" Before="ActivateNetTcpPortSharingAction">
+        <![CDATA[NOT REMOVE]]>
+      </Custom>
+      <Custom Action="ActivateNetTcpPortSharingAction" Before="ReserveTrailersUrlAction">
+        <![CDATA[NOT REMOVE]]>
+      </Custom>
+      <Custom Action='ReserveTrailersUrlAction' Before='InstallFinalize'>
+        <![CDATA[NOT REMOVE]]>
+      </Custom>
+      <Custom Action='StartOMLEngineServiceAction' After='InstallFinalize'>
+        <![CDATA[NOT REMOVE]]>
+      </Custom>
+      <Custom Action='LaunchApplication' After='StartOMLEngineServiceAction'>
+        <![CDATA[NOT REMOVE]]>
+      </Custom>
+    </InstallExecuteSequence>
+
+    <CustomAction Id="LaunchApplication"
+                  BinaryKey="WixCA"
+                  DllEntry="WixShellExec"
+                  Impersonate="yes"/>
+  </Fragment>
+</Wix>

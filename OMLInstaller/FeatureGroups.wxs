@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Fragment>
+    <FeatureGroup Id ="CLIENTFEATURES">
+      <Feature Id="CLIENTFEATUREUI" Title="OML Media Center Plugin" Level="1" AllowAdvertise="no" Description="Install the Media Center Plugin">
+        <Condition Level="0"><![CDATA[NOT MCEINSTALLVERSION >= "5.0" OR NOT REGISTERMCEAPP]]></Condition>
+        <ComponentGroupRef Id="ClientGroupUI"/>
+      </Feature>
+      <Feature Id="CLIENTFEATUREEDITOR" Title="OML Database Editor" Level="1" AllowAdvertise="no" Description="Install the Database Editor">
+        <ComponentGroupRef Id="ClientGroupEditor"/>
+      </Feature>
+    </FeatureGroup>
+  </Fragment>
+</Wix>
