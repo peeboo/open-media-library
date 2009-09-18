@@ -185,7 +185,7 @@ namespace NetFlixMetadata
                     switch (reader.Name)
                     {
                         case "id":
-                            try { result.Id = int.Parse(GetElementValue(reader)); }
+                            try { result.Id =int.Parse( OMLEngine.RegexUtils.FindFirstSubstring(GetElementValue(reader), "[0-9]+$", true)); }
                             catch { }
                             break;
 
