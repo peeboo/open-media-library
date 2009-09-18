@@ -48,6 +48,18 @@ namespace OMLEngine
             return (retArray);
         }
         
+        
+        public static string FindFirstSubstring(string source, string matchPattern, bool findAllUnique)
+        {
+            Match[] matches = FindSubstrings(source, matchPattern, findAllUnique);
+
+            if (matches.Length > 0)
+            {
+                return matches[0].ToString();
+            }
+
+            return "";
+        }     
         /// <summary>
         /// 
         /// </summary>
