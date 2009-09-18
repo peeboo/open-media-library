@@ -23,6 +23,17 @@ namespace OMLSDK
             _metadataPlugins = metadataPlugins;
         }
 
+        /// <summary>
+        /// Performs a metadata search using the data and plugin passed in.
+        /// </summary>
+        /// <param name="metadata"></param>
+        /// <param name="titletype"></param>
+        /// <param name="titleNameSearch"></param>
+        /// <param name="EpisodeName"></param>
+        /// <param name="SeasonNo"></param>
+        /// <param name="EpisodeNo"></param>
+        /// <param name="title"></param>
+        /// <returns></returns>
         private bool MetadataSearch(MetaDataPluginDescriptor metadata, TitleTypes titletype, string titleNameSearch, string EpisodeName, int? SeasonNo, int? EpisodeNo, out Title title)
         {
             title = null;
@@ -67,7 +78,18 @@ namespace OMLSDK
             return true;
         }
 
-        public bool MetadataSearchUsingPreferred(TitleTypes titletype, bool coverArtOnly, string titleNameSearch, string EpisodeName, int? SeasonNo, int? EpisodeNo, out Title title)
+        /// <summary>
+        /// Looksup the preferred metadata on the passed in search criteria
+        /// </summary>
+        /// <param name="titletype"></param>
+        /// <param name="coverArtOnly"></param>
+        /// <param name="titleNameSearch"></param>
+        /// <param name="EpisodeName"></param>
+        /// <param name="SeasonNo"></param>
+        /// <param name="EpisodeNo"></param>
+        /// <param name="title"></param>
+        /// <returns></returns>
+        public bool MetadataSearchUsingPreferred(TitleTypes titletype, /*bool coverArtOnly,*/ string titleNameSearch, string EpisodeName, int? SeasonNo, int? EpisodeNo, out Title title)
         {
             title = null;
 
@@ -185,6 +207,88 @@ namespace OMLSDK
                 return false;
             }
         }
+
+        /// <summary>
+        /// Looksup the preferred metadata on the passed in title
+        /// </summary>
+        /// <param name="title"></param>
+        /// <returns></returns>
+        public bool MetadataSearchUsingPreferred(Title title)
+        {
+            Title SearchResult;
+            int? SeasonNo = null;
+            int? EpisodeNo = null;
+            bool retval = false;
+
+            if (((title.TitleType & TitleTypes.Episode) != 0) ||
+            ((title.TitleType & TitleTypes.Season) != 0) ||
+            ((title.TitleType & TitleTypes.TVShow) != 0))
+            {
+                // TV Search
+                if (title.SeasonNumber != null) SeasonNo = title.SeasonNumber.Value;
+                if (title.EpisodeNumber != null) EpisodeNo = title.EpisodeNumber.Value;
+                string Showname = null;
+
+                // Try to find show name be looking up the folder structure.
+                Title parenttitle = title;
+                while ((title.TitleType & TitleTypes.Root) == 0)
+                {
+                    // Get parent
+                    parenttitle = parenttitle.ParentTitle;
+                    if ((parenttitle.TitleType & TitleTypes.TVShow) != 0)
+                    {
+                        Showname = parenttitle.Name;
+                        break;
+                    }
+                }
+
+                if (string.IsNullOrEmpty(Showname))
+                {
+                    // Cannot find a show name in the folder structure
+                    //return StartMetadataImport(title, plugin, coverArtOnly, title.Name, "", SeasonNo, EpisodeNo);
+                    retval =  MetadataSearchUsingPreferred(title.TitleType, title.Name, "", SeasonNo, EpisodeNo, out SearchResult);
+                }
+                else
+                {
+                    //return StartMetadataImport(title, plugin, coverArtOnly, Showname, title.Name, SeasonNo, EpisodeNo);
+                    retval =  MetadataSearchUsingPreferred(title.TitleType, Showname, title.Name, SeasonNo, EpisodeNo, out SearchResult);
+                }
+            }
+            else
+            {
+                // Movie Search
+                //return StartMetadataImport(title, plugin, coverArtOnly, title.Name, "", SeasonNo, EpisodeNo);
+                retval =  MetadataSearchUsingPreferred(title.TitleType, title.Name, "", SeasonNo, EpisodeNo, out SearchResult);
+            }
+
+
+            if (retval)
+            {
+                // Successful lookup, process
+
+                if (((title.TitleType & TitleTypes.Season) != 0) ||
+                    ((title.TitleType & TitleTypes.TVShow) != 0) ||
+                    ((title.TitleType & TitleTypes.Episode) != 0))
+                {
+                    // Use the preferred overwrite settings for TV
+                    title.CopyMetadata(SearchResult, OMLEngine.Settings.OMLSettings.MetadataLookupOverwriteExistingDataPrefTV,
+                        OMLEngine.Settings.OMLSettings.MetadataLookupUpdateNamePrefTV,
+                        OMLEngine.Settings.OMLSettings.MetadataLookupOverwriteExistingDataPrefTV);
+                }
+                else
+                {
+                    // Use the preferred overwrite settings for Movies
+                    title.CopyMetadata(SearchResult, OMLEngine.Settings.OMLSettings.MetadataLookupOverwriteExistingDataPrefMovies,
+                        OMLEngine.Settings.OMLSettings.MetadataLookupUpdateNamePrefMovies,
+                        OMLEngine.Settings.OMLSettings.MetadataLookupOverwriteExistingDataPrefMovies);
+                }
+
+                //LoadFanart(mds.FanArt, title); -- Do this in the calling program (may need to provide user feedback of progress
+            }
+
+            return retval;
+        }
+
 
         private void ApplyGenreMappings(Title title, bool removeUnknownGenres)
         {
