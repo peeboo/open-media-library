@@ -531,11 +531,9 @@
     </None>
     <None Include="Setupx64\Build.bat" />
     <None Include="Setupx64\License.rtf" />
-    <None Include="Setupx64\omlsetupx64.proj" />
     <None Include="Setupx64\Setup-en-us.wxl" />
     <None Include="Setupx64\Setup.wxs" />
     <None Include="Setup\License.rtf" />
-    <None Include="Setup\omlsetupx86.proj" />
     <EmbeddedResource Include="Revision.txt" />
     <None Include="Resources\Credits.xml" />
     <Content Include="Setupx64\SetupClient.wxs" />

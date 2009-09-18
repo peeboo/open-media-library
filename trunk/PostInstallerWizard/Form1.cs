@@ -68,8 +68,8 @@ namespace PostInstallerWizard
                 ServerInstall = true;
             }
 
-            if ((File.Exists("C:\\Program Files\\OpenMediaLibrary\\SQLInstaller\\SQLEXPR_x86_ENU.exe")) ||
-                (File.Exists("C:\\Program Files\\OpenMediaLibrary\\SQLInstaller\\SQLEXPR_x64_ENU.exe")))
+            if ((File.Exists(Environment.SpecialFolder.ProgramFiles.ToString() + "\\OpenMediaLibrary\\SQLInstaller\\SQLEXPR_x86_ENU.exe")) ||
+                (File.Exists(Environment.SpecialFolder.ProgramFiles.ToString() + "\\OpenMediaLibrary\\SQLInstaller\\SQLEXPR_x64_ENU.exe")))
             {
                 ServerInstall = true;
             }

@@ -70,7 +70,7 @@ namespace Library
                         Convert.ToBoolean(downloaderNode.Attributes["GAC"].Value),
                         downloaderNode.Attributes["type"].Value,
                         downloaderNode.Attributes["url"].Value,
-                        @"C:\Program Files\OpenMediaLibrary\FileDownloader.exe");
+                        Environment.SpecialFolder.ProgramFiles.ToString() + @"\OpenMediaLibrary\FileDownloader.exe");
 
                     XmlNode maximizerNode = xDoc.SelectSingleNode("/Config/Maximizer");
                     ProcessSingleFileUpdate(
@@ -78,7 +78,7 @@ namespace Library
                         Convert.ToBoolean(maximizerNode.Attributes["GAC"].Value),
                         maximizerNode.Attributes["type"].Value,
                         maximizerNode.Attributes["url"].Value,
-                        @"C:\Program Files\OpenMediaLibrary\Maximizer.exe");
+                        Environment.SpecialFolder.ProgramFiles.ToString() + @"\OpenMediaLibrary\Maximizer.exe");
 
                     XmlNode mencoderNode = xDoc.SelectSingleNode("/Config/MEncoder");
                     ProcessSingleFileUpdate(
@@ -86,7 +86,7 @@ namespace Library
                         Convert.ToBoolean(mencoderNode.Attributes["GAC"].Value),
                         mencoderNode.Attributes["type"].Value,
                         mencoderNode.Attributes["url"].Value,
-                        @"C:\Program Files\OpenMediaLibrary\Mencoder.exe");
+                        Environment.SpecialFolder.ProgramFiles.ToString() + @"\OpenMediaLibrary\Mencoder.exe");
                 }
             }
             catch (Exception)

@@ -29,7 +29,7 @@ namespace OMLTestSuite
                             @":\"" -oac copy -ovc copy -of mpeg -mpegopts format=dvd:tsaf " +
                             @"-vf harddup -really-quiet -o """ + FileSystemWalker.TranscodeBufferDirectory.ToLower() + @"\mymovie.mpg""", builder.GetArguments(MEncoderLogging.None).ToLower());
             Assert.IsNotNull(builder.GetCommand());
-            Assert.AreEqual(@"c:\program files\openmedialibrary\mencoder.exe", builder.GetCommand().ToLower());
+            Assert.AreEqual(Environment.SpecialFolder.ProgramFiles.ToString() + @"\openmedialibrary\mencoder.exe", builder.GetCommand().ToLower());
         }
 
         [Test]

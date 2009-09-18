@@ -185,7 +185,7 @@ namespace OMLEngine.Trailers
             }
             catch (Exception err)
             {
-
+                Utilities.DebugLine("[AppleTrailers] Error: {0}", err.Message);
             }
         }                
 

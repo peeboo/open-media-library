@@ -7,20 +7,19 @@ using System.ServiceProcess;
 using System.Security.Principal;
 using Microsoft.Deployment.WindowsInstaller;
 using FileDownloader;
-using System.Data.Sql;
 
 namespace OMLCustomWiXAction {
     public class CustomActions {
         private static string MediaInfoX64Url = @"http://www.openmedialibrary.org/OMLInstallerFiles/MediaInfox64.dll";
         private static string MediaInfoX86Url = @"http://www.openmedialibrary.org/OMLInstallerFiles/MediaInfoi386.dll";
-        private static string MediaInfoLocalPath = @"c:\program files\openmedialibrary\MediaInfo.dll";
+        private static string MediaInfoLocalPath = Environment.SpecialFolder.ProgramFiles.ToString() + @"\openmedialibrary\MediaInfo.dll";
 
         private static string MEncoderUrl = @"http://www.openmedialibrary.org/OMLInstallerFiles/mencoder-1.0rc2-4.2.1.exe";
-        private static string MEncoderPath = @"c:\program files\openmedialibrary\MEncoder.exe";
+        private static string MEncoderPath = Environment.SpecialFolder.ProgramFiles.ToString() + @"\openmedialibrary\MEncoder.exe";
 
         private static string UserManualUrl = @"http://www.openmedialibrary.org/OMLInstallerFiles/Open_Media_Library_User_Manual.pdf";
-        private static string UserManualHelpPath = @"c:\program files\openmedialibrary\Help";
-        private static string UserManualPath = @"c:\program files\openmedialibrary\Help\Open_Media_Library_User_Manual.pdf";
+        private static string UserManualHelpPath = Environment.SpecialFolder.ProgramFiles.ToString() + @"\openmedialibrary\Help";
+        private static string UserManualPath = Environment.SpecialFolder.ProgramFiles.ToString() + @"\openmedialibrary\Help\Open_Media_Library_User_Manual.pdf";
 
         [CustomAction]
         public static ActionResult StartOMLEngineService(Session session) {

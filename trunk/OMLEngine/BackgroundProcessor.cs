@@ -113,7 +113,7 @@ namespace OMLEngine
                         }
                         catch (Exception ex)
                         {
-                            //Application.Logger.ReportException("Error in background processor.", ex);
+                            Utilities.DebugLine("Error in background processor.", ex);
                         }
                     }
                     itemArrived.WaitOne();
