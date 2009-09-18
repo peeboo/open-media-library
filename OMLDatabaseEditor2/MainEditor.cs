@@ -825,13 +825,14 @@ namespace OMLDatabaseEditor
 
                         MetadataSearchManagement mds = new MetadataSearchManagement(_metadataPlugins);
 
-                        bool retval = mds.MetadataSearchUsingPreferred(title.TitleType, coverArtOnly, titleNameSearch, EpisodeName, SeasonNo, EpisodeNo, out searchresult);
+                        //bool retval = mds.MetadataSearchUsingPreferred(title.TitleType, coverArtOnly, titleNameSearch, EpisodeName, SeasonNo, EpisodeNo, out searchresult);
+                        bool retval = mds.MetadataSearchUsingPreferred(title);
 
                         if (retval)
                         {    
                             // Successful lookup, process
 
-                            if (((title.TitleType & TitleTypes.Season) != 0) ||
+                           /* if (((title.TitleType & TitleTypes.Season) != 0) ||
                                 ((title.TitleType & TitleTypes.TVShow) != 0) ||
                                 ((title.TitleType & TitleTypes.Episode) != 0))
                             {
@@ -847,7 +848,7 @@ namespace OMLDatabaseEditor
                                     OMLEngine.Settings.OMLSettings.MetadataLookupUpdateNamePrefMovies,
                                     OMLEngine.Settings.OMLSettings.MetadataLookupOverwriteExistingDataPrefMovies);
                             }
-
+                            */
                             LoadFanart(mds.FanArt, title); 
 
                             //CheckGenresAgainstSupported(titleEditor.EditedTitle);
@@ -2490,17 +2491,22 @@ namespace OMLDatabaseEditor
         private void deleteSelectedMoviesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ListView.SelectedListViewItemCollection sic = lvTitles.SelectedItems;
-
-            foreach (ListViewItem item in sic)
+              
+            DialogResult result = XtraMessageBox.Show("Are you sure you want to delete the selected items?", "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
+            if (result == DialogResult.Yes)
             {
-                int id = Convert.ToInt32(item.Text);
 
-                if (titleEditor.EditedTitle != null && titleEditor.EditedTitle.Id == id)
-                    titleEditor.ClearEditor(true);
+                foreach (ListViewItem item in sic)
+                {
+                    int id = Convert.ToInt32(item.Text);
 
-                TitleCollectionManager.DeleteTitle(_movieList[id]);
+                    if (titleEditor.EditedTitle != null && titleEditor.EditedTitle.Id == id)
+                        titleEditor.ClearEditor(true);
 
-                _movieList.Remove(id);
+                    TitleCollectionManager.DeleteTitle(_movieList[id]);
+
+                    _movieList.Remove(id);
+                }
             }
             //_titleCollection.saveTitleCollection();
             PopulateMovieListV2(SelectedTreeRoot);
@@ -3526,15 +3532,32 @@ namespace OMLDatabaseEditor
         #endregion
         
         
-        #region Title & Folder Creation
+        #region Title & Folder Creation.
+        // These wrap the functionality provided by the engine with
+        // some code to update the editor with the added titles
+        
         private int CreateTitle(int? parentid, string Name, TitleTypes titletype, Disk[] disks, bool RefreshUI)
         {
-            return CreateTitle(parentid, Name, titletype, null, null, disks, RefreshUI);
+            Title addedTitle = null;
+
+            TitleCollectionManager.CreateTitle(parentid, Name, titletype, null, null, disks, out addedTitle);
+            
+            AddCreatedTitle(addedTitle, RefreshUI);
+
+            return addedTitle.Id;
         }
 
         private int CreateTitle(int? parentid, string Name, TitleTypes titletype, short? SeasonNumber, short? EpisodeNumber, Disk[] disks, bool RefreshUI)
         {
-            Title newTitle = new Title();
+            Title addedTitle = null; 
+
+            TitleCollectionManager.CreateTitle(parentid, Name, titletype, SeasonNumber, EpisodeNumber, disks, out addedTitle);
+            
+            AddCreatedTitle(addedTitle, RefreshUI);
+
+            return addedTitle.Id;
+
+            /*Title newTitle = new Title();
             newTitle.Name = Name;
 
             if (parentid == null)
@@ -3579,34 +3602,19 @@ namespace OMLDatabaseEditor
             TitleCollectionManager.AddTitle(newTitle);
 
             // Get the new title from the DB and add it to the title list 
-            Title addedTitle = TitleCollectionManager.GetTitle(newTitle.Id);
-            _movieList.Add(newTitle.Id, addedTitle);
-
-            if (RefreshUI)
-            {
-                if ((titletype & TitleTypes.AllMedia) != 0)
-                {
-                    // Added a media
-                    PopulateMovieListV2(SelectedTreeRoot);
-                    titleEditor.LoadDVD(addedTitle);
-                    //ToggleSaveState(true);
-                }
-                else
-                {
-                    // Added a folder
-                    PopulateMediaTree();
-                    if (_mediaTree.ContainsKey(addedTitle.Id))
-                    {
-                        treeMedia.SelectedNode = _mediaTree[addedTitle.Id];
-                    }
-                }
-            }
-
-            return newTitle.Id;
+            Title addedTitle = TitleCollectionManager.GetTitle(newTitle.Id);*/
         }
 
-        private int CreateFolder(int? parentid, string Name, TitleTypes titletype, short? seriesNumber, bool RefreshUI) {
-            if (parentid == null) {
+        private int CreateFolder(int? parentid, string Name, TitleTypes titletype, short? seriesNumber, bool RefreshUI)
+        {
+            Title addedTitle = null; 
+
+            TitleCollectionManager.CreateFolder(parentid, Name, titletype, seriesNumber, out addedTitle);
+           
+            AddCreatedTitle(addedTitle, RefreshUI);
+     
+            return addedTitle.Id;
+            /*if (parentid == null) {
                 return CreateTitle(null, Name, titletype, null, RefreshUI);
             } else {
                 if ((titletype & TitleTypes.Unknown) != 0) {
@@ -3621,12 +3629,20 @@ namespace OMLDatabaseEditor
                     }
                 }
                 return CreateTitle(parentid, Name, titletype, seriesNumber, null, null, RefreshUI);
-            }
+            }*/
         }
 
         private int CreateFolder(int? parentid, string Name, TitleTypes titletype, bool RefreshUI)
         {
-            if (parentid == null)
+            Title addedTitle = null;
+
+            TitleCollectionManager.CreateFolder(parentid, Name, titletype, out addedTitle);
+
+            AddCreatedTitle(addedTitle, RefreshUI);
+            
+            return addedTitle.Id;
+
+            /*if (parentid == null)
             {
                 // Root Node
                 return CreateTitle(null, Name, titletype, null, RefreshUI);
@@ -3648,7 +3664,7 @@ namespace OMLDatabaseEditor
                     }
                 }
                 return CreateTitle(parentid, Name, titletype, null, RefreshUI);
-            }
+            }*/
         }
 
         private int CreateFolder(string Name, TitleTypes titletype, bool RefreshUI)
@@ -3662,7 +3678,7 @@ namespace OMLDatabaseEditor
             {
                 int parentid = Convert.ToInt32(treeMedia.SelectedNode.Name);
 
-                if ((titletype & TitleTypes.Unknown) != 0)
+                /*if ((titletype & TitleTypes.Unknown) != 0)
                 {
                     // Title type is unknown. Attempt to find title type by looking at parent
                     if (((_movieList[(int)parentid].TitleType & TitleTypes.TVShow) != 0) ||
@@ -3675,11 +3691,38 @@ namespace OMLDatabaseEditor
                     {
                         titletype = TitleTypes.Collection;
                     }
-                }
+                }*/
                 return CreateFolder(parentid, Name, titletype, RefreshUI);
             }
         }
 
+        private void AddCreatedTitle(Title addedTitle, bool RefreshUI)
+        {
+            _movieList.Add(addedTitle.Id, addedTitle);
+
+            if (RefreshUI)
+            {
+                if ((addedTitle.TitleType & TitleTypes.AllMedia) != 0)
+                {
+                    // Added a media
+                    PopulateMovieListV2(SelectedTreeRoot);
+                    titleEditor.LoadDVD(addedTitle);
+                    //ToggleSaveState(true);
+                }
+                else
+                {
+                    // Added a folder
+                    PopulateMediaTree();
+                    if (_mediaTree.ContainsKey(addedTitle.Id))
+                    {
+                        treeMedia.SelectedNode = _mediaTree[addedTitle.Id];
+                    }
+                }
+            }
+        }
+        #endregion
+
+        #region St Sana
         private void CreateTitlesFromPathArray(int? parentid, string[] path)
         {
             StSanaEvents eventsForm = new StSanaEvents();
