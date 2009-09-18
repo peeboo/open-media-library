@@ -784,6 +784,102 @@ namespace OMLEngine
                 Dao.DBContext.Instance.Dispose();
             }            
         }
+
+
+        public static int CreateTitle(int? parentid, string Name, TitleTypes titletype, Disk[] disks, out Title addedTitle)
+        {
+            return CreateTitle(parentid, Name, titletype, null, null, disks, out addedTitle);
+        }
+
+        public static int CreateTitle(int? parentid, string Name, TitleTypes titletype, short? SeasonNumber, short? EpisodeNumber, Disk[] disks, out Title addedTitle)
+        {
+            Title newTitle = new Title();
+            newTitle.Name = Name;
+
+            if (parentid == null)
+            {
+                newTitle.TitleType = TitleTypes.Root | titletype;
+            }
+            else
+            {
+                newTitle.TitleType = titletype;
+                newTitle.ParentTitleId = (int)parentid;
+
+                if ((titletype & TitleTypes.Unknown) != 0)
+                {
+                    // Title type is unknown. Attempt to find title type by looking at parent
+                    Title parent = GetTitle((int)parentid);
+                    if (parent != null)
+                    {
+                        if (((parent.TitleType & TitleTypes.TVShow) != 0) ||
+                        (((parent.TitleType & TitleTypes.Season) != 0)))
+                        {
+                            newTitle.TitleType = TitleTypes.Episode;
+                        }
+
+                        if ((parent.TitleType & TitleTypes.Collection) != 0)
+                        {
+                            newTitle.TitleType = TitleTypes.Movie;
+                        }
+                    }
+                }
+            }
+            newTitle.DateAdded = DateTime.Now;
+
+            newTitle.SeasonNumber = SeasonNumber;
+            newTitle.EpisodeNumber = EpisodeNumber;
+
+            if (disks != null)
+            {
+                foreach (Disk disk in disks)
+                {
+                    newTitle.AddDisk(disk);
+                }
+            }
+
+            // Add the title now to get the title ID
+            TitleCollectionManager.AddTitle(newTitle);
+
+            // Get the new title from the DB and add it to the title list 
+            addedTitle = TitleCollectionManager.GetTitle(newTitle.Id);
+            
+            return newTitle.Id;
+        }
+
+        public static int CreateFolder(int? parentid, string Name, TitleTypes titletype, short? seriesNumber, out Title addedTitle)
+        {
+            if (parentid == null)
+            {
+                return CreateTitle(null, Name, titletype, seriesNumber, null, null, out addedTitle);
+            }
+            else
+            {
+                if ((titletype & TitleTypes.Unknown) != 0)
+                {
+                    // Title type is unknown. Attempt to find title type by looking at parent
+                    Title parent = GetTitle((int)parentid);
+                    if (parent != null)
+                    {
+                        if (((parent.TitleType & TitleTypes.TVShow) != 0) ||
+                        (((parent.TitleType & TitleTypes.Season) != 0)))
+                        {
+                            titletype = TitleTypes.Season;
+                        }
+
+                        if ((parent.TitleType & TitleTypes.Collection) != 0)
+                        {
+                            titletype = TitleTypes.Collection;
+                        }
+                    }
+                }
+                return CreateTitle(parentid, Name, titletype, seriesNumber, null, null, out addedTitle);
+            }
+        }
+
+        public static int CreateFolder(int? parentid, string Name, TitleTypes titletype, out Title addedTitle)
+        {
+            return CreateFolder(parentid, Name, titletype, null, out addedTitle);
+        }
     }
 
     public class FilteredCollectionWithImages : FilteredCollection
