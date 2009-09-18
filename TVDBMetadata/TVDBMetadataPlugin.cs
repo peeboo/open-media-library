@@ -376,34 +376,64 @@ namespace TVDBMetadata
                             series.Id = seriesId;
 
                             XmlNode contentRatingNode = seriesNode.SelectSingleNode("ContentRating");
-                            series.ContentRating = contentRatingNode.ChildNodes[0].Value;
+                            if (contentRatingNode.ChildNodes.Count > 0)
+                            {
+                                series.ContentRating = contentRatingNode.ChildNodes[0].Value;
+                            }
 
                             XmlNode genreNode = seriesNode.SelectSingleNode("Genre");
-                            series.Genre = genreNode.ChildNodes[0].Value;
+                            if (genreNode.ChildNodes.Count > 0)
+                            {
+                                series.Genre = genreNode.ChildNodes[0].Value;
+                            }
 
                             XmlNode imdbidNode = seriesNode.SelectSingleNode("IMDB_ID");
-                            series.IMDBId = imdbidNode.ChildNodes[0].Value;
+                            if (imdbidNode.ChildNodes.Count > 0)
+                            {
+                                series.IMDBId = imdbidNode.ChildNodes[0].Value;
+                            }
 
                             XmlNode networkNode = seriesNode.SelectSingleNode("Network");
-                            series.network = networkNode.ChildNodes[0].Value;
+                            if (networkNode.ChildNodes.Count > 0)
+                            {
+                                series.network = networkNode.ChildNodes[0].Value;
+                            }
 
                             XmlNode runtimeNode = seriesNode.SelectSingleNode("Runtime");
-                            series.Runtime = Int16.Parse(runtimeNode.ChildNodes[0].Value);
+                            if (runtimeNode.ChildNodes.Count > 0)
+                            {
+                                series.Runtime = Int16.Parse(runtimeNode.ChildNodes[0].Value);
+                            }
 
                             XmlNode seriesNameNode = seriesNode.SelectSingleNode("SeriesName");
-                            series.SeriesName = seriesNameNode.ChildNodes[0].Value;
+                            if (seriesNameNode.ChildNodes.Count > 0)
+                            {
+                                series.SeriesName = seriesNameNode.ChildNodes[0].Value;
+                            }
 
                             XmlNode bannerNode = seriesNode.SelectSingleNode("banner");
-                            series.BannerUrl = "http://images.thetvdb.com/banners/" + bannerNode.ChildNodes[0].Value;
+                            if (bannerNode.ChildNodes.Count > 0)
+                            {
+                                series.BannerUrl = "http://images.thetvdb.com/banners/" + bannerNode.ChildNodes[0].Value;
+                            }
 
                             XmlNode fanartNode = seriesNode.SelectSingleNode("fanart");
-                            series.FanartUrl = "http://images.thetvdb.com/banners/" + fanartNode.ChildNodes[0].Value;
+                            if (fanartNode.ChildNodes.Count > 0)
+                            {
+                                series.FanartUrl = "http://images.thetvdb.com/banners/" + fanartNode.ChildNodes[0].Value;
+                            }
 
                             XmlNode posterNode = seriesNode.SelectSingleNode("poster");
-                            series.PosterUrl = posterNode.ChildNodes[0].Value;
+                            if (posterNode.ChildNodes.Count > 0)
+                            {
+                                series.PosterUrl = posterNode.ChildNodes[0].Value;
+                            }
 
                             XmlNode zap2itNode = seriesNode.SelectSingleNode("zap2it_id");
-                            series.Zap2ItId = zap2itNode.ChildNodes[0].Value;
+                            if (zap2itNode.ChildNodes.Count > 0)
+                            {
+                                series.Zap2ItId = zap2itNode.ChildNodes[0].Value;
+                            }
 
                             return series;
                         }
