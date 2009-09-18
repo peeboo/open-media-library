@@ -1300,7 +1300,7 @@ namespace OMLDatabaseEditor
                 try
                 {
                     Process pr = new Process();
-                    pr.StartInfo.FileName = @"c:\program files\openmedialibrary\TranscoderTester.exe";
+                    pr.StartInfo.FileName = Environment.SpecialFolder.ProgramFiles.ToString() + @"\openmedialibrary\TranscoderTester.exe";
                     pr.StartInfo.Arguments = "\"" + mediafile + "\"";
                     pr.Start();
                 }

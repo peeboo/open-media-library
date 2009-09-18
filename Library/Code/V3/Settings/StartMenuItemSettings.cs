@@ -166,7 +166,7 @@ namespace Library.Code.V3
             if (string.IsNullOrEmpty(this.selectedItem.ItemId))
             {
                 this.selectedItem.Description = "some desc";
-                this.selectedItem.ImageUrl = @"C:\Program Files\Open Media Library\Application.png";
+                this.selectedItem.ImageUrl = Environment.SpecialFolder.ProgramFiles.ToString() + @"\Open Media Library\Application.png";
                 this.helper.AddStartMenuItem(this.selectedItem);
             }
             else

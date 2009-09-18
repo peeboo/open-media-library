@@ -57,7 +57,7 @@ namespace Library.Code.V3
             moviesItem.Context = Context.Movies;
             moviesItem.ExtendedContext = string.Empty;
             moviesItem.Description = "Movies";
-            moviesItem.ImageUrl = @"C:\Program Files\Open Media Library\Application.png";
+            moviesItem.ImageUrl = Environment.SpecialFolder.ProgramFiles.ToString() + @"\Open Media Library\Application.png";
             this.helper.AddStartMenuItem(moviesItem);
             //create tv
             StartMenuItem tvItem = new StartMenuItem();
@@ -65,7 +65,7 @@ namespace Library.Code.V3
             tvItem.Context = Context.TV;
             tvItem.ExtendedContext = string.Empty;
             tvItem.Description = "TV";
-            tvItem.ImageUrl = @"C:\Program Files\Open Media Library\Application.png";
+            tvItem.ImageUrl = Environment.SpecialFolder.ProgramFiles.ToString() + @"\Open Media Library\Application.png";
             this.helper.AddStartMenuItem(tvItem);
             //create trailers
             StartMenuItem trailersItem = new StartMenuItem();
@@ -73,7 +73,7 @@ namespace Library.Code.V3
             trailersItem.Context = Context.Trailers;
             trailersItem.ExtendedContext = string.Empty;
             trailersItem.Description = "Trailers";
-            trailersItem.ImageUrl = @"C:\Program Files\Open Media Library\Application.png";
+            trailersItem.ImageUrl = Environment.SpecialFolder.ProgramFiles.ToString() + @"\Open Media Library\Application.png";
             this.helper.AddStartMenuItem(trailersItem);
             //create search
             StartMenuItem searchItem = new StartMenuItem();
@@ -81,7 +81,7 @@ namespace Library.Code.V3
             searchItem.Context = Context.Search;
             searchItem.ExtendedContext = string.Empty;
             searchItem.Description = "Search";
-            searchItem.ImageUrl = @"C:\Program Files\Open Media Library\Application.png";
+            searchItem.ImageUrl = Environment.SpecialFolder.ProgramFiles.ToString() + @"\Open Media Library\Application.png";
             this.helper.AddStartMenuItem(searchItem);
         }
 

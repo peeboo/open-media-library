@@ -2203,6 +2203,7 @@ namespace OMLEngine
             }
             catch (Exception ex)
             {
+                Utilities.DebugLine("[Title] Error: {0}", ex.Message);
                 return null;
             }
 

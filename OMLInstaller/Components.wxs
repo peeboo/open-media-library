@@ -292,7 +292,7 @@
           <RegistryValue Id="reg6" Type="string" Name="AppId" Value="{3f0850a7-0fd7-4cbf-b8dc-c7f7ea31534e}" Action="write"/>
           <RegistryValue Id="reg7" Type="expandable" Name="Context" Value="Menu" Action="write"/>
           <RegistryValue Id="reg8" Type="expandable" Name="Description" Value="Open Media Library" Action="write"/>
-          <RegistryValue Id="reg9" Type="expandable" Name="ImageUrl" Value="C:\Program Files\Open Media Library\Application.png" Action="write"/>
+          <RegistryValue Id="reg9" Type="expandable" Name="ImageUrl" Value="$(env.PROGRAMFILES)\Open Media Library\Application.png" Action="write"/>
           <RegistryValue Id="reg10" Type="integer" Name="TimeStamp" Value="214505905" Action="write"/>
           <RegistryValue Id="reg11" Type="string" Name="Title" Value="Open Media Library" Action="write"/>
         </RegistryKey>
