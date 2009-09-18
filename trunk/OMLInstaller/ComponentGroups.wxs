@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Fragment>
+    <ComponentGroup Id="CommonComponents">
+      <ComponentRef Id="PostInstallerWizard.exe"/>
+
+      <ComponentRef Id="Application.png" />
+
+      <!-- Required OML Libraries-->
+      <ComponentRef Id="OMLEngine.dll" />
+      <ComponentRef Id="OMLSDK.dll" />
+      <ComponentRef Id="StSana.dll"/>
+      <ComponentRef Id="MediaInfo.dll"/>
+      <ComponentRef Id="Maximizer.exe"/>
+      <ComponentRef Id="OMLEngineService.exe"/>
+
+      <!-- File Watcher-->
+      <ComponentRef Id="OMLFWService.exe"/>
+      <ComponentRef Id="OMLFileWatcher.dll"/>
+      <ComponentRef Id="registryFWS"/>
+
+      <!-- Database scripts-->
+      <ComponentRef Id="TitleDatabase.sql"/>
+      <ComponentRef Id="TitleDatabaseUpgrade1.1.sql"/>
+      <ComponentRef Id="TitleDatabaseUpgrade1.2.sql"/>
+      <ComponentRef Id="SQLConfigNoTools_x32.ini"/>
+    </ComponentGroup>
+
+    <ComponentGroup Id="ClientGroupUI">
+      <!-- Media Center plugin components-->
+      <ComponentRef Id="Library.dll" />
+      <ComponentRef Id="dssnap.dll" />
+      <ComponentRef Id="OMLTranscoder.dll"/>
+      <ComponentRef Id="Registration.xml" />
+      <ComponentRef Id="MEncoder.exe"/>
+      <ComponentRef Id="FileDownloader.dll"/>
+
+      <!-- UI Registry Keys -->
+      <ComponentRef Id="registryUI"/>
+    </ComponentGroup>
+
+    <ComponentGroup Id="ClientGroupEditor">
+      <!-- Editor components -->
+      <ComponentRef Id="DevExpress.Data.v8.2.dll"/>
+      <ComponentRef Id="DevExpress.Utils.v8.2.dll"/>
+      <ComponentRef Id="DevExpress.XtraEditors.v8.2.dll"/>
+      <ComponentRef Id="DevExpress.XtraNavBar.v8.2.dll"/>
+      <ComponentRef Id="DevExpress.Data.v8.2.xml"/>
+      <ComponentRef Id="DevExpress.Utils.v8.2.xml"/>
+      <ComponentRef Id="DevExpress.XtraEditors.v8.2.xml"/>
+      <ComponentRef Id="DevExpress.XtraNavBar.v8.2.xml"/>
+      <ComponentRef Id="OMLDatabaseEditor.exe" />
+      <ComponentRef Id="TranscoderTester.exe"/>
+
+      <!-- Importer Plugins -->
+      <ComponentRef Id="OMLImporter.exe" />
+      <ComponentRef Id="DVDProfilerPlugin.dll" />
+      <ComponentRef Id="DVRMSPlugin.dll" />
+      <ComponentRef Id="MovieCollectorz.dll" />
+      <ComponentRef Id="MyMoviesPlugin.dll" />
+      <ComponentRef Id="MyMoviesToOML.xsl" />
+      <ComponentRef Id="OMLXMLImporter.dll" />
+
+      <!-- Metadata Plugins -->
+      <ComponentRef Id="VMCDVDLibraryPlugin.dll" />
+      <ComponentRef Id="AmazonMetadata.dll" />
+      <ComponentRef Id="TheMovieDbMetadata.dll" />
+      <ComponentRef Id="NetFlixMetadata.dll"/>
+      <ComponentRef Id="DVDProfilerMetaData.dll"/>
+      <ComponentRef Id="TVDBMetadata.dll"/>
+
+
+      <!-- Start Menu Shortcuts -->
+      <ComponentRef Id="DatabaseEditorShortcut" />
+      <ComponentRef Id="ImporterShortcut" />
+
+    </ComponentGroup>
+
+    <ComponentGroup Id="UserGuide">
+      <ComponentRef Id="UserManualShortcut" />
+      <ComponentRef Id="Open_Media_Library_User_Manual.pdf"/>
+    </ComponentGroup>
+  </Fragment>
+</Wix>
