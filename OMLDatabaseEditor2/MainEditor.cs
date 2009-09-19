@@ -70,31 +70,36 @@ namespace OMLDatabaseEditor
 
             InitializeComponent();
 
-            InitData();
-            
-            // Setup views
-            splitContainerDetails.Panel2.Controls["titleEditor"].Visible = true;
-            splitContainerDetails.Panel2.Controls["bioDataEditor"].Visible = false;
-            splitContainerDetails.Panel2.Controls["genreMetaDataEditor"].Visible = false;
-            splitContainerDetails.Panel2.Controls["titlesListView"].Visible = false;
-            splitContainerDetails.Panel2.Controls["titleEditor"].Dock = DockStyle.Fill;
-            splitContainerDetails.Panel2.Controls["bioDataEditor"].Dock = DockStyle.Fill;
-            splitContainerDetails.Panel2.Controls["genreMetaDataEditor"].Dock = DockStyle.Fill;
-            splitContainerDetails.Panel2.Controls["titlesListView"].Dock = DockStyle.Fill;
-            alwaysShowTitleListToolStripMenuItem.Checked = OMLEngine.Settings.OMLSettings.DBEAlwaysShowTitleList;
-            showAllItemsInTitleListToolStripMenuItem.Checked = OMLEngine.Settings.OMLSettings.ShowSubFolderTitles;
+            if (InitData())
+            {
+                // Setup views
+                splitContainerDetails.Panel2.Controls["titleEditor"].Visible = true;
+                splitContainerDetails.Panel2.Controls["bioDataEditor"].Visible = false;
+                splitContainerDetails.Panel2.Controls["genreMetaDataEditor"].Visible = false;
+                splitContainerDetails.Panel2.Controls["titlesListView"].Visible = false;
+                splitContainerDetails.Panel2.Controls["titleEditor"].Dock = DockStyle.Fill;
+                splitContainerDetails.Panel2.Controls["bioDataEditor"].Dock = DockStyle.Fill;
+                splitContainerDetails.Panel2.Controls["genreMetaDataEditor"].Dock = DockStyle.Fill;
+                splitContainerDetails.Panel2.Controls["titlesListView"].Dock = DockStyle.Fill;
+                alwaysShowTitleListToolStripMenuItem.Checked = OMLEngine.Settings.OMLSettings.DBEAlwaysShowTitleList;
+                showAllItemsInTitleListToolStripMenuItem.Checked = OMLEngine.Settings.OMLSettings.ShowSubFolderTitles;
 
-            this.DesktopBounds =new Rectangle(Properties.Settings.Default.Location,Properties.Settings.Default.Size);
-            this.WindowState = (FormWindowState)Enum.Parse(typeof(FormWindowState),Properties.Settings.Default.WindowState);
+                this.DesktopBounds = new Rectangle(Properties.Settings.Default.Location, Properties.Settings.Default.Size);
+                this.WindowState = (FormWindowState)Enum.Parse(typeof(FormWindowState), Properties.Settings.Default.WindowState);
 
-            CurrentNavigation = mainNav.ActiveGroup;
+                CurrentNavigation = mainNav.ActiveGroup;
+            }
+            else
+            {
+                Environment.Exit(-1);
+            }
         }
 
 
         /// <summary>
         /// Perform startup initialisation including updating the splash screen
         /// </summary>
-        private void InitData()
+        private bool InitData()
         {
             Cursor = Cursors.WaitCursor;
             //OMLEngine.Utilities.DebugLine("[MainEditor] InitData() : new TitleCollection()");
@@ -105,7 +110,7 @@ namespace OMLDatabaseEditor
             {
                 SplashScreen2.CloseForm();
                 Cursor = Cursors.Default;
-                return;
+                return false;
             }
 
             defaultLookAndFeel1.LookAndFeel.SkinName = OMLEngine.Settings.OMLSettings.DBEditorSkin;
@@ -166,6 +171,7 @@ namespace OMLDatabaseEditor
 
             SplashScreen2.CloseForm();
             Cursor = Cursors.Default;
+            return true;
         }
 
 
