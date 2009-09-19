@@ -786,12 +786,12 @@ namespace OMLEngine
         }
 
 
-        public static int CreateTitle(int? parentid, string Name, TitleTypes titletype, Disk[] disks, out Title addedTitle)
+        public static Title CreateTitle(int? parentid, string Name, TitleTypes titletype, Disk[] disks)
         {
-            return CreateTitle(parentid, Name, titletype, null, null, disks, out addedTitle);
+            return CreateTitle(parentid, Name, titletype, null, null, disks);
         }
 
-        public static int CreateTitle(int? parentid, string Name, TitleTypes titletype, short? SeasonNumber, short? EpisodeNumber, Disk[] disks, out Title addedTitle)
+        public static Title CreateTitle(int? parentid, string Name, TitleTypes titletype, short? SeasonNumber, short? EpisodeNumber, Disk[] disks)
         {
             Title newTitle = new Title();
             newTitle.Name = Name;
@@ -841,16 +841,14 @@ namespace OMLEngine
             TitleCollectionManager.AddTitle(newTitle);
 
             // Get the new title from the DB and add it to the title list 
-            addedTitle = TitleCollectionManager.GetTitle(newTitle.Id);
-            
-            return newTitle.Id;
+            return TitleCollectionManager.GetTitle(newTitle.Id);
         }
 
-        public static int CreateFolder(int? parentid, string Name, TitleTypes titletype, short? seriesNumber, out Title addedTitle)
+        public static Title CreateFolder(int? parentid, string Name, TitleTypes titletype, short? seriesNumber)
         {
             if (parentid == null)
             {
-                return CreateTitle(null, Name, titletype, seriesNumber, null, null, out addedTitle);
+                return CreateTitle(null, Name, titletype, seriesNumber, null, null);
             }
             else
             {
@@ -872,13 +870,50 @@ namespace OMLEngine
                         }
                     }
                 }
-                return CreateTitle(parentid, Name, titletype, seriesNumber, null, null, out addedTitle);
+                return CreateTitle(parentid, Name, titletype, seriesNumber, null, null);
             }
         }
 
-        public static int CreateFolder(int? parentid, string Name, TitleTypes titletype, out Title addedTitle)
+        public static Title CreateFolder(int? parentid, string Name, TitleTypes titletype)
         {
-            return CreateFolder(parentid, Name, titletype, null, out addedTitle);
+            return CreateFolder(parentid, Name, titletype, null);
+        }
+
+        /// <summary>
+        /// Creates or finds an existing folder by 'Name' with a specific parentid. Returns an out addedTitle
+        /// parameter if a new title was created, if title allready exists
+        /// </summary>
+        /// <param name="parentid"></param>
+        /// <param name="Name"></param>
+        /// <param name="titletype"></param>
+        /// <param name="seriesNumber"></param>
+        /// <param name="addedTitle"></param>
+        /// <returns></returns>
+        public static Title CreateFolderNonDuplicate(int? parentid, string Name, TitleTypes titletype, short? seriesNumber, out bool titleCreated)
+        {
+            // Build filter
+            TitleFilter tf1 = new TitleFilter(TitleFilterType.Parent, parentid.ToString());
+            TitleFilter tf2 = new TitleFilter(TitleFilterType.Name, Name);
+            List<TitleFilter> tf = new List<TitleFilter>();
+            tf.Add(tf1);
+            tf.Add(tf2);
+            List<Title> existingTitle = (from t in TitleCollectionManager.GetFilteredTitles(tf)
+                                         where t.Name == Name
+                                         select t).ToList();
+
+
+
+            if (existingTitle.Count() > 0)
+            {
+                titleCreated = false;
+                return existingTitle[0];
+            }
+            else
+            {
+                Title addedTitle = null;
+                titleCreated = true;
+                return CreateFolder(parentid, Name, titletype, seriesNumber);
+            }
         }
     }
 
