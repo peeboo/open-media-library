@@ -3538,9 +3538,7 @@ namespace OMLDatabaseEditor
         
         private int CreateTitle(int? parentid, string Name, TitleTypes titletype, Disk[] disks, bool RefreshUI)
         {
-            Title addedTitle = null;
-
-            TitleCollectionManager.CreateTitle(parentid, Name, titletype, null, null, disks, out addedTitle);
+            Title addedTitle = TitleCollectionManager.CreateTitle(parentid, Name, titletype, null, null, disks);
             
             AddCreatedTitle(addedTitle, RefreshUI);
 
@@ -3549,9 +3547,7 @@ namespace OMLDatabaseEditor
 
         private int CreateTitle(int? parentid, string Name, TitleTypes titletype, short? SeasonNumber, short? EpisodeNumber, Disk[] disks, bool RefreshUI)
         {
-            Title addedTitle = null; 
-
-            TitleCollectionManager.CreateTitle(parentid, Name, titletype, SeasonNumber, EpisodeNumber, disks, out addedTitle);
+            Title addedTitle = TitleCollectionManager.CreateTitle(parentid, Name, titletype, SeasonNumber, EpisodeNumber, disks);
             
             AddCreatedTitle(addedTitle, RefreshUI);
 
@@ -3607,9 +3603,7 @@ namespace OMLDatabaseEditor
 
         private int CreateFolder(int? parentid, string Name, TitleTypes titletype, short? seriesNumber, bool RefreshUI)
         {
-            Title addedTitle = null; 
-
-            TitleCollectionManager.CreateFolder(parentid, Name, titletype, seriesNumber, out addedTitle);
+            Title addedTitle = TitleCollectionManager.CreateFolder(parentid, Name, titletype, seriesNumber);
            
             AddCreatedTitle(addedTitle, RefreshUI);
      
@@ -3634,9 +3628,7 @@ namespace OMLDatabaseEditor
 
         private int CreateFolder(int? parentid, string Name, TitleTypes titletype, bool RefreshUI)
         {
-            Title addedTitle = null;
-
-            TitleCollectionManager.CreateFolder(parentid, Name, titletype, out addedTitle);
+            Title addedTitle = TitleCollectionManager.CreateFolder(parentid, Name, titletype);
 
             AddCreatedTitle(addedTitle, RefreshUI);
             
@@ -3722,8 +3714,9 @@ namespace OMLDatabaseEditor
         }
         #endregion
 
+
         #region St Sana
-        private void CreateTitlesFromPathArray(int? parentid, string[] path)
+        /*private void CreateTitlesFromPathArray(int? parentid, string[] path)
         {
             StSanaEvents eventsForm = new StSanaEvents();
             eventsForm.Show();
@@ -3936,6 +3929,46 @@ namespace OMLDatabaseEditor
             eventsForm = null;
             PopulateMovieListV2(SelectedTreeRoot);
             PopulateMediaTree();
+        }*/
+
+
+        private void CreateTitlesFromPathArray(int? parentid, string[] path)
+        {
+            StSanaEvents eventsForm = new StSanaEvents();
+            eventsForm.Show();
+            eventsForm.Activate();
+
+            // Create the St Sana class
+            StSanaServices StSana = new StSanaServices();
+
+            StSana.Log += new StSanaServices.SSEventHandler(stsana_Log);
+            
+            List<Title> titles= StSana.CreateTitlesFromPathArray(parentid, path);
+
+            foreach (Title t in titles)
+            {
+                AddCreatedTitle(t, false);
+
+                if ((t.TitleType & TitleTypes.AllMedia) != 0)
+                {
+                    try
+                    {
+                        stsana_Log("Looking up metadata for " + t.Name);
+                        LookupPreferredMetaData(t);
+                    }
+                    catch (Exception ex)
+                    {
+                        Utilities.DebugLine("[OMLDatabaseEditor] CreateTitlesFromPathArray exception " + ex.Message);
+                    }
+                }
+            }
+            TitleCollectionManager.SaveTitleUpdates();
+
+            eventsForm.Hide();
+            eventsForm.Dispose();
+            eventsForm = null;
+            PopulateMovieListV2(SelectedTreeRoot);
+            PopulateMediaTree();
         }
 
         void stsana_Log(string message)
@@ -3943,7 +3976,7 @@ namespace OMLDatabaseEditor
             StSanaEvents.UpdateStatus(message);
         }
 
-        private void CheckDiskPathForImages(Title title, Disk disk)
+        /*private void CheckDiskPathForImages(Title title, Disk disk)
         {
             if ((disk == null) || (string.IsNullOrEmpty(disk.Path))) return;
 
@@ -4039,7 +4072,7 @@ namespace OMLDatabaseEditor
                 }
             }
         }
-
+        */
         private void LookupPreferredMetaData(Title title)
         {
             if (OMLEngine.Settings.OMLSettings.StSanaAutoLookupMeta)
@@ -4057,7 +4090,7 @@ namespace OMLDatabaseEditor
         /// <param name="Name"></param>
         /// <param name="titletype"></param>
         /// <param name="RefreshUI"></param>
-        private int CreateFolderNonDuplicate(int? parentid, string Name, TitleTypes titletype, short? seriesNumber, bool RefreshUI)
+        /*private int CreateFolderNonDuplicate(int? parentid, string Name, TitleTypes titletype, short? seriesNumber, bool RefreshUI)
         {
             int titleid;
 
@@ -4082,7 +4115,7 @@ namespace OMLDatabaseEditor
                 titleid = CreateFolder(parentid, Name, titletype, seriesNumber, RefreshUI);
             }
             return titleid;
-        }
+        }*/
         #endregion
 
 
