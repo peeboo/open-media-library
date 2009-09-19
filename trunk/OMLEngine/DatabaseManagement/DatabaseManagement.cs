@@ -47,6 +47,7 @@ namespace OMLEngine.DatabaseManagement
         /// <returns></returns>
         private DatabaseInformation.SQLState CheckOMLDatabase()
         {
+            Utilities.DebugLine("[DatabaseManagement] : Entering CheckOMLDatabase()");
             SqlDataReader reader;
 
             // Test 1. Create database connection to OML and open it
@@ -55,6 +56,7 @@ namespace OMLEngine.DatabaseManagement
 
             if (sqlConn == null)
             {
+                Utilities.DebugLine("[DatabaseManagement / CheckOMLDatabase()] : Failed to login using - " + DatabaseInformation.OMLDatabaseConnectionString);
                 return DatabaseInformation.SQLState.LoginFailure;
             }
 
@@ -63,6 +65,7 @@ namespace OMLEngine.DatabaseManagement
             string sql = "ALTER DATABASE [" + DatabaseInformation.DatabaseName + "] SET MULTI_USER";
             if (!ExecuteNonQuery(sqlConn, sql))
             {
+                Utilities.DebugLine("[DatabaseManagement / CheckOMLDatabase()] : Attempting to set the database to Multi user failed");
                 sqlConn.Close();
                 sqlConn.Dispose();
                 return DatabaseInformation.SQLState.UnknownState;
@@ -96,11 +99,15 @@ namespace OMLEngine.DatabaseManagement
             {
                 // Cannot find schema version
                 sqlstate = DatabaseInformation.SQLState.OMLDBVersionNotFound;
+                Utilities.DebugLine("[DatabaseManagement / CheckOMLDatabase()] : Unable to finr the schema version.");
+
             }
 
 
             sqlConn.Close();
             sqlConn.Dispose();
+            
+            Utilities.DebugLine("[DatabaseManagement] : Leaving CheckOMLDatabase()");
 
             return sqlstate;
         }
@@ -112,21 +119,26 @@ namespace OMLEngine.DatabaseManagement
         /// <returns></returns>
         private DatabaseInformation.SQLState DatabaseDiagnostics()
         {
+            Utilities.DebugLine("[DatabaseManagement] : Entering DatabaseDiagnostics()");
+
             object data;
 
             // Test 1. Open database connection to Master and open it
             // ------------------------------------------------------
+            Utilities.DebugLine("[DatabaseManagement / DatabaseDiagnostics()] : Checking the master database");
             SqlConnection sqlConn = OpenDatabase(DatabaseInformation.MasterDatabaseConnectionString);
-
             if (sqlConn == null)
-            {  
+            {
+                Utilities.DebugLine("[DatabaseManagement / DatabaseDiagnostics()] : Failed to login using - " + DatabaseInformation.MasterDatabaseConnectionString);
                 return DatabaseInformation.SQLState.LoginFailure;
             }
 
             // Test 2. Check if the database exists on the server
+            Utilities.DebugLine("[DatabaseManagement / DatabaseDiagnostics()] : Checking the oml sysdatabase entry");
             string sql = "select count(*) from sysdatabases where name = '" + DatabaseInformation.DatabaseName + "'";
             if (!ExecuteScalar(sqlConn, sql, out data))
             {
+                Utilities.DebugLine("[DatabaseManagement / DatabaseDiagnostics()] : sysdatabases check failed");
                 sqlConn.Close();
                 sqlConn.Dispose();
                 return DatabaseInformation.SQLState.UnknownState;
@@ -134,6 +146,7 @@ namespace OMLEngine.DatabaseManagement
 
             if (Convert.ToInt32(data) != 1)
             {
+                Utilities.DebugLine("[DatabaseManagement / DatabaseDiagnostics()] : Could not find the database - " + DatabaseInformation.DatabaseName);
                 sqlConn.Close();
                 sqlConn.Dispose();
                 return DatabaseInformation.SQLState.OMLDBNotFound;
@@ -142,9 +155,11 @@ namespace OMLEngine.DatabaseManagement
 
             // Test 3. Check user account exists
             // ---------------------------------
+            Utilities.DebugLine("[DatabaseManagement / DatabaseDiagnostics()] : Checking the syslogins entry");
             sql = "select count(*) from syslogins where name = '" + DatabaseInformation.OMLUserAcct.ToLower() + "'";
             if (!ExecuteScalar(sqlConn, sql, out data))
             {
+                Utilities.DebugLine("[DatabaseManagement / DatabaseDiagnostics()] : syslogins check failed");
                 sqlConn.Close();
                 sqlConn.Dispose();
                 return DatabaseInformation.SQLState.UnknownState;
@@ -152,6 +167,7 @@ namespace OMLEngine.DatabaseManagement
 
             if (Convert.ToInt32(data) != 1)
             {
+                Utilities.DebugLine("[DatabaseManagement / DatabaseDiagnostics()] : Could not find the oml login in master database");
                 // Try to create user
                 CreateOMLUser(sqlConn);
                 return DatabaseInformation.SQLState.OMLUserNotFound;
@@ -160,10 +176,12 @@ namespace OMLEngine.DatabaseManagement
             // Test 4. Check user account exists in oml database
             // -------------------------------------------------
             sqlConn.ChangeDatabase(DatabaseInformation.DatabaseName);
-
+            Utilities.DebugLine("[DatabaseManagement / DatabaseDiagnostics()] : Checking the oml.sysusers entry");
             sql = "select count(*) from sysusers where name = '" + DatabaseInformation.OMLUserAcct.ToLower() + "'";
             if (!ExecuteScalar(sqlConn, sql, out data))
             {
+                Utilities.DebugLine("[DatabaseManagement / DatabaseDiagnostics()] : oml.sysusers check failed");
+
                 sqlConn.Close();
                 sqlConn.Dispose();
                 return DatabaseInformation.SQLState.UnknownState;
@@ -171,13 +189,44 @@ namespace OMLEngine.DatabaseManagement
 
             if (Convert.ToInt32(data) != 1)
             {
+                Utilities.DebugLine("[DatabaseManagement / DatabaseDiagnostics()] : Could not find the oml user in the user database");
                 // Try to create user 
                 CreateOMLUser(sqlConn);
                 return DatabaseInformation.SQLState.OMLUserNotFound;
             }
 
+            // Test 5. Check for matching sid on the master.syslogins amd oml.sysusers entries
+            // --------------------------------------------------------------------------------
+            sqlConn.ChangeDatabase(DatabaseInformation.DatabaseName);
+            Utilities.DebugLine("[DatabaseManagement / DatabaseDiagnostics()] : Checking the sid fields on master.sys oml.sysusers");
+            sql = "select count(*) from master.sys.syslogins sl " + 
+                "inner join oml.sys.sysusers su " +
+                "on sl.sid = su.sid " +
+                "where sl.name = '" + DatabaseInformation.OMLUserAcct.ToLower() + "' " +
+                "and  su.name = '" + DatabaseInformation.OMLUserAcct.ToLower() + "'";
+            if (!ExecuteScalar(sqlConn, sql, out data))
+            {
+                Utilities.DebugLine("[DatabaseManagement / DatabaseDiagnostics()] : sid fields on master.sys oml.sysusers check failed");
+
+                sqlConn.Close();
+                sqlConn.Dispose();
+                return DatabaseInformation.SQLState.UnknownState;
+            }
+
+            if (Convert.ToInt32(data) < 1)
+            {
+                Utilities.DebugLine("[DatabaseManagement / DatabaseDiagnostics()] : Mismatch on the SID entries. Attempting to recreate accounts");
+                // Try to create user 
+                CreateOMLUser(sqlConn);
+                return DatabaseInformation.SQLState.OMLUserNotFound;
+            }
+
+
             sqlConn.Close();
             sqlConn.Dispose();
+
+            Utilities.DebugLine("[DatabaseManagement] : Leaving DatabaseDiagnostics()");
+
             return DatabaseInformation.SQLState.OK;
         }
 
@@ -402,6 +451,8 @@ namespace OMLEngine.DatabaseManagement
         /// </summary>
         private void CreateOMLUser(SqlConnection sqlConn)
         {
+            Utilities.DebugLine("[DatabaseManagement] : Entering CreateOMLUser()");
+
             ExecuteNonQuery(sqlConn, "CREATE LOGIN [" + DatabaseInformation.OMLUserAcct + "] " +
                     "WITH PASSWORD=N'" + DatabaseInformation.OMLUserPassword + "', " +
                     " DEFAULT_DATABASE=[" + DatabaseInformation.DatabaseName + "], DEFAULT_LANGUAGE=[us_english], CHECK_EXPIRATION=OFF, CHECK_POLICY=OFF");
@@ -412,6 +463,9 @@ namespace OMLEngine.DatabaseManagement
             ExecuteNonQuery(sqlConn, "CREATE USER [" + DatabaseInformation.OMLUserAcct + "] FOR LOGIN [" + DatabaseInformation.OMLUserAcct + "] WITH DEFAULT_SCHEMA=[dbo]");
             ExecuteNonQuery(sqlConn, "EXEC sp_addrolemember [db_owner], [" + DatabaseInformation.OMLUserAcct + "]");
             sqlConn.ChangeDatabase("master");
+
+            Utilities.DebugLine("[DatabaseManagement] : Leaving CreateOMLUser()");
+
         }
 
 
@@ -654,6 +708,10 @@ namespace OMLEngine.DatabaseManagement
             }
             catch (Exception ex)
             {
+                Utilities.DebugLine("[DatabaseManagement / ExecuteScalar()] : Executing SQL -" + query);
+                Utilities.DebugLine("                     Returned error - " + ex.Message);
+                Utilities.DebugLine("                  Connection string - " + sqlConn.ConnectionString);
+
                 DatabaseInformation.LastSQLError = ex.Message;
                 return false;
             }
