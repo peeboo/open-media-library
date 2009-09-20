@@ -111,6 +111,11 @@ namespace OMLDatabaseEditor
             ceStSanaAlwaysCreateMovieFolder.Checked = OMLSettings.StSanaAlwaysCreateMovieFolder;
             ceDBEStSanaAutoLookupMeta.Checked = OMLEngine.Settings.OMLSettings.StSanaAutoLookupMeta;
 
+            // Watched folders
+            lbcWatchedFolders.Items.AddRange(OMLEngine.Settings.OMLSettings.ScannerWatchedFolders.ToArray());
+            ceFileWatcherEnabled.Checked = OMLEngine.Settings.OMLSettings.ScannerEnabled;
+
+
             // Mounting Tools
             foreach (string toolName in Enum.GetNames(typeof(OMLEngine.FileSystem.MountingTool.Tool)))
             {
@@ -201,6 +206,15 @@ namespace OMLDatabaseEditor
                 {
                     OMLSettings.AddParentFoldersToTitleName = this.cePrependParentFolder.Checked;
                 }
+
+                // Watched folders
+                IList<String> SWF = new List<string>();
+                foreach (string lbi in lbcWatchedFolders.Items)
+                {
+                    SWF.Add(lbi);
+                }
+                OMLEngine.Settings.OMLSettings.ScannerWatchedFolders = SWF;
+                OMLEngine.Settings.OMLSettings.ScannerEnabled = ceFileWatcherEnabled.Checked;
 
                 MountingTool.Tool tool = (MountingTool.Tool)Enum.Parse(typeof(MountingTool.Tool), rgMountingTool.Text);
                 OMLSettings.MountingToolSelection = tool;
@@ -348,6 +362,37 @@ namespace OMLDatabaseEditor
 
             if (teMntToolPath.Text == "") XtraMessageBox.Show("Cannot find the selected image mounting tool!");
 
+        }
+
+        private void beWatchedFolder_ButtonClick(object sender, ButtonPressedEventArgs e)
+        {
+            folderBrowserDialog.SelectedPath = beWatchedFolder.Text;
+            if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
+            {
+                if (!lbcWatchedFolders.Items.Contains(folderBrowserDialog.SelectedPath))
+                {
+                    lbcWatchedFolders.Items.Add(folderBrowserDialog.SelectedPath);
+                }
+            }
+        }
+
+        private void lbcWatchedFolders_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode != Keys.Delete) return;
+            if (((ListBoxControl)sender).SelectedItems.Count <= 0) return;
+
+            List<string> itemstodelete = new List<string>();
+
+            foreach (object item in ((ListBoxControl)sender).SelectedItems)
+            {
+                itemstodelete.Add(item.ToString());
+            }
+
+            foreach (string WatchedFolder in itemstodelete)
+            {
+                lbcWatchedFolders.Items.Remove(WatchedFolder);
+            }
+            ((ListBoxControl)sender).Refresh();
         }
     }
 }
