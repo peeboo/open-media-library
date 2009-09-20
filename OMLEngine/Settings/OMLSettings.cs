@@ -634,7 +634,7 @@ namespace OMLEngine.Settings
 
         public static bool StSanaAutoLookupMeta
         {
-            get { return SettingsManager.GetSettingByNameBool("StSanaAutoLookupMeta", InstanceName) ?? false; }
+            get { return SettingsManager.GetSettingByNameBool("StSanaAutoLookupMeta", InstanceName) ?? true; }
             set { SettingsManager.SaveSettingByName("StSanaAutoLookupMeta", value.ToString(), InstanceName); }
         }
 
