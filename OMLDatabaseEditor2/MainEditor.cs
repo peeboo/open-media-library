@@ -305,7 +305,7 @@ namespace OMLDatabaseEditor
             }
         }
 
-        private static void LoadImportPlugins(string pluginType, List<OMLPlugin> pluginList)
+        private void LoadImportPlugins(string pluginType, List<OMLPlugin> pluginList)
         {
             pluginList.Clear();
 
@@ -330,9 +330,13 @@ namespace OMLDatabaseEditor
         /// </summary>
         /// <param name="pluginType"></param>
         /// <param name="pluginList"></param>
-        private static void LoadMetadataPlugins(string pluginType, List<MetaDataPluginDescriptor> pluginList)
+        private void LoadMetadataPlugins(string pluginType, List<MetaDataPluginDescriptor> pluginList)
         {
-            pluginList.Clear();
+            PluginServices pgs = new PluginServices();
+            pgs.Loaded += new PluginServices.PluginLoaded(MetadataPluginLoaded);
+            pgs.LoadMetadataPlugins(pluginType, pluginList);
+
+            /*pluginList.Clear();
 
             List<PluginServices.AvailablePlugin> plugins = new List<PluginServices.AvailablePlugin>();
             string path = FileSystemWalker.PluginsDirectory;
@@ -375,9 +379,13 @@ namespace OMLDatabaseEditor
 
                 }
                 plugins = null;
-            }
+            }*/
         }
 
+        void MetadataPluginLoaded(string message)
+        {
+            SplashScreen2.SetStatus(32, "Loading plugin - " + message);
+        }
         private void LoadImporters()
         {
             Cursor = Cursors.WaitCursor;
