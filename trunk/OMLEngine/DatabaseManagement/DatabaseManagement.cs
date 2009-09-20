@@ -396,6 +396,9 @@ namespace OMLEngine.DatabaseManagement
                         retval = false;
                     }
                 }
+
+                // Refresh the user logins
+                CreateOMLUser(sqlConn);
             }
             sqlConn.Close();
             return retval;
