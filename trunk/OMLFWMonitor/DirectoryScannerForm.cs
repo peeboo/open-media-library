@@ -36,7 +36,19 @@ namespace OMLFWMonitor
 
         void watcher_Added(object sender, Title title)
         {
-            BeginInvoke(new AddPathDelegate(AddPath), new object[] { title.Disks[0].Path });           
+            if (title.Disks.Count > 0)
+            {
+                BeginInvoke(new AddPathDelegate(AddPath), new object[] { title.Name + " : " + title.Disks[0].Path });
+            }
+            else
+            {
+                BeginInvoke(new AddPathDelegate(AddPath), new object[] { title.Name + " : NO DISK" });
+            }
+
+        }
+        void watcher_Progress(object sender, string message)
+        {
+            BeginInvoke(new AddPathDelegate(AddPath), new object[] { message });
         }
 
         private void AddPath(string path)
@@ -53,7 +65,10 @@ namespace OMLFWMonitor
         }
 
         private void ReloadSettings()
-        {            
+        {
+            BeginInvoke(new AddPathDelegate(AddPath), new object[] { "[Reload Settings timer triggered!]" });           
+
+        
             DateTime updatedTime = OMLSettings.ScannerSettingsLastUpdated;
 
             if (!OMLSettings.ScannerEnabled)
@@ -81,13 +96,15 @@ namespace OMLFWMonitor
 
         private void button1_Click(object sender, EventArgs e)
         {
-            OMLSettings.ScannerWatchedFolders = new List<string> { "d:\\test" };
+            //OMLSettings.ScannerWatchedFolders = new List<string> { @"C:\Media" };
+            
             watcher = new DirectoryScanner();
 
             ReloadSettings();
 
             watcher.Added += new DirectoryScanner.TitleAdded(watcher_Added);
-
+            watcher.Progress += new DirectoryScanner.ProgressMessage(watcher_Progress);
+            
             timer = new System.Timers.Timer(SETTINGS_UPDATE_TIMEOUT);
             timer.Elapsed += new ElapsedEventHandler(timer_Elapsed);
             timer.AutoReset = true;
