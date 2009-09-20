@@ -14,6 +14,9 @@ namespace OMLSDK
 
     public class PluginServices
     {
+        public delegate void PluginLoaded(string plugingName);
+        public event PluginLoaded Loaded;
+
         public static List<AvailablePlugin> FindPlugins(string strPath, string strInterface) {
             List<AvailablePlugin> Plugins = new List<AvailablePlugin>();
             string[] strDLLs;
@@ -87,6 +90,53 @@ namespace OMLSDK
             public string AssemblyPath;
             
             public string ClassName;
+        }
+
+        // Not putting a static on this as it doesn't seem to like a static event
+        public void LoadMetadataPlugins(string pluginType, List<MetaDataPluginDescriptor> pluginList)
+        {
+            pluginList.Clear();
+
+            List<PluginServices.AvailablePlugin> plugins = new List<PluginServices.AvailablePlugin>();
+            string path = FileSystemWalker.PluginsDirectory;
+            plugins = PluginServices.FindPlugins(path, pluginType);
+            IOMLMetadataPlugin objPlugin;
+            // Loop through available plugins, creating instances and add them
+            if (plugins != null)
+            {
+                foreach (PluginServices.AvailablePlugin oPlugin in plugins)
+                {
+                    // Create an instance to enumerate providers in the plugin
+                    objPlugin = (IOMLMetadataPlugin)PluginServices.CreateInstance(oPlugin);
+
+                    foreach (MetaDataPluginDescriptor provider in objPlugin.GetProviders)
+                    {
+                        if (Loaded != null)
+                            Loaded(provider.DataProviderName);
+
+                        // Create instance of the plugin for this particular provider. This would create a unique instance per provider.
+                        provider.PluginDLL = (IOMLMetadataPlugin)PluginServices.CreateInstance(oPlugin);
+
+                        // Initialise the plugin and select which provider it serves
+                        provider.PluginDLL.Initialize(provider.DataProviderName, new Dictionary<string, string>());
+
+                        // Configure the plugin with any settings stored in the db
+                        if (provider.PluginDLL.GetOptions() != null)
+                        {
+                            foreach (OMLMetadataOption option in provider.PluginDLL.GetOptions())
+                            {
+                                string setting = OMLEngine.Settings.SettingsManager.GetSettingByName(option.Name, "PLG-" + provider.DataProviderName);
+                                if (setting != null)
+                                {
+                                    provider.PluginDLL.SetOptionValue(option.Name, setting);
+                                }
+                            }
+                        }
+                        pluginList.Add(provider);
+                    }
+                }
+                plugins = null;
+            }
         }
 
     }
