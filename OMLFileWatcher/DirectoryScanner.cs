@@ -32,11 +32,14 @@ namespace OMLFileWatcher
         private List<string> waitCreatedList = new List<string>();
         private List<string> waitDeletedList = new List<string>();
 
-        IOMLMetadataPlugin metaDataPlugin = null;
+        //IOMLMetadataPlugin metaDataPlugin = null;
+        internal static List<MetaDataPluginDescriptor> _metadataPlugins = null;
 
         public delegate void TitleAdded(object sender, Title title);
         public event TitleAdded Added;
 
+        public delegate void ProgressMessage(object sender, string message);
+        public event ProgressMessage Progress;
 
         public DirectoryScanner()
         {                       
@@ -48,6 +51,12 @@ namespace OMLFileWatcher
             badWatcherTimer.AutoReset = false;
             badWatcherTimer.Interval = CHANGE_TIMER_TIMEOUT;
             badWatcherTimer.Elapsed += new System.Timers.ElapsedEventHandler(badWatcherTimer_Elapsed);
+
+            // Load the plugins
+            _metadataPlugins = new List<MetaDataPluginDescriptor>();
+            PluginServices plg = new PluginServices();
+            plg.LoadMetadataPlugins(PluginTypes.MetadataPlugin, _metadataPlugins);
+
         }            
 
         /// <summary>
@@ -147,6 +156,7 @@ namespace OMLFileWatcher
             }
         }*/
 
+
         /// <summary>
         /// Scans the directory for any new media and adds the titles to the db
         /// </summary>
@@ -166,12 +176,50 @@ namespace OMLFileWatcher
             // this shouldln't happen but I'm putting a lock here for safety
             lock (staticLockObject)
             {
-                try
+                //try
                 {
-                    DateTime start = DateTime.Now;
-                    int adddedCount = 0;
+                    int addedCount = 0;
                     bool updated = false;
-                    IEnumerable<string> media = FileScanner.GetAllMediaFromPath(directories);
+
+                    StSanaServices StSana = new StSanaServices();
+                    StSana.Log += new StSanaServices.SSEventHandler(stsana_Log);
+
+                    DateTime start = DateTime.Now;
+
+                    foreach (string directory in directories)
+                    {
+                        DebugLine("Performing a media scan on - " + directory);
+                        List<Title> titles =  StSana.CreateTitlesFromPathArray(null, new string [] { directory });
+
+                        addedCount += titles.Count();
+
+                        if (titles.Count() > 0) updated = true;
+
+                        foreach (Title title in titles)
+                        {
+                            if (Added != null)
+                                Added(this, title);
+
+                            if ((title.TitleType & TitleTypes.AllMedia) != 0)
+                            {
+                                try
+                                {
+                                    DebugLine("Looking up metadata for " + title.Name);
+                                    LookupPreferredMetaData(title);
+                                    TitleCollectionManager.SaveTitleUpdates();
+                                }
+                                catch (Exception ex)
+                                {
+                                    DebugLineError(ex, "Metadata lookup exception ");
+                                }
+                            }
+                        }
+                        DebugLine("Media scan on - " + directory + " finished");
+                    }
+
+
+
+                    /*IEnumerable<string> media = FileScanner.GetAllMediaFromPath(directories);
                     IEnumerable<string> uniqueMedia = TitleCollectionManager.GetUniquePaths(media);
 
                     foreach (string path in uniqueMedia)
@@ -186,6 +234,8 @@ namespace OMLFileWatcher
 
                         // save the title to the database
                         TitleCollectionManager.AddTitle(title);
+                        
+                        DebugLine("Adding Titles - " + title.Name);
 
                         updated = true;
                         adddedCount++;
@@ -193,28 +243,53 @@ namespace OMLFileWatcher
                         // fire the event
                         if (Added != null)
                             Added(this, title);                                
-                    }
+                    }*/
 
                     // save all the image updates
                     if (updated)
                     {
                         TitleCollectionManager.SaveTitleUpdates();
-                        DebugLine("Folder scanning completed.  Took {0} seconds and added {1} title(s).", (DateTime.Now - start).TotalSeconds, adddedCount);
+                        DebugLine("Folder scanning completed.  Took {0} seconds and added {1} title(s).", (DateTime.Now - start).TotalSeconds, addedCount);
                     }
                     else
                         DebugLine("Folder scan resulted in no updates. Took {0} seconds", (DateTime.Now - start).TotalSeconds);
                 }
-                catch (Exception err)
+                //catch (Exception err)
                 {
-                    DebugLineError(err, "Error scanning folders");
+                    //DebugLineError(err, "Error scanning folders");
                 }
-                finally
+                //finally
                 {
                     // null out the meta data plugin
-                    metaDataPlugin = null;
+                    //metaDataPlugin = null;
                 }
             }
         }
+
+
+        void stsana_Log(string message)
+        {
+            if (Progress != null)
+                Progress(this, "        St Sana message : " + message);
+
+            DebugLine("        St Sana message : " + message);
+        }
+
+
+        private void LookupPreferredMetaData(Title title)
+        {
+            MetadataSearchManagement mds = new MetadataSearchManagement(_metadataPlugins);
+
+            bool retval = mds.MetadataSearchUsingPreferred(title);
+
+            if (retval)
+            {
+                //LoadFanart(mds.FanArt, title);
+
+                //CheckGenresAgainstSupported(titleEditor.EditedTitle);
+            }
+        }
+
 
         /// <summary>
         /// Sets up file watchers for the given folders.  When there's a change it'll scan all the
@@ -301,11 +376,14 @@ namespace OMLFileWatcher
             watcher.Renamed += new RenamedEventHandler(watcher_Renamed);
             watcher.Error += new ErrorEventHandler(watcher_Error);
 
+            DebugLine("Creating Watcher on " + folder);
             return watcher;
         }
 
         void watcher_Renamed(object sender, RenamedEventArgs e)
-        {            
+        {
+            DebugLine("Watcher File Renamed Triggered. " + e.OldFullPath + " to " + e.FullPath);
+
             if (e.OldFullPath.Equals(e.FullPath, StringComparison.OrdinalIgnoreCase))
                 return;
 
@@ -323,6 +401,8 @@ namespace OMLFileWatcher
 
         void watcher_Deleted(object sender, FileSystemEventArgs e)
         {
+            DebugLine("Watcher File Deleted Triggered. " + e.FullPath);
+
             // reset the timer
             timer.Stop();  
 
@@ -339,6 +419,8 @@ namespace OMLFileWatcher
 
         void watcher_Created(object sender, FileSystemEventArgs e)
         {
+            DebugLine("Watcher File Created Triggered. " + e.FullPath);
+            
             // ignore directory creation
             if (Directory.Exists(e.FullPath))
                 return;
@@ -383,6 +465,8 @@ namespace OMLFileWatcher
         /// <param name="e"></param>
         private void watcher_Error(object sender, ErrorEventArgs e)
         {
+            DebugLine("Watcher Error Triggered. " + e.ToString());
+
             try
             {    
                 FileSystemWatcher watcher = sender as FileSystemWatcher;
@@ -614,6 +698,9 @@ namespace OMLFileWatcher
         /// <param name="parameters"></param>
         private void DebugLine(string message, params object[] parameters)
         {
+            if (Progress != null)
+                Progress(this, string.Format(message, parameters));
+
             Utilities.DebugLine("[DirectoryScanner] " + message, parameters);
         }
 
@@ -628,7 +715,11 @@ namespace OMLFileWatcher
             if (err == null)
                 DebugLine(message, parameters);
             else
+            {
                 Utilities.DebugLine("[DirectoryScanner] " + message + " '" + err.Message + "' " + err.StackTrace, parameters);
+                if (Progress != null)
+                    Progress(this, string.Format(message, parameters) + err.Message);
+            }
         }
     }
 }
