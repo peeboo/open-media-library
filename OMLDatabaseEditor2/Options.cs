@@ -28,6 +28,8 @@ namespace OMLDatabaseEditor
         public Boolean OptionsDirty = false;
         private Boolean MPAAdirty = false;
         private Boolean TagsDirty = false;
+        private Boolean WatchedFoldersDirty = false;
+
         private List<String> MPAAList;
         private List<String> TagList;
 
@@ -208,14 +210,17 @@ namespace OMLDatabaseEditor
                 }
 
                 // Watched folders
-                IList<String> SWF = new List<string>();
-                foreach (string lbi in lbcWatchedFolders.Items)
+                if (WatchedFoldersDirty)
                 {
-                    SWF.Add(lbi);
+                    IList<String> SWF = new List<string>();
+                    foreach (string lbi in lbcWatchedFolders.Items)
+                    {
+                        SWF.Add(lbi);
+                    }
+                    OMLEngine.Settings.OMLSettings.ScannerWatchedFolders = SWF;
+                    OMLEngine.Settings.OMLSettings.ScannerEnabled = ceFileWatcherEnabled.Checked;
+                    OMLEngine.Settings.OMLSettings.ScannerSettingsLastUpdated = DateTime.Now;
                 }
-                OMLEngine.Settings.OMLSettings.ScannerWatchedFolders = SWF;
-                OMLEngine.Settings.OMLSettings.ScannerEnabled = ceFileWatcherEnabled.Checked;
-
                 MountingTool.Tool tool = (MountingTool.Tool)Enum.Parse(typeof(MountingTool.Tool), rgMountingTool.Text);
                 OMLSettings.MountingToolSelection = tool;
                 OMLSettings.VirtualDiscDrive = cmbMntToolVDrive.Text;
@@ -369,6 +374,7 @@ namespace OMLDatabaseEditor
             folderBrowserDialog.SelectedPath = beWatchedFolder.Text;
             if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
             {
+                WatchedFoldersDirty = true;
                 if (!lbcWatchedFolders.Items.Contains(folderBrowserDialog.SelectedPath))
                 {
                     lbcWatchedFolders.Items.Add(folderBrowserDialog.SelectedPath);
@@ -393,6 +399,8 @@ namespace OMLDatabaseEditor
                 lbcWatchedFolders.Items.Remove(WatchedFolder);
             }
             ((ListBoxControl)sender).Refresh();
+
+            WatchedFoldersDirty = true;
         }
     }
 }
