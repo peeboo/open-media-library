@@ -424,17 +424,75 @@ namespace OMLEngine.Settings
             set { SettingsManager.SaveSettingByName("ScannerSettingsLastUpdated", value.ToString(), InstanceName); }
         }       
 
-        public static IList<string> ScannerMetaDataPlugins
+        /*public static IList<string> ScannerMetaDataPlugins
         {
             get { return SettingsManager.GetSettingByNameListString("ScannerMetaDataPlugins", InstanceName) ?? new List<string>(0); }
             set { SettingsManager.SaveSettingByName("ScannerMetaDataPlugins", value, InstanceName); }
+        }*/
+        public class WatchedFolder
+        {
+            public string Folder;
+            public int? ParentID;
+            public string ParentTitle
+            {
+                get
+                {
+                    if (ParentID != null)
+                    {
+                        try
+                        {
+                            return TitleCollectionManager.GetTitle((int)ParentID).Name;
+                        }
+                        catch
+                        {
+                            // Unable to find the parent id. Probably deleted
+                            ParentID = null;
+                            return "";
+                        }
+                    }
+                    else
+                    {
+                        return "";
+                    }
+                }
+            }
         }
 
-        public static IList<string> ScannerWatchedFolders
+        public static IList<WatchedFolder> ScannerWatchedFolders
+        {
+            get {
+                var folders = from t in SettingsManager.WatchedFolder_GetFolders(InstanceName)
+                              select t;
+
+                IList<WatchedFolder> wfs = new List<WatchedFolder>();
+
+                foreach (Dao.WatchedFolder daow in folders)
+                {
+                    WatchedFolder wf = new WatchedFolder();
+                    wf.Folder = daow.Folder;
+                    wf.ParentID = daow.ParentTitle;
+                    wfs.Add(wf);
+                }
+                return wfs;
+            }
+            set {
+                SettingsManager.WatchedFolders_Clear(InstanceName);
+
+                foreach (WatchedFolder w in value)
+                {
+                    Dao.WatchedFolder daow = new OMLEngine.Dao.WatchedFolder();
+                    daow.InstanceName = InstanceName;
+                    daow.Folder = w.Folder;
+                    daow.ParentTitle = w.ParentID;
+                    SettingsManager.WatchedFolder_Add(daow);
+                }
+            }
+        }
+        /*public static IList<string> ScannerWatchedFolders
         {
             get { return SettingsManager.GetSettingByNameListString("ScannerWatchedFolders", InstanceName) ?? new List<string>(0); }
             set { SettingsManager.SaveSettingByName("ScannerWatchedFolders", value, InstanceName); }
-        }
+        }*/
         #endregion
 
         public static bool EnableAutomaticUpdates

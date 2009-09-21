@@ -23,6 +23,7 @@
       <ComponentRef Id="TitleDatabase.sql"/>
       <ComponentRef Id="TitleDatabaseUpgrade1.1.sql"/>
       <ComponentRef Id="TitleDatabaseUpgrade1.2.sql"/>
+      <ComponentRef Id="TitleDatabaseUpgrade1.3.sql"/>
       <ComponentRef Id="SQLConfigNoTools_x32.ini"/>
     </ComponentGroup>
 

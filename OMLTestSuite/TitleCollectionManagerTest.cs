@@ -419,7 +419,7 @@ namespace OMLTestSuite
 
             list.Add(@"C:\Users\Public\Recorded TV");
 
-            OMLSettings.ScannerWatchedFolders = list;
+            //OMLSettings.ScannerWatchedFolders = list;
         }
 
         /*public void UPDATE_SETTINGS()

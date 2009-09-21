@@ -90,6 +90,9 @@ namespace OMLFWService
 
         protected override void OnStart(string[] args)
         {
+#if DEBUG
+            System.Diagnostics.Debugger.Launch();
+#endif
             // TODO: Add code here to start your service.
             ReloadSettings();
             timer.Enabled = true;

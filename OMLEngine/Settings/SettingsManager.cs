@@ -12,6 +12,7 @@ namespace OMLEngine.Settings
 
         private static Dictionary<string, string> settingsCache = new Dictionary<string, string>();
 
+        #region Metadata Mappings
         public static IEnumerable<OMLEngine.Dao.MataDataMapping> MetaDataMap_GetMappings()
         {
             var mdm = from t in OMLDataSettingsDBContext.Instance.MataDataMappings
@@ -74,8 +75,10 @@ namespace OMLEngine.Settings
             OMLDataSettingsDBContext.Instance.MataDataMappings.InsertOnSubmit(maping);
             OMLDataSettingsDBContext.Instance.SubmitChanges();
         }
+        #endregion
 
 
+        #region Genre Mappings
         public static string GenreMap_GetMapping(string genreName)
         {
             var mdm = from t in OMLDataSettingsDBContext.Instance.GenreMappings
@@ -87,7 +90,6 @@ namespace OMLEngine.Settings
             return mdm.ToArray()[0];
         }
 
-
         public static void GenreMap_Remove(string genre)
         {
 
@@ -98,6 +100,37 @@ namespace OMLEngine.Settings
             OMLDataSettingsDBContext.Instance.GenreMappings.InsertOnSubmit(maping);
             OMLDataSettingsDBContext.Instance.SubmitChanges();
         }
+        #endregion
+
+
+        #region Watched Folders
+        public static IEnumerable<OMLEngine.Dao.WatchedFolder> WatchedFolder_GetFolders(string instanceName)
+        {
+            var mdm = from t in OMLDataSettingsDBContext.Instance.WatchedFolders
+                      where t.InstanceName == instanceName
+                      select t;
+
+            return mdm;
+        }
+
+        public static void WatchedFolder_Add(OMLEngine.Dao.WatchedFolder watchedfolder)
+        {
+            OMLDataSettingsDBContext.Instance.WatchedFolders.InsertOnSubmit(watchedfolder);
+            OMLDataSettingsDBContext.Instance.SubmitChanges();
+        }
+
+        public static void WatchedFolders_Clear(string instanceName)
+        {
+            var deleteFolders = from d in Dao.OMLDataSettingsDBContext.Instance.WatchedFolders
+                                where d.InstanceName == instanceName
+                                select d;
+
+            Dao.OMLDataSettingsDBContext.Instance.WatchedFolders.DeleteAllOnSubmit(deleteFolders);
+
+            Dao.OMLDataSettingsDBContext.Instance.SubmitChanges();
+        }
+        #endregion
+
 
         public static string GetSettingByName(string name, string instanceName)
         {
