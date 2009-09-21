@@ -74,9 +74,11 @@ namespace OMLDatabaseEditor
             this.simpleButtonScanMntTool = new DevExpress.XtraEditors.SimpleButton();
             this.rgMountingTool = new DevExpress.XtraEditors.RadioGroup();
             this.tpFileWatcher = new DevExpress.XtraTab.XtraTabPage();
+            this.lvWatchedFolders = new System.Windows.Forms.ListView();
+            this.chFolder = new System.Windows.Forms.ColumnHeader();
+            this.chParent = new System.Windows.Forms.ColumnHeader();
             this.beWatchedFolder = new DevExpress.XtraEditors.ButtonEdit();
             this.ceFileWatcherEnabled = new DevExpress.XtraEditors.CheckEdit();
-            this.lbcWatchedFolders = new DevExpress.XtraEditors.ListBoxControl();
             this.sbCancel = new DevExpress.XtraEditors.SimpleButton();
             this.sbOK = new DevExpress.XtraEditors.SimpleButton();
             this.cmGenreMappings = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -120,7 +122,6 @@ namespace OMLDatabaseEditor
             this.tpFileWatcher.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.beWatchedFolder.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ceFileWatcherEnabled.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.lbcWatchedFolders)).BeginInit();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -630,12 +631,35 @@ namespace OMLDatabaseEditor
             // 
             // tpFileWatcher
             // 
+            this.tpFileWatcher.Controls.Add(this.lvWatchedFolders);
             this.tpFileWatcher.Controls.Add(this.beWatchedFolder);
             this.tpFileWatcher.Controls.Add(this.ceFileWatcherEnabled);
-            this.tpFileWatcher.Controls.Add(this.lbcWatchedFolders);
             this.tpFileWatcher.Name = "tpFileWatcher";
             this.tpFileWatcher.Size = new System.Drawing.Size(473, 303);
             this.tpFileWatcher.Text = "File Watcher";
+            // 
+            // lvWatchedFolders
+            // 
+            this.lvWatchedFolders.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.chFolder,
+            this.chParent});
+            this.lvWatchedFolders.Location = new System.Drawing.Point(0, 24);
+            this.lvWatchedFolders.Name = "lvWatchedFolders";
+            this.lvWatchedFolders.Size = new System.Drawing.Size(473, 253);
+            this.lvWatchedFolders.TabIndex = 4;
+            this.lvWatchedFolders.UseCompatibleStateImageBehavior = false;
+            this.lvWatchedFolders.View = System.Windows.Forms.View.Details;
+            this.lvWatchedFolders.KeyDown += new System.Windows.Forms.KeyEventHandler(this.lvWatchedFolders_KeyDown);
+            // 
+            // chFolder
+            // 
+            this.chFolder.Text = "Folder";
+            this.chFolder.Width = 220;
+            // 
+            // chParent
+            // 
+            this.chParent.Text = "Parent";
+            this.chParent.Width = 220;
             // 
             // beWatchedFolder
             // 
@@ -657,17 +681,6 @@ namespace OMLDatabaseEditor
             this.ceFileWatcherEnabled.Properties.Caption = "Enabled";
             this.ceFileWatcherEnabled.Size = new System.Drawing.Size(75, 18);
             this.ceFileWatcherEnabled.TabIndex = 1;
-            // 
-            // lbcWatchedFolders
-            // 
-            this.lbcWatchedFolders.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.lbcWatchedFolders.Location = new System.Drawing.Point(0, 27);
-            this.lbcWatchedFolders.Name = "lbcWatchedFolders";
-            this.lbcWatchedFolders.Size = new System.Drawing.Size(473, 250);
-            this.lbcWatchedFolders.TabIndex = 0;
-            this.lbcWatchedFolders.KeyDown += new System.Windows.Forms.KeyEventHandler(this.lbcWatchedFolders_KeyDown);
             // 
             // sbCancel
             // 
@@ -751,7 +764,6 @@ namespace OMLDatabaseEditor
             this.tpFileWatcher.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.beWatchedFolder.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ceFileWatcherEnabled.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.lbcWatchedFolders)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -808,7 +820,9 @@ namespace OMLDatabaseEditor
         private DevExpress.XtraTab.XtraTabPage tpFileWatcher;
         private DevExpress.XtraEditors.ButtonEdit beWatchedFolder;
         private DevExpress.XtraEditors.CheckEdit ceFileWatcherEnabled;
-        private DevExpress.XtraEditors.ListBoxControl lbcWatchedFolders;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog;
+        private System.Windows.Forms.ListView lvWatchedFolders;
+        private System.Windows.Forms.ColumnHeader chParent;
+        private System.Windows.Forms.ColumnHeader chFolder;
     }
 }

@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.IO;
 using DevExpress.Utils;
 using DevExpress.XtraEditors;
 using DevExpress.XtraEditors.Controls;
@@ -114,7 +115,12 @@ namespace OMLDatabaseEditor
             ceDBEStSanaAutoLookupMeta.Checked = OMLEngine.Settings.OMLSettings.StSanaAutoLookupMeta;
 
             // Watched folders
-            lbcWatchedFolders.Items.AddRange(OMLEngine.Settings.OMLSettings.ScannerWatchedFolders.ToArray());
+            foreach (OMLSettings.WatchedFolder wf in OMLSettings.ScannerWatchedFolders)
+            {
+                ListViewItem lvi = new ListViewItem(new string[] { wf.Folder.Trim(), wf.ParentTitle.Trim() });
+                lvi.Tag = wf.ParentID;
+                lvWatchedFolders.Items.Add(lvi);
+            }
             ceFileWatcherEnabled.Checked = OMLEngine.Settings.OMLSettings.ScannerEnabled;
 
 
@@ -212,15 +218,19 @@ namespace OMLDatabaseEditor
                 // Watched folders
                 if (WatchedFoldersDirty)
                 {
-                    IList<String> SWF = new List<string>();
-                    foreach (string lbi in lbcWatchedFolders.Items)
+                    IList<OMLSettings.WatchedFolder> SWF = new List<OMLSettings.WatchedFolder>();
+                    foreach (ListViewItem lvi in lvWatchedFolders.Items)
                     {
-                        SWF.Add(lbi);
+                        OMLSettings.WatchedFolder WF = new OMLSettings.WatchedFolder();
+                        WF.Folder = lvi.Text;
+                        if (lvi.Tag != null) WF.ParentID = (int)lvi.Tag;
+                        SWF.Add(WF);
                     }
                     OMLEngine.Settings.OMLSettings.ScannerWatchedFolders = SWF;
                     OMLEngine.Settings.OMLSettings.ScannerEnabled = ceFileWatcherEnabled.Checked;
                     OMLEngine.Settings.OMLSettings.ScannerSettingsLastUpdated = DateTime.Now;
                 }
+
                 MountingTool.Tool tool = (MountingTool.Tool)Enum.Parse(typeof(MountingTool.Tool), rgMountingTool.Text);
                 OMLSettings.MountingToolSelection = tool;
                 OMLSettings.VirtualDiscDrive = cmbMntToolVDrive.Text;
@@ -375,30 +385,70 @@ namespace OMLDatabaseEditor
             if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
             {
                 WatchedFoldersDirty = true;
-                if (!lbcWatchedFolders.Items.Contains(folderBrowserDialog.SelectedPath))
+                if (!lvWatchedFolders.Items.ContainsKey(folderBrowserDialog.SelectedPath))
                 {
-                    lbcWatchedFolders.Items.Add(folderBrowserDialog.SelectedPath);
+                    if (CheckWatchedPath(folderBrowserDialog.SelectedPath))
+                    {
+                        ListViewItem lvi = new ListViewItem(new string[] { folderBrowserDialog.SelectedPath, "" });
+                        lvi.Tag = null;
+                        lvWatchedFolders.Items.Add(lvi);
+                    }
                 }
             }
         }
 
-        private void lbcWatchedFolders_KeyDown(object sender, KeyEventArgs e)
+        private bool CheckWatchedPath(string path)
+        {
+            foreach (ListViewItem lvi in lvWatchedFolders.Items)
+            {
+                // Theres probably an easy way to see if a path contains another path
+                // Just hacking this up for now
+
+                string path1 = FormatPath(path);
+                string path2 = FormatPath(lvi.Text);
+                
+                if (path.Length > path2.Length)
+                {
+                    if (string.Compare(path2, path1.Substring(0, Math.Min(path1.Length, path2.Length)), true) != 0) return true;
+                }
+                else
+                {
+                    if (string.Compare(path1, path2.Substring(0, Math.Min(path1.Length, path2.Length)), true) != 0) return true;
+                }
+
+                XtraMessageBox.Show("The path '" + path + "' conflicts with '" + path2 + "'", "Add watched folder.");
+                return false;
+            }
+            return true;
+        }
+        public String FormatPath(string path)
+        {
+            string retpath = Path.GetFullPath(path);
+
+            if (!retpath.Trim().EndsWith("\\"))
+            {
+                return retpath + @"\";
+            }
+            return retpath;
+        }
+
+        private void lvWatchedFolders_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode != Keys.Delete) return;
-            if (((ListBoxControl)sender).SelectedItems.Count <= 0) return;
+            if (((ListView)sender).SelectedItems.Count <= 0) return;
 
-            List<string> itemstodelete = new List<string>();
+            List<ListViewItem> itemstodelete = new List<ListViewItem>();
 
-            foreach (object item in ((ListBoxControl)sender).SelectedItems)
+            foreach (ListViewItem item in ((ListView)sender).SelectedItems)
             {
-                itemstodelete.Add(item.ToString());
+                itemstodelete.Add(item);
             }
 
-            foreach (string WatchedFolder in itemstodelete)
+            foreach (ListViewItem WatchedFolder in itemstodelete)
             {
-                lbcWatchedFolders.Items.Remove(WatchedFolder);
+                lvWatchedFolders.Items.Remove(WatchedFolder);
             }
-            ((ListBoxControl)sender).Refresh();
+            ((ListView)sender).Refresh();
 
             WatchedFoldersDirty = true;
         }

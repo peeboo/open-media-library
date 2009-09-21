@@ -23,7 +23,7 @@ namespace OMLFileWatcher
         private List<FileSystemWatcher> watchers = null;
         private List<FileSystemWatcher> badWatchers = new List<FileSystemWatcher>();
 
-        private IList<string> watchFolders;
+        private IList<OMLSettings.WatchedFolder> watchFolders;
         private object lockObject = new object();
 
         private static object staticLockObject = new object();
@@ -161,16 +161,16 @@ namespace OMLFileWatcher
         /// Scans the directory for any new media and adds the titles to the db
         /// </summary>
         /// <param name="directory"></param>
-        public void Scan(string directory)
+        /*public void Scan(string directory)
         {
             Scan(new string[] { directory });
-        }
+        }*/
 
         /// <summary>
         /// Scans the list of directories and adds the new titles to the db
         /// </summary>
         /// <param name="directories"></param>
-        public void Scan(IList<string> directories)
+        public void Scan(IList<OMLSettings.WatchedFolder> directories)
         {
             // only one thread should be doing a scan at a time
             // this shouldln't happen but I'm putting a lock here for safety
@@ -186,10 +186,11 @@ namespace OMLFileWatcher
 
                     DateTime start = DateTime.Now;
 
-                    foreach (string directory in directories)
+                    foreach (OMLSettings.WatchedFolder watchedfolder in directories)
                     {
-                        DebugLine("Performing a media scan on - " + directory);
-                        List<Title> titles =  StSana.CreateTitlesFromPathArray(null, new string [] { directory });
+                        DebugLine("Performing a media scan on - " + watchedfolder.Folder);
+                        List<Title> titles = StSana.CreateTitlesFromPathArray(watchedfolder.ParentID,
+                            new string[] { watchedfolder.Folder });
 
                         addedCount += titles.Count();
 
@@ -214,7 +215,7 @@ namespace OMLFileWatcher
                                 }
                             }
                         }
-                        DebugLine("Media scan on - " + directory + " finished");
+                        DebugLine("Media scan on - " + watchedfolder.Folder + " finished");
                     }
 
 
@@ -297,7 +298,7 @@ namespace OMLFileWatcher
         /// </summary>
         /// <param name="folders"></param>
         /// <returns>Returns false if it's in the middle of a scan and can't update the watch folders</returns>
-        public bool WatchFolders(IEnumerable<string> folders)
+        public bool WatchFolders(IList<OMLSettings.WatchedFolder> folders)
         {
             if (!Monitor.TryEnter(lockObject))
             {
@@ -321,7 +322,7 @@ namespace OMLFileWatcher
                         }
                     }
 
-                    watchFolders = new List<string>(folders);
+                    watchFolders = new List<OMLSettings.WatchedFolder>(folders);
 
                     // if there are no watch folders bail out
                     if (watchFolders.Count == 0)
@@ -334,11 +335,11 @@ namespace OMLFileWatcher
 
                     watchers = new List<FileSystemWatcher>(watchFolders.Count);
 
-                    foreach (string folder in watchFolders)
+                    foreach (OMLSettings.WatchedFolder watchedfolder in watchFolders)
                     {
-                        if (Directory.Exists(folder))
-                        {                            
-                            watchers.Add(CreateWatcher(folder));
+                        if (Directory.Exists(watchedfolder.Folder))
+                        {
+                            watchers.Add(CreateWatcher(watchedfolder.Folder));
                         }
                     }
                 }
