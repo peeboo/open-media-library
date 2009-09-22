@@ -18,6 +18,7 @@
     <VerboseOutput>True</VerboseOutput>
     <SuppressAllWarnings>False</SuppressAllWarnings>
     <Pedantic>False</Pedantic>
+    <Cultures>en-us</Cultures>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <OutputPath>bin\$(Configuration)\</OutputPath>
@@ -32,11 +33,11 @@
     <Content Include="License.rtf" />
   </ItemGroup>
   <ItemGroup>
-    <WixExtension Include="WixUIExtension">
-      <HintPath>$(WixExtDir)\WixUIExtension.dll</HintPath>
-    </WixExtension>
     <WixExtension Include="WixUtilExtension">
       <HintPath>$(WixExtDir)\WixUtilExtension.dll</HintPath>
+    </WixExtension>
+    <WixExtension Include="WixUIExtension">
+      <HintPath>$(WixExtDir)\WixUIExtension.dll</HintPath>
     </WixExtension>
     <WixExtension Include="WixSqlExtension">
       <HintPath>$(WixExtDir)\WixSqlExtension.dll</HintPath>
@@ -44,9 +45,6 @@
     <WixExtension Include="WixNetFxExtension">
       <HintPath>$(WixExtDir)\WixNetFxExtension.dll</HintPath>
     </WixExtension>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Product-en-us.wxl" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\OMLWiXLib\OMLWiXLib.wixproj">

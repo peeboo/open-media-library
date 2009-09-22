@@ -9,43 +9,43 @@
       <Directory Id="WindowsFolder" Name="WINDOWS">
         <Directory Id="EhomeFolder" Name="eHome"/>
       </Directory>
-      <Directory Id="ProgramFilesFolder" Name="Program Files">
+      <Directory Id="ProgramFiles64Folder" Name="Program Files">
         <Directory Id="APPLICATIONROOTDIRECTORY" Name="OpenMediaLibrary">
-          <Component Id="Library.dll" Guid="6BEE7ED8-C866-470B-9656-8B0320C923B5" DiskId="1">
+          <Component Id="Library.dll" Guid="6BEE7ED8-C866-470B-9656-8B0320C923B5" DiskId="1" Win64="yes">
             <File Name="Library.dll"
                   KeyPath="yes" Source="..\Library\bin\$(var.Configuration)\Library.dll"
                   Checksum="yes" Vital="yes" Assembly=".net"/>
           </Component>
-          <Component Id="OMLEngine.dll" Guid="FA02E91A-33FD-45E9-B189-A2CF15D3EA90" DiskId="1">
+          <Component Id="OMLEngine.dll" Guid="FA02E91A-33FD-45E9-B189-A2CF15D3EA90" DiskId="1" Win64="yes">
             <File Name="OMLEngine.dll"
                   KeyPath="yes" Source="..\OMLEngine\bin\$(var.Configuration)\OMLEngine.dll"
                   Checksum="yes" Vital="yes" Assembly=".net"/>
           </Component>
-          <Component Id="dssnap.dll" Guid="5FD9888F-4EB4-4DA1-BC2A-F82D3C5E4E53" DiskId="1">
+          <Component Id="dssnap.dll" Guid="5FD9888F-4EB4-4DA1-BC2A-F82D3C5E4E53" DiskId="1" Win64="yes">
             <File Name="dssnap.dll"
                   KeyPath="yes" Source="..\OMLEngine\bin\$(var.Configuration)\dssnap.dll"
                   Checksum="yes" Vital="yes" Assembly=".net"/>
           </Component>
-          <Component Id="OMLFileWatcher.dll" Guid="7EA6B674-1AD6-417A-A184-7F89AA8B1578" DiskId="1">
+          <Component Id="OMLFileWatcher.dll" Guid="7EA6B674-1AD6-417A-A184-7F89AA8B1578" DiskId="1" Win64="yes">
             <File Name="OMLFileWatcher.dll"
                   KeyPath="yes" Source="..\OMLFileWatcher\bin\$(var.Configuration)\OMLFileWatcher.dll"
                   Checksum="yes" Vital="yes" Assembly=".net"/>
           </Component>
-          <Component Id="OMLTranscoder.dll" Guid="C5A408B2-9BB7-4BC4-9359-EE11FCB65FFE" DiskId="1">
+          <Component Id="OMLTranscoder.dll" Guid="C5A408B2-9BB7-4BC4-9359-EE11FCB65FFE" DiskId="1" Win64="yes">
             <File Name="OMLTranscoder.dll"
                   KeyPath="yes" Source="..\OMLTranscoder\bin\$(var.Configuration)\OMLTranscoder.dll"
                   Checksum="yes" Vital="yes" Assembly=".net"/>
           </Component>
-          <Component Id="FileDownloader.dll" Guid="F52BAB24-FE4F-43D6-9259-D56E2EFEC5DC" DiskId="1">
+          <Component Id="FileDownloader.dll" Guid="F52BAB24-FE4F-43D6-9259-D56E2EFEC5DC" DiskId="1" Win64="yes">
             <File Name="FileDownloader.dll"
                   KeyPath="yes" Source="..\FileDownloader\bin\$(var.Configuration)\FileDownloader.dll"
                   Checksum="yes" Vital="yes" Assembly=".net"/>
           </Component>
-          <Component Id="Registration.xml" Guid="68B08279-69C0-42FB-B087-30A20EE12608" DiskId="1">
+          <Component Id="Registration.xml" Guid="68B08279-69C0-42FB-B087-30A20EE12608" DiskId="1" Win64="yes">
             <File Name="Registration.xml"
                   Source="..\Library\Registration.xml" Checksum="no" />
           </Component>
-          <Component Id="Application.png" Guid="34C83BCD-A522-4103-8BAC-AD159113D313" DiskId="1">
+          <Component Id="Application.png" Guid="34C83BCD-A522-4103-8BAC-AD159113D313" DiskId="1" Win64="yes">
             <File Name="Application.png"
                   Source="..\Library\Images\Application.png" Checksum="no" />
             <File Name="Application2.png"
@@ -53,74 +53,74 @@
             <File Name="Settings.png"
                   Source="..\Library\Images\Settings.png" Checksum="no" />
           </Component>
-          <Component Id="DevExpress.Data.v8.2.dll" Guid="5268F9D7-2529-4AF0-B5FB-6B94079A7F74" DiskId="1">
+          <Component Id="DevExpress.Data.v8.2.dll" Guid="5268F9D7-2529-4AF0-B5FB-6B94079A7F74" DiskId="1" Win64="yes">
             <File Name="DevExpress.Data.v8.2.dll"
                   Source="..\OMLDatabaseEditor2\DevExpress.Data.v8.2.dll" Checksum="no" />
           </Component>
-          <Component Id="DevExpress.Utils.v8.2.dll" Guid="419C9895-3E28-442C-AF94-D77F9E4487B4" DiskId="1">
+          <Component Id="DevExpress.Utils.v8.2.dll" Guid="419C9895-3E28-442C-AF94-D77F9E4487B4" DiskId="1" Win64="yes">
             <File Name="DevExpress.Utils.v8.2.dll"
                   Source="..\OMLDatabaseEditor2\DevExpress.Utils.v8.2.dll" Checksum="no" />
           </Component>
-          <Component Id="DevExpress.XtraEditors.v8.2.dll" Guid="CD530611-C23A-4A31-AA6E-AC8926845707" DiskId="1">
+          <Component Id="DevExpress.XtraEditors.v8.2.dll" Guid="CD530611-C23A-4A31-AA6E-AC8926845707" DiskId="1" Win64="yes">
             <File Name="DevExpress.XtraEditors.v8.2.dll"
                   Source="..\OMLDatabaseEditor2\DevExpress.XtraEditors.v8.2.dll" Checksum="no" />
           </Component>
-          <Component Id="DevExpress.XtraNavBar.v8.2.dll" Guid="CD530611-C23A-4A31-AA6F-AC8926845707" DiskId="1">
+          <Component Id="DevExpress.XtraNavBar.v8.2.dll" Guid="CD530611-C23A-4A31-AA6F-AC8926845707" DiskId="1" Win64="yes">
             <File Name="DevExpress.XtraNavBar.v8.2.dll"
                   Source="..\OMLDatabaseEditor2\DevExpress.XtraNavBar.v8.2.dll" Checksum="no" />
           </Component>
-          <Component Id="DevExpress.Data.v8.2.xml" Guid="25AF85CB-DC9D-46DF-B022-F8A3DF4F71FB" DiskId="1">
+          <Component Id="DevExpress.Data.v8.2.xml" Guid="25AF85CB-DC9D-46DF-B022-F8A3DF4F71FB" DiskId="1" Win64="yes">
             <File Name="DevExpress.Data.v8.2.xml"
                   Source="..\OMLDatabaseEditor2\DevExpress.Data.v8.2.xml" Checksum="no" />
           </Component>
-          <Component Id="DevExpress.Utils.v8.2.xml" Guid="AC15AD59-C236-4A0B-9CB9-A009684582B7" DiskId="1">
+          <Component Id="DevExpress.Utils.v8.2.xml" Guid="AC15AD59-C236-4A0B-9CB9-A009684582B7" DiskId="1" Win64="yes">
             <File Name="DevExpress.Utils.v8.2.xml"
                   Source="..\OMLDatabaseEditor2\DevExpress.Utils.v8.2.xml" Checksum="no" />
           </Component>
-          <Component Id="DevExpress.XtraEditors.v8.2.xml" Guid="365BA1F3-7823-4FF7-AC1C-CB040D2B852E" DiskId="1">
+          <Component Id="DevExpress.XtraEditors.v8.2.xml" Guid="365BA1F3-7823-4FF7-AC1C-CB040D2B852E" DiskId="1" Win64="yes">
             <File Name="DevExpress.XtraEditors.v8.2.xml"
                   Source="..\OMLDatabaseEditor2\DevExpress.XtraEditors.v8.2.xml" Checksum="no" />
           </Component>
-          <Component Id="DevExpress.XtraNavBar.v8.2.xml" Guid="365BA1F3-7823-4FF8-AC1C-CB040D2B852E" DiskId="1">
+          <Component Id="DevExpress.XtraNavBar.v8.2.xml" Guid="365BA1F3-7823-4FF8-AC1C-CB040D2B852E" DiskId="1" Win64="yes">
             <File Name="DevExpress.XtraNavBar.v8.2.xml"
                   Source="..\OMLDatabaseEditor2\DevExpress.XtraNavBar.v8.2.xml" Checksum="no" />
           </Component>
-          <Component Id="StSana.dll" Guid="9752ADE8-61E5-4FE4-BF26-F046B9F43026" DiskId="1">
+          <Component Id="StSana.dll" Guid="9752ADE8-61E5-4FE4-BF26-F046B9F43026" DiskId="1" Win64="yes">
             <File Name="StSana.dll"
                   Source="..\OMLDatabaseEditor2\StSana.dll" Checksum="no" />
           </Component>
-          <Component Id="OMLDatabaseEditor.exe" Guid="4226FE89-8797-44ED-B463-6FDA1BE5C918" DiskId="1">
+          <Component Id="OMLDatabaseEditor.exe" Guid="4226FE89-8797-44ED-B463-6FDA1BE5C918" DiskId="1" Win64="yes">
             <File Name="OMLDatabaseEditor.exe"
                   Source="..\OMLDatabaseEditor2\bin\$(var.Configuration)\OMLDatabaseEditor.exe" Checksum="no" />
           </Component>
-          <Component Id="OMLImporter.exe" Guid="5405AC5C-69BA-49C0-8854-BB766FFE44BB" DiskId="1">
+          <Component Id="OMLImporter.exe" Guid="5405AC5C-69BA-49C0-8854-BB766FFE44BB" DiskId="1" Win64="yes">
             <File Name="OMLImporter.exe"
                   Source="..\OMLImporter\bin\$(var.Configuration)\OMLImporter.exe" Checksum="no" />
           </Component>
-          <Component Id="MEncoder.exe" Guid="7D8351D2-AC92-4F8D-9755-ED8B31918FC1" DiskId="1">
+          <Component Id="MEncoder.exe" Guid="7D8351D2-AC92-4F8D-9755-ED8B31918FC1" DiskId="1" Win64="yes">
             <File Name="MEncoder.exe"
                   Source="..\OMLTranscoder\mencoder-1.0rc2-4.2.1.exe" Checksum="no" />
           </Component>
-          <Component Id="MediaInfo.dll" Guid="BCDD1285-37EA-4086-838A-82BE908F074F" DiskId="1">
+          <Component Id="MediaInfo.dll" Guid="BCDD1285-37EA-4086-838A-82BE908F074F" DiskId="1" Win64="yes">
             <File Name="MediaInfo.dll"
                               Source="..\OMLEngine\MediaInfoi386.dll" Checksum="no" />
           </Component>
-          <Component Id="PostInstallerWizard.exe" Guid="53F24DE9-DEBA-43C0-A6B2-95AC100DCD1E" DiskId="1">
+          <Component Id="PostInstallerWizard.exe" Guid="53F24DE9-DEBA-43C0-A6B2-95AC100DCD1E" DiskId="1" Win64="yes">
             <File Name="PostInstallerWizard.exe"
                               Source="..\PostInstallerWizard\bin\$(var.Configuration)\PostInstallerWizard.exe" Checksum="no" />
           </Component>
 
-          <Component Id="TranscoderTester.exe" Guid="2F7D11B3-70BD-4F2D-9EC1-730D28042BBF" DiskId="1">
+          <Component Id="TranscoderTester.exe" Guid="2F7D11B3-70BD-4F2D-9EC1-730D28042BBF" DiskId="1" Win64="yes">
             <File Name="TranscoderTester.exe"
                 Source="..\TranscoderTester\bin\$(var.Configuration)\TranscoderTester.exe" Checksum="no" />
           </Component>
 
-          <Component Id="Maximizer.exe" Guid="E94299E1-62CD-4068-8861-052C8C7BEC6C" DiskId="1">
+          <Component Id="Maximizer.exe" Guid="E94299E1-62CD-4068-8861-052C8C7BEC6C" DiskId="1" Win64="yes">
             <File Name="Maximizer.exe"
                 Source="..\Maximizer\bin\$(var.Configuration)\Maximizer.exe" Checksum="no" />
           </Component>
 
-          <Component Id="OMLEngineService.exe" Guid="12988468-3DCC-496A-B0B3-6982FFDE25B9" DiskId="1">
+          <Component Id="OMLEngineService.exe" Guid="12988468-3DCC-496A-B0B3-6982FFDE25B9" DiskId="1" Win64="yes">
             <File Name="OMLEngineService.exe" KeyPath="yes"
                   Source="..\OMLEngineService\bin\$(var.Configuration)\OMLEngineService.exe" Checksum="yes"/>
             <File Name="OMLEngineService.exe.config"
@@ -137,7 +137,7 @@
             </ServiceInstall>
           </Component>
 
-          <Component Id="OMLFWService.exe" Guid="8F57190C-0489-40B4-9C46-5E9B09EC0DEC" DiskId="1">
+          <Component Id="OMLFWService.exe" Guid="8F57190C-0489-40B4-9C46-5E9B09EC0DEC" DiskId="1" Win64="yes">
             <File Name="OMLFWService.exe"
                   Source="..\OMLFWService\bin\$(var.Configuration)\OMLFWService.exe" Checksum="yes"/>
             <ServiceControl Id="OMLFWServiceControl" Name="OMLFWService" Stop="both" Remove="uninstall"/>
@@ -153,96 +153,96 @@
           </Component>
 
           <Directory Id="SQLDBSCRIPTS" Name="SQLInstaller">
-            <Component Id="TitleDatabase.sql" Guid="D559AFE1-A066-4BF6-86EE-9DF8124E564E" DiskId="1">
+            <Component Id="TitleDatabase.sql" Guid="D559AFE1-A066-4BF6-86EE-9DF8124E564E" DiskId="1" Win64="yes">
               <File Name="Title Database.sql"
                                 Source="..\SQL Scripts\Title Database.sql" Checksum="no" />
             </Component>
-            <Component Id="TitleDatabaseUpgrade1.1.sql" Guid="8A2D9A1D-DFD3-42D1-92F2-ABA57EDD84F0" DiskId="1">
+            <Component Id="TitleDatabaseUpgrade1.1.sql" Guid="8A2D9A1D-DFD3-42D1-92F2-ABA57EDD84F0" DiskId="1" Win64="yes">
               <File Name="Title Database - Upgrade 1.1.sql"
                                 Source="..\SQL Scripts\Title Database - Upgrade 1.1.sql" Checksum="no" />
             </Component>
-            <Component Id="TitleDatabaseUpgrade1.2.sql" Guid="A4884E78-002C-44F4-A622-E077FDC391D0" DiskId="1">
+            <Component Id="TitleDatabaseUpgrade1.2.sql" Guid="A4884E78-002C-44F4-A622-E077FDC391D0" DiskId="1" Win64="yes">
               <File Name="Title Database - Upgrade 1.2.sql"
                                 Source="..\SQL Scripts\Title Database - Upgrade 1.2.sql" Checksum="no" />
             </Component>
-            <Component Id="TitleDatabaseUpgrade1.3.sql" Guid="2E867C92-3F3A-44CE-A526-54C3AD094ABD" DiskId="1">
+            <Component Id="TitleDatabaseUpgrade1.3.sql" Guid="2E867C92-3F3A-44CE-A526-54C3AD094ABD" DiskId="1" Win64="yes">
               <File Name="Title Database - Upgrade 1.3.sql"
                                 Source="..\SQL Scripts\Title Database - Upgrade 1.2.sql" Checksum="no" />
             </Component>
-            <Component Id="SQLConfigNoTools_x32.ini" Guid="95458A50-59EE-4408-958E-1E0904C95442" DiskId="1">
+            <Component Id="SQLConfigNoTools_x32.ini" Guid="95458A50-59EE-4408-958E-1E0904C95442" DiskId="1" Win64="yes">
               <File Name="SQLConfigNoTools_x32.ini"
                                 Source="..\SQL Scripts\SQLConfigNoTools_x32.ini" Checksum="no" />
             </Component>
           </Directory>
 
           <Directory Id ="HELPDIRECTORY" Name="Help">
-            <Component Id="Open_Media_Library_User_Manual.pdf" Guid="699C7762-E52E-4761-81C3-52B01231A2D2" DiskId="1">
+            <Component Id="Open_Media_Library_User_Manual.pdf" Guid="699C7762-E52E-4761-81C3-52B01231A2D2" DiskId="1" Win64="yes">
               <File Name="Open_Media_Library_User_Manual.pdf" KeyPath="no"
                     Source="..\Documentation\Open_Media_Library_User_Manual.pdf" Checksum="no" Vital="yes"/>
             </Component>
           </Directory>
           <Directory Id="PLUGINSDIRECTORY" Name="Plugins">
-            <Component Id="DVDProfilerPlugin.dll" Guid="B7F12EF4-E500-4D0E-BFBE-D77EAE64176C" DiskId="1">
+            <Component Id="DVDProfilerPlugin.dll" Guid="B7F12EF4-E500-4D0E-BFBE-D77EAE64176C" DiskId="1" Win64="yes">
               <File Name="DVDProfilerPlugin.dll"
                     KeyPath="yes" Source="..\DVDProfilerPlugin\bin\$(var.Configuration)\DVDProfilerPlugin.dll"
                     Checksum="yes" Vital="yes"/>
             </Component>
-            <Component Id="DVRMSPlugin.dll" Guid="EC74A168-53AE-4BEF-A72D-3FF093BB8B0F" DiskId="1">
+            <Component Id="DVRMSPlugin.dll" Guid="EC74A168-53AE-4BEF-A72D-3FF093BB8B0F" DiskId="1" Win64="yes">
               <File Name="DVRMSPlugin.dll"
                     KeyPath="yes" Source="..\DVRMSPlugin\bin\$(var.Configuration)\DVRMSPlugin.dll"
                     Checksum="yes" Vital="yes"/>
             </Component>
-            <Component Id="MovieCollectorz.dll" Guid="B3A7750C-5474-4BDF-9926-64E13ED92A97" DiskId="1">
+            <Component Id="MovieCollectorz.dll" Guid="B3A7750C-5474-4BDF-9926-64E13ED92A97" DiskId="1" Win64="yes">
               <File Name="MovieCollectorz.dll"
                     KeyPath="yes" Source="..\MovieCollectorz\bin\$(var.Configuration)\MovieCollectorz.dll"
                     Checksum="yes" Vital="yes"/>
             </Component>
-            <Component Id="MyMoviesPlugin.dll" Guid="4102AD78-C010-4367-8454-7317713CCFE6" DiskId="1">
+            <Component Id="MyMoviesPlugin.dll" Guid="4102AD78-C010-4367-8454-7317713CCFE6" DiskId="1" Win64="yes">
               <File Name="MyMoviesPlugin.dll"
                     KeyPath="yes" Source="..\MyMoviesPlugin\bin\$(var.Configuration)\MyMoviesPlugin.dll"
                     Checksum="yes" Vital="yes"/>
             </Component>
-            <Component Id="MyMoviesToOML.xsl" Guid="0CC7C503-DA16-45A4-AD1E-60C638B40FAC" DiskId="1">
+            <Component Id="MyMoviesToOML.xsl" Guid="0CC7C503-DA16-45A4-AD1E-60C638B40FAC" DiskId="1" Win64="yes">
               <File Name="MyMoviesToOML.xsl"
                     KeyPath="yes" Source="..\MyMoviesPlugin\MyMoviesToOML.xsl"
                     Vital="yes"/>
             </Component>
-            <Component Id="VMCDVDLibraryPlugin.dll" Guid="D8028D8C-A048-46B2-9C27-C64F07C8AB8D" DiskId="1">
+            <Component Id="VMCDVDLibraryPlugin.dll" Guid="D8028D8C-A048-46B2-9C27-C64F07C8AB8D" DiskId="1" Win64="yes">
               <File Name="VMCDVDLibraryPlugin.dll"
                     KeyPath="yes" Source="..\VMCDVDLibraryPlugin\bin\$(var.Configuration)\VMCDVDLibraryPlugin.dll"
                     Checksum="yes" Vital="yes"/>
             </Component>
-            <Component Id="OMLXMLImporter.dll" Guid="F7DC8CE0-7C53-438E-A3CC-5D155DB4CDD3" DiskId="1">
+            <Component Id="OMLXMLImporter.dll" Guid="F7DC8CE0-7C53-438E-A3CC-5D155DB4CDD3" DiskId="1" Win64="yes">
               <File Name="OMLXMLImporter.dll"
                     KeyPath="yes" Source="..\OMLXMLImporter\bin\$(var.Configuration)\OMLXMLImporter.dll"
                     Checksum="yes" Vital="yes"/>
             </Component>
-            <Component Id="AmazonMetadata.dll" Guid="CF998984-7F40-47FC-AA82-A85F8C8344DB" DiskId="1">
+            <Component Id="AmazonMetadata.dll" Guid="CF998984-7F40-47FC-AA82-A85F8C8344DB" DiskId="1" Win64="yes">
               <File Name="AmazonMetadata.dll"
                     KeyPath="yes" Source="..\AmazonMetadata2\bin\$(var.Configuration)\AmazonMetadata.dll"
                     Checksum="yes" Vital="yes"/>
             </Component>
-            <Component Id="TheMovieDbMetadata.dll" Guid="46534B9A-16B6-4C74-AB87-03B89BE3B160" DiskId="1">
+            <Component Id="TheMovieDbMetadata.dll" Guid="46534B9A-16B6-4C74-AB87-03B89BE3B160" DiskId="1" Win64="yes">
               <File Name="TheMovieDbMetadata.dll"
                     KeyPath="yes" Source="..\TheMovieDbMetadata\bin\$(var.Configuration)\TheMovieDbMetadata.dll"
                     Checksum="yes" Vital="yes"/>
             </Component>
-            <Component Id="NetFlixMetadata.dll" Guid="DB8D4CBF-6CEA-427C-B8CD-E9344475F712" DiskId="1">
+            <Component Id="NetFlixMetadata.dll" Guid="DB8D4CBF-6CEA-427C-B8CD-E9344475F712" DiskId="1" Win64="yes">
               <File Name="NetFlixMetadata.dll"
                     KeyPath="yes" Source="..\NetFlixMetadata\bin\$(var.Configuration)\NetFlixMetadata.dll"
                     Checksum="yes" Vital="yes"/>
             </Component>
-            <Component Id="DVDProfilerMetaData.dll" Guid="59F58BD9-03BC-484C-AED5-5737732E541C" DiskId="1">
+            <Component Id="DVDProfilerMetaData.dll" Guid="59F58BD9-03BC-484C-AED5-5737732E541C" DiskId="1" Win64="yes">
               <File Name="DVDProfilerMetaData.dll"
                     KeyPath="yes" Source="..\DVDProfilerMetaData\bin\$(var.Configuration)\DVDProfilerMetaData.dll"
                     Checksum="yes" Vital="yes"/>
             </Component>
-            <Component Id="TVDBMetadata.dll" Guid="9790B3E6-8680-4029-8360-D79FA668FE53" DiskId="1">
+            <Component Id="TVDBMetadata.dll" Guid="9790B3E6-8680-4029-8360-D79FA668FE53" DiskId="1" Win64="yes">
               <File Name="TVDBMetadata.dll"
                     KeyPath="yes" Source="..\TVDBMetadata\bin\$(var.Configuration)\TVDBMetadata.dll"
                     Checksum="yes" Vital="yes"/>
             </Component>
-            <Component Id="OMLSDK.dll" Guid="26097A63-FC55-41D2-A8D5-432809DE99FC" DiskId="1">
+            <Component Id="OMLSDK.dll" Guid="26097A63-FC55-41D2-A8D5-432809DE99FC" DiskId="1" Win64="yes">
               <File Name="OMLSDK.dll"
                     KeyPath="yes" Source="..\OMLSDK\bin\$(var.Configuration)\OMLSDK.dll"
                     Checksum="yes" Vital="yes" Assembly=".net"/>
@@ -252,7 +252,7 @@
       </Directory>
       <Directory Id="ProgramMenuFolder">
         <Directory Id="ApplicationProgramsFolder" Name="OpenMediaLibrary">
-          <Component Id="DatabaseEditorShortcut" Guid="AABEC970-4DEB-43CE-A39C-353FE9763CA1">
+          <Component Id="DatabaseEditorShortcut" Guid="D7E14A06-90CB-4142-B64A-EB1BE19795D3" Win64="yes">
             <Shortcut Id="DatabaseEditorStartMenuShortcut"
                       Name="OML Database Editor"
                       Description="My Application Description"
@@ -262,7 +262,7 @@
             <RemoveFolder Id="ApplicationProgramsFolder" On="uninstall"/>
             <RegistryValue Root="HKCU" Key="Software\OpenMediaLibrary\DatabaseEditorShortcut" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
           </Component>
-          <Component Id="ImporterShortcut" Guid="BC649387-39D8-4A13-8EBF-71D063580D94">
+          <Component Id="ImporterShortcut" Guid="F0E21BC8-AB1B-4739-A29A-35984270DE05" Win64="yes">
             <Shortcut Id="ImporterStartMenuShortcut"
                       Name="Commandline Database Editor"
                       Description="My Application Description"
@@ -270,7 +270,7 @@
                       WorkingDirectory="APPLICATIONROOTDIRECTORY"/>
             <RegistryValue Root="HKCU" Key="Software\OpenMediaLibrary\ImporterShortcut" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
           </Component>
-          <Component Id="UserManualShortcut" Guid="E63ED5B8-1650-4DD3-98E5-22C47B4DEC87">
+          <Component Id="UserManualShortcut" Guid="F1275ECC-0E5C-4585-AA38-F2EAC2549FEA" Win64="yes">
             <Shortcut Id="UserManualStartMenuShortcut"
                       Name="User Manual"
                       Description="OML User Manual"
@@ -282,7 +282,7 @@
       </Directory>
     </Directory>
     <DirectoryRef Id="TARGETDIR">
-      <Component Id="registryUI" Guid="FDDE2AF7-995E-4b84-B8B7-2E150E7C7101" DiskId="1" KeyPath="yes">
+      <Component Id="registryUI" Guid="FDDE2AF7-995E-4b84-B8B7-2E150E7C7101" DiskId="1" KeyPath="yes" Win64="yes">
         <RegistryKey Id="registry0" Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Media Center\Start Menu\Applications\{3f0850a7-0fd7-4cbf-b8dc-c7f7ea31534e}" Action="create">
           <RegistryValue Id="reg1" Type="string" Name="Title" Value="Open Media Library" Action="write"/>
           <RegistryValue Id="reg2" Type="string" Name="Category" Value="OML\Open Media Library" Action="write"/>
@@ -303,7 +303,7 @@
         <RemoveRegistryKey Action="removeOnInstall" Id="deleteOldKey1" Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Media Center\Extensibility\Applications\{ad208fce-2431-47d6-abed-1974a2a0555f}" />
         <RemoveRegistryKey Action="removeOnInstall" Id="deleteOldKey2" Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Media Center\Extensibility\Categories\OML\Media Library" />
       </Component>
-      <Component Id="registryFWS" Guid="1A746A98-A8D4-4e5e-B41F-5E6D6B8B5DFD" DiskId="1">
+      <Component Id="registryFWS" Guid="1A746A98-A8D4-4e5e-B41F-5E6D6B8B5DFD" DiskId="1" Win64="yes">
         <RegistryKey Id="registryFWS0" Root="HKCU" Key="Software\OpenMediaLibrary" Action="createAndRemoveOnUninstall">
           <RegistryValue Id="registryFWS1" Type="integer" Name="logging" Value="1"/>
           <RegistryValue Id="registryFWS2" Type="multiString" Name="Watches" Value="c:\\users\\public\\recorded tv;*.*" />
