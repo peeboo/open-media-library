@@ -15,7 +15,8 @@ GO
 
 --create the file for the filegroup
 DECLARE @TABLENAME VARCHAR(MAX)
-select @TABLENAME= REPLACE([filename], 'OML_Data.mdf','OML_FSData') from oml.dbo.sysfiles where [fileid]=1
+--select @TABLENAME= REPLACE([filename], 'OML_Data.mdf','OML_FSData') from oml.dbo.sysfiles where [fileid]=1--this probably needs to change to be more dynamic
+SELECT @TABLENAME= SUBSTRING([filename], 1, len([filename])-charindex(reverse('\'),reverse([filename])))+'\OML_FSData' from oml.dbo.sysfiles where [fileid]=1
 
 --ALTER DATABASE OML
 --ADD FILE
