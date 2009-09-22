@@ -7,6 +7,7 @@ using Microsoft.MediaCenter;
 using OMLEngine.Settings;
 using System.Collections;
 using System.Threading;
+using System.IO;
 
 namespace Library.Code.V3
 {
@@ -166,7 +167,7 @@ namespace Library.Code.V3
             if (string.IsNullOrEmpty(this.selectedItem.ItemId))
             {
                 this.selectedItem.Description = "some desc";
-                this.selectedItem.ImageUrl = Environment.SpecialFolder.ProgramFiles.ToString() + @"\Open Media Library\Application.png";
+                this.selectedItem.ImageUrl = Path.GetFullPath(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)) + @"\Open Media Library\Application.png";
                 this.helper.AddStartMenuItem(this.selectedItem);
             }
             else

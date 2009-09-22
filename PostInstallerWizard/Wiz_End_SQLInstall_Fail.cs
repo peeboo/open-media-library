@@ -20,11 +20,11 @@ namespace PostInstallerWizard
 
         private void buttonOpenLogFile_Click(object sender, EventArgs e)
         {
-            if (File.Exists(Environment.SpecialFolder.ProgramFiles.ToString() + @"\Microsoft SQL Server\100\Setup Bootstrap\Log\Summary.txt"))
+            if (File.Exists(Path.GetFullPath(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)) + @"\Microsoft SQL Server\100\Setup Bootstrap\Log\Summary.txt"))
             {
                 Process pr = new Process();
                 pr.StartInfo.UseShellExecute = true;
-                pr.StartInfo.FileName = Environment.SpecialFolder.ProgramFiles.ToString() + @"\Microsoft SQL Server\100\Setup Bootstrap\Log\Summary.txt";
+                pr.StartInfo.FileName = Path.GetFullPath(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)) + @"\Microsoft SQL Server\100\Setup Bootstrap\Log\Summary.txt";
                 pr.Start();
                 pr.WaitForExit();
             }

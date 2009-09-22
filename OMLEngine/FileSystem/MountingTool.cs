@@ -204,8 +204,8 @@ namespace OMLEngine.FileSystem
 
 
         // Functions for finding the mounting tool
-        private string DefaultDaemonToolsPath = Environment.SpecialFolder.ProgramFiles.ToString() + @"\DAEMON Tools Lite\daemon.exe";
-        private string DefaultVirtualCloneDrivePath = Environment.SpecialFolder.ProgramFiles.ToString() + @"\Elaborate Bytes\VirtualCloneDrive\VCDMount.exe";
+        private string DefaultDaemonToolsPath = Path.GetFullPath(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)) + @"\DAEMON Tools Lite\daemon.exe";
+        private string DefaultVirtualCloneDrivePath = Path.GetFullPath(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)) + @"\Elaborate Bytes\VirtualCloneDrive\VCDMount.exe";
 
         public string ScanForMountTool(Tool _tool, string _driveToScan)
         {
@@ -349,8 +349,8 @@ namespace OMLEngine.FileSystem
         private const string VirtualCloneDriveRegistryPath = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\VirtualCloneDrive";
         private const string DaemonToolsExe = "daemon.exe";
         private const string VirtualCloneDriveExe = "VCDMount.exe";
-        private static string DaemonToolsFolderPath = Environment.SpecialFolder.ProgramFiles.ToString() + @"\DAEMON Tools Lite";
-        private static string VirtualCloneDriveFolderPath = Environment.SpecialFolder.ProgramFiles.ToString() + @"\Elaborate Bytes\VirtualCloneDrive";
+        private static string DaemonToolsFolderPath = Path.GetFullPath(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)) + @"\DAEMON Tools Lite";
+        private static string VirtualCloneDriveFolderPath = Path.GetFullPath(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)) + @"\Elaborate Bytes\VirtualCloneDrive";
 
         public static string GetMountingToolPath(Tool _tool)
         {
