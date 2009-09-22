@@ -7,19 +7,20 @@ using System.ServiceProcess;
 using System.Security.Principal;
 using Microsoft.Deployment.WindowsInstaller;
 using FileDownloader;
+using System.Security.AccessControl;
 
 namespace OMLCustomWiXAction {
     public class CustomActions {
-        private static string MediaInfoX64Url = @"http://www.openmedialibrary.org/OMLInstallerFiles/MediaInfox64.dll";
-        private static string MediaInfoX86Url = @"http://www.openmedialibrary.org/OMLInstallerFiles/MediaInfoi386.dll";
-        private static string MediaInfoLocalPath = Environment.SpecialFolder.ProgramFiles.ToString() + @"\openmedialibrary\MediaInfo.dll";
+        private static string MediaInfoX64Url = @"http://open-media-library.googlecode.com/files/MediaInfox64.dll";
+        private static string MediaInfoX86Url = @"http://open-media-library.googlecode.com/files/MediaInfoi386.dll";
+        private static string MediaInfoLocalPath = Path.GetFullPath(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)) + @"\openmedialibrary\MediaInfo.dll";
 
-        private static string MEncoderUrl = @"http://www.openmedialibrary.org/OMLInstallerFiles/mencoder-1.0rc2-4.2.1.exe";
-        private static string MEncoderPath = Environment.SpecialFolder.ProgramFiles.ToString() + @"\openmedialibrary\MEncoder.exe";
+        private static string MEncoderUrl = @"http://open-media-library.googlecode.com/files/mencoder-1.0rc2-4.2.1.exe";
+        private static string MEncoderPath = Path.GetFullPath(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)) + @"\openmedialibrary\MEncoder.exe";
 
-        private static string UserManualUrl = @"http://www.openmedialibrary.org/OMLInstallerFiles/Open_Media_Library_User_Manual.pdf";
-        private static string UserManualHelpPath = Environment.SpecialFolder.ProgramFiles.ToString() + @"\openmedialibrary\Help";
-        private static string UserManualPath = Environment.SpecialFolder.ProgramFiles.ToString() + @"\openmedialibrary\Help\Open_Media_Library_User_Manual.pdf";
+        private static string UserManualUrl = @"http://open-media-library.googlecode.com/files/Open_Media_Library_User_Manual.pdf";
+        private static string UserManualHelpPath = Path.GetFullPath(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)) + @"\openmedialibrary\Help";
+        private static string UserManualPath = Path.GetFullPath(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)) + @"\openmedialibrary\Help\Open_Media_Library_User_Manual.pdf";
 
         [CustomAction]
         public static ActionResult StartOMLEngineService(Session session) {
@@ -97,19 +98,36 @@ namespace OMLCustomWiXAction {
                 ? CustomActions.MediaInfoX86Url
                 : CustomActions.MediaInfoX64Url;
 
+            session.Log("MediaInfo: Selected {0} based on detected processor architecture of {1}",
+                miUrl, Environment.GetEnvironmentVariable(@"PROCESSOR_ARCHITECTURE"));
+
             DownloadEngine miEngine = new DownloadEngine(miUrl);
 
-            miEngine.Log += (s) => {
-                int pct = Convert.ToInt32((Convert.ToDouble(Int32.Parse(s)) / Convert.ToDouble(miEngine.TotalBytes)) * 100);
-                session.Log(string.Format("MediaInfo: {0}", pct));
+            miEngine.Bytes += (i) => {
+                if (i > 0) {
+                    int pct = Convert.ToInt32((Convert.ToDouble(i) / Convert.ToDouble(miEngine.TotalBytes)) * 100);
+                    session.Log(string.Format("MediaInfo: ({0}) {1}b of {2}b", pct, i, miEngine.TotalBytes));
+                }
             };
-            bool miDownloaded = miEngine.Download();
-            if (!miDownloaded) {
-                session.Log("MediaInfo Failed to download");
+
+            session.Log("MediaInfo: Beginning download");
+            bool miDownloaded = false;
+            try {
+                miDownloaded = miEngine.Download(true);
+            } catch (Exception ex) {
+                session.Log("MediaInfo: Error {0}", ex.Message);
                 return ActionResult.Failure;
             }
-            session.Log("File is: {0}", miEngine.DownloadedFile);
+
+            if (!miDownloaded) {
+                session.Log("MediaInfo: Failed to download");
+                return ActionResult.Failure;
+            }
+            session.Log("MediaInfo: Downloaded File Location {0}", miEngine.DownloadedFile);
+            session.Log("MediaInfo: Final destination is {0}", CustomActions.MediaInfoLocalPath);
+
             try {
+                session.Log("MediaInfo: copying into final location");
                 File.Copy(miEngine.DownloadedFile, CustomActions.MediaInfoLocalPath, true);
             } catch (Exception ex) {
                 session.Log("MediaInfo Error: {0}", ex.Message);
