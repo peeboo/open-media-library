@@ -9,8 +9,6 @@ using DevExpress.XtraEditors;
 using System.Linq;
 using OMLEngine;
 
-using OMLEngine;
-
 namespace OMLDatabaseEditor
 {
     public partial class ResolveGenres : DevExpress.XtraEditors.XtraForm

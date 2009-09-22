@@ -499,9 +499,9 @@ namespace OMLEngine.DatabaseManagement
             {
                 // Launch backup job
                 string sql = @"CREATE DATABASE [OML] ON  PRIMARY " +
-                    @"( NAME = N'OML', FILENAME = N'" + Environment.SpecialFolder.ProgramFiles.ToString() + @"\Microsoft SQL Server\MSSQL10.OML\MSSQL\DATA\OML.mdf' , SIZE = 3072KB , MAXSIZE = UNLIMITED, FILEGROWTH = 1024KB ) " +
+                    @"( NAME = N'OML', FILENAME = N'" + Path.GetFullPath(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)) + @"\Microsoft SQL Server\MSSQL10.OML\MSSQL\DATA\OML.mdf' , SIZE = 3072KB , MAXSIZE = UNLIMITED, FILEGROWTH = 1024KB ) " +
                     @" LOG ON  " +
-                    @"( NAME = N'OML_log', FILENAME = N'" + Environment.SpecialFolder.ProgramFiles.ToString() + @"\Microsoft SQL Server\MSSQL10.OML\MSSQL\DATA\OML_log.ldf' , SIZE = 1024KB , MAXSIZE = 2048GB , FILEGROWTH = 10%) ";
+                    @"( NAME = N'OML_log', FILENAME = N'" + Path.GetFullPath(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)) + @"\Microsoft SQL Server\MSSQL10.OML\MSSQL\DATA\OML_log.ldf' , SIZE = 1024KB , MAXSIZE = 2048GB , FILEGROWTH = 10%) ";
 
                 if (ExecuteNonQuery(sqlConn, sql))
                 {
