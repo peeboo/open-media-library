@@ -24,6 +24,9 @@
     <Compile Include="Library.wxs" />
     <Compile Include="Properties.wxs" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Product-en-us.wxl" />
+  </ItemGroup>
   <Import Project="$(WixTargetsPath)" />
   <!--
 	To modify your build process, add your task inside one of the targets below and uncomment it.
