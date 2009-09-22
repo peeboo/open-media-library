@@ -20,6 +20,7 @@
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="ComponentGroups.wxs" />
     <Compile Include="FeatureGroups.wxs" />
     <Compile Include="Library.wxs" />
     <Compile Include="Properties.wxs" />
