@@ -2,11 +2,21 @@
 using System.IO;
 using System.Net;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace FileDownloader {
     public class DownloadEngine {
         public delegate void DownloadEventsHandler(string status);
+        public delegate void CurrentBytesEventHandler(int bytes);
+
         public event DownloadEventsHandler Log;
+        public event CurrentBytesEventHandler Bytes;
+
+        protected void FireEvent(int bytes) {
+            if (Bytes != null)
+                Bytes(bytes);
+        }
+
         protected void FireEvent(string msg) {
             if (Log != null)
                 Log(msg);
@@ -15,10 +25,6 @@ namespace FileDownloader {
         public string UserAgent {
             get;
             set;
-        }
-
-        public void FireEvent(int msg) {
-            FireEvent(Convert.ToString(msg));
         }
 
         public string Url {
@@ -69,14 +75,13 @@ namespace FileDownloader {
                             bytesRead = readStream.Read(buffer, 0, buffer.Length);
                             writeStream.Write(buffer, 0, bytesRead);
                             bytesDone += bytesRead;
-                            //int pct = Convert.ToInt32((Convert.ToDouble(bytesDone) / Convert.ToDouble(TotalBytes)) * 100);
                             FireEvent(bytesDone);
                         } while (bytesRead > 0);
                     }
                 }
             } catch (Exception ex) {
-                FireEvent(ex.Message);
                 bytesDone = 0;
+                throw ex;
             } finally {
                 if (res != null)
                     res = null;
@@ -92,8 +97,40 @@ namespace FileDownloader {
             return false;
         }
 
+        public bool Download(bool AllowUnsafeHeaders) {
+            if (SetAllowUnsafeHeaderParsing20())
+                return Download();
+
+            return false;
+        }
+
         private string _localfile() {
             return Path.GetTempFileName();
+        }
+
+        private static bool SetAllowUnsafeHeaderParsing20() {
+            //Get the assembly that contains the internal class
+            Assembly aNetAssembly = Assembly.GetAssembly(typeof(System.Net.Configuration.SettingsSection));
+            if (aNetAssembly != null) {
+                //Use the assembly in order to get the internal type for the internal class
+                Type aSettingsType = aNetAssembly.GetType("System.Net.Configuration.SettingsSectionInternal");
+                if (aSettingsType != null) {
+                    //Use the internal static property to get an instance of the internal settings class.
+                    //If the static instance isn't created allready the property will create it for us.
+                    object anInstance = aSettingsType.InvokeMember("Section",
+                      BindingFlags.Static | BindingFlags.GetProperty | BindingFlags.NonPublic, null, null, new object[] { });
+
+                    if (anInstance != null) {
+                        //Locate the private bool field that tells the framework is unsafe header parsing should be allowed or not
+                        FieldInfo aUseUnsafeHeaderParsing = aSettingsType.GetField("useUnsafeHeaderParsing", BindingFlags.NonPublic | BindingFlags.Instance);
+                        if (aUseUnsafeHeaderParsing != null) {
+                            aUseUnsafeHeaderParsing.SetValue(anInstance, true);
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
         }
     }
 }
