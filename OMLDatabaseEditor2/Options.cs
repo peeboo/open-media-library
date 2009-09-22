@@ -89,6 +89,7 @@ namespace OMLDatabaseEditor
             this.cePrependParentFolder.Checked = OMLSettings.AddParentFoldersToTitleName;
             cePrependParentFolder.Enabled = this.ceFoldersAsTitles.Checked;
 
+            // Metadata
             foreach (MetaDataPluginDescriptor plugin in MainEditor._metadataPlugins)
             {
                 cmbDefaultMetadataPlugin.Properties.Items.Add(plugin.DataProviderName);
@@ -102,7 +103,8 @@ namespace OMLDatabaseEditor
             ceUpdateTitleNameTV.Checked = OMLEngine.Settings.OMLSettings.MetadataLookupUpdateNamePrefTV;
 
             seMetadataLookupResultsQty.Value = OMLEngine.Settings.OMLSettings.MetadataLookupResultsQty;
-
+            seMetadataLookupMaxFanartQty.Value = OMLEngine.Settings.OMLSettings.MetadataLookupMaxFanartQty;
+            
             ceTitledFanArtFolder.Checked = OMLSettings.TitledFanArtFolder;
             beTitledFanArtPath.EditValue = OMLSettings.TitledFanArtPath;
             if (string.IsNullOrEmpty(beTitledFanArtPath.EditValue.ToString())) beTitledFanArtPath.EditValue = OMLEngine.FileSystemWalker.FanArtDirectory;
@@ -110,6 +112,7 @@ namespace OMLDatabaseEditor
             beTitledFanArtPath.MaskBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
             beTitledFanArtPath.MaskBox.AutoCompleteSource = AutoCompleteSource.FileSystemDirectories;
 
+            // St Sana
             ceStSanaCreateTLFolder.Checked = OMLSettings.StSanaCreateTLFolder;
             ceStSanaAlwaysCreateMovieFolder.Checked = OMLSettings.StSanaAlwaysCreateMovieFolder;
             ceDBEStSanaAutoLookupMeta.Checked = OMLEngine.Settings.OMLSettings.StSanaAutoLookupMeta;
@@ -122,6 +125,8 @@ namespace OMLDatabaseEditor
                 lvWatchedFolders.Items.Add(lvi);
             }
             ceFileWatcherEnabled.Checked = OMLEngine.Settings.OMLSettings.ScannerEnabled;
+            cmbFileWatchedTag.Properties.Items.AddRange(TitleCollectionManager.GetAllTagsList().ToArray());
+            cmbFileWatchedTag.Text = OMLEngine.Settings.OMLSettings.ScannerSettingsTagTitlesWith;
 
 
             // Mounting Tools
@@ -196,7 +201,8 @@ namespace OMLDatabaseEditor
                 OMLEngine.Settings.OMLSettings.MetadataLookupUpdateNamePrefTV = ceUpdateTitleNameTV.Checked;
 
                 OMLEngine.Settings.OMLSettings.MetadataLookupResultsQty = (int)seMetadataLookupResultsQty.Value;
-                
+                OMLEngine.Settings.OMLSettings.MetadataLookupMaxFanartQty = (int)seMetadataLookupMaxFanartQty.Value;
+
                 OMLSettings.StSanaCreateTLFolder = ceStSanaCreateTLFolder.Checked;
                 OMLSettings.StSanaAlwaysCreateMovieFolder = ceStSanaAlwaysCreateMovieFolder.Checked;
                 OMLEngine.Settings.OMLSettings.StSanaAutoLookupMeta = ceDBEStSanaAutoLookupMeta.Checked;
@@ -228,6 +234,7 @@ namespace OMLDatabaseEditor
                     }
                     OMLEngine.Settings.OMLSettings.ScannerWatchedFolders = SWF;
                     OMLEngine.Settings.OMLSettings.ScannerEnabled = ceFileWatcherEnabled.Checked;
+                    OMLEngine.Settings.OMLSettings.ScannerSettingsTagTitlesWith = cmbFileWatchedTag.Text;
                     OMLEngine.Settings.OMLSettings.ScannerSettingsLastUpdated = DateTime.Now;
                 }
 
@@ -450,6 +457,16 @@ namespace OMLDatabaseEditor
             }
             ((ListView)sender).Refresh();
 
+            WatchedFoldersDirty = true;
+        }
+
+        private void ceFileWatcherEnabled_CheckedChanged(object sender, EventArgs e)
+        {
+            WatchedFoldersDirty = true;
+        }
+
+        private void cmbFileWatchedTag_EditValueChanged(object sender, EventArgs e)
+        {
             WatchedFoldersDirty = true;
         }
     }

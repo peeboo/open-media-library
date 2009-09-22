@@ -786,12 +786,12 @@ namespace OMLEngine
         }
 
 
-        public static Title CreateTitle(int? parentid, string Name, TitleTypes titletype, Disk[] disks)
+        public static Title CreateTitle(int? parentid, string Name, TitleTypes titletype, string Tag, Disk[] disks)
         {
-            return CreateTitle(parentid, Name, titletype, null, null, disks);
+            return CreateTitle(parentid, Name, titletype, Tag, null, null, disks);
         }
 
-        public static Title CreateTitle(int? parentid, string Name, TitleTypes titletype, short? SeasonNumber, short? EpisodeNumber, Disk[] disks)
+        public static Title CreateTitle(int? parentid, string Name, TitleTypes titletype, string Tag, short? SeasonNumber, short? EpisodeNumber, Disk[] disks)
         {
             Title newTitle = new Title();
             newTitle.Name = Name;
@@ -828,6 +828,8 @@ namespace OMLEngine
 
             newTitle.SeasonNumber = SeasonNumber;
             newTitle.EpisodeNumber = EpisodeNumber;
+            
+            if (Tag != null) newTitle.AddTag(Tag);
 
             if (disks != null)
             {
@@ -848,7 +850,7 @@ namespace OMLEngine
         {
             if (parentid == null)
             {
-                return CreateTitle(null, Name, titletype, seriesNumber, null, null);
+                return CreateTitle(null, Name, titletype, "", seriesNumber, null, null);
             }
             else
             {
@@ -870,7 +872,7 @@ namespace OMLEngine
                         }
                     }
                 }
-                return CreateTitle(parentid, Name, titletype, seriesNumber, null, null);
+                return CreateTitle(parentid, Name, titletype, null, seriesNumber, null, null);
             }
         }
 

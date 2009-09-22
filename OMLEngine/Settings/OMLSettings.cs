@@ -418,17 +418,30 @@ namespace OMLEngine.Settings
             set { SettingsManager.SaveSettingByName("ScannerEnabled", value.ToString(), InstanceName); }
         }
 
+        public static int ScannerSettingsNewTitles
+        {
+            get { return SettingsManager.GetSettingByNameInt("ScannerSettingsNewTitles", InstanceName) ?? 0; }
+            set { SettingsManager.SaveSettingByName("ScannerSettingsNewTitles", value.ToString(), InstanceName); }
+        }
+
+        public static DateTime ScannerSettingsLastScanDateTime
+        {
+            get { return SettingsManager.GetSettingByNameDateTime("ScannerSettingsLastScanDateTime", InstanceName) ?? DateTime.Now.AddYears(-30); }
+            set { SettingsManager.SaveSettingByName("ScannerSettingsLastScanDateTime", value.ToString(), InstanceName); }
+        }
+
         public static DateTime ScannerSettingsLastUpdated
         {
             get { return SettingsManager.GetSettingByNameDateTime("ScannerSettingsLastUpdated", InstanceName) ?? DateTime.Now.AddYears(-30); }
             set { SettingsManager.SaveSettingByName("ScannerSettingsLastUpdated", value.ToString(), InstanceName); }
-        }       
+        }
 
-        /*public static IList<string> ScannerMetaDataPlugins
+        public static string ScannerSettingsTagTitlesWith
         {
-            get { return SettingsManager.GetSettingByNameListString("ScannerMetaDataPlugins", InstanceName) ?? new List<string>(0); }
-            set { SettingsManager.SaveSettingByName("ScannerMetaDataPlugins", value, InstanceName); }
-        }*/
+            get { return SettingsManager.GetSettingByName("ScannerSettingsTagTitlesWith", InstanceName) ?? "Unknown Title"; }
+            set { SettingsManager.SaveSettingByName("ScannerSettingsTagTitlesWith", value, InstanceName); }
+        } 
+
         public class WatchedFolder
         {
             public string Folder;
@@ -488,11 +501,7 @@ namespace OMLEngine.Settings
                 }
             }
         }
-        /*public static IList<string> ScannerWatchedFolders
-        {
-            get { return SettingsManager.GetSettingByNameListString("ScannerWatchedFolders", InstanceName) ?? new List<string>(0); }
-            set { SettingsManager.SaveSettingByName("ScannerWatchedFolders", value, InstanceName); }
-        }*/
+
         #endregion
 
         public static bool EnableAutomaticUpdates
@@ -631,6 +640,12 @@ namespace OMLEngine.Settings
         {
             get { return SettingsManager.GetSettingByNameInt("MetadataLookupResultsQty", InstanceName) ?? 10; }
             set { SettingsManager.SaveSettingByName("MetadataLookupResultsQty", value.ToString(), InstanceName); }
+        }
+
+        public static int MetadataLookupMaxFanartQty
+        {
+            get { return SettingsManager.GetSettingByNameInt("MetadataLookupMaxFanartQty", InstanceName) ?? 10; }
+            set { SettingsManager.SaveSettingByName("MetadataLookupMaxFanartQty", value.ToString(), InstanceName); }
         }
 
         // Overwrite settings for a manual search
