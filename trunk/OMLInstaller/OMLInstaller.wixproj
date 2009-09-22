@@ -5,16 +5,19 @@
     <ProductVersion>3.0</ProductVersion>
     <ProjectGuid>{edc53116-7907-4947-a599-701353cf23d8}</ProjectGuid>
     <SchemaVersion>2.0</SchemaVersion>
-    <OutputName>OMLInstaller</OutputName>
+    <OutputName>OMLSetup</OutputName>
     <OutputType>Package</OutputType>
     <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' AND '$(MSBuildExtensionsPath32)' != '' ">$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.0\Wix.targets</WixTargetsPath>
     <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.0\Wix.targets</WixTargetsPath>
-    <Name>OMLInstallerBuilder</Name>
+    <Name>OMLInstaller</Name>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
     <DefineConstants>Debug</DefineConstants>
+    <VerboseOutput>True</VerboseOutput>
+    <SuppressAllWarnings>False</SuppressAllWarnings>
+    <Pedantic>False</Pedantic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <OutputPath>bin\$(Configuration)\</OutputPath>
