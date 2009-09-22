@@ -21,6 +21,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ComponentGroups.wxs" />
+    <Compile Include="WixUI_OML.wxs" />
     <Compile Include="FeatureGroups.wxs" />
     <Compile Include="Library.wxs" />
     <Compile Include="Properties.wxs" />

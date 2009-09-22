@@ -74,7 +74,7 @@
     <!-- page and a completion page. Other dialog sets are available in the WiX toolset and are          -->
     <!-- described in more detail in the WiX documentation.                                              -->
     <UI>
-      <UIRef Id="WixUI_FeatureTree" />
+      <UIRef Id="WixUI_OML" />
     </UI>
   </Product>
 </Wix>
