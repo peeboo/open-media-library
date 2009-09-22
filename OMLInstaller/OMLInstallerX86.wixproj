@@ -26,7 +26,6 @@
   <ItemGroup>
     <Compile Include="ComponentGroups.wxs" />
     <Compile Include="Components.wxs" />
-    <Compile Include="FeatureGroups.wxs" />
     <Compile Include="Product.wxs" />
   </ItemGroup>
   <ItemGroup>

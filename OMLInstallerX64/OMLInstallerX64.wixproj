@@ -3,10 +3,10 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>3.0</ProductVersion>
-    <ProjectGuid>{d74defde-10f2-41ef-8cae-773310fff3b9}</ProjectGuid>
+    <ProjectGuid>{998968bd-f02d-443e-8ba9-9ecb3a599adf}</ProjectGuid>
     <SchemaVersion>2.0</SchemaVersion>
-    <OutputName>OMLWiXLib</OutputName>
-    <OutputType>Library</OutputType>
+    <OutputName>OMLInstallerX64</OutputName>
+    <OutputType>Package</OutputType>
     <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' AND '$(MSBuildExtensionsPath32)' != '' ">$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.0\Wix.targets</WixTargetsPath>
     <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.0\Wix.targets</WixTargetsPath>
   </PropertyGroup>
@@ -20,9 +20,7 @@
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="FeatureGroups.wxs" />
-    <Compile Include="Library.wxs" />
-    <Compile Include="Properties.wxs" />
+    <Compile Include="Product.wxs" />
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" />
   <!--
