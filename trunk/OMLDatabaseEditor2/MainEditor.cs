@@ -839,37 +839,14 @@ namespace OMLDatabaseEditor
 
                         MetadataSearchManagement mds = new MetadataSearchManagement(_metadataPlugins);
 
-                        //bool retval = mds.MetadataSearchUsingPreferred(title.TitleType, coverArtOnly, titleNameSearch, EpisodeName, SeasonNo, EpisodeNo, out searchresult);
                         bool retval = mds.MetadataSearchUsingPreferred(title);
 
                         if (retval)
                         {    
                             // Successful lookup, process
-
-                           /* if (((title.TitleType & TitleTypes.Season) != 0) ||
-                                ((title.TitleType & TitleTypes.TVShow) != 0) ||
-                                ((title.TitleType & TitleTypes.Episode) != 0))
-                            {
-                                // Use the preferred overwrite settings for TV
-                                title.CopyMetadata(searchresult, OMLEngine.Settings.OMLSettings.MetadataLookupOverwriteExistingDataPrefTV,
-                                    OMLEngine.Settings.OMLSettings.MetadataLookupUpdateNamePrefTV,
-                                    OMLEngine.Settings.OMLSettings.MetadataLookupOverwriteExistingDataPrefTV);
-                            }
-                            else
-                            { 
-                                // Use the preferred overwrite settings for Movies
-                                title.CopyMetadata(searchresult, OMLEngine.Settings.OMLSettings.MetadataLookupOverwriteExistingDataPrefMovies,
-                                    OMLEngine.Settings.OMLSettings.MetadataLookupUpdateNamePrefMovies,
-                                    OMLEngine.Settings.OMLSettings.MetadataLookupOverwriteExistingDataPrefMovies);
-                            }
-                            */
                             LoadFanart(mds.FanArt, title); 
-
-                            //CheckGenresAgainstSupported(titleEditor.EditedTitle);
-                           
                             titleEditor.RefreshEditor();
                             Cursor = Cursors.Default;
-
                             return true;
                         }
                     }
@@ -905,9 +882,12 @@ namespace OMLDatabaseEditor
 
             foreach (string image in _images)
             {
-                if (!ImageManager.CheckImageOriginalNameTitleThreadSafe(title.Id, image))
+                if (images.Count < OMLEngine.Settings.OMLSettings.MetadataLookupMaxFanartQty)
                 {
-                    images.Add(image);
+                    if (!ImageManager.CheckImageOriginalNameTitleThreadSafe(title.Id, image))
+                    {
+                        images.Add(image);
+                    }
                 }
             }
 
@@ -2091,7 +2071,7 @@ namespace OMLDatabaseEditor
             }
             catch (Exception ex)
             {
-                Utilities.DebugLine("[OMLDatabaseEditor] treeMedia_DragOver Outer exception" + ex.Message);
+                Utilities.DebugLine("[OMLDatabaseEditor] treeMedia_DragOver Outer exception : " + ex.Message);
             }
         }
 
@@ -3552,7 +3532,7 @@ namespace OMLDatabaseEditor
         
         private int CreateTitle(int? parentid, string Name, TitleTypes titletype, Disk[] disks, bool RefreshUI)
         {
-            Title addedTitle = TitleCollectionManager.CreateTitle(parentid, Name, titletype, null, null, disks);
+            Title addedTitle = TitleCollectionManager.CreateTitle(parentid, Name, titletype, null, null, null, disks);
             
             AddCreatedTitle(addedTitle, RefreshUI);
 
@@ -3561,7 +3541,7 @@ namespace OMLDatabaseEditor
 
         private int CreateTitle(int? parentid, string Name, TitleTypes titletype, short? SeasonNumber, short? EpisodeNumber, Disk[] disks, bool RefreshUI)
         {
-            Title addedTitle = TitleCollectionManager.CreateTitle(parentid, Name, titletype, SeasonNumber, EpisodeNumber, disks);
+            Title addedTitle = TitleCollectionManager.CreateTitle(parentid, Name, titletype, null, SeasonNumber, EpisodeNumber, disks);
             
             AddCreatedTitle(addedTitle, RefreshUI);
 
@@ -3957,26 +3937,26 @@ namespace OMLDatabaseEditor
 
             StSana.Log += new StSanaServices.SSEventHandler(stsana_Log);
             
-            List<Title> titles= StSana.CreateTitlesFromPathArray(parentid, path);
+            List<Title> titles= StSana.CreateTitlesFromPathArray(parentid, path, null);
 
             foreach (Title t in titles)
             {
-                AddCreatedTitle(t, false);
-
-                if ((t.TitleType & TitleTypes.AllMedia) != 0)
+                try
                 {
-                    try
+                    AddCreatedTitle(t, false);
+
+                    if ((t.TitleType & TitleTypes.AllMedia) != 0)
                     {
                         stsana_Log("Looking up metadata for " + t.Name);
                         LookupPreferredMetaData(t);
                     }
-                    catch (Exception ex)
-                    {
-                        Utilities.DebugLine("[OMLDatabaseEditor] CreateTitlesFromPathArray exception " + ex.Message);
-                    }
+                    TitleCollectionManager.SaveTitleUpdates();
+                }
+                catch (Exception ex)
+                {
+                    Utilities.DebugLine("[OMLDatabaseEditor] CreateTitlesFromPathArray exception  on title : " + t.Name + " : " + ex.Message);
                 }
             }
-            TitleCollectionManager.SaveTitleUpdates();
 
             eventsForm.Hide();
             eventsForm.Dispose();

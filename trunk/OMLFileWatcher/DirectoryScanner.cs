@@ -32,7 +32,6 @@ namespace OMLFileWatcher
         private List<string> waitCreatedList = new List<string>();
         private List<string> waitDeletedList = new List<string>();
 
-        //IOMLMetadataPlugin metaDataPlugin = null;
         internal static List<MetaDataPluginDescriptor> _metadataPlugins = null;
 
         public delegate void TitleAdded(object sender, Title title);
@@ -59,112 +58,6 @@ namespace OMLFileWatcher
 
         }            
 
-        /// <summary>
-        /// Get's a meta data filled title for the given name
-        /// </summary>
-        /// <param name="title"></param>
-        /*public Title GetTitleMetaData(string name)
-        {            
-            Title returnTitle = null;
-
-            // setup the meta data plugin the first time we need it
-            if (metaDataPlugin == null)
-                SetupMetaDataPlugin();
-
-            // if the setup failed let's bail out
-            if (metaDataPlugin == null)
-            {
-                return new Title() { Name = name };
-            }
-
-            DebugLine("Attemping to get meta data for '{0}'", name);
-
-            try
-            {
-                metaDataPlugin.SearchForMovie(name);
-                returnTitle = metaDataPlugin.GetBestMatch();
-            }
-            catch (Exception err)
-            {
-                DebugLineError(err, "Error getting meta data");
-            }
-
-            if (returnTitle == null)
-                DebugLine("Not meta data found for " + name);
-            else
-                DebugLine("Meta Data found for " + name);
-
-            return returnTitle ?? new Title() { Name = name };            
-        }*/
-
-        /// <summary>
-        /// Initializes the meta data source of choice
-        /// </summary>
-        /*private void SetupMetaDataPlugin()
-        {
-            try
-            {
-                IList<string> plugins = OMLSettings.ScannerMetaDataPlugins;
-
-                // if no meta plugins are set just bail out
-                if (plugins == null && plugins.Count == 0)
-                    return;
-
-                // todo : solomon : eventually we should support an order of meta data plugins to allow
-                // for more than one - sadly that day isn't here yet
-                MetaDataSettings metaDataSettings = GetTitleMetaData(plugins[0]);
-
-                List<PluginServices.AvailablePlugin> plugins = PluginServices.FindPlugins(FileSystemWalker.PluginsDirectory, PluginTypes.MetadataPlugin);
-
-                // Loop through available plugins, creating instances and add them
-                if (plugins != null)
-                {
-                    foreach (PluginServices.AvailablePlugin plugin in plugins)
-                    {
-                        IOMLMetadataPlugin foundPlugin = (IOMLMetadataPlugin)PluginServices.CreateInstance(plugin);
-
-                        if (foundPlugin.PluginName.Equals(metaDataSettings.Name, StringComparison.OrdinalIgnoreCase))
-                        {
-                            metaDataPlugin = foundPlugin;
-
-                            if (metaDataSettings.Options != null)
-                            {
-                                foreach (KeyValuePair<string, string> pair in metaDataSettings.Options)
-                                {
-                                    DebugLine("Setting meta data plugin options '{0}' : '{1]'", pair.Key, pair.Value);
-                                    
-                                    metaDataPlugin.SetOptionValue(pair.Key, pair.Value);
-                                }
-                            }
-
-                            metaDataPlugin.Initialize(null);
-
-                            DebugLine("Loaded meta data plugin '{0}'", foundPlugin.PluginName);
-                            break;
-                        }
-                    }
-                }
-
-                if (metaDataPlugin == null)
-                {
-                    DebugLine("Meta data plugin not found : " + metaDataSettings.Name);
-                }
-            }
-            catch (Exception err)
-            {
-                DebugLineError(err, "Error could not load meta data plugin");
-            }
-        }*/
-
-
-        /// <summary>
-        /// Scans the directory for any new media and adds the titles to the db
-        /// </summary>
-        /// <param name="directory"></param>
-        /*public void Scan(string directory)
-        {
-            Scan(new string[] { directory });
-        }*/
 
         /// <summary>
         /// Scans the list of directories and adds the new titles to the db
@@ -190,7 +83,8 @@ namespace OMLFileWatcher
                     {
                         DebugLine("Performing a media scan on - " + watchedfolder.Folder);
                         List<Title> titles = StSana.CreateTitlesFromPathArray(watchedfolder.ParentID,
-                            new string[] { watchedfolder.Folder });
+                            new string[] { watchedfolder.Folder }, 
+                            OMLSettings.ScannerSettingsTagTitlesWith);
 
                         addedCount += titles.Count();
 
@@ -219,38 +113,12 @@ namespace OMLFileWatcher
                     }
 
 
-
-                    /*IEnumerable<string> media = FileScanner.GetAllMediaFromPath(directories);
-                    IEnumerable<string> uniqueMedia = TitleCollectionManager.GetUniquePaths(media);
-
-                    foreach (string path in uniqueMedia)
-                    {
-                        // todo : solomon : i'm ignoring the meta data stuff for now
-
-                        // add the new title as unkown so the UI can filter on it
-                        Title title = new Title() { Name = FileHelper.GetNameFromPath(path), TitleType = TitleTypes.Root | TitleTypes.Unknown }; 
-                        //GetTitleMetaData(FileHelper.GetNameFromPath(path));
-
-                        title.AddDisk(new Disk(DEFAULT_DISK_NAME, path, FileScanner.GetVideoFormatFromPath(path)));
-
-                        // save the title to the database
-                        TitleCollectionManager.AddTitle(title);
-                        
-                        DebugLine("Adding Titles - " + title.Name);
-
-                        updated = true;
-                        adddedCount++;
-
-                        // fire the event
-                        if (Added != null)
-                            Added(this, title);                                
-                    }*/
-
                     // save all the image updates
                     if (updated)
                     {
                         TitleCollectionManager.SaveTitleUpdates();
                         DebugLine("Folder scanning completed.  Took {0} seconds and added {1} title(s).", (DateTime.Now - start).TotalSeconds, addedCount);
+                        OMLSettings.ScannerSettingsNewTitles = OMLSettings.ScannerSettingsNewTitles + addedCount;
                     }
                     else
                         DebugLine("Folder scan resulted in no updates. Took {0} seconds", (DateTime.Now - start).TotalSeconds);
@@ -286,8 +154,6 @@ namespace OMLFileWatcher
             if (retval)
             {
                 //LoadFanart(mds.FanArt, title);
-
-                //CheckGenresAgainstSupported(titleEditor.EditedTitle);
             }
         }
 
@@ -679,6 +545,7 @@ namespace OMLFileWatcher
                 try
                 {
                     Scan(watchFolders);
+                    OMLSettings.ScannerSettingsLastScanDateTime = DateTime.Now;
                 }
                 finally
                 {

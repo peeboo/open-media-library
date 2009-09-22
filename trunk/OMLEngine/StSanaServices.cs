@@ -12,7 +12,7 @@ namespace OMLEngine
         public delegate void SSEventHandler(string message);
         public event SSEventHandler Log;
 
-        public List<Title> CreateTitlesFromPathArray(int? parentid, string[] path)
+        public List<Title> CreateTitlesFromPathArray(int? parentid, string[] path, string Tag)
         {
             // Create a list of all newly added titles
             List<Title> NewTitles = new List<Title>();
@@ -146,6 +146,7 @@ namespace OMLEngine
                                                 Title newTitle = TitleCollectionManager.CreateTitle(s_parent,
                                                     Path.GetFileNameWithoutExtension(v.Name),
                                                     TitleTypes.Unknown,
+                                                    Tag,
                                                     disks.ToArray());
 
                                                 CheckDiskPathForImages(newTitle, disks[0]);
@@ -177,6 +178,7 @@ namespace OMLEngine
                                                     Title newTitle = TitleCollectionManager.CreateTitle(s_parent,
                                                         Path.GetFileNameWithoutExtension(f),
                                                         TitleTypes.Episode,
+                                                        Tag,
                                                         (short)s.Number,
                                                         episodeno,
                                                         disks.ToArray());
@@ -210,6 +212,7 @@ namespace OMLEngine
                             Title newTitle = TitleCollectionManager.CreateTitle(parentid,
                                 Path.GetFileNameWithoutExtension(file),
                                 TitleTypes.Unknown,
+                                Tag,
                                 new Disk[1] { disk });
 
                             CheckDiskPathForImages(newTitle, disk);

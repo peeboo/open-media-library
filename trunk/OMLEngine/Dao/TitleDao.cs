@@ -58,8 +58,8 @@ namespace OMLEngine.Dao
                     continue;
 
                 // try to see if the tag exists in the db already
-                tag = context.Tags.SingleOrDefault(t => t.Name.ToLower() == name.ToLower());
-
+                //tag = context.Tags.SingleOrDefault(t => t.Name.ToLower() == name.ToLower());
+                
                 if (tag == null)
                 {
                     // if it doesn't exist create a new one

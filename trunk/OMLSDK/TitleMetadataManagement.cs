@@ -318,7 +318,7 @@ namespace OMLSDK
                         }
                         else
                         {
-                            // Mapping doesn't exists for genre, try trimming off 'file' from the end just incase
+                            // Mapping doesn't exists for genre, try trimming off 'film' from the end just incase
                             if (newGenre.EndsWith("Film", true, CultureInfo.InvariantCulture))
                                 newGenre = newGenre.Replace(" Film", "");
 
