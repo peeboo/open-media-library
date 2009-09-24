@@ -207,6 +207,12 @@
     <Compile Include="ListEditor.Designer.cs">
       <DependentUpon>ListEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="MediaTreePicker.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MediaTreePicker.Designer.cs">
+      <DependentUpon>MediaTreePicker.cs</DependentUpon>
+    </Compile>
     <Compile Include="MetadataMappings.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -413,6 +419,9 @@
     <Content Include="Application.ico" />
     <Content Include="Resources\Application.png" />
     <Content Include="Resources\applications-multimedia.png" />
+    <EmbeddedResource Include="MediaTreePicker.resx">
+      <DependentUpon>MediaTreePicker.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\Credits.xml" />
     <Content Include="Resources\emblem-symbolic-link.png" />
     <EmbeddedResource Include="Controls\TitlesListView.resx">
