@@ -30,6 +30,9 @@ namespace OMLEngineService
         #region overridden control methods (start, stop, pause, continue, etc)
         protected override void OnStart(string[] args)
         {
+#if DEBUG
+            System.Diagnostics.Debugger.Launch();
+#endif
             WriteToLog(System.Diagnostics.EventLogEntryType.Information, "OMLEngineService Start");
 
             _transcodingServiceHost = WCFUtilites.StartService(EventSource, typeof(TranscodingService));

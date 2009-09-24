@@ -449,6 +449,8 @@ namespace OMLEngine.Dao
 		
 		private System.Nullable<int> _ParentTitle;
 		
+		private int _RowID;
+		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -459,6 +461,8 @@ namespace OMLEngine.Dao
     partial void OnFolderChanged();
     partial void OnParentTitleChanging(System.Nullable<int> value);
     partial void OnParentTitleChanged();
+    partial void OnRowIDChanging(int value);
+    partial void OnRowIDChanged();
     #endregion
 		
 		public WatchedFolder()
@@ -522,6 +526,26 @@ namespace OMLEngine.Dao
 					this._ParentTitle = value;
 					this.SendPropertyChanged("ParentTitle");
 					this.OnParentTitleChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_RowID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int RowID
+		{
+			get
+			{
+				return this._RowID;
+			}
+			set
+			{
+				if ((this._RowID != value))
+				{
+					this.OnRowIDChanging(value);
+					this.SendPropertyChanging();
+					this._RowID = value;
+					this.SendPropertyChanged("RowID");
+					this.OnRowIDChanged();
 				}
 			}
 		}

@@ -83,7 +83,8 @@ namespace OMLDatabaseEditor
                     Cursor = Cursors.Default;
                     XtraMessageBox.Show("The restore has failed with error : " + OMLEngine.DatabaseManagement.DatabaseInformation.LastSQLError, "Database Restore");
                 }
-            }
+            } 
+            OMLEngine.ImageManager.RemoveAllCachedImages();
         }
 
         private void sbOptimizeDB_Click(object sender, EventArgs e)
