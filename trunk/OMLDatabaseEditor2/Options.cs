@@ -225,6 +225,7 @@ namespace OMLDatabaseEditor
                 if (WatchedFoldersDirty)
                 {
                     IList<OMLSettings.WatchedFolder> SWF = new List<OMLSettings.WatchedFolder>();
+
                     foreach (ListViewItem lvi in lvWatchedFolders.Items)
                     {
                         OMLSettings.WatchedFolder WF = new OMLSettings.WatchedFolder();
@@ -468,6 +469,28 @@ namespace OMLDatabaseEditor
         private void cmbFileWatchedTag_EditValueChanged(object sender, EventArgs e)
         {
             WatchedFoldersDirty = true;
+        }
+
+        private void lvWatchedFolders_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (((ListView)sender).SelectedItems.Count <= 0) return;
+
+            List<ListViewItem> itemstoupdate = new List<ListViewItem>();
+
+            foreach (ListViewItem item in ((ListView)sender).SelectedItems)
+            {
+                itemstoupdate.Add(item);
+            }
+
+            MediaTreePicker mtp = new MediaTreePicker();
+            if (mtp.ShowDialog() == DialogResult.OK)
+            {
+                foreach (ListViewItem lvi in itemstoupdate)
+                {
+                    lvi.SubItems[1].Text = mtp.SelectedTitleName;
+                    lvi.Tag = mtp.SelectedTitleID;
+                }
+            }
         }
     }
 }

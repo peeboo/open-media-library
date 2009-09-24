@@ -579,7 +579,7 @@ namespace OMLEngine.DatabaseManagement
         public void GetRequiredSchemaVersion(out int Major, out int Minor)
         {
             Major = 1;
-            Minor = 3;
+            Minor = 4;
         }
 
 

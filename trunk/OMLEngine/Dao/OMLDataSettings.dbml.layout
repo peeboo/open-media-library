@@ -20,10 +20,10 @@
         <elementListCompartment Id="4b547352-3ff6-44fb-baae-6cbe65b0a4d0" absoluteBounds="3.3899999999999997, 1.21, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="6460721f-bfab-4d1e-ba9b-ffbe8aa17621" absoluteBounds="3.625, 3.125, 2, 1.3862939453125">
+    <classShape Id="6460721f-bfab-4d1e-ba9b-ffbe8aa17621" absoluteBounds="3.625, 3.125, 2, 1.5785953776041666">
       <DataClassMoniker Name="/OMLDataSettingsDataContext/WatchedFolder" />
       <nestedChildShapes>
-        <elementListCompartment Id="fd677c37-d0a9-4718-aa6e-34861a6e53be" absoluteBounds="3.6399999999999997, 3.585, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="fd677c37-d0a9-4718-aa6e-34861a6e53be" absoluteBounds="3.64, 3.585, 1.9700000000000002, 1.0185953776041665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
   </nestedChildShapes>

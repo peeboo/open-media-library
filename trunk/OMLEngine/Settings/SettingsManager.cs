@@ -116,18 +116,19 @@ namespace OMLEngine.Settings
         public static void WatchedFolder_Add(OMLEngine.Dao.WatchedFolder watchedfolder)
         {
             OMLDataSettingsDBContext.Instance.WatchedFolders.InsertOnSubmit(watchedfolder);
-            OMLDataSettingsDBContext.Instance.SubmitChanges();
+            OMLEngine.Dao.OMLDataSettingsDBContext.Instance.SubmitChanges();
         }
 
         public static void WatchedFolders_Clear(string instanceName)
         {
-            var deleteFolders = from d in Dao.OMLDataSettingsDBContext.Instance.WatchedFolders
+            var deleteFolders = from d in OMLDataSettingsDBContext.Instance.WatchedFolders
                                 where d.InstanceName == instanceName
                                 select d;
+            int o = OMLDataSettingsDBContext.Instance.WatchedFolders.Count();
 
-            Dao.OMLDataSettingsDBContext.Instance.WatchedFolders.DeleteAllOnSubmit(deleteFolders);
+            OMLDataSettingsDBContext.Instance.WatchedFolders.DeleteAllOnSubmit(deleteFolders);
 
-            Dao.OMLDataSettingsDBContext.Instance.SubmitChanges();
+            OMLEngine.Dao.OMLDataSettingsDBContext.Instance.SubmitChanges();
         }
         #endregion
 

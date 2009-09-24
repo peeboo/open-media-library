@@ -27,6 +27,7 @@
       <Column Name="InstanceName" Type="System.String" DbType="NVarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="Folder" Type="System.String" DbType="NChar(255) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="ParentTitle" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="RowID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
     </Type>
   </Table>
 </Database>

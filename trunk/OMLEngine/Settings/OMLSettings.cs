@@ -689,6 +689,7 @@ namespace OMLEngine.Settings
         #endregion
 
 
+        #region St Sana
         /// <summary>
         /// Create top level folder when dragging in a folder structure from Windows Explorer
         /// into the editor. Also applies to watched folders using StSana (When implemented)
@@ -710,7 +711,7 @@ namespace OMLEngine.Settings
             get { return SettingsManager.GetSettingByNameBool("StSanaAutoLookupMeta", InstanceName) ?? true; }
             set { SettingsManager.SaveSettingByName("StSanaAutoLookupMeta", value.ToString(), InstanceName); }
         }
-
+        #endregion
 
         public static string MPAARatings
         {
