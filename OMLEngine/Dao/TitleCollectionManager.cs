@@ -25,7 +25,9 @@ namespace OMLEngine
         Unknown = 0x1000,
         AllMedia = 0xFF00,
 
-        Everything = 0xFFFF
+        Everything = 0xFFFF,
+
+        Shortcut = 0x01000000
     }
 
 

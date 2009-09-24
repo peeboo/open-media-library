@@ -70,15 +70,18 @@ namespace OMLDatabaseEditor
 
             foreach (KeyValuePair<int, Title> title in mediatreefolders)
             {
-                TreeNode tn = new TreeNode(title.Value.Name);
-                tn.Name = title.Value.Id.ToString();
-                _mediaTree[title.Value.Id] = tn;
-                if (title.Value.ParentTitleId != null)
+                if ((title.Value.TitleType & TitleTypes.Shortcut) == 0)
                 {
-                    _parentchildRelationship[title.Value.Id] = (int)title.Value.ParentTitleId;
+                    TreeNode tn = new TreeNode(title.Value.Name);
+                    tn.Name = title.Value.Id.ToString();
+                    _mediaTree[title.Value.Id] = tn;
+                    if (title.Value.ParentTitleId != null)
+                    {
+                        _parentchildRelationship[title.Value.Id] = (int)title.Value.ParentTitleId;
+                    }
+                    //if (title.Value.Id == title.Value.ParentTitleId) { rootnode.Nodes.Add(tn); }
+                    if ((title.Value.TitleType & TitleTypes.Root) != 0) { rootnode.Nodes.Add(tn); }
                 }
-                //if (title.Value.Id == title.Value.ParentTitleId) { rootnode.Nodes.Add(tn); }
-                if ((title.Value.TitleType & TitleTypes.Root) != 0) { rootnode.Nodes.Add(tn); }
             }
 
 

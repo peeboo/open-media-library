@@ -2387,7 +2387,9 @@ namespace OMLDatabaseEditor
                 cms.Items.Add("Delete", null, new System.EventHandler(this.deleteSelectedMoviesToolStripMenuItem_Click));
                 cms.Items.Add("Add Tag", null, new System.EventHandler(this.addTagMenuItem1_Click));
                 cms.Items.Add("Add Genre", null, new System.EventHandler(this.addGenreMenuItem1_Click));
-
+#if DEBUG
+                cms.Items.Add("Create Shortcut", null, new System.EventHandler(this.CreateTitleShortcut_Click));
+#endif 
                 cms.Show(lvTitles.PointToScreen(e.Location));
             }
         }
@@ -4304,6 +4306,56 @@ namespace OMLDatabaseEditor
             {
                 RemoveGenreMetaData();
             }
+        }
+
+        private void CreateTitleShortcut_Click(object sender, EventArgs e)
+        {
+            ListView.SelectedListViewItemCollection sic = lvTitles.SelectedItems;
+            if (sic.Count < 1) return;
+
+            // Get the parent for the shortcut
+            MediaTreePicker mtp = new MediaTreePicker();
+            if (mtp.ShowDialog() == DialogResult.OK)
+            {
+                //lvi.SubItems[1].Text = mtp.SelectedTitleName;
+                //lvi.Tag = mtp.SelectedTitleID;
+                foreach (ListViewItem item in sic)
+                {
+                    Title title = _movieList[Convert.ToInt32(item.Text)];
+
+                    if ((title.TitleType & TitleTypes.Shortcut) != 0)
+                    {
+                        XtraMessageBox.Show("Cannot create a shortcut to '" + title.Name + "'", "Error creating shortcut!");
+                    }
+                    else
+                    {
+                        if ((title.TitleType & TitleTypes.AllFolders) != 0)
+                        {
+                            // Folder
+                            CreateFolder(mtp.SelectedTitleID,
+                                "Shortcut to : " + title.Name,
+                                title.TitleType | TitleTypes.Shortcut,
+                                title.SeasonNumber,
+                                true);
+
+                        }
+
+                        if ((title.TitleType & TitleTypes.AllMedia) != 0)
+                        {
+                            // Movie or episode
+                            CreateTitle(mtp.SelectedTitleID,
+                                "Shortcut to : " + title.Name,
+                                title.TitleType | TitleTypes.Shortcut,
+                                title.SeasonNumber,
+                                title.EpisodeNumber,
+                                null,
+                                true);
+                        }
+                    }
+                }
+            }
+
+            TitleCollectionManager.SaveTitleUpdates();
         }
     }
 }
