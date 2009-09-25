@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
-     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension"
+     xmlns:fire="http://schemas.microsoft.com/wix/FirewallExtension">
 
   <Fragment>
     <!-- This is a list of directories that are used by this product as installation locations or custom -->
@@ -150,6 +151,14 @@
               <util:ServiceConfig ServiceName="OMLFWService" FirstFailureActionType="restart" SecondFailureActionType="restart"
                                   ThirdFailureActionType="restart" ResetPeriodInDays="7" RestartServiceDelayInSeconds="60"/>
             </ServiceInstall>
+          </Component>
+
+          <Component Id="SQLFIREWALLEXCEPTION" Guid="20BDD2CA-AF22-41E3-9559-0DED146CB372" DiskId="1" Win64="yes">
+            <fire:FirewallException Name="TCPNORMALPORT" Id="TCPNORMALPORT" Port="1433" Protocol="tcp" IgnoreFailure="yes" Scope="localSubnet"/>
+            <fire:FirewallException Name="UDPNORMALPORT" Id="UDPNORMALPORT" Port="1433" Protocol="udp" IgnoreFailure="yes" Scope="localSubnet"/>
+            <fire:FirewallException Name="TCPALTERNATEPORT" Id="TCPALTERNATEPORT" Port="1434" Protocol="tcp" IgnoreFailure="yes" Scope="localSubnet"/>
+            <fire:FirewallException Name="UDPALTERNATEPORT" Id="UDPALTERNATEPORT" Port="1434" Protocol="udp" IgnoreFailure="yes" Scope="localSubnet"/>
+            <CreateFolder/>
           </Component>
 
           <Directory Id="SQLDBSCRIPTS" Name="SQLInstaller">

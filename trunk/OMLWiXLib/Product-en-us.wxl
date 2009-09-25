@@ -4,8 +4,8 @@
   <String Id="LaunchCondition_LaterVersion">A later version of Open Media Library is already installed.</String>
   <String Id="LaunchCondition_WrongOSVersion">Open Media Library can only be installed on Microsoft Windows Vista/Windows7 Home Premium or Ultimate Edition.</String>
 
-  <String Id="Property_ArpHelpLink">http://msdn.microsoft.com/mce/</String>
-  <String Id="Property_ArpUrlInfoAbout">http://msdn.microsoft.com/mce/</String>
+  <String Id="Property_ArpHelpLink">http://www.ornskov.dk/forum/</String>
+  <String Id="Property_ArpUrlInfoAbout">http://www.openmedialibrary.org/</String>
   <String Id="Property_ProductLanguage">1033</String>
   <String Id="Property_ProductName">Open Media Library</String>
   <String Id="Property_CompanyName">Open Media Library Team</String>

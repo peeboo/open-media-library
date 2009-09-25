@@ -24,13 +24,14 @@ First-time install dialog sequence:      Maintenance dialog sequence:
 
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
   <Fragment>
-    <UI Id="WixUI_OML">
+    <UI Id="WixUI.OML">
+      <UIRef Id="WixUI_Common"/>
+
       <TextStyle Id="WixUI_Font_Normal" FaceName="Tahoma" Size="8" />
       <TextStyle Id="WixUI_Font_Bigger" FaceName="Tahoma" Size="12" />
       <TextStyle Id="WixUI_Font_Title" FaceName="Tahoma" Size="9" Bold="yes" />
 
       <Property Id="DefaultUIFont" Value="WixUI_Font_Normal" />
-      <Property Id="WixUI_Mode" Value="FeatureTree" />
 
       <DialogRef Id="ErrorDlg" />
       <DialogRef Id="FatalError" />
@@ -46,23 +47,108 @@ First-time install dialog sequence:      Maintenance dialog sequence:
       <Publish Dialog="WelcomeDlg" Control="Next" Event="NewDialog" Value="LicenseAgreementDlg">1</Publish>
 
       <Publish Dialog="LicenseAgreementDlg" Control="Back" Event="NewDialog" Value="WelcomeDlg">1</Publish>
-      <Publish Dialog="LicenseAgreementDlg" Control="Next" Event="NewDialog" Value="CustomizeDlg">LicenseAccepted = "1"</Publish>
+      <Publish Dialog="LicenseAgreementDlg" Control="Next" Event="NewDialog" Value="OMLCustomizeDlg">LicenseAccepted = "1"</Publish>
 
-      <Publish Dialog="CustomizeDlg" Control="Back" Event="NewDialog" Value="MaintenanceTypeDlg" Order="1">Installed</Publish>
-      <Publish Dialog="CustomizeDlg" Control="Back" Event="NewDialog" Value="LicenseAgreementDlg" Order="2">NOT Installed</Publish>
-      <Publish Dialog="CustomizeDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg">1</Publish>
+      <Publish Dialog="OMLCustomizeDlg" Control="Back" Event="NewDialog" Value="MaintenanceTypeDlg" Order="1">Installed</Publish>
+      <Publish Dialog="OMLCustomizeDlg" Control="Back" Event="NewDialog" Value="LicenseAgreementDlg" Order="2">NOT Installed</Publish>
+      <Publish Dialog="OMLCustomizeDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg">&amp;SERVERFEATURE=3</Publish>
+      <Publish Dialog="OMLCustomizeDlg" Control="Next" Event="NewDialog" Value="SelectServerDlg">NOT (&amp;SERVERFEATURE=3)</Publish>
 
-      <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="CustomizeDlg" Order="1">NOT Installed OR WixUI_InstallMode = "Change"</Publish>
+      <!-- Injected to allow select of Sql server to use on the network if server was NOT selected -->
+      <Publish Dialog="SelectServerDlg" Control="Back" Event="NewDialog" Value="OMLCustomizeDlg">1</Publish>
+      <Publish Dialog="SelectServerDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg">1</Publish>
+
+      <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="OMLCustomizeDlg" Order="1">NOT Installed OR WixUI_InstallMode = "Change"</Publish>
       <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="MaintenanceTypeDlg" Order="2">Installed</Publish>
 
       <Publish Dialog="MaintenanceWelcomeDlg" Control="Next" Event="NewDialog" Value="MaintenanceTypeDlg">1</Publish>
 
-      <Publish Dialog="MaintenanceTypeDlg" Control="ChangeButton" Event="NewDialog" Value="CustomizeDlg">1</Publish>
+      <Publish Dialog="MaintenanceTypeDlg" Control="ChangeButton" Event="NewDialog" Value="OMLCustomizeDlg">1</Publish>
       <Publish Dialog="MaintenanceTypeDlg" Control="RepairButton" Event="NewDialog" Value="VerifyReadyDlg">1</Publish>
       <Publish Dialog="MaintenanceTypeDlg" Control="RemoveButton" Event="NewDialog" Value="VerifyReadyDlg">1</Publish>
       <Publish Dialog="MaintenanceTypeDlg" Control="Back" Event="NewDialog" Value="MaintenanceWelcomeDlg">1</Publish>
-    </UI>
 
-    <UIRef Id="WixUI_Common" />
+      <!-- Set the status text to be displayed during each custom action as its run -->
+      <ProgressText Action="ReserveTrailersUrlAction">Reserving Url for Trailers Proxy Server</ProgressText>
+      <ProgressText Action="ActivateNetTcpPortSharingAction">Activating NetTcpPortSharing for Transcoding Services</ProgressText>
+      <ProgressText Action="StartOMLEngineServiceAction">Starting the OMLEngine Service</ProgressText>
+      <ProgressText Action="ScanNetworkForSqlServersAction">Scanning your network for instances of Microsoft Sql Server</ProgressText>
+    </UI>
+  </Fragment>
+  <Fragment>
+    <UI>
+      <Dialog Id="OMLCustomizeDlg" Width="370" Height="270" Title="!(loc.CustomizeDlg_Title)" TrackDiskSpace="yes">
+        <Control Id="Tree" Type="SelectionTree" X="25" Y="85" Width="175" Height="115" Property="_BrowseProperty" Sunken="yes" TabSkip="no" Text="!(loc.CustomizeDlgTree)" />
+        <Control Id="Browse" Type="PushButton" X="294" Y="210" Width="66" Height="17" Text="!(loc.CustomizeDlgBrowse)">
+          <Publish Event="SelectionBrowse" Value="BrowseDlg">1</Publish>
+          <Condition Action="hide">Installed</Condition>
+          <Condition Action="disable">Installed</Condition>
+        </Control>
+        <Control Id="Reset" Type="PushButton" X="10" Y="243" Width="81" Height="17" Text="!(loc.CustomizeDlgReset)">
+          <Publish Event="Reset" Value="0">1</Publish>
+          <Subscribe Event="SelectionNoItems" Attribute="Enabled" />
+        </Control>
+        <Control Id="DiskCost" Type="PushButton" X="91" Y="243" Width="100" Height="17" Text="!(loc.CustomizeDlgDiskCost)">
+          <Publish Event="SpawnDialog" Value="DiskCostDlg">1</Publish>
+          <Subscribe Event="SelectionNoItems" Attribute="Enabled" />
+        </Control>
+        <Control Id="Back" Type="PushButton" X="192" Y="243" Width="56" Height="17" Text="!(loc.WixUIBack)" />
+        <Control Id="Next" Type="PushButton" X="248" Y="243" Width="56" Height="17" Default="yes" Text="!(loc.WixUINext)">
+          <Subscribe Event="SelectionNoItems" Attribute="Enabled" />
+          <Publish Event="SpawnDialog" Value="VerifyReadyDlg">&amp;SERVERFEATURE=3</Publish>
+          <Publish Event="DoAction" Value="ScanNetworkForSqlServersAction" Order="1">NOT (&amp;SERVERFEATURE=3)</Publish>
+          <Publish Event="SpawnDialog" Value="SelectServerDlg">NOT (&amp;SERVERFEATURE=3)</Publish>
+        </Control>
+        <Control Id="Cancel" Type="PushButton" X="304" Y="243" Width="56" Height="17" Cancel="yes" Text="!(loc.WixUICancel)">
+          <Publish Event="SpawnDialog" Value="CancelDlg">1</Publish>
+        </Control>
+        <Control Id="BannerBitmap" Type="Bitmap" X="0" Y="0" Width="370" Height="44" TabSkip="no" Text="!(loc.CustomizeDlgBannerBitmap)" />
+        <Control Id="Text" Type="Text" X="25" Y="55" Width="320" Height="20" Text="!(loc.CustomizeDlgText)" />
+        <Control Id="BannerLine" Type="Line" X="0" Y="44" Width="370" Height="0" />
+        <Control Id="BottomLine" Type="Line" X="0" Y="234" Width="370" Height="0" />
+        <Control Id="Description" Type="Text" X="25" Y="23" Width="280" Height="15" Transparent="yes" NoPrefix="yes" Text="!(loc.CustomizeDlgDescription)" />
+        <Control Id="Title" Type="Text" X="15" Y="6" Width="210" Height="15" Transparent="yes" NoPrefix="yes" Text="!(loc.CustomizeDlgTitle)" />
+        <Control Id="Box" Type="GroupBox" X="210" Y="81" Width="150" Height="118" />
+        <Control Id="ItemDescription" Type="Text" X="215" Y="90" Width="131" Height="50" Text="!(loc.CustomizeDlgItemDescription)">
+          <Subscribe Event="SelectionDescription" Attribute="Text" />
+        </Control>
+        <Control Id="ItemSize" Type="Text" X="215" Y="140" Width="131" Height="50" Text="!(loc.CustomizeDlgItemSize)">
+          <Subscribe Event="SelectionSize" Attribute="Text" />
+        </Control>
+        <Control Id="Location" Type="Text" X="90" Y="210" Width="200" Height="20" Text="!(loc.CustomizeDlgLocation)">
+          <Subscribe Event="SelectionPath" Attribute="Text" />
+          <Subscribe Event="SelectionPathOn" Attribute="Visible" />
+          <Condition Action="hide">Installed</Condition>
+        </Control>
+        <Control Id="LocationLabel" Type="Text" X="25" Y="210" Width="65" Height="10" Text="!(loc.CustomizeDlgLocationLabel)">
+          <Subscribe Event="SelectionPathOn" Attribute="Visible" />
+          <Condition Action="hide">Installed</Condition>
+        </Control>
+      </Dialog>
+      
+      <Dialog Id="SelectServerDlg" Width="370" Height="270" Title="!(loc.WelcomeDlg_Title)">
+        <!--
+        <Control Id="RunSqlFinder" Type="Text" X="25" Y="210" Width="1" Height="1" Text="NothingOfValue" Hidden="yes">
+          <Publish Event="DoAction" Value="ScanNetworkForSqlServersAction" Order="1">1</Publish>
+        </Control>
+        -->
+        <Control Id="Next" Type="PushButton" X="236" Y="243" Width="56" Height="17" Default="no" Text="Next" />
+        <Control Id="Cancel" Type="PushButton" X="304" Y="243" Width="56" Height="17" Cancel="no" Text="Cancel">
+          <Publish Event="SpawnDialog" Value="CancelDlg">1</Publish>
+        </Control>
+        <Control Id="Bitmap" Type="Bitmap" X="0" Y="0" Width="370" Height="234" TabSkip="no" Text="!(loc.WelcomeDlgBitmap)" />
+        <Control Id="Back" Type="PushButton" X="180" Y="243" Width="56" Height="17" Text="Back" Disabled="yes" />
+        <Control Id="BottomLine" Type="Line" X="0" Y="234" Width="370" Height="2" />
+        <Control Id="Title" Type="Text" X="135" Y="20" Width="220" Height="60" Transparent="yes" NoPrefix="yes" Text="Select the existing OML database from the list." />
+        <Control Id="SqlChooseComboBox" Type="ComboBox" X="135" Y="107" Width="200" Height="16" ComboList="yes" Property="OMLProp_SqlServers" Sorted="yes" RightToLeft="yes">
+          <ComboBox Property="OMLProp_SqlServers" />
+        </Control>
+        <Control Id="Control_Dummy" Property="DUMMY" Type="ComboBox" X="218" Y="4" Width="51" Height="17" Text="Poo" Hidden="yes" Disabled="yes">
+          <ComboBox Property="DUMMY">
+            <ListItem Value="filler"/>
+          </ComboBox>
+        </Control>
+      </Dialog>
+    </UI>
   </Fragment>
 </Wix>

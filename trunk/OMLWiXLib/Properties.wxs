@@ -54,5 +54,6 @@
     <Icon Id="icon.ico" SourceFile="..\Library\Resources\Application.ico"/>
 
     <Property Id="WixShellExecTarget" Value="[#PostInstallerWizard.exe]" />
+    <Property Id="HasScannedForSql" Value="0" />
   </Fragment>
 </Wix>

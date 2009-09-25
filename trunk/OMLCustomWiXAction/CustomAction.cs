@@ -197,12 +197,32 @@ namespace OMLCustomWiXAction {
 
         [CustomAction]
         public static ActionResult ScanNetworkForSqlServers(Session session) {
-            IList<string> servers = new List<string>();
-            DataTable dt = SqlDataSourceEnumerator.Instance.GetDataSources();
-            foreach (DataRow row in dt.Rows)
-                servers.Add(string.Format("{0} ({1})", row["ServerName"], row["InstanceName"]));
+            if (session["HasScannedForSql"].CompareTo("0") == 0) {
+                DataTable dt = SqlDataSourceEnumerator.Instance.GetDataSources();
+                View sqlComboBox = session.Database.OpenView("SELECT * FROM `ComboBox`");
+                sqlComboBox.Execute();
+                int numRows = 0;
+                while (sqlComboBox.Fetch() != null) {
+                    numRows++;
+                }
+                if (numRows == 1) {
+                    session.Log("found {0} sql servers", dt.Rows.Count);
+                    int itemNumber = 2;
+                    foreach (DataRow row in dt.Rows) {
+                        Record rec = new Record(3);
+                        rec.SetString(1, "OMLProp_SqlServers");
+                        rec.SetInteger(2, itemNumber);
+                        string description = string.Format("{0} - {1}", row["ServerName"], row["InstanceName"]);
+                        rec.SetString(3, description);
 
-                return ActionResult.Success;
+                        session.Log("Adding a new record, its number will be {0} and its value will be {1}", itemNumber, string.Format("{0} ({1})", row["ServerName"], row["InstanceName"]));
+                        sqlComboBox.Modify(ViewModifyMode.InsertTemporary, rec);
+                        itemNumber++;
+                    }
+                }
+                session["HasScannedForSql"] = "1";
+            }
+            return ActionResult.Success;
         }
     }
 }
