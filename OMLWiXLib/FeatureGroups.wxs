@@ -1,13 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
 	<Fragment>
-    <FeatureGroup Id ="CLIENTFEATURES">
-      <Feature Id="CLIENTFEATUREUI" Title="OML Media Center Plugin" Level="1" AllowAdvertise="no" Description="Install the Media Center Plugin">
-        <Condition Level="0"><![CDATA[NOT MCEINSTALLVERSION >= "5.0" OR NOT REGISTERMCEAPP]]></Condition>
+    <FeatureGroup Id ="OMLFEATURES">
+      <Feature Id="CLIENTFEATUREUI"
+               Title="OML Media Center Plugin"
+               Level="1"
+               AllowAdvertise="no"
+               Description="Install the Media Center Plugin"
+               Display="expand">
+        <Condition Level="0">
+          <![CDATA[NOT MCEINSTALLVERSION >= "5.0" OR NOT REGISTERMCEAPP]]>
+        </Condition>
         <ComponentGroupRef Id="ClientGroupUI"/>
       </Feature>
-      <Feature Id="CLIENTFEATUREEDITOR" Title="OML Database Editor" Level="1" AllowAdvertise="no" Description="Install the Database Editor">
+      <Feature Id="CLIENTFEATUREEDITOR"
+               Title="OML Database Editor"
+               Level="1"
+               AllowAdvertise="no"
+               Description="Install the Database Editor"
+               Display="expand">
         <ComponentGroupRef Id="ClientGroupEditor"/>
+      </Feature>
+      <!-- typical install is level 3, so we set this to 4 so it will not get installed by default -->
+      <Feature Id="SERVERFEATURE"
+               Title="OML Database Server"
+               Level="4"
+               Description="Install the OML Database Server"
+               AllowAdvertise="no"
+               Display="expand">
+        <ComponentGroupRef Id="ServerGroup"/>
       </Feature>
     </FeatureGroup>
   </Fragment>

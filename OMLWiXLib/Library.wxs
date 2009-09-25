@@ -1,14 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
 	<Fragment>
-    <!-- Set the status text to be displayed during each custom action as its run -->
-    <UI>
-      <ProgressText Action="ReserveTrailersUrlAction">Reserving Url for Trailers Proxy Server</ProgressText>
-      <ProgressText Action="ActivateNetTcpPortSharingAction">Activating NetTcpPortSharing for Transcoding Services</ProgressText>
-      <ProgressText Action="StartOMLEngineServiceAction">Starting the OMLEngine Service</ProgressText>
-      <ProgressText Action="ScanNetworkForSqlServersAction">Scanning your network for instances of Microsoft Sql Server</ProgressText>
-    </UI>
-
     <!-- These custom actions are used to register the application with Media Center using the utility   -->
     <!-- RegisterMceApp.exe that is instnaalled as a part of the Windows Media Center feature. Each custom -->
     <!-- action is defined as a pair in order to leverage the WiX QtExec custom action to suppress the   -->
@@ -61,7 +53,7 @@
     <CustomAction Id="ScanNetworkForSqlServersAction"
                   BinaryKey="OMLCALib"
                   DllEntry="ScanNetworkForSqlServers"
-                  Execute="deferred"
+                  Execute="immediate"
                   Return="check" />
 
     <!-- The binary to include that contains managed custom actions -->

@@ -45,7 +45,7 @@
     <Feature Id="APPLICATIONROOTFEATURE" Title="Open Media Library" Level="1" AllowAdvertise="no" Absent="disallow">
       <ComponentGroupRef Id="CommonComponents"/>
       <ComponentGroupRef Id="UserGuide"/>
-      <FeatureGroupRef Id="CLIENTFEATURES"/>
+      <FeatureGroupRef Id="OMLFEATURES"/>
     </Feature>
 
     <!-- The InstallExecuteSequence table describes the order that actions will be executed during       -->
@@ -53,7 +53,6 @@
     <InstallExecuteSequence>
       <RemoveExistingProducts After="InstallInitialize" />
       <LaunchConditions After="AppSearch"/>
-
     </InstallExecuteSequence>
 
     <!-- The InstallUISequence table describes the order that actions will be executed when the user     -->
@@ -64,16 +63,19 @@
       <Custom Action="CA_BlockOlderVersionInstall" After="FindRelatedProducts">
         <![CDATA[NEWERVERSIONDETECTED]]>
       </Custom>
-      <Custom Action="CA_ErrWrongWindowsVersion" Before="CostInitialize"><![CDATA[(NOT VersionNT >= 500) AND NOT Installed]]></Custom>
+      <Custom Action="CA_ErrWrongWindowsVersion" Before="CostInitialize">
+        <![CDATA[(NOT VersionNT >= 500) AND NOT Installed]]>
+      </Custom>
+      <!--<Custom Action="ScanNetworkForSqlServersAction" After="CostFinalize" />-->
     </InstallUISequence>
+
 
     <!-- This UIRef element specifies what WiXUI dialog set to use for the setup UI. This package uses   -->
     <!-- the WixUI_InstallDir dialog set, which provides a welcome page, a license agreement page, a     -->
     <!-- page to allow changing the installation path, an installation confirmation page, a progress     -->
     <!-- page and a completion page. Other dialog sets are available in the WiX toolset and are          -->
     <!-- described in more detail in the WiX documentation.                                              -->
-    <UI>
-      <UIRef Id="WixUI_OML" />
-    </UI>
+
+    <UIRef Id="WixUI.OML"/>
   </Product>
 </Wix>

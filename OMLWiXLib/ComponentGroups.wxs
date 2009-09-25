@@ -81,5 +81,10 @@
       <ComponentRef Id="UserManualShortcut" />
       <ComponentRef Id="Open_Media_Library_User_Manual.pdf"/>
     </ComponentGroup>
+
+    <ComponentGroup Id="ServerGroup">
+      <ComponentRef Id="SQLFIREWALLEXCEPTION"/>
+    </ComponentGroup>
+
   </Fragment>
 </Wix>
