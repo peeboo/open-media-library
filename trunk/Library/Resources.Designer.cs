@@ -91,12 +91,12 @@ namespace Library {
         ///    &lt;Person&gt;TheSeeker - Developer&lt;/Person&gt;
         ///    &lt;Person&gt;Solomon - Developer&lt;/Person&gt;
         ///    &lt;Person&gt;mikem2te - Developer&lt;/Person&gt;
+        ///    &lt;Person&gt;MSBob - UI Developer&lt;/Person&gt;
         ///  &lt;/Developers&gt;
         ///  &lt;Contributors&gt;
         ///    &lt;Person&gt;Warren&lt;/Person&gt;
         ///    &lt;Person&gt;docmattman&lt;/Person&gt;
-        ///    &lt;Person&gt;Taranu&lt;/Person&gt;
-        ///    &lt;Person&gt;eck brian &apos;dbldown768 [rest of string was truncated]&quot;;.
+        ///    &lt;Person&gt;Taranu&lt; [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Credits {
             get {
@@ -2162,6 +2162,13 @@ namespace Library {
         internal static byte[] V3_UpdaterSettings {
             get {
                 object obj = ResourceManager.GetObject("V3_UpdaterSettings", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        internal static byte[] V3_WizardGalleryPage {
+            get {
+                object obj = ResourceManager.GetObject("V3_WizardGalleryPage", resourceCulture);
                 return ((byte[])(obj));
             }
         }
