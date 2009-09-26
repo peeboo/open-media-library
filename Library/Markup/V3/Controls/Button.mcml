@@ -8,6 +8,7 @@
 <Mcml xmlns ="http://schemas.microsoft.com/2006/mcml"
     xmlns:cor ="assembly://MsCorLib/System"
     xmlns:comm="resx://Library/Library.Resources/V3_Globals"
+      xmlns:shl ="assembly://Library/Library.Code.V3"
     xmlns:me ="Me">
   <!--test:MergeAnimation Name="PressedLabelHighlight">
     <Sources>
@@ -40,7 +41,7 @@
     <Properties>
       <Command Name="SampleButton1" Description="Cast + More"/>
       <Command Name="SampleButton2" Description="Record"/>
-      <Command Name="SampleButton3" Description="Advanced Record"/>
+      <Command Name="SampleButton3" Description="Advanced Record srgeg egege egetg"/>
       <Command Name="SampleButton4" Description="Other Showings"/>
     </Properties>
     <Content>
@@ -247,6 +248,10 @@
       <Condition Source="[Input.KeyFocus]" SourceValue="false" Target="[BackgroundUnderlay.Visible]" Value="true"/>
       <Condition Source="[Input.KeyFocus]" SourceValue="true" Target="[BackgroundUnderlay.Visible]" Value="false"/>
       <Condition Source="[Input.Enabled]" SourceValue="false" Target="[Fill.Content]" Value="[DisabledFillColor]"/>
+      
+      <Condition Source="[Input.KeyFocus]" SourceValue="false" Target="[Label.HasFocus]" Value="false"/>
+      <Condition Source="[Input.KeyFocus]" SourceValue="true" Target="[Label.HasFocus]" Value="true"/>
+      
       <Rule>
         <Conditions>
           <Equality Source="[Input.KeyFocus]" Value="true"/>
@@ -340,7 +345,8 @@
                       <AnchorLayoutInput Vertical="Center" Horizontal="Near"/>
                     </LayoutInput>
                     <Children>
-                      <Text Name="Label" Color="[NoFocusColor]" Font="[Font]"/>
+                      <!--Text Name="Label" Color="[NoFocusColor]" Font="[Font]"/-->
+                      <me:FancyText AvailableSpaceInt="[TileSize.Width]" HasFocus="false" AllowMarquee="[AllowMarquee]" Name="Label" Color="[NoFocusColor]" Font="[Font]"/>
                     </Children>
                   </Graphic>
                   <Graphic Name="LabelBackgroundGraphic" Content="[LabelBackground]" Visible="[ShowLabelBackground]" Layout="Fill" />
@@ -418,4 +424,166 @@
     </Content>
   </UI>
   <UI Name="BaseIconFocusLoopContent"></UI>
+  <UI Name="FancyText">
+    <Properties>
+      <Font Name="Font" Font="font://comm:ButtonText"/>
+      <Color Name="Color" Color="color://comm:OffWhite"/>
+      <!--Size Name="LableSize" Size="250, 51"/-->
+      <cor:String Name="Content" String="This text will marquee scroll across the screen slowly." />
+      
+      <cor:Int32 Name="AvailableSpaceInt" Int32="250" />
+      <cor:Boolean Name="AllowMarquee" Boolean="true"/>
+      <cor:Boolean Name="HasFocus" Boolean="false"/>
+      
+    </Properties>
+    <Locals>
+      <shl:FancyTextHelper Name="FancyTextHelper"/>
+      <cor:Single Name="AvailableSpace" />
+    </Locals>
+    <!--Rules>
+      <Binding Source="[Content]" Target="[Label.Content]"/>
+    </Rules-->
+    <Rules>
+      <Rule>
+        <Conditions>
+          <Equality Source="[AllowMarquee]" ConditionOp="Equals" Value="true"/>
+        </Conditions>
+        <Actions>
+          <!--Invoke Target="[RepeaterHelper.SetScrollingLayout]" Panel="[Scroller]"/-->
+          <!--Invoke Target="[RepeaterHelper.SetLayoutInput]" Panel="[Repeater]"/-->
+          <!--Invoke Target="[RepeaterHelper.SetFlowLayout]" Panel="[GroupedFlowLayout]"/-->
+          <!--Invoke Target="[RepeaterHelper.BindTargetViewItem]" SourceScroller="[Scroller]" TargetScrollData="[ScrollData]"/-->
+          <Set Target="[FancyTextHelper.MaximumWidthInt]" Value="[AvailableSpaceInt]"/>
+          <Set Target="[AvailableSpace]" Value="[FancyTextHelper.MaximumWidth]"/>
+          <Set Target="[FancyLabel.AvailableSpace]" Value="[FancyTextHelper.MaximumWidth]"/>
+          <Invoke Target="[FancyLabel.ForceRefresh]"/>
+          <!--Invoke Target="[FancyLabel.MarkLayoutInvalid]"/-->
+          <Set Target="[FancyTextHelper.Content]" Value="[Content]"/>
+          <Set Target="[FancyTextHelper.FontString]" Value="[Font]"/>
+          <Set Target="[FancyTextHelper.FontName]" Value="[Font.FontName]"/>
+          <Set Target="[FancyTextHelper.FontSize]" Value="[Font.FontSize]"/>
+          <Set Target="[FancyTextHelper.FontStyle]" Value="[Font.FontStyle]"/>
+          
+          <!--Invoke Target="[Label.DetachAnimation]" type="ContentChangeHide" InvokePolicy="Synchronous"/-->
+          <!--Invoke Target="[FancyTextHelper.DetachAnimation]" type="ContentChangeHide" InvokePolicy="Synchronous"/-->
+        </Actions>
+      </Rule>
+      <Changed Source="[HasFocus]">
+        <Conditions>
+          <Equality Source="[HasFocus]" Value="true"/>
+          <Equality Source="[AllowMarquee]" ConditionOp="Equals" Value="true"/>
+          <Equality Source="[FancyTextHelper.ShouldScroll]" ConditionOp="Equals" Value="true"/>
+        </Conditions>
+        <Actions>
+          <!--Invoke Target="[Label.AttachAnimation]" animation="animation://me:Browse.Command.NavigateToForward" InvokePolicy="Synchronous"/-->
+          <!--Set Target="[Label.Source]" Value="Me:FancyTextAnimated"/-->
+          <Set Target="[Label.Visible]" Value="false"/>
+          <Set Target="[FancyLabel.Visible]" Value="true"/>
+        </Actions>
+      </Changed>
+      <Default Target="[Label.Visible]" Value="true"/>
+      <Default Target="[FancyLabel.Visible]" Value="false"/>
+      <!--Default Target="[Input.Enabled]" Value="true"/>
+      <Default Target="[Input.KeyInteractive]" Value="true"/-->
+    </Rules>
+    <Content>
+      <Scroller Orientation="Horizontal" FadeSize="-2" Margins="2,0,2,0" >
+        <Children>
+          <Text Name="Label" Color="[Color]" Font="[Font]" Content="[Content]"/>
+          <me:FancyTextAnimated Visible="false" AvailableSpace="[AvailableSpace]" Name="FancyLabel" Color="[Color]" Font="[Font]" Content="[Content]"/>
+        </Children>
+      </Scroller>
+    </Content>
+  </UI>
+
+  <UI Name="FancyTextNotAnimated">
+    <Properties>
+      <Font Name="Font" Font="font://comm:ButtonText"/>
+      <Color Name="Color" Color="color://comm:OffWhite"/>
+      <!--Size Name="LableSize" Size="250, 51"/-->
+      <cor:String Name="Content" String="This text will marquee scroll across the screen slowly." />
+      <cor:Single Name="AvailableSpace" Single="250" />
+    </Properties>
+    <Content>
+      <Text Name="Label" Color="[Color]" Font="[Font]" Content="[Content]"/>
+    </Content>
+  </UI>
+  <UI Name="FancyTextAnimated">
+    <Properties>
+      <Font Name="Font" Font="font://comm:ButtonText"/>
+      <Color Name="Color" Color="color://comm:OffWhite"/>
+      <!--Size Name="LableSize" Size="250, 51"/-->
+      <cor:String Name="Content" String="This text will marquee scroll across the screen slowly." />
+      <cor:Single Name="AvailableSpace" Single="250" />
+    </Properties>
+    <Content>
+      <Text Name="Label" Color="[Color]" Font="[Font]" Content="[Content]">
+        <Animations>
+          <!-- Our animation will be a merger of a couple of different  -->
+          <!-- components.                                              -->
+          <MergeAnimation Name="FancyTextAnimation">
+            <Sources>
+
+              <!-- This is the first part of the animation, where the   -->
+              <!-- text is totally still.  We don't want to have this   -->
+              <!-- part time shifted like the rest.                     -->
+              <Animation>
+                <Keyframes>
+                  <PositionKeyframe Time="0.0"/>
+                  <PositionKeyframe Time="0.5"/>
+
+                  <AlphaKeyframe Time="0.0" Value="1.0"/>
+                </Keyframes>
+              </Animation>
+
+              <!-- Take our position animation and delay it by some     -->
+              <!-- fraction the text size.  This ensures that varying   -->
+              <!-- text lengths have a similar scroll speed.            -->
+              <TransformByAttributeAnimation Attribute="Width" Delay="0.0050">
+                <ValueTransformer>
+                  <MathTransformer Subtract="[AvailableSpace]"/>
+                </ValueTransformer>
+                <Source>
+
+                  <!-- Take our unit-vector (0 to 1) position animation -->
+                  <!-- and magnify it by the width of our text content. -->
+                  <TransformByAttributeAnimation Attribute="Width"
+                                                 Magnitude="1.0"
+                                                 Filter="Position">
+                    <ValueTransformer>
+                      <MathTransformer Subtract="[AvailableSpace]"/>
+                    </ValueTransformer>
+                    <Source>
+
+                      <!-- The source animation is a position loop.     -->
+                      <!-- Note that it doesn't include the beginning   -->
+                      <!-- keyframes, because we don't want them time   -->
+                      <!-- shifted.                                     -->
+                      <Animation Type="Idle" Loop="-1">
+                        <Keyframes>
+                          <PositionKeyframe Time="0.80" Value="-1,0,0"/>
+                          <PositionKeyframe Time="1.70" Value="-1,0,0"/>
+                          <PositionKeyframe Time="1.75" Value="0,0,0"/>
+                          <PositionKeyframe Time="2.50" Value="0,0,0"/>
+
+                          <AlphaKeyframe Time="1.00" Value="1.0"/>
+                          <AlphaKeyframe Time="1.70" Value="0.0"/>
+                          <AlphaKeyframe Time="1.75" Value="0.0"/>
+                          <AlphaKeyframe Time="1.95" Value="1.0"/>
+                          <AlphaKeyframe Time="2.50" Value="1.0"/>
+                        </Keyframes>
+                      </Animation>
+
+                    </Source>
+                  </TransformByAttributeAnimation>
+
+                </Source>
+              </TransformByAttributeAnimation>
+
+            </Sources>
+          </MergeAnimation>
+        </Animations>
+      </Text>
+    </Content>
+  </UI>
 </Mcml>

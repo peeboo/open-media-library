@@ -105,6 +105,7 @@
     <Compile Include="Code\ExternalPlayer.cs" />
     <Compile Include="Code\Filters.cs" />
     <Compile Include="Code\V3\AlphaPivot.cs" />
+    <Compile Include="Code\V3\Controls\FancyText.cs" />
     <Compile Include="Code\V3\Controls\LegacyHorizontalFlowLayoutHelper.cs" />
     <Compile Include="Code\V3\CollectionItem.cs" />
     <Compile Include="Code\V3\CollectionPage.cs" />
@@ -131,6 +132,7 @@
     <Compile Include="Code\V3\Settings\FavoritesSettings.cs" />
     <Compile Include="Code\V3\Settings\GallerySettings.cs" />
     <Compile Include="Code\V3\Settings\GeneralSettings.cs" />
+    <Compile Include="Code\V3\Wizards\WizardGalleryPage.cs" />
     <Compile Include="Code\V3\YearBrowseGroup.cs" />
     <Compile Include="Code\V3\ContentPage.cs" />
     <Compile Include="Code\V3\Controls\AreaOfInterestLayoutInput.cs" />
@@ -522,6 +524,7 @@
     <Content Include="Markup\V3\Search\MoviesSearchPageTitle.mcml" />
     <Content Include="Markup\V3\Settings\MediaChangerManagerPage.mcml" />
     <Content Include="Markup\V3\Settings\SettingsManager.mcml" />
+    <Content Include="Markup\V3\Wizards\WizardGalleryPage.mcml" />
     <Content Include="OMLInfo.xml" />
     <Content Include="Registration.xml" />
     <None Include="app.config" />
