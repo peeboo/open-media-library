@@ -580,6 +580,11 @@ namespace TVDBMetadata
             // execute the request
             using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
             {
+                //StreamReader reader2 = new StreamReader(response.GetResponseStream());
+                //string  tmp = reader2.ReadToEnd();
+                //Console.Write(tmp);
+
+
                 string mirrorpath = "";
                 int typemask = 0;
 
@@ -627,7 +632,7 @@ namespace TVDBMetadata
                                                 break;
                                         }
                                     }
-                                    else if (reader.NodeType == XmlNodeType.EndElement && reader.Name.ToLower() == "episode")
+                                    else if (reader.NodeType == XmlNodeType.EndElement && reader.Name.ToLower() == "series")
                                     {
                                         break;
                                     }

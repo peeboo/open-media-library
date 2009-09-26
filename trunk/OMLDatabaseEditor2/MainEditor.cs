@@ -731,7 +731,7 @@ namespace OMLDatabaseEditor
 
                 // Try to find show name be looking up the folder structure.
                 Title parenttitle = title;
-                while ((title.TitleType & TitleTypes.Root) == 0)
+                while ((parenttitle.TitleType & TitleTypes.Root) == 0)
                 {
                     // Get parent
                     parenttitle = parenttitle.ParentTitle;
