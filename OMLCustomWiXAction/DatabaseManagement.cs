@@ -494,8 +494,16 @@ namespace OMLCustomWiXAction
             if (sqlConn != null)
             {
                 // Launch backup job
+                //string sql = @"CREATE DATABASE [OML] ON  PRIMARY " +
+                //    @"( NAME = N'OML', FILENAME = N'" + Path.GetFullPath(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)) + @"\Microsoft SQL Server\MSSQL10.OML\MSSQL\DATA\OML.mdf' , SIZE = 3072KB , MAXSIZE = UNLIMITED, FILEGROWTH = 1024KB ) " +
+                //    @" LOG ON  " +
+                //    @"( NAME = N'OML_log', FILENAME = N'" + Path.GetFullPath(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)) + @"\Microsoft SQL Server\MSSQL10.OML\MSSQL\DATA\OML_log.ldf' , SIZE = 1024KB , MAXSIZE = 2048GB , FILEGROWTH = 10%) ";
+                ExecuteNonQuery(sqlConn, "EXEC sp_configure filestream_access_level, 2");
+                ExecuteNonQuery(sqlConn, "RECONFIGURE");
+
                 string sql = @"CREATE DATABASE [OML] ON  PRIMARY " +
                     @"( NAME = N'OML', FILENAME = N'" + Path.GetFullPath(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)) + @"\Microsoft SQL Server\MSSQL10.OML\MSSQL\DATA\OML.mdf' , SIZE = 3072KB , MAXSIZE = UNLIMITED, FILEGROWTH = 1024KB ) " +
+                    @"FILEGROUP [OMLFILEGROUP] CONTAINS FILESTREAM  DEFAULT ( NAME = N'OMLFS_Group', FILENAME = N'" + Path.GetFullPath(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)) + @"\Microsoft SQL Server\MSSQL10.OML\MSSQL\DATA\OML_FSData' ) " +
                     @" LOG ON  " +
                     @"( NAME = N'OML_log', FILENAME = N'" + Path.GetFullPath(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)) + @"\Microsoft SQL Server\MSSQL10.OML\MSSQL\DATA\OML_log.ldf' , SIZE = 1024KB , MAXSIZE = 2048GB , FILEGROWTH = 10%) ";
 
