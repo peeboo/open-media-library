@@ -2,8 +2,6 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
   <Fragment>
     <ComponentGroup Id="CommonComponents">
-      <ComponentRef Id="PostInstallerWizard.exe"/>
-
       <ComponentRef Id="Application.png" />
 
       <!-- Required OML Libraries-->

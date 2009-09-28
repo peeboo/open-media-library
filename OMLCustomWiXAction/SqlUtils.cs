@@ -155,13 +155,13 @@ namespace OMLCustomWiXAction {
         }
 
         public static void WriteSettings(Session session) {
-            DatabaseInformation.DatabaseName = "oml";
-            DatabaseInformation.OMLUserAcct = "oml";
-            DatabaseInformation.OMLUserPassword = "oml";
-            DatabaseInformation.SAPassword = sapassword;
-            DatabaseInformation.SQLInstanceName = instancename;
-            DatabaseInformation.SQLServerName = servername;
-            DatabaseInformation.SaveSettings();
+            DatabaseInformation.xmlSettings.DatabaseName = "oml";
+            DatabaseInformation.xmlSettings.OMLUserAcct = "oml";
+            DatabaseInformation.xmlSettings.OMLUserPassword = "oml";
+            DatabaseInformation.xmlSettings.SAPassword = sapassword;
+            DatabaseInformation.xmlSettings.SQLInstanceName = instancename;
+            DatabaseInformation.xmlSettings.SQLServerName = servername;
+            DatabaseInformation.xmlSettings.SaveSettings();
         }
     }
 }

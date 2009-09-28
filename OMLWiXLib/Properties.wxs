@@ -53,7 +53,14 @@
 
     <Icon Id="icon.ico" SourceFile="..\Library\Resources\Application.ico"/>
 
-    <Property Id="WixShellExecTarget" Value="[#PostInstallerWizard.exe]" />
-    <Property Id="HasScannedForSql" Value="0" />
+    <!-- Sql Server Properties (shared between the custom actions and the installer) -->
+    <Property Id="HASSCANNEDFORSQL" Secure="yes" Value="0" />
+    <Property Id="CONFIGFILEEXISTS" Secure="yes" />
+    <Property Id="SQLSERVERNAME" Secure="yes" />
+    <Property Id="SQLINSTANCENAME" Secure="yes" />
+    <Property Id="DATABASENAME" Secure="yes" />
+    <Property Id="SAPASSWORD" Secure="yes" />
+    <Property Id="OMLUSERACCT" Secure="yes" />
+    <Property Id="OMLUSERPASSWORD" Secure="yes" />
   </Fragment>
 </Wix>

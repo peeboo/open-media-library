@@ -45,6 +45,7 @@ namespace OMLEngine.DatabaseManagement
 
         }
 
+        /*** REMOVE ONCE THE UNIFIED WIX INSTALLERS ARE COMPLETE ***/
         public static void SaveSettings()
         {
             OMLEngine.Settings.XMLSettingsManager xmlsettings = new OMLEngine.Settings.XMLSettingsManager();
@@ -56,6 +57,7 @@ namespace OMLEngine.DatabaseManagement
             xmlsettings.OMLUserPassword = _OMLUserPassword;
             xmlsettings.SaveSettings();
         }
+        /*** REMOVE ONCE THE UNIFIED WIX INSTALLERS ARE COMPLETE ***/
      
         // Database server name, database name and credentials
         public static string SQLServerName
@@ -64,11 +66,13 @@ namespace OMLEngine.DatabaseManagement
             {
                 return (_SQLServerName ?? "localhost");
             }
+            /*** REMOVE ONCE THE UNIFIED WIX INSTALLERS ARE COMPLETE ***/
             set
             {
                 _SQLServerName = value;
                 SaveSettings();
             }
+            /*** REMOVE ONCE THE UNIFIED WIX INSTALLERS ARE COMPLETE ***/
         }
         public static string SQLInstanceName
         {
@@ -76,11 +80,13 @@ namespace OMLEngine.DatabaseManagement
             {
                 return (_SQLInstanceName ?? "oml");
             }
+            /*** REMOVE ONCE THE UNIFIED WIX INSTALLERS ARE COMPLETE ***/
             set
             {
                 _SQLInstanceName = value;
                 SaveSettings();
             }
+            /*** REMOVE ONCE THE UNIFIED WIX INSTALLERS ARE COMPLETE ***/
         }
         public static string SAPassword
         {
@@ -88,11 +94,13 @@ namespace OMLEngine.DatabaseManagement
             {
                 return (_SAPassword ?? "R3WztB4#9");
             }
+            /*** REMOVE ONCE THE UNIFIED WIX INSTALLERS ARE COMPLETE ***/
             set
             {
                 _SAPassword = value;
                 SaveSettings();
             }
+            /*** REMOVE ONCE THE UNIFIED WIX INSTALLERS ARE COMPLETE ***/
         }
         public static string OMLUserAcct
         {
@@ -100,11 +108,13 @@ namespace OMLEngine.DatabaseManagement
             {
                 return (_OMLUserAcct ?? "oml");
             }
+            /*** REMOVE ONCE THE UNIFIED WIX INSTALLERS ARE COMPLETE ***/
             set
             {
                 _OMLUserAcct = value;
                 SaveSettings();
             }
+            /*** REMOVE ONCE THE UNIFIED WIX INSTALLERS ARE COMPLETE ***/
         }
         public static string OMLUserPassword
         {
@@ -112,11 +122,13 @@ namespace OMLEngine.DatabaseManagement
             {
                 return (_OMLUserPassword ?? "oml");
             }
+            /*** REMOVE ONCE THE UNIFIED WIX INSTALLERS ARE COMPLETE ***/
             set
             {
                 _OMLUserPassword = value;
                 SaveSettings();
             }
+            /*** REMOVE ONCE THE UNIFIED WIX INSTALLERS ARE COMPLETE ***/
         }
         public static string DatabaseName 
         { 
@@ -124,11 +136,13 @@ namespace OMLEngine.DatabaseManagement
             {
                 return (_DatabaseName ?? "oml");
             }
+            /*** REMOVE ONCE THE UNIFIED WIX INSTALLERS ARE COMPLETE ***/
             set
             {
                 _DatabaseName = value;
                 SaveSettings();
             }
+            /*** REMOVE ONCE THE UNIFIED WIX INSTALLERS ARE COMPLETE ***/
         }
 
         // Database Error & schema version

@@ -116,14 +116,6 @@
       <Custom Action='StartOMLEngineServiceAction' After='InstallFinalize'>
         <![CDATA[NOT REMOVE]]>
       </Custom>
-      <Custom Action='LaunchApplication' After='StartOMLEngineServiceAction'>
-        <![CDATA[NOT REMOVE]]>
-      </Custom>
     </InstallExecuteSequence>
-
-    <CustomAction Id="LaunchApplication"
-                  BinaryKey="WixCA"
-                  DllEntry="WixShellExec"
-                  Impersonate="yes"/>
   </Fragment>
 </Wix>

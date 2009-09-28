@@ -106,11 +106,6 @@
             <File Name="MediaInfo.dll"
                               Source="..\OMLEngine\MediaInfoi386.dll" Checksum="no" />
           </Component>
-          <Component Id="PostInstallerWizard.exe" Guid="53F24DE9-DEBA-43C0-A6B2-95AC100DCD1E" DiskId="1">
-            <File Name="PostInstallerWizard.exe"
-                              Source="..\PostInstallerWizard\bin\$(var.Configuration)\PostInstallerWizard.exe" Checksum="no" />
-          </Component>
-
           <Component Id="TranscoderTester.exe" Guid="2F7D11B3-70BD-4F2D-9EC1-730D28042BBF" DiskId="1">
             <File Name="TranscoderTester.exe"
                 Source="..\TranscoderTester\bin\$(var.Configuration)\TranscoderTester.exe" Checksum="no" />
