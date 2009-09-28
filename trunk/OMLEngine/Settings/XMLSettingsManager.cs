@@ -64,6 +64,7 @@ namespace OMLEngine.Settings
             }
         }
 
+        /*** REMOVE ONCE THE UNIFIED WIX INSTALLERS ARE COMPLETE ***/
         public void SaveSettings()
         {
             TextWriter xmlhandle = new StreamWriter(SettingsFile(), false); // FileStream(file, FileMode.Create);
@@ -83,6 +84,7 @@ namespace OMLEngine.Settings
 
             xmlhandle.Close();
         }
+        /*** REMOVE ONCE THE UNIFIED WIX INSTALLERS ARE COMPLETE ***/
 
         public string SettingsFile()
         {

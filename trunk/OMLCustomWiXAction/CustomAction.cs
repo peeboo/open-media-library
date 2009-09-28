@@ -11,6 +11,8 @@ using System.Security.AccessControl;
 
 namespace OMLCustomWiXAction {
     public class CustomActions {
+        public static XMLSettingsManager xmlSettings = new XMLSettingsManager();
+
         private static string MediaInfoX64Url = @"http://open-media-library.googlecode.com/files/MediaInfox64.dll";
         private static string MediaInfoX86Url = @"http://open-media-library.googlecode.com/files/MediaInfoi386.dll";
         private static string MediaInfoLocalPath = Path.GetFullPath(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)) + @"\openmedialibrary\MediaInfo.dll";
@@ -197,31 +199,58 @@ namespace OMLCustomWiXAction {
 
         [CustomAction]
         public static ActionResult ScanNetworkForSqlServers(Session session) {
-            if (session["HasScannedForSql"].CompareTo("0") == 0) {
-                DataTable dt = SqlDataSourceEnumerator.Instance.GetDataSources();
-                View sqlComboBox = session.Database.OpenView("SELECT * FROM `ComboBox`");
-                sqlComboBox.Execute();
-                int numRows = 0;
-                while (sqlComboBox.Fetch() != null) {
-                    numRows++;
-                }
-                if (numRows == 1) {
-                    session.Log("found {0} sql servers", dt.Rows.Count);
-                    int itemNumber = 2;
-                    foreach (DataRow row in dt.Rows) {
-                        Record rec = new Record(3);
-                        rec.SetString(1, "OMLProp_SqlServers");
-                        rec.SetInteger(2, itemNumber);
-                        string description = string.Format("{0} - {1}", row["ServerName"], row["InstanceName"]);
-                        rec.SetString(3, description);
+            if (session["HASSCANNEDFORSQL"].CompareTo("0") == 0) {
+                if (xmlSettings.SettingsFileExists()) {
+                    return ActionResult.SkipRemainingActions;
+                } else {
+                    DataTable dt = SqlDataSourceEnumerator.Instance.GetDataSources();
+                    View sqlComboBox = session.Database.OpenView("SELECT * FROM `ComboBox`");
+                    sqlComboBox.Execute();
+                    int numRows = 0;
+                    while (sqlComboBox.Fetch() != null) {
+                        numRows++;
+                    }
+                    if (numRows == 1) {
+                        session.Log("found {0} sql servers", dt.Rows.Count);
+                        int itemNumber = 2;
+                        foreach (DataRow row in dt.Rows) {
+                            Record rec = new Record(3);
+                            rec.SetString(1, "OMLProp_SqlServers");
+                            rec.SetInteger(2, itemNumber);
+                            string description = string.Format("{0} - {1}", row["ServerName"], row["InstanceName"]);
+                            rec.SetString(3, description);
 
-                        session.Log("Adding a new record, its number will be {0} and its value will be {1}", itemNumber, string.Format("{0} ({1})", row["ServerName"], row["InstanceName"]));
-                        sqlComboBox.Modify(ViewModifyMode.InsertTemporary, rec);
-                        itemNumber++;
+                            session.Log("Adding a new record, its number will be {0} and its value will be {1}", itemNumber, string.Format("{0} ({1})", row["ServerName"], row["InstanceName"]));
+                            sqlComboBox.Modify(ViewModifyMode.InsertTemporary, rec);
+                            itemNumber++;
+                        }
                     }
                 }
-                session["HasScannedForSql"] = "1";
+                session["HASSCANNEDFORSQL"] = "1";
             }
+            return ActionResult.Success;
+        }
+
+        [CustomAction]
+        public static ActionResult CreateXmlSettingsFile(Session session) {
+            string sqlservername = string.IsNullOrEmpty(session["SQLSERVERNAME"]) ? string.Empty : session["SQLSERVERNAME"];
+            string sqlinstancename = string.IsNullOrEmpty(session["SQLINSTANCENAME"]) ? string.Empty : session["SQLINSTANCENAME"];
+            string databasename = string.IsNullOrEmpty(session["DATABASENAME"]) ? string.Empty : session["DATABASENAME"];
+            string sapassword = string.IsNullOrEmpty(session["SAPASSWORD"]) ? string.Empty : session["SAPASSWORD"];
+            string omluseracct = string.IsNullOrEmpty(session["OMLUSERACCT"]) ? string.Empty : session["OMLUSERACCT"];
+            string omluserpassword = string.IsNullOrEmpty(session["OMLUSERACCT"]) ? string.Empty : session["OMLUSERACCT"];
+
+            if (string.IsNullOrEmpty(sqlservername) || string.IsNullOrEmpty(sqlinstancename) || string.IsNullOrEmpty(databasename) || string.IsNullOrEmpty(omluserpassword) || string.IsNullOrEmpty(omluserpassword))
+                return ActionResult.Failure;
+
+            xmlSettings.SQLServerName = sqlservername;
+            xmlSettings.SQLInstanceName = sqlinstancename;
+            xmlSettings.DatabaseName = databasename;
+            xmlSettings.SAPassword = sapassword;
+            xmlSettings.OMLUserAcct = omluseracct;
+            xmlSettings.OMLUserPassword = omluserpassword;
+            xmlSettings.SaveSettings();
+
             return ActionResult.Success;
         }
     }

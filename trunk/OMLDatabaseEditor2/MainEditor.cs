@@ -174,7 +174,7 @@ namespace OMLDatabaseEditor
             return true;
         }
 
-
+        /*** REMOVE ONCE THE UNIFIED WIX INSTALLERS ARE COMPLETE ***/
         /// <summary>
         /// Load the db connection settings and try to connect to the database.
         /// Give option to specify alternative sql connection details if connection
@@ -236,6 +236,7 @@ namespace OMLDatabaseEditor
                     return false;
             }
         }
+        /*** REMOVE ONCE THE UNIFIED WIX INSTALLERS ARE COMPLETE ***/
 
         private void GetDXSkins()
         {

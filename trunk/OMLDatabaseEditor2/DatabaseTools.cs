@@ -16,6 +16,7 @@ namespace OMLDatabaseEditor
         {
             InitializeComponent();
 
+            /*** REMOVE ONCE THE UNIFIED WIX INSTALLERS ARE COMPLETE ***/
             // Get database versioning
             OMLEngine.DatabaseManagement.DatabaseManagement dbm = new OMLEngine.DatabaseManagement.DatabaseManagement();
             int dbMajor;
@@ -26,7 +27,11 @@ namespace OMLDatabaseEditor
             int dbRejMinor;
             dbm.GetRequiredSchemaVersion(out dbReqMajor, out dbRejMinor);
             lcReqDatabaseVersion.Text = "Required Database version :" + dbReqMajor.ToString() + "." + dbRejMinor.ToString();
+            /*** REMOVE ONCE THE UNIFIED WIX INSTALLERS ARE COMPLETE ***/
 
+            /*** ADD ONCE THE UNIFIED WIX INSTALLERS ARE COMPLETE ***/
+            //OMLEngine.DatabaseManagement.DatabaseManagement dbm = new OMLEngine.DatabaseManagement.DatabaseManagement();
+            /*** ADD ONCE THE UNIFIED WIX INSTALLERS ARE COMPLETE ***/
             int DataSize;
             int LogSize;
             dbm.GetDatabaseSize(out DataSize, out LogSize);

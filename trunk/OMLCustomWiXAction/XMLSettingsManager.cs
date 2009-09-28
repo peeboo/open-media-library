@@ -17,7 +17,6 @@ namespace OMLCustomWiXAction
         public string OMLUserAcct { get; set; }
         public string OMLUserPassword { get; set; }
 
-
         public XMLSettingsManager()
         {
             try
@@ -86,8 +85,12 @@ namespace OMLCustomWiXAction
 
         public string SettingsFile()
         {
-            return string.Empty;
-            //return Path.Combine(FileSystemWalker.PublicRootDirectory, "settings.xml");
+            return Path.Combine(Environment.GetFolderPath(
+                Environment.SpecialFolder.CommonApplicationData), @"OpenMediaLibrary\settings.xml");
+        }
+
+        public bool SettingsFileExists() {
+            return File.Exists(SettingsFile());
         }
     }
 }

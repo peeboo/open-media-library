@@ -12,6 +12,7 @@ namespace OMLEngine.DatabaseManagement
 {
     public class DatabaseManagement
     {
+        /*** REMOVE ONCE THE UNIFIED WIX INSTALLERS ARE COMPLETE ***/
         /// <summary>
         /// Tests database connectivity
         /// </summary>
@@ -229,6 +230,7 @@ namespace OMLEngine.DatabaseManagement
 
             return DatabaseInformation.SQLState.OK;
         }
+        /*** REMOVE ONCE THE UNIFIED WIX INSTALLERS ARE COMPLETE ***/
 
         public bool GetDatabaseSize(out int Data, out int Logs)
         {
@@ -471,7 +473,7 @@ namespace OMLEngine.DatabaseManagement
 
         }
 
-
+        /*** REMOVE ONCE THE UNIFIED WIX INSTALLERS ARE COMPLETE ***/
         public void CreateOMLUser()
         {
             bool retval = false;
@@ -486,7 +488,6 @@ namespace OMLEngine.DatabaseManagement
             sqlConn.Close();
             //return retval;
         }
-
 
         public bool CreateOMLDatabase()
         {
@@ -545,7 +546,6 @@ namespace OMLEngine.DatabaseManagement
 
             return retval;
         }
-
 
         public void ConfigureSQL(string ScriptsPath)
         {
@@ -664,7 +664,7 @@ namespace OMLEngine.DatabaseManagement
             return true;
         }
         #endregion
-
+        /*** REMOVE ONCE THE UNIFIED WIX INSTALLERS ARE COMPLETE ***/
 
         #region Open database code and sql Execution functions
         private SqlConnection OpenDatabase(string connectionstring)

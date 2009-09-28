@@ -61,7 +61,7 @@ namespace OMLCustomWiXAction
 
             // Test 2. Ensure the database is in multiuser mode - could be a result of a bad restore
             // -------------------------------------------------------------------------------------
-            string sql = "ALTER DATABASE [" + DatabaseInformation.DatabaseName + "] SET MULTI_USER";
+            string sql = "ALTER DATABASE [" + DatabaseInformation.xmlSettings.DatabaseName + "] SET MULTI_USER";
             if (!ExecuteNonQuery(sqlConn, sql))
             {
                 //Utilities.DebugLine("[DatabaseManagement / CheckOMLDatabase()] : Attempting to set the database to Multi user failed");
@@ -134,7 +134,7 @@ namespace OMLCustomWiXAction
 
             // Test 2. Check if the database exists on the server
             //Utilities.DebugLine("[DatabaseManagement / DatabaseDiagnostics()] : Checking the oml sysdatabase entry");
-            string sql = "select count(*) from sysdatabases where name = '" + DatabaseInformation.DatabaseName + "'";
+            string sql = "select count(*) from sysdatabases where name = '" + DatabaseInformation.xmlSettings.DatabaseName + "'";
             if (!ExecuteScalar(sqlConn, sql, out data))
             {
                 //Utilities.DebugLine("[DatabaseManagement / DatabaseDiagnostics()] : sysdatabases check failed");
@@ -155,7 +155,7 @@ namespace OMLCustomWiXAction
             // Test 3. Check user account exists
             // ---------------------------------
             //Utilities.DebugLine("[DatabaseManagement / DatabaseDiagnostics()] : Checking the syslogins entry");
-            sql = "select count(*) from syslogins where name = '" + DatabaseInformation.OMLUserAcct.ToLower() + "'";
+            sql = "select count(*) from syslogins where name = '" + DatabaseInformation.xmlSettings.OMLUserAcct.ToLower() + "'";
             if (!ExecuteScalar(sqlConn, sql, out data))
             {
                 //Utilities.DebugLine("[DatabaseManagement / DatabaseDiagnostics()] : syslogins check failed");
@@ -174,9 +174,9 @@ namespace OMLCustomWiXAction
 
             // Test 4. Check user account exists in oml database
             // -------------------------------------------------
-            sqlConn.ChangeDatabase(DatabaseInformation.DatabaseName);
+            sqlConn.ChangeDatabase(DatabaseInformation.xmlSettings.DatabaseName);
             //Utilities.DebugLine("[DatabaseManagement / DatabaseDiagnostics()] : Checking the oml.sysusers entry");
-            sql = "select count(*) from sysusers where name = '" + DatabaseInformation.OMLUserAcct.ToLower() + "'";
+            sql = "select count(*) from sysusers where name = '" + DatabaseInformation.xmlSettings.OMLUserAcct.ToLower() + "'";
             if (!ExecuteScalar(sqlConn, sql, out data))
             {
                 //Utilities.DebugLine("[DatabaseManagement / DatabaseDiagnostics()] : oml.sysusers check failed");
@@ -196,13 +196,13 @@ namespace OMLCustomWiXAction
 
             // Test 5. Check for matching sid on the master.syslogins amd oml.sysusers entries
             // --------------------------------------------------------------------------------
-            sqlConn.ChangeDatabase(DatabaseInformation.DatabaseName);
+            sqlConn.ChangeDatabase(DatabaseInformation.xmlSettings.DatabaseName);
             //Utilities.DebugLine("[DatabaseManagement / DatabaseDiagnostics()] : Checking the sid fields on master.sys oml.sysusers");
             sql = "select count(*) from master.sys.syslogins sl " + 
                 "inner join oml.sys.sysusers su " +
                 "on sl.sid = su.sid " +
-                "where sl.name = '" + DatabaseInformation.OMLUserAcct.ToLower() + "' " +
-                "and  su.name = '" + DatabaseInformation.OMLUserAcct.ToLower() + "'";
+                "where sl.name = '" + DatabaseInformation.xmlSettings.OMLUserAcct.ToLower() + "' " +
+                "and  su.name = '" + DatabaseInformation.xmlSettings.OMLUserAcct.ToLower() + "'";
             if (!ExecuteScalar(sqlConn, sql, out data))
             {
                 //Utilities.DebugLine("[DatabaseManagement / DatabaseDiagnostics()] : sid fields on master.sys oml.sysusers check failed");
@@ -229,223 +229,6 @@ namespace OMLCustomWiXAction
             return DatabaseInformation.SQLState.OK;
         }
 
-        public bool GetDatabaseSize(out int Data, out int Logs)
-        {
-            Data = 0;
-            Logs = 0;
-
-            // Create database connection to OML and open it
-            SqlConnection sqlConn = OpenDatabase(DatabaseInformation.MasterDatabaseConnectionString);
-            
-            SqlDataReader reader;
-            
-            if (!ExecuteReader(sqlConn, "select name, size / 128 from oml.dbo.sysfiles", out reader))
-            {
-                return false;
-            }
-
-            while (reader.Read())
-            {
-                if (reader[0].ToString().Contains("log"))
-                {
-                    Logs = Convert.ToInt32(reader[1]);
-                }
-                else
-                {
-                    Data = Convert.ToInt32(reader[1]);
-                }
-            }
-            return true;
-        }
-
-        public class DatabaseFile
-        {
-            public string Name;
-            public int Size;
-            public string SizeString;
-            public int MaxSize;
-            public string MaxSizeString;
-            public int Growth;
-            public string GrowthString;
-        }
-
-        public List<DatabaseFile> GetDatabaseFileInfo()
-        {
-            List<DatabaseFile> DBFS = new List<DatabaseFile>(); 
-            
-            // Create database connection to OML and open it
-            SqlConnection sqlConn = OpenDatabase(DatabaseInformation.MasterDatabaseConnectionString);
-
-            SqlDataReader reader;
-
-            if (!ExecuteReader(sqlConn, "select * from oml.dbo.sysfiles", out reader))
-            {
-                return null;
-            }
-
-            while (reader.Read())
-            {
-                DatabaseFile DBF = new DatabaseFile();
-                DBF.Name = (string)reader["name"];
-                DBF.Size = (int)reader["size"] / 128;
-                DBF.SizeString = ((int)reader["size"] / 128).ToString() + "MB";
-
-                if ((int)reader["maxsize"] > 0)
-                {
-                    DBF.MaxSize = (int)reader["maxsize"] / 128;
-                    DBF.MaxSizeString = ((int)reader["maxsize"] / 128).ToString() + "MB";
-                }
-                else 
-                {
-                    DBF.MaxSize = 0;
-                    if ((int)reader["maxsize"] == 0)
-                        DBF.MaxSizeString = "No Growth";
-                    else
-                        DBF.MaxSizeString = "Unlimited Growth";
-                }
-
-                
-                if ((int)reader["growth"] == 0)
-                {
-                    DBF.Growth = 0;
-                    DBF.GrowthString = "No Growth";
-
-                }
-                else
-                {
-                    if (((int)reader["status"] & 0x100000) != 0)
-                    {
-                        // Percentage growth
-                        DBF.Growth = (int)reader["growth"];
-                        DBF.GrowthString = (int)reader["growth"] + "%";
-                    }
-                    else
-                    {
-                        DBF.Growth = (int)reader["growth"] / 128;
-                        DBF.GrowthString = ((int)reader["growth"] / 128).ToString() + "MB";
-
-                    }
-                }
-
-                DBFS.Add(DBF);
-            }
-            return DBFS;
-        }
-        #region Database Maintenance
-        public bool BackupDatabase(string path)
-        {
-            bool retval = false;
-
-            // Create database connection to OML and open it
-            SqlConnection sqlConn = OpenDatabase(DatabaseInformation.MasterDatabaseConnectionString);
-
-            if (sqlConn != null)
-            {
-                // Launch backup job
-                string sql = "BACKUP DATABASE [" + DatabaseInformation.DatabaseName + "] TO DISK = '" + path + "' WITH INIT";
-                if (ExecuteNonQuery(sqlConn, sql, 1200))
-                {
-                    retval = true;
-                }
-            }
-            sqlConn.Close();
-            return retval;
-        }
-
-        public bool RestoreDatabase(string path)
-        {
-            bool retval = false;
-
-            // Create database connection to OML and open it
-            SqlConnection sqlConn = OpenDatabase(DatabaseInformation.MasterDatabaseConnectionString);
-
-            if (sqlConn != null)
-            {
-                // This method used to work in earlier versions of SQL ???
-                // Kill all users connected to OML
-                /*string sql = "DECLARE @SQL varchar(max) " +
-                    "SET @SQL = '' " +
-                    "SELECT @SQL = @SQL + 'Kill ' + Convert(varchar, SPId) + ';' " +
-                    "FROM MASTER..SysProcesses " +
-                    "WHERE DBId = DB_ID('" + DatabaseInformation.DatabaseName + "') " +
-                    "EXEC(@SQL)";*/ 
-
-
-                // Put the database into single user mode
-                string sql = "ALTER DATABASE [" + DatabaseInformation.DatabaseName + "] SET SINGLE_USER WITH ROLLBACK IMMEDIATE";
-
-                if (ExecuteNonQuery(sqlConn, sql, 1200))
-                {
-                    // Succeeded - Database should now be in single user mode
-                    // Launch backup job
-                    sql = "RESTORE DATABASE [" + DatabaseInformation.DatabaseName + "] FROM DISK = '" + path + "' WITH REPLACE";
-
-                    if (ExecuteNonQuery(sqlConn, sql, 1200))
-                    {
-                        // Database should now be restored
-                        retval = true;
-                    }
-
-                    // Put database backinto multiuser mode    
-                    sql = "ALTER DATABASE [" + DatabaseInformation.DatabaseName + "] SET MULTI_USER";
-
-                    if (!ExecuteNonQuery(sqlConn, sql, 1200))
-                    {
-                        // If this fails set the retval to false
-                        retval = false;
-                    }
-                }
-
-                // Refresh the user logins
-                CreateOMLUser(sqlConn);
-            }
-            sqlConn.Close();
-            return retval;
-        }
-
-        public bool OptimiseDatabase()
-        {
-            bool retval = true;
-            List<string> Tables = new List<string>();
-
-            // Create database connection to OML and open it
-            SqlConnection sqlConn = OpenDatabase(DatabaseInformation.OMLDatabaseConnectionString);
-            if (sqlConn != null)
-            {
-                // Get a list of tables in database
-                string sql = "select name from sysobjects where category = 0 and xtype = 'U'";
-                SqlDataReader reader;
-
-                if (!ExecuteReader(sqlConn, sql, out reader))
-                {
-                    return false;
-                }
-
-                while (reader.Read())
-                {
-                    Tables.Add(reader[0].ToString());
-                }
-                reader.Close();
-
-                foreach (string Table in Tables)
-                {
-                    // Launch reindex job
-                    sql = "DBCC DBREINDEX (" + Table + ", '', 70)";
-                    if (!ExecuteNonQuery(sqlConn, sql))
-                    {
-                        sqlConn.Close();
-                        sqlConn.Dispose();
-                        return false;
-                    }
-                }
-            }
-            sqlConn.Close();
-            sqlConn.Dispose();
-            return retval;
-        }
-        #endregion
-
-
         #region User and Database creation functions
         /// <summary>
         /// Creates the OML user. This should allready have been done as part
@@ -455,15 +238,15 @@ namespace OMLCustomWiXAction
         {
             //Utilities.DebugLine("[DatabaseManagement] : Entering CreateOMLUser()");
 
-            ExecuteNonQuery(sqlConn, "CREATE LOGIN [" + DatabaseInformation.OMLUserAcct + "] " +
-                    "WITH PASSWORD=N'" + DatabaseInformation.OMLUserPassword + "', " +
-                    " DEFAULT_DATABASE=[" + DatabaseInformation.DatabaseName + "], DEFAULT_LANGUAGE=[us_english], CHECK_EXPIRATION=OFF, CHECK_POLICY=OFF");
-                
-            sqlConn.ChangeDatabase(DatabaseInformation.DatabaseName);
-            ExecuteNonQuery(sqlConn, "DROP USER [" + DatabaseInformation.OMLUserAcct + "]");
-            ExecuteNonQuery(sqlConn, "DROP ROLE [" + DatabaseInformation.OMLUserAcct + "]");
-            ExecuteNonQuery(sqlConn, "CREATE USER [" + DatabaseInformation.OMLUserAcct + "] FOR LOGIN [" + DatabaseInformation.OMLUserAcct + "] WITH DEFAULT_SCHEMA=[dbo]");
-            ExecuteNonQuery(sqlConn, "EXEC sp_addrolemember [db_owner], [" + DatabaseInformation.OMLUserAcct + "]");
+            ExecuteNonQuery(sqlConn, "CREATE LOGIN [" + DatabaseInformation.xmlSettings.OMLUserAcct + "] " +
+                    "WITH PASSWORD=N'" + DatabaseInformation.xmlSettings.OMLUserPassword + "', " +
+                    " DEFAULT_DATABASE=[" + DatabaseInformation.xmlSettings.DatabaseName + "], DEFAULT_LANGUAGE=[us_english], CHECK_EXPIRATION=OFF, CHECK_POLICY=OFF");
+
+            sqlConn.ChangeDatabase(DatabaseInformation.xmlSettings.DatabaseName);
+            ExecuteNonQuery(sqlConn, "DROP USER [" + DatabaseInformation.xmlSettings.OMLUserAcct + "]");
+            ExecuteNonQuery(sqlConn, "DROP ROLE [" + DatabaseInformation.xmlSettings.OMLUserAcct + "]");
+            ExecuteNonQuery(sqlConn, "CREATE USER [" + DatabaseInformation.xmlSettings.OMLUserAcct + "] FOR LOGIN [" + DatabaseInformation.xmlSettings.OMLUserAcct + "] WITH DEFAULT_SCHEMA=[dbo]");
+            ExecuteNonQuery(sqlConn, "EXEC sp_addrolemember [db_owner], [" + DatabaseInformation.xmlSettings.OMLUserAcct + "]");
             sqlConn.ChangeDatabase("master");
 
             //Utilities.DebugLine("[DatabaseManagement] : Leaving CreateOMLUser()");
