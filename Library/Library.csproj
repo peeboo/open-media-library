@@ -30,6 +30,7 @@
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <DocumentationFile>
     </DocumentationFile>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>full</DebugType>
@@ -104,6 +105,7 @@
     <Compile Include="Code\ParentalControlManager.cs" />
     <Compile Include="Code\ExternalPlayer.cs" />
     <Compile Include="Code\Filters.cs" />
+    <Compile Include="Code\ThemeManager.cs" />
     <Compile Include="Code\V3\AlphaPivot.cs" />
     <Compile Include="Code\V3\Controls\FancyText.cs" />
     <Compile Include="Code\V3\Controls\LegacyHorizontalFlowLayoutHelper.cs" />
