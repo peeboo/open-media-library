@@ -13,6 +13,11 @@ namespace OMLEngine
     /// </summary>
     public class FileSystemWalker
     {
+        public static string eHomeDirectory
+        {
+            get { return Path.Combine(Environment.GetEnvironmentVariable("SystemRoot"), @"eHome"); }
+        }
+
         /// <summary>
         /// Location of Root directory for ALL OML files
         /// </summary>
