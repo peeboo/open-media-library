@@ -103,13 +103,13 @@ namespace Library
             //set our location to the programdata dir
             Environment.CurrentDirectory = OMLEngine.FileSystemWalker.PublicRootDirectory;
             //need to start checking ehres themes on startup!
-            //ThemeManager.CreateThemeFiles();
+            ThemeManager.CreateThemeFiles();
 
             //_id = "FirstRun";
             if (_id == "FirstRun")
             {
                 //generate our themes - this happens every time mc starts
-                ThemeManager.CreateThemeFiles();
+                //ThemeManager.CreateThemeFiles();
                 CheckFirstRun(host);
             }
             else

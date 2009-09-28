@@ -17,6 +17,7 @@ using Microsoft.Win32.SafeHandles;
 using System.Threading;
 using System.ComponentModel;
 using System.Xml.XPath;
+using System.Security.Cryptography;
 
 namespace Library
 {
@@ -90,10 +91,18 @@ namespace Library
             }
 
             try
-            {                
-                updateMCMLResource("Microsoft.MediaCenter.Shell!Colors.mcml", Resources.V3_Controls_Common_Colors, Path.Combine(themePath, "Colors.mcml"));
-                updateMCMLResource("Microsoft.MediaCenter.Shell!Fonts.mcml", Resources.V3_Controls_Common_Fonts, Path.Combine(themePath, "Fonts.mcml"));
-                updateMCMLResource("Microsoft.MediaCenter.Shell!FontNames.mcml", Resources.V3_Controls_Common_FontNames, Path.Combine(themePath, "FontNames.mcml"));
+            {
+                //update our mcml files
+                //we store a hash of Microsoft.MediaCenter.Shell.dll and if it doesn't match we regen
+                //omlsettings would not be applicable because this is machine specific
+                if (!File.Exists(Path.Combine(themePath, "Fonts.mcml")) || !File.Exists(Path.Combine(themePath, "FontNames.mcml")) || !File.Exists(Path.Combine(themePath, "Colors.mcml")) || string.IsNullOrEmpty(Properties.Settings.Default.MicrosoftMediaCenterShellHash) || ComputeFileHash(Path.Combine(OMLEngine.FileSystemWalker.eHomeDirectory, "Microsoft.MediaCenter.Shell.dll")) != Properties.Settings.Default.MicrosoftMediaCenterShellHash)
+                {
+                    updateMCMLResource("Microsoft.MediaCenter.Shell!Colors.mcml", Resources.V3_Controls_Common_Colors, Path.Combine(themePath, "Colors.mcml"));
+                    updateMCMLResource("Microsoft.MediaCenter.Shell!Fonts.mcml", Resources.V3_Controls_Common_Fonts, Path.Combine(themePath, "Fonts.mcml"));
+                    updateMCMLResource("Microsoft.MediaCenter.Shell!FontNames.mcml", Resources.V3_Controls_Common_FontNames, Path.Combine(themePath, "FontNames.mcml"));
+                    Properties.Settings.Default.MicrosoftMediaCenterShellHash = ComputeFileHash(Path.Combine(OMLEngine.FileSystemWalker.eHomeDirectory, "Microsoft.MediaCenter.Shell.dll"));
+                    Properties.Settings.Default.Save();
+                }
                 
             }
             catch (Exception ex)
@@ -102,6 +111,27 @@ namespace Library
             }
 
         }
+
+        private static string ComputeFileHash(string file)
+        {
+            //SHA1Managed managed = new SHA1Managed(); 
+            MD5CryptoServiceProvider unmanaged = new MD5CryptoServiceProvider(); 
+            //managed.ComputeHash(buffer, 0, buffer.Length);
+            //return System.Text.Encoding.Default.GetString(unmanaged.ComputeHash(File.OpenRead(Path.Combine(OMLEngine.FileSystemWalker.eHomeDirectory,""))));
+            return Convert.ToBase64String(unmanaged.ComputeHash(File.OpenRead(file)));
+            //foreach (byte b in bs)
+            //{
+            //    s.Append(b.ToString("x2").ToLower());
+            //}
+            //string password = s.ToString();
+            //return password;
+
+        }
+
+        //private static byte[] ComputeFileHash(string fileName)
+        //{
+        //    using (var stream = File.OpenRead(fileName)) return System.Security.Cryptography.MD5.Create().ComputeHash(stream);
+        //}
 
     }
 
