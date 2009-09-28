@@ -100,9 +100,16 @@ namespace Library
 
         public void Launch(AddInHost host)
         {
+            //set our location to the programdata dir
+            Environment.CurrentDirectory = OMLEngine.FileSystemWalker.PublicRootDirectory;
+            //need to start checking ehres themes on startup!
+            //ThemeManager.CreateThemeFiles();
+
             //_id = "FirstRun";
             if (_id == "FirstRun")
             {
+                //generate our themes - this happens every time mc starts
+                ThemeManager.CreateThemeFiles();
                 CheckFirstRun(host);
             }
             else
@@ -131,6 +138,11 @@ namespace Library
                         return true;
                     case OMLEngine.DatabaseManagement.DatabaseInformation.SQLState.LoginFailure:
                         return false;
+                    case OMLEngine.DatabaseManagement.DatabaseInformation.SQLState.OMLDBVersionUpgradeRequired:
+                        {
+                            //TODO: do upgrade bits here...
+                            return true;
+                        }
                     default:
                         throw (new Exception(OMLEngine.DatabaseManagement.DatabaseInformation.LastSQLError));
                 }
