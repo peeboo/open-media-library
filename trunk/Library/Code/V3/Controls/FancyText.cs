@@ -46,19 +46,26 @@ namespace Library.Code.V3
         {
             get
             {
-                if (!checkedScroll)
+                try
                 {
-                    checkedScroll = true;
-                    Bitmap bmp = new Bitmap(1, 1);
-                    Graphics graphics = Graphics.FromImage(bmp);
-                    Font f = new Font(FontName, FontSize);
-                    if (MeasureDisplayStringWidth(graphics, this.Content, f) > MaximumWidth && MaximumWidth>0)
+                    if (!checkedScroll)
                     {
-                        this.shouldScroll = true;
-                        return true;
+                        checkedScroll = true;
+                        Bitmap bmp = new Bitmap(1, 1);
+                        Graphics graphics = Graphics.FromImage(bmp);
+                        Font f = new Font(FontName, FontSize);
+                        if (MeasureDisplayStringWidth(graphics, this.Content, f) > MaximumWidth && MaximumWidth > 0)
+                        {
+                            this.shouldScroll = true;
+                            return true;
+                        }
                     }
+                    return this.shouldScroll;
                 }
-                return this.shouldScroll;
+                catch
+                {
+                    return false;
+                }
             }
         }
 
