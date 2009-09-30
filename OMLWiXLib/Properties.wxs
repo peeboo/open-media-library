@@ -59,8 +59,9 @@
     <Property Id="SQLSERVERNAME" Secure="yes" />
     <Property Id="SQLINSTANCENAME" Secure="yes" />
     <Property Id="DATABASENAME" Secure="yes" />
-    <Property Id="SAPASSWORD" Secure="yes" />
+    <Property Id="SAPASSWORD" Secure="yes" Value="R3WztB4#9" />
     <Property Id="OMLUSERACCT" Secure="yes" />
     <Property Id="OMLUSERPASSWORD" Secure="yes" />
+    <Property Id="ISSERVERINSTALL" Secure="yes" Value="0" />
   </Fragment>
 </Wix>
