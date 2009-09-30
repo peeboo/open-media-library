@@ -11,7 +11,7 @@ using System.Security.AccessControl;
 
 namespace OMLCustomWiXAction {
     public class CustomActions {
-        public static XMLSettingsManager xmlSettings = new XMLSettingsManager();
+        public static XMLSettingsManager xmlSettings;
 
         private static string MediaInfoX64Url = @"http://open-media-library.googlecode.com/files/MediaInfox64.dll";
         private static string MediaInfoX86Url = @"http://open-media-library.googlecode.com/files/MediaInfoi386.dll";
@@ -26,23 +26,25 @@ namespace OMLCustomWiXAction {
 
         [CustomAction]
         public static ActionResult StartOMLEngineService(Session session) {
-            session.Log("Inside StartOMLEngineService");
+            sessionObj = session;
+            CustomActions.LogToSession("Inside StartOMLEngineService");
             try {
                 ServiceController omlengineController = new ServiceController(@"OMLEngineService");
                 TimeSpan timeout = TimeSpan.FromSeconds(20);
                 omlengineController.Start();
                 omlengineController.WaitForStatus(ServiceControllerStatus.Running, timeout);
                 omlengineController.Close();
-                session.Log("StartOMLEngineService CA: Success");
+                CustomActions.LogToSession("StartOMLEngineService CA: Success");
                 return ActionResult.Success;
             } catch (Exception e) {
-                session.Log(string.Format("Error starting OMLEngineService: {0}", e.Message));
+                CustomActions.LogToSession(string.Format("Error starting OMLEngineService: {0}", e.Message));
                 return ActionResult.Failure;
             }
         }
 
         [CustomAction]
         public static ActionResult StartOMLFWService(Session session) {
+            sessionObj = session;
             try {
                 ServiceController omlfsserviceController = new ServiceController(@"OMLFWService");
                 TimeSpan timeout = TimeSpan.FromSeconds(10);
@@ -50,7 +52,7 @@ namespace OMLCustomWiXAction {
                 omlfsserviceController.WaitForStatus(ServiceControllerStatus.Running, timeout);
                 omlfsserviceController.Close();
             } catch (Exception e) {
-                session.Log(string.Format("An error occured starting the OMLFW Service: {0}", e.Message));
+                CustomActions.LogToSession(string.Format("An error occured starting the OMLFW Service: {0}", e.Message));
                 return ActionResult.Failure;
             }
             return ActionResult.Success;
@@ -58,7 +60,8 @@ namespace OMLCustomWiXAction {
 
         [CustomAction]
         public static ActionResult ReserveTrailersUrl(Session session) {
-            session.Log("Inside ReserveTrailersUrl");
+            sessionObj = session;
+            CustomActions.LogToSession("Inside ReserveTrailersUrl");
             try {
                 SecurityIdentifier sid;
 
@@ -71,68 +74,70 @@ namespace OMLCustomWiXAction {
                 sid = new SecurityIdentifier("S-1-5-18");//system
                 rev.AddSecurityIdentifier(sid);
                 rev.Create();
-                session.Log("ReserveTrailersUrl CA: Success");
+                CustomActions.LogToSession("ReserveTrailersUrl CA: Success");
                 return ActionResult.Success;
 
             } catch (Exception e) {
-                session.Log("Error in ReserveTrailersUrl: {0}", e.Message);
+                CustomActions.LogToSession(string.Format("Error in ReserveTrailersUrl: {0}", e.Message));
                 return ActionResult.Failure;
             }
         }
 
         [CustomAction]
         public static ActionResult ActivateNetTcpPortSharing(Session session) {
+            sessionObj = session;
             try {
                 System.ServiceModel.Activation.Configuration.NetTcpSection ntSection = new System.ServiceModel.Activation.Configuration.NetTcpSection();
                 ntSection.TeredoEnabled = true;
-                session.Log("ActivateNetTcpPortSharing: Success");
+                CustomActions.LogToSession("ActivateNetTcpPortSharing: Success");
                 return ActionResult.Success;
             } catch (Exception e) {
-                session.Log(string.Format("Failed to activate NetTcpPortSharing: {0}", e.Message));
+                CustomActions.LogToSession(string.Format("Failed to activate NetTcpPortSharing: {0}", e.Message));
                 return ActionResult.Failure;
             }
         }
 
         [CustomAction]
         public static ActionResult DownloadAndInstallMediaInfo(Session session) {
+            sessionObj = session;
             string type = Environment.GetEnvironmentVariable(@"PROCESSOR_ARCHITECTURE");
             string miUrl = type.ToUpperInvariant().Contains("86")
                 ? CustomActions.MediaInfoX86Url
                 : CustomActions.MediaInfoX64Url;
 
-            session.Log("MediaInfo: Selected {0} based on detected processor architecture of {1}",
-                miUrl, Environment.GetEnvironmentVariable(@"PROCESSOR_ARCHITECTURE"));
+            CustomActions.LogToSession(string.Format("MediaInfo: Selected {0} based on detected processor architecture of {1}",
+                miUrl, Environment.GetEnvironmentVariable(@"PROCESSOR_ARCHITECTURE")));
 
             DownloadEngine miEngine = new DownloadEngine(miUrl);
 
             miEngine.Bytes += (i) => {
                 if (i > 0) {
                     int pct = Convert.ToInt32((Convert.ToDouble(i) / Convert.ToDouble(miEngine.TotalBytes)) * 100);
-                    session.Log(string.Format("MediaInfo: ({0}) {1}b of {2}b", pct, i, miEngine.TotalBytes));
+                    CustomActions.LogToSession(string.Format("MediaInfo: ({0}) {1}b of {2}b", pct, i, miEngine.TotalBytes));
                 }
             };
 
-            session.Log("MediaInfo: Beginning download");
+            CustomActions.LogToSession("MediaInfo: Beginning download");
             bool miDownloaded = false;
             try {
                 miDownloaded = miEngine.Download(true);
             } catch (Exception ex) {
-                session.Log("MediaInfo: Error {0}", ex.Message);
+                CustomActions.LogToSession(string.Format("MediaInfo: Error {0}", ex.Message));
                 return ActionResult.Failure;
             }
 
             if (!miDownloaded) {
-                session.Log("MediaInfo: Failed to download");
+                CustomActions.LogToSession("MediaInfo: Failed to download");
                 return ActionResult.Failure;
             }
-            session.Log("MediaInfo: Downloaded File Location {0}", miEngine.DownloadedFile);
-            session.Log("MediaInfo: Final destination is {0}", CustomActions.MediaInfoLocalPath);
+            CustomActions.LogToSession(string.Format("MediaInfo: Downloaded File Location {0}", miEngine.DownloadedFile));
+            CustomActions.LogToSession(string.Format("MediaInfo: Final destination is {0}", CustomActions.MediaInfoLocalPath));
 
             try {
-                session.Log("MediaInfo: copying into final location");
+                CustomActions.LogToSession("MediaInfo: copying into final location");
                 File.Copy(miEngine.DownloadedFile, CustomActions.MediaInfoLocalPath, true);
             } catch (Exception ex) {
-                session.Log("MediaInfo Error: {0}", ex.Message);
+                CustomActions.LogToSession(string.Format("MediaInfo Error: {0}", ex.Message));
                 return ActionResult.Failure;
             }
 
@@ -141,21 +146,22 @@ namespace OMLCustomWiXAction {
 
         [CustomAction]
         public static ActionResult DownloadAndInstallMEncoder(Session session) {
+            sessionObj = session;
             DownloadEngine meEngine = new DownloadEngine(CustomActions.MEncoderUrl);
             meEngine.Log += (s) => {
                 int pct = Convert.ToInt32((Convert.ToDouble(Int32.Parse(s)) / Convert.ToDouble(meEngine.TotalBytes)) * 100);
-                session.Log(string.Format("MEncoder: {0}", pct));
+                CustomActions.LogToSession(string.Format("MEncoder: {0}", pct));
             };
             bool meDownloaded = meEngine.Download();
             if (!meDownloaded) {
-                session.Log("MEncoder Failed to download");
+                CustomActions.LogToSession("MEncoder Failed to download");
                 return ActionResult.Failure;
             }
-            session.Log("File is: {0}", meEngine.DownloadedFile);
+            CustomActions.LogToSession(string.Format("File is: {0}", meEngine.DownloadedFile));
             try {
                 File.Copy(meEngine.DownloadedFile, CustomActions.MEncoderPath, true);
             } catch (Exception ex) {
-                session.Log("MEncoder Error: {0}", ex.Message);
+                CustomActions.LogToSession(string.Format("MEncoder Error: {0}", ex.Message));
                 return ActionResult.Failure;
             }
 
@@ -164,22 +170,23 @@ namespace OMLCustomWiXAction {
 
         [CustomAction]
         public static ActionResult DownloadAndInstallUserManual(Session session) {
+            sessionObj = session;
             DownloadEngine umEngine = new DownloadEngine(CustomActions.UserManualUrl);
             umEngine.Log += (s) => {
                 int pct = Convert.ToInt32((Convert.ToDouble(Int32.Parse(s)) / Convert.ToDouble(umEngine.TotalBytes)) * 100);
-                session.Log(string.Format("PDF: {0}", pct));
+                CustomActions.LogToSession(string.Format("PDF: {0}", pct));
             };
             bool umDownloaded = umEngine.Download();
             if (!umDownloaded) {
-                session.Log("Open_Media_Library_User_Manual Failed to download");
+                CustomActions.LogToSession("Open_Media_Library_User_Manual Failed to download");
                 return ActionResult.Failure;
             }
-            session.Log("File is: {0}", umEngine.DownloadedFile);
+            CustomActions.LogToSession(string.Format("File is: {0}", umEngine.DownloadedFile));
             try {
                 if (Directory.Exists(CustomActions.UserManualHelpPath)) {
-                    session.Log(@"Creating folder: {0}", CustomActions.UserManualHelpPath);
+                    CustomActions.LogToSession(string.Format(@"Creating folder: {0}", CustomActions.UserManualHelpPath));
                     Directory.CreateDirectory(CustomActions.UserManualHelpPath);
-                    session.Log("setting access controls");
+                    CustomActions.LogToSession("setting access controls");
                 //    DirectoryInfo dInfo = new DirectoryInfo(CustomActions.UserManualHelpPath);
                 //    System.Security.AccessControl.DirectorySecurity dSec = dInfo.GetAccessControl();
                 //    dSec.AddAccessRule(new System.Security.AccessControl.FileSystemAccessRule(
@@ -187,10 +194,10 @@ namespace OMLCustomWiXAction {
                 //        ));
                 //    dInfo.SetAccessControl(dSec);
                 }
-                session.Log("Copying file");
+                CustomActions.LogToSession("Copying file");
                 File.Copy(umEngine.DownloadedFile, CustomActions.UserManualPath, true);
             } catch (Exception ex) {
-                session.Log("Open_Media_Library_User_Manual Error: {0}", ex.Message);
+                CustomActions.LogToSession(string.Format("Open_Media_Library_User_Manual Error: {0}", ex.Message));
                 return ActionResult.Failure;
             }
 
@@ -199,7 +206,11 @@ namespace OMLCustomWiXAction {
 
         [CustomAction]
         public static ActionResult ScanNetworkForSqlServers(Session session) {
-            if (session["HASSCANNEDFORSQL"].CompareTo("0") == 0) {
+            sessionObj = session;
+            if (xmlSettings == null)
+                xmlSettings = new XMLSettingsManager();
+
+            if ((session["HASSCANNEDFORSQL"].CompareTo("0") == 0) && (session["ISSERVERINSTALL"] != "0")) {
                 if (xmlSettings.SettingsFileExists()) {
                     return ActionResult.SkipRemainingActions;
                 } else {
@@ -211,7 +222,7 @@ namespace OMLCustomWiXAction {
                         numRows++;
                     }
                     if (numRows == 1) {
-                        session.Log("found {0} sql servers", dt.Rows.Count);
+                        CustomActions.LogToSession(string.Format("found {0} sql servers", dt.Rows.Count));
                         int itemNumber = 2;
                         foreach (DataRow row in dt.Rows) {
                             Record rec = new Record(3);
@@ -220,7 +231,7 @@ namespace OMLCustomWiXAction {
                             string description = string.Format("{0} - {1}", row["ServerName"], row["InstanceName"]);
                             rec.SetString(3, description);
 
-                            session.Log("Adding a new record, its number will be {0} and its value will be {1}", itemNumber, string.Format("{0} ({1})", row["ServerName"], row["InstanceName"]));
+                            CustomActions.LogToSession(string.Format("Adding a new record, its number will be {0} and its value will be {1}", itemNumber, string.Format("{0} ({1})", row["ServerName"], row["InstanceName"])));
                             sqlComboBox.Modify(ViewModifyMode.InsertTemporary, rec);
                             itemNumber++;
                         }
@@ -233,6 +244,7 @@ namespace OMLCustomWiXAction {
 
         [CustomAction]
         public static ActionResult CreateXmlSettingsFile(Session session) {
+            sessionObj = session;
             string sqlservername = string.IsNullOrEmpty(session["SQLSERVERNAME"]) ? string.Empty : session["SQLSERVERNAME"];
             string sqlinstancename = string.IsNullOrEmpty(session["SQLINSTANCENAME"]) ? string.Empty : session["SQLINSTANCENAME"];
             string databasename = string.IsNullOrEmpty(session["DATABASENAME"]) ? string.Empty : session["DATABASENAME"];
@@ -242,6 +254,9 @@ namespace OMLCustomWiXAction {
 
             if (string.IsNullOrEmpty(sqlservername) || string.IsNullOrEmpty(sqlinstancename) || string.IsNullOrEmpty(databasename) || string.IsNullOrEmpty(omluserpassword) || string.IsNullOrEmpty(omluserpassword))
                 return ActionResult.Failure;
+
+            if (xmlSettings == null)
+                xmlSettings = new XMLSettingsManager();
 
             xmlSettings.SQLServerName = sqlservername;
             xmlSettings.SQLInstanceName = sqlinstancename;
@@ -253,5 +268,18 @@ namespace OMLCustomWiXAction {
 
             return ActionResult.Success;
         }
+
+        private static Session sessionObj;
+        public static void LogToSession(string msg) {
+            if (sessionObj != null)
+                sessionObj.Log(msg);
+        }
     }
 }
+
+// TODO: Check for Server install
+// TODO: Activate the download sql and run it CA
+// TODO: Create CA for creating the database on a given machine
+// TODO: Create CA for validating the current database
+// TODO: Create CA to upgrade the current database
+// TODO: Add ability to report errors dynamically inside wix

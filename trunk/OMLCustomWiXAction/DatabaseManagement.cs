@@ -47,7 +47,7 @@ namespace OMLCustomWiXAction
         /// <returns></returns>
         private DatabaseInformation.SQLState CheckOMLDatabase()
         {
-            //Utilities.DebugLine("[DatabaseManagement] : Entering CheckOMLDatabase()");
+            CustomActions.LogToSession("[DatabaseManagement] : Entering CheckOMLDatabase()");
 
             // Test 1. Create database connection to OML and open it
             // -----------------------------------------------------
@@ -55,7 +55,7 @@ namespace OMLCustomWiXAction
 
             if (sqlConn == null)
             {
-                //Utilities.DebugLine("[DatabaseManagement / CheckOMLDatabase()] : Failed to login using - " + DatabaseInformation.OMLDatabaseConnectionString);
+                CustomActions.LogToSession("[DatabaseManagement / CheckOMLDatabase()] : Failed to login using - " + DatabaseInformation.OMLDatabaseConnectionString);
                 return DatabaseInformation.SQLState.LoginFailure;
             }
 
@@ -64,7 +64,7 @@ namespace OMLCustomWiXAction
             string sql = "ALTER DATABASE [" + DatabaseInformation.xmlSettings.DatabaseName + "] SET MULTI_USER";
             if (!ExecuteNonQuery(sqlConn, sql))
             {
-                //Utilities.DebugLine("[DatabaseManagement / CheckOMLDatabase()] : Attempting to set the database to Multi user failed");
+                CustomActions.LogToSession("[DatabaseManagement / CheckOMLDatabase()] : Attempting to set the database to Multi user failed");
                 sqlConn.Close();
                 sqlConn.Dispose();
                 return DatabaseInformation.SQLState.UnknownState;
@@ -98,15 +98,15 @@ namespace OMLCustomWiXAction
             {
                 // Cannot find schema version
                 sqlstate = DatabaseInformation.SQLState.OMLDBVersionNotFound;
-                //Utilities.DebugLine("[DatabaseManagement / CheckOMLDatabase()] : Unable to finr the schema version.");
+                CustomActions.LogToSession("[DatabaseManagement / CheckOMLDatabase()] : Unable to finr the schema version.");
 
             }
 
 
             sqlConn.Close();
             sqlConn.Dispose();
-            
-            //Utilities.DebugLine("[DatabaseManagement] : Leaving CheckOMLDatabase()");
+
+            CustomActions.LogToSession("[DatabaseManagement] : Leaving CheckOMLDatabase()");
 
             return sqlstate;
         }
@@ -118,26 +118,26 @@ namespace OMLCustomWiXAction
         /// <returns></returns>
         private DatabaseInformation.SQLState DatabaseDiagnostics()
         {
-            //Utilities.DebugLine("[DatabaseManagement] : Entering DatabaseDiagnostics()");
+            CustomActions.LogToSession("[DatabaseManagement] : Entering DatabaseDiagnostics()");
 
             object data;
 
             // Test 1. Open database connection to Master and open it
             // ------------------------------------------------------
-            //Utilities.DebugLine("[DatabaseManagement / DatabaseDiagnostics()] : Checking the master database");
+            CustomActions.LogToSession("[DatabaseManagement / DatabaseDiagnostics()] : Checking the master database");
             SqlConnection sqlConn = OpenDatabase(DatabaseInformation.MasterDatabaseConnectionString);
             if (sqlConn == null)
             {
-                //Utilities.DebugLine("[DatabaseManagement / DatabaseDiagnostics()] : Failed to login using - " + DatabaseInformation.MasterDatabaseConnectionString);
+                CustomActions.LogToSession("[DatabaseManagement / DatabaseDiagnostics()] : Failed to login using - " + DatabaseInformation.MasterDatabaseConnectionString);
                 return DatabaseInformation.SQLState.LoginFailure;
             }
 
             // Test 2. Check if the database exists on the server
-            //Utilities.DebugLine("[DatabaseManagement / DatabaseDiagnostics()] : Checking the oml sysdatabase entry");
+            CustomActions.LogToSession("[DatabaseManagement / DatabaseDiagnostics()] : Checking the oml sysdatabase entry");
             string sql = "select count(*) from sysdatabases where name = '" + DatabaseInformation.xmlSettings.DatabaseName + "'";
             if (!ExecuteScalar(sqlConn, sql, out data))
             {
-                //Utilities.DebugLine("[DatabaseManagement / DatabaseDiagnostics()] : sysdatabases check failed");
+                CustomActions.LogToSession("[DatabaseManagement / DatabaseDiagnostics()] : sysdatabases check failed");
                 sqlConn.Close();
                 sqlConn.Dispose();
                 return DatabaseInformation.SQLState.UnknownState;
@@ -145,7 +145,7 @@ namespace OMLCustomWiXAction
 
             if (Convert.ToInt32(data) != 1)
             {
-                //Utilities.DebugLine("[DatabaseManagement / DatabaseDiagnostics()] : Could not find the database - " + DatabaseInformation.DatabaseName);
+                CustomActions.LogToSession("[DatabaseManagement / DatabaseDiagnostics()] : Could not find the database - " + DatabaseInformation.xmlSettings.DatabaseName);
                 sqlConn.Close();
                 sqlConn.Dispose();
                 return DatabaseInformation.SQLState.OMLDBNotFound;
@@ -154,11 +154,11 @@ namespace OMLCustomWiXAction
 
             // Test 3. Check user account exists
             // ---------------------------------
-            //Utilities.DebugLine("[DatabaseManagement / DatabaseDiagnostics()] : Checking the syslogins entry");
+            CustomActions.LogToSession("[DatabaseManagement / DatabaseDiagnostics()] : Checking the syslogins entry");
             sql = "select count(*) from syslogins where name = '" + DatabaseInformation.xmlSettings.OMLUserAcct.ToLower() + "'";
             if (!ExecuteScalar(sqlConn, sql, out data))
             {
-                //Utilities.DebugLine("[DatabaseManagement / DatabaseDiagnostics()] : syslogins check failed");
+                CustomActions.LogToSession("[DatabaseManagement / DatabaseDiagnostics()] : syslogins check failed");
                 sqlConn.Close();
                 sqlConn.Dispose();
                 return DatabaseInformation.SQLState.UnknownState;
@@ -166,7 +166,7 @@ namespace OMLCustomWiXAction
 
             if (Convert.ToInt32(data) != 1)
             {
-                //Utilities.DebugLine("[DatabaseManagement / DatabaseDiagnostics()] : Could not find the oml login in master database");
+                CustomActions.LogToSession("[DatabaseManagement / DatabaseDiagnostics()] : Could not find the oml login in master database");
                 // Try to create user
                 CreateOMLUser(sqlConn);
                 return DatabaseInformation.SQLState.OMLUserNotFound;
@@ -175,11 +175,11 @@ namespace OMLCustomWiXAction
             // Test 4. Check user account exists in oml database
             // -------------------------------------------------
             sqlConn.ChangeDatabase(DatabaseInformation.xmlSettings.DatabaseName);
-            //Utilities.DebugLine("[DatabaseManagement / DatabaseDiagnostics()] : Checking the oml.sysusers entry");
+            CustomActions.LogToSession("[DatabaseManagement / DatabaseDiagnostics()] : Checking the oml.sysusers entry");
             sql = "select count(*) from sysusers where name = '" + DatabaseInformation.xmlSettings.OMLUserAcct.ToLower() + "'";
             if (!ExecuteScalar(sqlConn, sql, out data))
             {
-                //Utilities.DebugLine("[DatabaseManagement / DatabaseDiagnostics()] : oml.sysusers check failed");
+                CustomActions.LogToSession("[DatabaseManagement / DatabaseDiagnostics()] : oml.sysusers check failed");
 
                 sqlConn.Close();
                 sqlConn.Dispose();
@@ -188,7 +188,7 @@ namespace OMLCustomWiXAction
 
             if (Convert.ToInt32(data) != 1)
             {
-                //Utilities.DebugLine("[DatabaseManagement / DatabaseDiagnostics()] : Could not find the oml user in the user database");
+                CustomActions.LogToSession("[DatabaseManagement / DatabaseDiagnostics()] : Could not find the oml user in the user database");
                 // Try to create user 
                 CreateOMLUser(sqlConn);
                 return DatabaseInformation.SQLState.OMLUserNotFound;
@@ -197,7 +197,7 @@ namespace OMLCustomWiXAction
             // Test 5. Check for matching sid on the master.syslogins amd oml.sysusers entries
             // --------------------------------------------------------------------------------
             sqlConn.ChangeDatabase(DatabaseInformation.xmlSettings.DatabaseName);
-            //Utilities.DebugLine("[DatabaseManagement / DatabaseDiagnostics()] : Checking the sid fields on master.sys oml.sysusers");
+            CustomActions.LogToSession("[DatabaseManagement / DatabaseDiagnostics()] : Checking the sid fields on master.sys oml.sysusers");
             sql = "select count(*) from master.sys.syslogins sl " + 
                 "inner join oml.sys.sysusers su " +
                 "on sl.sid = su.sid " +
@@ -205,7 +205,7 @@ namespace OMLCustomWiXAction
                 "and  su.name = '" + DatabaseInformation.xmlSettings.OMLUserAcct.ToLower() + "'";
             if (!ExecuteScalar(sqlConn, sql, out data))
             {
-                //Utilities.DebugLine("[DatabaseManagement / DatabaseDiagnostics()] : sid fields on master.sys oml.sysusers check failed");
+                CustomActions.LogToSession("[DatabaseManagement / DatabaseDiagnostics()] : sid fields on master.sys oml.sysusers check failed");
 
                 sqlConn.Close();
                 sqlConn.Dispose();
@@ -214,7 +214,7 @@ namespace OMLCustomWiXAction
 
             if (Convert.ToInt32(data) < 1)
             {
-                //Utilities.DebugLine("[DatabaseManagement / DatabaseDiagnostics()] : Mismatch on the SID entries. Attempting to recreate accounts");
+                CustomActions.LogToSession("[DatabaseManagement / DatabaseDiagnostics()] : Mismatch on the SID entries. Attempting to recreate accounts");
                 // Try to create user 
                 CreateOMLUser(sqlConn);
                 return DatabaseInformation.SQLState.OMLUserNotFound;
@@ -224,7 +224,7 @@ namespace OMLCustomWiXAction
             sqlConn.Close();
             sqlConn.Dispose();
 
-            //Utilities.DebugLine("[DatabaseManagement] : Leaving DatabaseDiagnostics()");
+            CustomActions.LogToSession("[DatabaseManagement] : Leaving DatabaseDiagnostics()");
 
             return DatabaseInformation.SQLState.OK;
         }
@@ -236,7 +236,7 @@ namespace OMLCustomWiXAction
         /// </summary>
         private void CreateOMLUser(SqlConnection sqlConn)
         {
-            //Utilities.DebugLine("[DatabaseManagement] : Entering CreateOMLUser()");
+            CustomActions.LogToSession("[DatabaseManagement] : Entering CreateOMLUser()");
 
             ExecuteNonQuery(sqlConn, "CREATE LOGIN [" + DatabaseInformation.xmlSettings.OMLUserAcct + "] " +
                     "WITH PASSWORD=N'" + DatabaseInformation.xmlSettings.OMLUserPassword + "', " +
@@ -249,7 +249,7 @@ namespace OMLCustomWiXAction
             ExecuteNonQuery(sqlConn, "EXEC sp_addrolemember [db_owner], [" + DatabaseInformation.xmlSettings.OMLUserAcct + "]");
             sqlConn.ChangeDatabase("master");
 
-            //Utilities.DebugLine("[DatabaseManagement] : Leaving CreateOMLUser()");
+            CustomActions.LogToSession("[DatabaseManagement] : Leaving CreateOMLUser()");
 
         }
 
@@ -496,9 +496,9 @@ namespace OMLCustomWiXAction
             }
             catch (Exception ex)
             {
-                //Utilities.DebugLine("[DatabaseManagement / ExecuteScalar()] : Executing SQL -" + query);
-                //Utilities.DebugLine("                     Returned error - " + ex.Message);
-                //Utilities.DebugLine("                  Connection string - " + sqlConn.ConnectionString);
+                CustomActions.LogToSession("[DatabaseManagement / ExecuteScalar()] : Executing SQL -" + query);
+                CustomActions.LogToSession("                      Returned error - " + ex.Message);
+                CustomActions.LogToSession("                      Connection string - " + sqlConn.ConnectionString);
 
                 DatabaseInformation.LastSQLError = ex.Message;
                 return false;

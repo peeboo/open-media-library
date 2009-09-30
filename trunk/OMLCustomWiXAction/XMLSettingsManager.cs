@@ -35,11 +35,12 @@ namespace OMLCustomWiXAction
                 OMLUserPassword = ExtractField(dr, "OMLUserPassword");
                 ConfigFileExists = true;
 
-                //Utilities.DebugLine("[SettingsManager] : Loaded settings xml");
+                CustomActions.LogToSession("[SettingsManager] : Loaded settings xml");
             }
             catch (Exception ex)
             {
-                //Utilities.DebugLine("[SettingsManager] : Failed to load settings xml {0}", ex.Message);
+                CustomActions.LogToSession(string.Format("[SettingsManager] : Failed to load settings xml {0}", ex.Message));
+
                 SQLServerName = null;
                 SQLInstanceName = null;
                 DatabaseName = null;

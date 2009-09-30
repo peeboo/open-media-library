@@ -96,8 +96,9 @@ First-time install dialog sequence:      Maintenance dialog sequence:
         <Control Id="Next" Type="PushButton" X="248" Y="243" Width="56" Height="17" Default="yes" Text="!(loc.WixUINext)">
           <Subscribe Event="SelectionNoItems" Attribute="Enabled" />
           <Publish Event="SpawnDialog" Value="VerifyReadyDlg">&amp;SERVERFEATURE=3</Publish>
-          <Publish Event="DoAction" Value="ScanNetworkForSqlServersAction" Order="1">NOT (&amp;SERVERFEATURE=3)</Publish>
+          <Publish Event="DoAction" Value="ScanNetworkForSqlServersAction">NOT (&amp;SERVERFEATURE=3)</Publish>
           <Publish Event="SpawnDialog" Value="SelectServerDlg">NOT (&amp;SERVERFEATURE=3)</Publish>
+          <Publish Property="ISSERVERINSTALL" Value="&amp;SERVERFEATURE">(&amp;SERVERFEATURE=2)</Publish>
         </Control>
         <Control Id="Cancel" Type="PushButton" X="304" Y="243" Width="56" Height="17" Cancel="yes" Text="!(loc.WixUICancel)">
           <Publish Event="SpawnDialog" Value="CancelDlg">1</Publish>
