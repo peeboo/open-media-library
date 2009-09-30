@@ -8,6 +8,7 @@ using System.Security.Principal;
 using Microsoft.Deployment.WindowsInstaller;
 using FileDownloader;
 using System.Security.AccessControl;
+using System.Diagnostics;
 
 namespace OMLCustomWiXAction {
     public class CustomActions {
@@ -23,6 +24,9 @@ namespace OMLCustomWiXAction {
         private static string UserManualUrl = @"http://open-media-library.googlecode.com/files/Open_Media_Library_User_Manual.pdf";
         private static string UserManualHelpPath = Path.GetFullPath(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)) + @"\openmedialibrary\Help";
         private static string UserManualPath = Path.GetFullPath(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)) + @"\openmedialibrary\Help\Open_Media_Library_User_Manual.pdf";
+
+        private static string SqlServerX86Url = @"";
+        private static string SqlServer64Url = @"";
 
         [CustomAction]
         public static ActionResult StartOMLEngineService(Session session) {
@@ -165,6 +169,61 @@ namespace OMLCustomWiXAction {
                 return ActionResult.Failure;
             }
 
+            return ActionResult.Success;
+        }
+
+        [CustomAction]
+        public static ActionResult DownloadSQLServer(Session session) {
+            sessionObj = session;
+            string type = Environment.GetEnvironmentVariable(@"PROCESSOR_ARCHITECTURE");
+            string sqlUrl = type.ToUpperInvariant().Contains("86")
+                ? CustomActions.SqlServerX86Url
+                : CustomActions.SqlServer64Url;
+
+            DownloadEngine sqlEngine = new DownloadEngine(sqlUrl);
+            sqlEngine.Log += (s) => {
+                int pct = Convert.ToInt32((Convert.ToDouble(Int32.Parse(s)) / Convert.ToDouble(sqlEngine.TotalBytes)) * 100);
+                CustomActions.LogToSession(string.Format("SqlServer: {0}", pct));
+            };
+            bool sqlDownloaded = sqlEngine.Download();
+            if (!sqlDownloaded) {
+                CustomActions.LogToSession("SqlServer Failed to download");
+                return ActionResult.Failure;
+            }
+            CustomActions.LogToSession(string.Format("File is: {0}", sqlEngine.DownloadedFile));
+            session["SQLSERVERFILE"] = sqlEngine.DownloadedFile;
+
+            return ActionResult.Success;
+        }
+
+        [CustomAction]
+        public static ActionResult InstallingSQLServer(Session session) {
+            string sqlfile = session["SQLSERVERFILE"];
+            if (!string.IsNullOrEmpty(sqlfile)) {
+                Process process = new Process();
+                process.StartInfo.FileName = sqlfile;
+                process.StartInfo.Arguments = @"";
+                process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                process.StartInfo.ErrorDialog = false;
+                process.StartInfo.UseShellExecute = false;
+                process.StartInfo.RedirectStandardError = true;
+                process.StartInfo.RedirectStandardOutput = true;
+                process.ErrorDataReceived += (object sender, DataReceivedEventArgs e) => {
+                    CustomActions.LogToSession(string.Format("[SqlServerInstall-Error] {0}", e.Data));
+                };
+
+                process.OutputDataReceived += (object sender, DataReceivedEventArgs e) => {
+                    CustomActions.LogToSession(string.Format("[SqlServerInstall-Output] {0}", e.Data));
+                };
+
+                process.EnableRaisingEvents = true;
+                process.Exited += (object sender, EventArgs e) => {
+                    CustomActions.LogToSession(string.Format("[SqlServerInstall Exited with code {0}]", process.ExitCode));
+                };
+                process.Start();
+                while (!process.HasExited)
+                    System.Threading.Thread.Sleep(new TimeSpan(0, 0, 2));
+            }
             return ActionResult.Success;
         }
 

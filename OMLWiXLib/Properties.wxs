@@ -63,5 +63,6 @@
     <Property Id="OMLUSERACCT" Secure="yes" />
     <Property Id="OMLUSERPASSWORD" Secure="yes" />
     <Property Id="ISSERVERINSTALL" Secure="yes" Value="0" />
+    <Property Id="SQLSERVERFILE" Secure="yes" />
   </Fragment>
 </Wix>

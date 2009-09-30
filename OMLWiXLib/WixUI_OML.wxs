@@ -73,6 +73,8 @@ First-time install dialog sequence:      Maintenance dialog sequence:
       <ProgressText Action="ActivateNetTcpPortSharingAction">Activating NetTcpPortSharing for Transcoding Services</ProgressText>
       <ProgressText Action="StartOMLEngineServiceAction">Starting the OMLEngine Service</ProgressText>
       <ProgressText Action="ScanNetworkForSqlServersAction">Scanning your network for instances of Microsoft Sql Server</ProgressText>
+      <ProgressText Action="DownloadSQLServerAction">Downloading Microsoft Sql Server</ProgressText>
+      <ProgressText Action="InstallingSQLServerAction">Installing Microsoft Sql Server</ProgressText>
     </UI>
   </Fragment>
   <Fragment>
