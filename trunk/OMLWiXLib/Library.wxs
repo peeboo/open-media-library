@@ -56,6 +56,13 @@
                   Execute="immediate"
                   Return="check" />
 
+    <CustomAction Id="DownloadSQLServerAction"
+                  BinaryKey="OMLCALib"
+                  DllEntry="DownloadSQLServer"
+                  Execute="deferred"
+                  Impersonate="no"
+                  Return="check" />
+
     <!-- The binary to include that contains managed custom actions -->
     <Binary Id="OMLCALib"
             SourceFile="..\OMLCustomWiXAction\bin\$(var.Configuration)\OMLWiXActionsCAsPackage.dll" />
@@ -104,16 +111,16 @@
       <Custom Action="CA_RegisterMceApp_Register" After="CA_RegisterMceApp_Unregister_Install">
         <![CDATA[NOT REMOVE AND (&CLIENTFEATUREUI=3)]]>
       </Custom>
-      <Custom Action="ScanNetworkForSqlServersAction" Before="ActivateNetTcpPortSharingAction">
+      <Custom Action="ActivateNetTcpPortSharingAction" Before="DownloadSQLServerAction">
         <![CDATA[NOT REMOVE]]>
       </Custom>
-      <Custom Action="ActivateNetTcpPortSharingAction" Before="ReserveTrailersUrlAction">
+      <Custom Action="DownloadSQLServerAction" Before="ReserveTrailersUrlAction">
         <![CDATA[NOT REMOVE]]>
       </Custom>
-      <Custom Action='ReserveTrailersUrlAction' Before='InstallFinalize'>
+      <Custom Action="ReserveTrailersUrlAction" Before="InstallFinalize">
         <![CDATA[NOT REMOVE]]>
       </Custom>
-      <Custom Action='StartOMLEngineServiceAction' After='InstallFinalize'>
+      <Custom Action="StartOMLEngineServiceAction" After="InstallFinalize">
         <![CDATA[NOT REMOVE]]>
       </Custom>
     </InstallExecuteSequence>
