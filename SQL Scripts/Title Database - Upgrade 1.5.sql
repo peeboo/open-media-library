@@ -89,6 +89,10 @@ GO
 sp_RENAME 'DBImagesTemp', 'DBImages'
 GO
 
+--generate the guid on insert
+ALTER TABLE [dbo].[DBImages] ADD  CONSTRAINT [DF_DBImages_ItemGUID]  DEFAULT (newid()) FOR [ItemGUID]
+GO
+
 --update our schema
 SET ANSI_NULLS ON
 GO

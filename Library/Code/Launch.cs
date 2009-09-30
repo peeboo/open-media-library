@@ -100,7 +100,7 @@ namespace Library
 
         public void Launch(AddInHost host)
         {
-            //set our location to the programdata dir
+            //set our location to the programdata dir - if we don't theme support breaks!
             Environment.CurrentDirectory = OMLEngine.FileSystemWalker.PublicRootDirectory;
             //need to start checking ehres themes on startup!
             ThemeManager.CreateThemeFiles();
