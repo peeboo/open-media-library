@@ -84,7 +84,7 @@ namespace Library.Code.V3
         /// </summary>
         public void Save()
         {
-            if ((string)this.trailerResolutions.Chosen == "Hi")
+            if ((string)this.trailerResolutions.Chosen == "HD")
                 OMLSettings.TrailersDefinition = "Hi";
             else
                 OMLSettings.TrailersDefinition = "Std";
