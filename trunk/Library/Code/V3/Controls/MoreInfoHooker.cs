@@ -150,14 +150,16 @@ namespace Library.Code.V3
                     //OMLApplication.Current.CatchMoreInfo();
                     OMLApplication.Current.CatchMoreInfo();
                     SendMoreInfo();
+                    return new IntPtr(1);
                     //if (this.ButtonPressed != null && rcb != RemoteControlButton.Unknown)
                     //    this.ButtonPressed(this, new RemoteControlEventArgs(rcb, InputDevice.Key));
                 }
-                else if (vkCode == WM_CONTEXTMENU || vkCode==93)
+                else if (vkCode == WM_CONTEXTMENU || vkCode == 93 || vkCode == VK_APPS)
                 {
                     RemoteControlButton rcb = RemoteControlButton.Details;
                     OMLApplication.Current.CatchMoreInfo();
                     SendMoreInfo();
+                    return new IntPtr(1);
                 }
                 //{
                 //    RemoteControlButton rcb = RemoteControlButton.Details;
@@ -177,22 +179,100 @@ namespace Library.Code.V3
                 //    //    this.ButtonPressed(this, new RemoteControlEventArgs(rcb, InputDevice.Key));
                 //}
             }
+            else if (nCode >= 0 && wParam == (IntPtr)WM_KEYUP)
+            {
+                int vkCode = Marshal.ReadInt32(lParam);
+                Console.WriteLine(vkCode);
+                if (Keys.D == (Keys)vkCode && Keys.Control == Control.ModifierKeys)
+                {
+                    return new IntPtr(1);
+                }
+                else if (vkCode == WM_CONTEXTMENU || vkCode == 93 || vkCode == VK_APPS)
+                {
+                    return new IntPtr(1);
+                }
+            }
+            else if (nCode >= 0 && wParam == (IntPtr)WM_KEYPRESS)
+            {
+                int vkCode = Marshal.ReadInt32(lParam);
+                Console.WriteLine(vkCode);
+                if (Keys.D == (Keys)vkCode && Keys.Control == Control.ModifierKeys)
+                {
+                    return new IntPtr(1);
+                }
+                else if (vkCode == WM_CONTEXTMENU || vkCode == 93 || vkCode == VK_APPS)
+                {
+                    return new IntPtr(1);
+                }
+            }
+            else if (nCode >= 0 && wParam == (IntPtr)WM_SYSKEYDOWN)
+            {
+                int vkCode = Marshal.ReadInt32(lParam);
+                Console.WriteLine(vkCode);
+                if (Keys.D == (Keys)vkCode && Keys.Control == Control.ModifierKeys)
+                {
+                    return new IntPtr(1);
+                }
+                else if (vkCode == WM_CONTEXTMENU || vkCode == 93 || vkCode == VK_APPS)
+                {
+                    return new IntPtr(1);
+                }
+            }
+            else if (nCode >= 0 && wParam == (IntPtr)WM_SYSKEYUP)
+            {
+                int vkCode = Marshal.ReadInt32(lParam);
+                Console.WriteLine(vkCode);
+                if (Keys.D == (Keys)vkCode && Keys.Control == Control.ModifierKeys)
+                {
+                    return new IntPtr(1);
+                }
+                else if (vkCode == WM_CONTEXTMENU || vkCode == 93 || vkCode == VK_APPS)
+                {
+                    return new IntPtr(1);
+                }
+            }
+            else if (nCode >= 0 && wParam == (IntPtr)WM_SYSKEYPRESS)
+            {
+                int vkCode = Marshal.ReadInt32(lParam);
+                Console.WriteLine(vkCode);
+                if (Keys.D == (Keys)vkCode && Keys.Control == Control.ModifierKeys)
+                {
+                    return new IntPtr(1);
+                }
+                else if (vkCode == WM_CONTEXTMENU || vkCode == 93 || vkCode==VK_APPS)
+                {
+                    return new IntPtr(1);
+                }
+            }
             return CallNextHookEx(kbHookID, nCode, wParam, lParam);
+            //return new IntPtr(1);
         }
 
         private static IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
         {
-            if (nCode >= 0 &&
-            MouseMessages.WM_RBUTTONUP == (MouseMessages)wParam)
-            {
-                MSLLHOOKSTRUCT hookStruct = (MSLLHOOKSTRUCT)Marshal.PtrToStructure(lParam, typeof(MSLLHOOKSTRUCT));
-                //Console.WriteLine(hookStruct.pt.x + ", " + hookStruct.pt.y);
-                RemoteControlButton rcb = RemoteControlButton.Details;
-                OMLApplication.Current.CatchMoreInfo();
-                SendMoreInfo();
-                //if (this.ButtonPressed != null && rcb != RemoteControlButton.Unknown)
-                //    this.ButtonPressed(this, new RemoteControlEventArgs(rcb, InputDevice.Mouse));
-            }
+            //IntPtr activeWindowHandle = GetForegroundWindow();
+            //Process curProcess = Process.GetCurrentProcess();
+            //if (activeWindowHandle == curProcess.MainWindowHandle)
+            //{
+
+                if (nCode >= 0 &&
+                MouseMessages.WM_RBUTTONDOWN == (MouseMessages)wParam)
+                {
+                    return new IntPtr(1);
+                }
+                if (nCode >= 0 &&
+                MouseMessages.WM_RBUTTONUP == (MouseMessages)wParam)
+                {
+                    MSLLHOOKSTRUCT hookStruct = (MSLLHOOKSTRUCT)Marshal.PtrToStructure(lParam, typeof(MSLLHOOKSTRUCT));
+                    //Console.WriteLine(hookStruct.pt.x + ", " + hookStruct.pt.y);
+                    RemoteControlButton rcb = RemoteControlButton.Details;
+                    OMLApplication.Current.CatchMoreInfo();
+                    SendMoreInfo();
+                    //if (this.ButtonPressed != null && rcb != RemoteControlButton.Unknown)
+                    //    this.ButtonPressed(this, new RemoteControlEventArgs(rcb, InputDevice.Mouse));
+                    return new IntPtr(1);
+                }
+            //}
             return CallNextHookEx(_hookID, nCode, wParam, lParam);
 
         }
@@ -226,6 +306,8 @@ namespace Library.Code.V3
             public uint time;
             public IntPtr dwExtraInfo;
         }
+        [DllImport("user32.dll")]
+        static extern IntPtr GetForegroundWindow();
 
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         private static extern IntPtr SetWindowsHookEx(int idHook,
@@ -353,8 +435,14 @@ namespace Library.Code.V3
         [DllImport("User32.dll")]
         extern static uint GetRawInputData(IntPtr hRawInput, uint uiCommand, IntPtr pData, ref uint pcbSize, uint cbSizeHeader);
 
-
+        public const int VK_APPS = 0x5d;
+ 
         private const int WM_KEYDOWN = 0x0100;
+        private const int WM_KEYUP = 0x101;
+        private const int WM_KEYPRESS = 0x102; 
+        private const int WM_SYSKEYDOWN = 0x0104;
+        private const int WM_SYSKEYUP = 0x0105;
+        private const int WM_SYSKEYPRESS = 0x0106;
         private const int WM_APPCOMMAND = 0x0319;
         private const int WM_INPUT = 0x00FF;
         private const int WM_RBUTTONUP = 0x0205;
