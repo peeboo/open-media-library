@@ -87,13 +87,13 @@ namespace Library {
         ///  &lt;Developers&gt;
         ///    &lt;Person&gt;KingManon - Project Manager&lt;/Person&gt;
         ///    &lt;Person&gt;Translucent - Senior Developer&lt;/Person&gt;
-        ///    &lt;Person&gt;Thom &apos;Bermuda&apos; Lamb - Developer&lt;/Person&gt;
-        ///    &lt;Person&gt;TheSeeker - Developer&lt;/Person&gt;
-        ///    &lt;Person&gt;Solomon - Developer&lt;/Person&gt;
         ///    &lt;Person&gt;mikem2te - Developer&lt;/Person&gt;
         ///    &lt;Person&gt;MSBob - UI Developer&lt;/Person&gt;
         ///  &lt;/Developers&gt;
         ///  &lt;Contributors&gt;
+        ///    &lt;Person&gt;Thom &apos;Bermuda&apos; Lamb - Developer&lt;/Person&gt;
+        ///    &lt;Person&gt;TheSeeker - Developer&lt;/Person&gt;
+        ///    &lt;Person&gt;Solomon - Developer&lt;/Person&gt;
         ///    &lt;Person&gt;Warren&lt;/Person&gt;
         ///    &lt;Person&gt;docmattman&lt;/Person&gt;
         ///    &lt;Person&gt;Taranu&lt; [rest of string was truncated]&quot;;.
@@ -2029,6 +2029,104 @@ namespace Library {
         internal static byte[] V3_MediaChangerManagerSettings {
             get {
                 object obj = ResourceManager.GetObject("V3_MediaChangerManagerSettings", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Movie_Icon_Default {
+            get {
+                object obj = ResourceManager.GetObject("V3_Movie_Icon_Default", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Movie_NoCover_1_Large {
+            get {
+                object obj = ResourceManager.GetObject("V3_Movie_NoCover_1_Large", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Movie_NoCover_1_Small {
+            get {
+                object obj = ResourceManager.GetObject("V3_Movie_NoCover_1_Small", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Movie_NoCover_2_Large {
+            get {
+                object obj = ResourceManager.GetObject("V3_Movie_NoCover_2_Large", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Movie_NoCover_2_Small {
+            get {
+                object obj = ResourceManager.GetObject("V3_Movie_NoCover_2_Small", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Movie_NoCover_3_Large {
+            get {
+                object obj = ResourceManager.GetObject("V3_Movie_NoCover_3_Large", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Movie_NoCover_3_Small {
+            get {
+                object obj = ResourceManager.GetObject("V3_Movie_NoCover_3_Small", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Movie_NoCover_4_Large {
+            get {
+                object obj = ResourceManager.GetObject("V3_Movie_NoCover_4_Large", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Movie_NoCover_4_Small {
+            get {
+                object obj = ResourceManager.GetObject("V3_Movie_NoCover_4_Small", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Movie_NoCover_5_Large {
+            get {
+                object obj = ResourceManager.GetObject("V3_Movie_NoCover_5_Large", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Movie_NoCover_5_Small {
+            get {
+                object obj = ResourceManager.GetObject("V3_Movie_NoCover_5_Small", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Movie_NoCover_6_Large {
+            get {
+                object obj = ResourceManager.GetObject("V3_Movie_NoCover_6_Large", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap V3_Movie_NoCover_6_Small {
+            get {
+                object obj = ResourceManager.GetObject("V3_Movie_NoCover_6_Small", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static byte[] V3_MovieItem {
+            get {
+                object obj = ResourceManager.GetObject("V3_MovieItem", resourceCulture);
                 return ((byte[])(obj));
             }
         }

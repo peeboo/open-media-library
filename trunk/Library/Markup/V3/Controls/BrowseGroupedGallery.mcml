@@ -9,6 +9,7 @@
 
   <Aggregate Source="resx://Library/Library.Resources/V3_Controls_BrowseGalleryItem"/>
   <Aggregate Source="resx://Library/Library.Resources/V3_Controls_BrowseListViewItem"/>
+  <Aggregate Source="resx://Library/Library.Resources/V3_MovieItem"/>
 
   <UI Name="ListViewGroup" BaseUI="me:GalleryGroup">
     <Properties>
@@ -335,9 +336,9 @@
       <!--me:oneRowGalleryItemPoster Page="[Page]" Model="[RepeatedItem!ICommand]" SelectionPolicy="[Pivot.ContentSelectionPolicy]" Source="[Pivot.ContentItemTemplate]"
                       Index="[RepeatedItemIndex]" ItemProperties="[ItemProperties]" GroupProperties="[GroupProperties]" ShowLabel="false">
       </me:oneRowGalleryItemPoster-->
-      <me:oneRowGalleryItemPoster OverlayContentTemplate="[RepeatedItem!shell:GalleryItem.OverlayContentTemplate]" Application="[Application]" Page="[Page]" Model="[RepeatedItem!ICommand]" SelectionPolicy="[Pivot.ContentSelectionPolicy]"
+      <me:MovieOneRowGalleryItemPoster OverlayContentTemplate="[RepeatedItem!shell:GalleryItem.OverlayContentTemplate]" Application="[Application]" Page="[Page]" Model="[RepeatedItem!ICommand]" SelectionPolicy="[Pivot.ContentSelectionPolicy]"
                       Index="[RepeatedItemIndex]" ItemProperties="[ItemProperties]" GroupProperties="[GroupProperties]" ShowLabel="false">
-      </me:oneRowGalleryItemPoster>
+      </me:MovieOneRowGalleryItemPoster>
       <!--Text Content="[RepeatedItem!ICommand.Description]"/-->
 
     </Content>
@@ -350,9 +351,9 @@
       <!--me:oneRowGalleryItemPoster Page="[Page]" Model="[RepeatedItem!ICommand]" SelectionPolicy="[Pivot.ContentSelectionPolicy]" Source="[Pivot.ContentItemTemplate]"
                       Index="[RepeatedItemIndex]" ItemProperties="[ItemProperties]" GroupProperties="[GroupProperties]" ShowLabel="false">
       </me:oneRowGalleryItemPoster-->
-      <me:twoRowGalleryItemPoster OverlayContentTemplate="[RepeatedItem!shell:GalleryItem.OverlayContentTemplate]" Application="[Application]" Page="[Page]" Model="[RepeatedItem!ICommand]" SelectionPolicy="[Pivot.ContentSelectionPolicy]"
+      <me:MovieTwoRowGalleryItemPoster OverlayContentTemplate="[RepeatedItem!shell:GalleryItem.OverlayContentTemplate]" Application="[Application]" Page="[Page]" Model="[RepeatedItem!ICommand]" SelectionPolicy="[Pivot.ContentSelectionPolicy]"
                       Index="[RepeatedItemIndex]" ItemProperties="[ItemProperties]" GroupProperties="[GroupProperties]" ShowLabel="false">
-      </me:twoRowGalleryItemPoster>
+      </me:MovieTwoRowGalleryItemPoster>
       <!--Text Content="[RepeatedItem!ICommand.Description]"/-->
 
     </Content>
