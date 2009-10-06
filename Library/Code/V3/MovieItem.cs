@@ -11,7 +11,14 @@ namespace Library.Code.V3
 {
     public class MovieItem : GalleryItem
     {
-
+        private int coverArtThemeId = 0;
+        public int CoverArtThemeId
+        {
+            get
+            {
+                return this.coverArtThemeId;
+            }
+        }
         private void CacheImageDone(object nothing)
         {
             FirePropertyChanged("DefaultImage");
@@ -25,32 +32,32 @@ namespace Library.Code.V3
             }
         }
 
-        public MovieItem(Library.GalleryItem title, IModelItem owner, List<TitleFilter> filter)
-            : base(owner)
-        {
-            this.Description = title.Caption;
+        //public MovieItem(Library.GalleryItem title, IModelItem owner, List<TitleFilter> filter)
+        //    : base(owner)
+        //{
+        //    this.Description = title.Caption;
 
-            this.Invoked += delegate(object sender, EventArgs args)
-            {
-                //am I being silly here copying this?
-                List<TitleFilter> newFilter = new List<TitleFilter>();
-                foreach (TitleFilter filt in filter)
-                {
-                    newFilter.Add(filt);
-                }
-                newFilter.Add(new TitleFilter(title.Category.FilterType, title.Name));
-                OMLProperties properties = new OMLProperties();
-                properties.Add("Application", OMLApplication.Current);
-                properties.Add("I18n", I18n.Instance);
-                Command CommandContextPopOverlay = new Command();
-                properties.Add("CommandContextPopOverlay", CommandContextPopOverlay);
+        //    this.Invoked += delegate(object sender, EventArgs args)
+        //    {
+        //        //am I being silly here copying this?
+        //        List<TitleFilter> newFilter = new List<TitleFilter>();
+        //        foreach (TitleFilter filt in filter)
+        //        {
+        //            newFilter.Add(filt);
+        //        }
+        //        newFilter.Add(new TitleFilter(title.Category.FilterType, title.Name));
+        //        OMLProperties properties = new OMLProperties();
+        //        properties.Add("Application", OMLApplication.Current);
+        //        properties.Add("I18n", I18n.Instance);
+        //        Command CommandContextPopOverlay = new Command();
+        //        properties.Add("CommandContextPopOverlay", CommandContextPopOverlay);
 
-                Library.Code.V3.GalleryPage gallery = new Library.Code.V3.GalleryPage(newFilter, title.Description);
+        //        Library.Code.V3.GalleryPage gallery = new Library.Code.V3.GalleryPage(newFilter, title.Description);
 
-                properties.Add("Page", gallery);
-                OMLApplication.Current.Session.GoToPage(@"resx://Library/Library.Resources/V3_GalleryPage", properties);
-            };
-        }
+        //        properties.Add("Page", gallery);
+        //        OMLApplication.Current.Session.GoToPage(@"resx://Library/Library.Resources/V3_GalleryPage", properties);
+        //    };
+        //}
 
         private bool isUnwatched = false;
         public bool IsUnwatched
@@ -73,10 +80,27 @@ namespace Library.Code.V3
         private OMLEngine.Title _titleObj;
         public OMLEngine.Title TitleObject { get { return _titleObj; } }
 
+        private void setCoverArtThemeId(string title)
+        {
+            if (!OMLApplication.IsWindows7)
+            {
+                this.coverArtThemeId = 0;//disable theme for this
+            }
+            else if (string.IsNullOrEmpty(title))
+            {
+                this.coverArtThemeId = 1;
+            }
+            else
+            {
+                this.coverArtThemeId = (Math.Abs(title.GetHashCode()) % 6) + 1;
+            }
+        }
+
         public MovieItem(Title title, IModelItem owner)
             : base(owner)
         {
             this._titleObj = title;
+            this.setCoverArtThemeId(title.Name);
             //this.InternalMovieItem = new Library.MovieItem(title, null);
 
             this.ItemType = 0;

@@ -47,6 +47,19 @@
 
   <Color Name="LinkSpecifier"           Color="255,   0, 255,   0"/>
 
-  <Color Name="DetailsBlack70Percent" Color="178, 16, 16, 16"/>
-  <Color Name="MediumBlue98Percent" Color="250, 60, 112, 162"/>
+  <Color Name="DetailsBlack70Percent"   Color="178, 16, 16, 16"/>
+  <Color Name="MediumBlue98Percent"     Color="250, 60, 112, 162"/>
+
+  <Color Name="MovieArtBGColor1"        Color="255, 45, 132, 184"/>
+  <Color Name="MovieArtBGColor2"        Color="255, 95, 167, 69"/>
+  <Color Name="MovieArtBGColor3"        Color="255, 163, 26, 26"/>
+  <Color Name="MovieArtBGColor4"        Color="255, 218, 218, 207"/>
+  <Color Name="MovieArtBGColor5"        Color="255, 236, 146, 28"/>
+  <Color Name="MovieArtBGColor6"        Color="255, 242, 206, 70"/>
+  <Color Name="MovieArtOverlayLabelColor1" Color="255, 2, 36, 56"/>
+  <Color Name="MovieArtOverlayLabelColor2" Color="255, 22, 54, 10"/>
+  <Color Name="MovieArtOverlayLabelColor3" Color="255, 255, 219, 219"/>
+  <Color Name="MovieArtOverlayLabelColor4" Color="255, 68, 68, 68"/>
+  <Color Name="MovieArtOverlayLabelColor5" Color="255, 66, 40, 10"/>
+  <Color Name="MovieArtOverlayLabelColor6" Color="255, 93, 80, 25"/>
 </Mcml>

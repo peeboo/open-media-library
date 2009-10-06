@@ -11,6 +11,7 @@
   <Aggregate Source="resx://Library/Library.Resources/V3_Controls_BrowseGroupedGallery"/>
   <Aggregate Source="resx://Library/Library.Resources/V3_Controls_BrowseJumpControl"/>
   <Aggregate Source="resx://Library/Library.Resources/V3_Controls_BrowseListViewItem"/>
+  <Aggregate Source="resx://Library/Library.Resources/V3_MovieItem"/>
 
   <Image Name="Browse.ListViewStrip"    Source="resx://Library/Library.Resources/V3_Controls_BrowseGallery_ListViewStrip" />
   <Image Name="Browse.ListViewStripTop" Source="resx://Library/Library.Resources/V3_Controls_BrowseGallery_ListViewStripTop" />
@@ -1019,9 +1020,9 @@
     </Content>
 
     <Content Name="oneRowGalleryItemPoster">
-      <me:oneRowGalleryItemPoster OverlayContentTemplate="[RepeatedItem!shell:GalleryItem.OverlayContentTemplate]" Application="[Application]" Page="[Page]" Model="[RepeatedItem!ICommand]" SelectionPolicy="[Model.ContentSelectionPolicy]"
+      <me:MovieOneRowGalleryItemPoster OverlayContentTemplate="[RepeatedItem!shell:GalleryItem.OverlayContentTemplate]" Application="[Application]" Page="[Page]" Model="[RepeatedItem!ICommand]" SelectionPolicy="[Model.ContentSelectionPolicy]"
                       Index="[RepeatedItemIndex]" ItemProperties="[ItemProperties]" GroupProperties="[GroupProperties]">
-      </me:oneRowGalleryItemPoster>
+      </me:MovieOneRowGalleryItemPoster>
     </Content>
 
     <Content Name="GalleryGroup">
@@ -1037,9 +1038,9 @@
     </Content>
     
     <Content Name="twoRowGalleryItemPoster">
-      <me:twoRowGalleryItemPoster OverlayContentTemplate="[RepeatedItem!shell:GalleryItem.OverlayContentTemplate]" Application="[Application]" Page="[Page]" Model="[RepeatedItem!ICommand]" SelectionPolicy="[Model.ContentSelectionPolicy]"
+      <me:MovieTwoRowGalleryItemPoster OverlayContentTemplate="[RepeatedItem!shell:GalleryItem.OverlayContentTemplate]" Application="[Application]" Page="[Page]" Model="[RepeatedItem!ICommand]" SelectionPolicy="[Model.ContentSelectionPolicy]"
                       Index="[RepeatedItemIndex]" ItemProperties="[ItemProperties]" GroupProperties="[GroupProperties]">
-      </me:twoRowGalleryItemPoster>
+      </me:MovieTwoRowGalleryItemPoster>
     </Content>
 
     <Content Name="threeRowGalleryItemPoster">

@@ -309,8 +309,8 @@
           <Set Target="[MousePanel.Scale]" Value="[FocusScale]"/>
           <Set Target="[Thumb.Alpha]" Value="[FocusAlpha]"/>
           <Set Target="[OverlayLabel.Font]" Value="[GalleryItemOverlayLabelFocus]"/>
-          <Set Target="[OverlayLabel.Color]" Value="color://comm:GalleryItemLabelFocus"/>
-          <Set Target="[ItemBGColor.Content]" Value="color://comm:GalleryItemFillFocus"/>
+          <Set Target="[OverlayLabel.Color]" Value="[OverlayLabelColor]"/>
+          <Set Target="[ItemBGColor.Content]" Value="[BGColor]"/>
           <Set Target="[Shadow.Visible]" Value="true"/>
         </Actions>
       </Rule>
@@ -622,8 +622,8 @@
           <Set Target="[MousePanel.Scale]" Value="[FocusScale]"/>
           <Set Target="[Thumb.Alpha]" Value="[FocusAlpha]"/>
           <Set Target="[OverlayLabel.Font]" Value="[GalleryItemOverlayLabelFocus]"/>
-          <Set Target="[OverlayLabel.Color]" Value="color://comm:GalleryItemLabelFocus"/>
-          <Set Target="[ItemBGColor.Content]" Value="color://comm:GalleryItemFillFocus"/>
+          <Set Target="[OverlayLabel.Color]" Value="[OverlayLabelColor]"/>
+          <Set Target="[ItemBGColor.Content]" Value="[BGColor]"/>
           <Set Target="[Shadow.Visible]" Value="true"/>
           <Invoke Target="[OuterTile.AttachAnimation]" animation="animation://me:Browse.Gallery.Item.Thumb.Move.GainFocus" InvokePolicy="Synchronous" ExclusiveApply="false"/>
           <Invoke Target="[MousePanel.AttachAnimation]" animation="animation://me:Browse.Gallery.Item.Thumb.Scale.GainFocus" InvokePolicy="Synchronous"/>
@@ -676,17 +676,22 @@
                     <Children>
 
                       <!-- Thumbnail -->
-                      <Graphic Name="Thumb" MaintainAspectRatio="[ThumbAspectRatio]" SizingPolicy="SizeToConstraint">
+                      <!--Graphic Name="Thumb" MaintainAspectRatio="[ThumbAspectRatio]" SizingPolicy="SizeToConstraint">
                         <LayoutInput>
                           <AnchorLayoutInput Top="Parent, 0" Left="Parent, 0" />
                         </LayoutInput>
-                      </Graphic>
+                      </Graphic-->
 
                       <!-- Overlay Label -->
                       <Text Name="OverlayLabel" Font="[GalleryItemOverlayLabel]" Color="[OverlayLabelColor]"
                                    MaximumSize="[ThumbSize]" Visible="[ShowOverlayLabel]" WordWrap="[OverlayWordWrap]"
                                    LayoutInput="[OverlayTextLayout]" />
-
+                      <!-- Thumbnail -->
+                      <Graphic Name="Thumb" MaintainAspectRatio="[ThumbAspectRatio]" SizingPolicy="SizeToConstraint">
+                        <LayoutInput>
+                          <AnchorLayoutInput Top="Parent, 0" Left="Parent, 0" />
+                        </LayoutInput>
+                      </Graphic>
                       <!-- Customizable underlay view -->
                       <me:BaseGalleryItemOverlayContent Name="UnderlayContentHost" Model="[Model]" Visible="false" Source="null">
                         <LayoutInput>

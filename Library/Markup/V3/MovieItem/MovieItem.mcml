@@ -1,0 +1,228 @@
+<Mcml xmlns ="http://schemas.microsoft.com/2006/mcml" 
+      xmlns:cor ="assembly://MSCorLib/System" 
+      xmlns:shell ="assembly://Library/Library.Code.V3" 
+      xmlns:browseitemres="resx://Library/Library.Resources/V3_Controls_BrowseGalleryItem" 
+      xmlns:comm ="resx://Library/Library.Resources/V3_Globals" xmlns:me ="Me">
+  <UI Name="MovieOneRowGalleryItemPoster" BaseUI="browseitemres:oneRowGalleryItemPoster">
+    <Properties>
+      <Image Name="NoThumbnailImage" Image="null"/>
+    </Properties>
+    <Locals>
+      <cor:Int32 Name="CoverArtThemeId" Int32="1"/>
+    </Locals>
+    <Rules>
+      <Rule>
+        <Conditions>
+          <IsType Source="[Model]" Type="shell:MovieItem"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[CoverArtThemeId]" Value="[Model!shell:MovieItem.CoverArtThemeId]"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <IsValid Source="[Model!shell:IThumbnailCommand.DefaultImage]"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[BGColor]" Value="color://comm:GalleryItemFill"/>
+          <!--Set Target="[BGColorFocus]" Value="color://comm:GalleryItemLabelFocus"/-->
+          <Set Target="[OverlayLabelColor]" Value="color://comm:GalleryItemLabel"/>
+          <!--Set Target="[OverlayLabelColorFocus]" Value="color://comm:GalleryItemFillFocus"/-->
+          <Set Target="[NoThumbnailImage]" Value="null"/>
+        </Actions>
+      </Rule>
+      <!-- back support for vista-->
+      <Rule>
+        <Conditions>
+          <Equality Source="[CoverArtThemeId]" Value="0"/>
+          <Equality Source="[Model!shell:IThumbnailCommand.DefaultImage]" Value="null"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[OverlayLabelColor]" Value="color://comm:GalleryItemLabel"/>
+          <Set Target="[BGColor]" Value="color://comm:GalleryItemFill"/>
+          <!--Set Target="[OverlayLabelColorFocus]" Value="color://comm:MovieArtOverlayLabelColor1"/-->
+          <Set Target="[NoThumbnailImage]" Value="resx://Library/Library.Resources/V3_Controls_BrowseGalleryItem_NoImage1RowPoster"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Equality Source="[CoverArtThemeId]" Value="1"/>
+          <Equality Source="[Model!shell:IThumbnailCommand.DefaultImage]" Value="null"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[OverlayLabelColor]" Value="color://comm:MovieArtOverlayLabelColor1"/>
+          <!--Set Target="[OverlayLabelColorFocus]" Value="color://comm:MovieArtOverlayLabelColor1"/-->
+          <Set Target="[NoThumbnailImage]" Value="resx://Library/Library.Resources/V3_Movie_NoCover_1_Small"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Equality Source="[CoverArtThemeId]" Value="2"/>
+          <Equality Source="[Model!shell:IThumbnailCommand.DefaultImage]" Value="null"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[OverlayLabelColor]" Value="color://comm:MovieArtOverlayLabelColor2"/>
+          <!--Set Target="[OverlayLabelColorFocus]" Value="color://comm:MovieArtOverlayLabelColor2"/-->
+          <Set Target="[NoThumbnailImage]" Value="resx://Library/Library.Resources/V3_Movie_NoCover_2_Small"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Equality Source="[CoverArtThemeId]" Value="3"/>
+          <Equality Source="[Model!shell:IThumbnailCommand.DefaultImage]" Value="null"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[OverlayLabelColor]" Value="color://comm:MovieArtOverlayLabelColor3"/>
+          <!--Set Target="[OverlayLabelColorFocus]" Value="color://comm:MovieArtOverlayLabelColor3"/-->
+          <Set Target="[NoThumbnailImage]" Value="resx://Library/Library.Resources/V3_Movie_NoCover_3_Small"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Equality Source="[CoverArtThemeId]" Value="4"/>
+          <Equality Source="[Model!shell:IThumbnailCommand.DefaultImage]" Value="null"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[OverlayLabelColor]" Value="color://comm:MovieArtOverlayLabelColor4"/>
+          <!--Set Target="[OverlayLabelColorFocus]" Value="color://comm:MovieArtOverlayLabelColor4"/-->
+          <Set Target="[NoThumbnailImage]" Value="resx://Library/Library.Resources/V3_Movie_NoCover_4_Small"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Equality Source="[CoverArtThemeId]" Value="5"/>
+          <Equality Source="[Model!shell:IThumbnailCommand.DefaultImage]" Value="null"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[OverlayLabelColor]" Value="color://comm:MovieArtOverlayLabelColor5"/>
+          <!--Set Target="[OverlayLabelColorFocus]" Value="color://comm:MovieArtOverlayLabelColor5"/-->
+          <Set Target="[NoThumbnailImage]" Value="resx://Library/Library.Resources/V3_Movie_NoCover_5_Small"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Equality Source="[CoverArtThemeId]" Value="6"/>
+          <Equality Source="[Model!shell:IThumbnailCommand.DefaultImage]" Value="null"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[OverlayLabelColor]" Value="color://comm:MovieArtOverlayLabelColor6"/>
+          <!--Set Target="[OverlayLabelColorFocus]" Value="color://comm:MovieArtOverlayLabelColor6"/-->
+          <Set Target="[NoThumbnailImage]" Value="resx://Library/Library.Resources/V3_Movie_NoCover_6_Small"/>
+        </Actions>
+      </Rule>
+      <Default Target="[BGColor]" Value="color://comm:Transparent"/>
+      <!--Default Target="[BGColorFocus]" Value="color://comm:Transparent"/-->
+    </Rules>
+  </UI>
+  <UI Name="MovieTwoRowGalleryItemPoster" BaseUI="browseitemres:twoRowGalleryItemPoster">
+    <Properties>
+      <Image Name="NoThumbnailImage" Image="null"/>
+    </Properties>
+    <Locals>
+      <cor:Int32 Name="CoverArtThemeId" Int32="1"/>
+    </Locals>
+    <Rules>
+      <Rule>
+        <Conditions>
+          <IsType Source="[Model]" Type="shell:MovieItem"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[CoverArtThemeId]" Value="[Model!shell:MovieItem.CoverArtThemeId]"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <IsValid Source="[Model!shell:IThumbnailCommand.DefaultImage]"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[BGColor]" Value="color://comm:GalleryItemFill"/>
+          <!--Set Target="[BGColorFocus]" Value="color://comm:GalleryItemLabelFocus"/-->
+          <Set Target="[OverlayLabelColor]" Value="color://comm:GalleryItemLabel"/>
+          <!--Set Target="[OverlayLabelColorFocus]" Value="color://comm:GalleryItemFillFocus"/-->
+          <Set Target="[NoThumbnailImage]" Value="null"/>
+        </Actions>
+      </Rule>
+      <!-- back support for vista-->
+      <Rule>
+        <Conditions>
+          <Equality Source="[CoverArtThemeId]" Value="0"/>
+          <Equality Source="[Model!shell:IThumbnailCommand.DefaultImage]" Value="null"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[OverlayLabelColor]" Value="color://comm:GalleryItemLabel"/>
+          <Set Target="[BGColor]" Value="color://comm:GalleryItemFill"/>
+          <!--Set Target="[OverlayLabelColorFocus]" Value="color://comm:MovieArtOverlayLabelColor1"/-->
+          <Set Target="[NoThumbnailImage]" Value="resx://Library/Library.Resources/V3_Controls_BrowseGalleryItem_NoImage2RowPoster"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Equality Source="[CoverArtThemeId]" Value="1"/>
+          <Equality Source="[Model!shell:IThumbnailCommand.DefaultImage]" Value="null"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[OverlayLabelColor]" Value="color://comm:MovieArtOverlayLabelColor1"/>
+          <!--Set Target="[OverlayLabelColorFocus]" Value="color://comm:MovieArtOverlayLabelColor1"/-->
+          <Set Target="[NoThumbnailImage]" Value="resx://Library/Library.Resources/V3_Movie_NoCover_1_Small"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Equality Source="[CoverArtThemeId]" Value="2"/>
+          <Equality Source="[Model!shell:IThumbnailCommand.DefaultImage]" Value="null"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[OverlayLabelColor]" Value="color://comm:MovieArtOverlayLabelColor2"/>
+          <!--Set Target="[OverlayLabelColorFocus]" Value="color://comm:MovieArtOverlayLabelColor2"/-->
+          <Set Target="[NoThumbnailImage]" Value="resx://Library/Library.Resources/V3_Movie_NoCover_2_Small"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Equality Source="[CoverArtThemeId]" Value="3"/>
+          <Equality Source="[Model!shell:IThumbnailCommand.DefaultImage]" Value="null"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[OverlayLabelColor]" Value="color://comm:MovieArtOverlayLabelColor3"/>
+          <!--Set Target="[OverlayLabelColorFocus]" Value="color://comm:MovieArtOverlayLabelColor3"/-->
+          <Set Target="[NoThumbnailImage]" Value="resx://Library/Library.Resources/V3_Movie_NoCover_3_Small"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Equality Source="[CoverArtThemeId]" Value="4"/>
+          <Equality Source="[Model!shell:IThumbnailCommand.DefaultImage]" Value="null"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[OverlayLabelColor]" Value="color://comm:MovieArtOverlayLabelColor4"/>
+          <!--Set Target="[OverlayLabelColorFocus]" Value="color://comm:MovieArtOverlayLabelColor4"/-->
+          <Set Target="[NoThumbnailImage]" Value="resx://Library/Library.Resources/V3_Movie_NoCover_4_Small"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Equality Source="[CoverArtThemeId]" Value="5"/>
+          <Equality Source="[Model!shell:IThumbnailCommand.DefaultImage]" Value="null"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[OverlayLabelColor]" Value="color://comm:MovieArtOverlayLabelColor5"/>
+          <!--Set Target="[OverlayLabelColorFocus]" Value="color://comm:MovieArtOverlayLabelColor5"/-->
+          <Set Target="[NoThumbnailImage]" Value="resx://Library/Library.Resources/V3_Movie_NoCover_5_Small"/>
+        </Actions>
+      </Rule>
+      <Rule>
+        <Conditions>
+          <Equality Source="[CoverArtThemeId]" Value="6"/>
+          <Equality Source="[Model!shell:IThumbnailCommand.DefaultImage]" Value="null"/>
+        </Conditions>
+        <Actions>
+          <Set Target="[OverlayLabelColor]" Value="color://comm:MovieArtOverlayLabelColor6"/>
+          <!--Set Target="[OverlayLabelColorFocus]" Value="color://comm:MovieArtOverlayLabelColor6"/-->
+          <Set Target="[NoThumbnailImage]" Value="resx://Library/Library.Resources/V3_Movie_NoCover_6_Small"/>
+        </Actions>
+      </Rule>
+      <Default Target="[BGColor]" Value="color://comm:Transparent"/>
+      <!--Default Target="[BGColorFocus]" Value="color://comm:Transparent"/-->
+    </Rules>
+  </UI>
+</Mcml>
