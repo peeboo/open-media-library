@@ -24,7 +24,7 @@
           <IsValid Source="[Model!shell:IThumbnailCommand.DefaultImage]"/>
         </Conditions>
         <Actions>
-          <Set Target="[BGColor]" Value="color://comm:GalleryItemFill"/>
+          <Set Target="[BGColor]" Value="color://comm:Transparent"/>
           <!--Set Target="[BGColorFocus]" Value="color://comm:GalleryItemLabelFocus"/-->
           <Set Target="[OverlayLabelColor]" Value="color://comm:GalleryItemLabel"/>
           <!--Set Target="[OverlayLabelColorFocus]" Value="color://comm:GalleryItemFillFocus"/-->
@@ -135,7 +135,7 @@
           <IsValid Source="[Model!shell:IThumbnailCommand.DefaultImage]"/>
         </Conditions>
         <Actions>
-          <Set Target="[BGColor]" Value="color://comm:GalleryItemFill"/>
+          <Set Target="[BGColor]" Value="color://comm:Transparent"/>
           <!--Set Target="[BGColorFocus]" Value="color://comm:GalleryItemLabelFocus"/-->
           <Set Target="[OverlayLabelColor]" Value="color://comm:GalleryItemLabel"/>
           <!--Set Target="[OverlayLabelColorFocus]" Value="color://comm:GalleryItemFillFocus"/-->
