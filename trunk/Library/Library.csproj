@@ -77,29 +77,31 @@
   <ItemGroup>
     <Compile Include="Code\ActiveSettings.cs" />
     <Compile Include="Code\BaseModelItem.cs" />
+    <None Include="Code\MoviePlayer\MoviePlayer.cs.working" />
     <Compile Include="Code\MovieGallery.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Code\MovieItem.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Code\MoviePlayerWVX.cs" />
+    <None Include="Code\MoviePlayer\MBMoviePlayer.cs.skipcompile" />
+    <None Include="Code\MoviePlayer\MBPlayState.cs.skipcompile" />
+    <None Include="Code\MoviePlayer\MMMoviePlayer.cs.skipcompile" />
+    <Compile Include="Code\MoviePlayer\MoviePlayerWVX.cs" />
     <Compile Include="Code\Impersonator.cs" />
     <Compile Include="Code\I18n.cs" />
-    <Compile Include="Code\MoviePlayerBluRay.cs" />
-    <Compile Include="Code\MoviePlayerExtenderDVD.cs" />
-    <Compile Include="Code\MoviePlayerHDDVD.cs" />
-    <Compile Include="Code\MoviePlayerTranscodeBluRay.cs" />
-    <Compile Include="Code\MoviePlayerTranscodeHDDVD.cs" />
-    <Compile Include="Code\MoviePlayerWPL.cs" />
+    <Compile Include="Code\MoviePlayer\MoviePlayerBluRay.cs" />
+    <Compile Include="Code\MoviePlayer\MoviePlayerExtenderDVD.cs" />
+    <Compile Include="Code\MoviePlayer\MoviePlayerHDDVD.cs" />
+    <Compile Include="Code\MoviePlayer\MoviePlayerWPL.cs" />
     <Compile Include="Code\OMLApplication.cs" />
     <Compile Include="Code\Launch.cs" />
-    <Compile Include="Code\MoviePlayer.cs" />
-    <Compile Include="Code\MoviePlayerDVD.cs" />
-    <Compile Include="Code\MoviePlayerMountImage.cs" />
-    <Compile Include="Code\MoviePlayerTranscode.cs" />
-    <Compile Include="Code\MoviePlayerUnavailable.cs" />
-    <Compile Include="Code\MoviePlayerVideo.cs" />
+    <Compile Include="Code\MoviePlayer\MoviePlayer.cs" />
+    <Compile Include="Code\MoviePlayer\MoviePlayerDVD.cs" />
+    <Compile Include="Code\MoviePlayer\MoviePlayerMountImage.cs" />
+    <Compile Include="Code\MoviePlayer\MoviePlayerTranscode.cs" />
+    <Compile Include="Code\MoviePlayer\MoviePlayerUnavailable.cs" />
+    <Compile Include="Code\MoviePlayer\MoviePlayerVideo.cs" />
     <Compile Include="Code\OMLProperties.cs" />
     <Compile Include="Code\OMLUpdater.cs" />
     <Compile Include="Code\ParentalControlManager.cs" />
@@ -115,7 +117,7 @@
     <Compile Include="Code\V3\GenreItem.cs" />
     <Compile Include="Code\V3\GenrePivot.cs" />
     <Compile Include="Code\V3\EpisodeItem.cs" />
-    <Compile Include="Code\MoviePlayerUrl.cs" />
+    <Compile Include="Code\MoviePlayer\MoviePlayerUrl.cs" />
     <Compile Include="Code\V3\Settings\AboutSettings.cs" />
     <Compile Include="Code\V3\Settings\UpdaterSettings.cs" />
     <Compile Include="Code\V3\Settings\FavoritesItemSettings.cs" />
