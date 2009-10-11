@@ -1,0 +1,2024 @@
+﻿public class PlayControl
+{
+    // Fields
+    private Hashtable hshRS232ChangerHandlers = new Hashtable();
+    private int intTranscoderSecondsDone;
+
+    // Methods
+    private bool GetPlayerCapability(XmlNode nodExternalPlayer, string strCapability)
+    {
+        if (nodExternalPlayer.SelectSingleNode(strCapability) != null)
+        {
+            bool flag;
+            try
+            {
+                return Conversions.ToBoolean(nodExternalPlayer.SelectSingleNode(strCapability).InnerText);
+            }
+            catch (Exception exception1)
+            {
+                ProjectData.SetProjectError(exception1);
+                Exception exception = exception1;
+                flag = false;
+                ProjectData.ClearProjectError();
+                return flag;
+                ProjectData.ClearProjectError();
+            }
+            return flag;
+        }
+        return false;
+    }
+
+    public string GetVideo(string strLocation, bool bolExtender, bool bolMediaCenterPlayer, bool bolInternalTranscoder, bool bolExternalTranscoder, [Optional, DefaultParameterValue(0)] ref int intErrorType, [Optional, DefaultParameterValue("")] ref string strErrorMessage)
+    {
+        Common.WriteLog("MCMLInterface.PlayControl.GetVideo - Folder or File '" + strLocation + "', Extender '" + bolExtender.ToString() + "', Media Center Player '" + bolMediaCenterPlayer.ToString() + "', Internal Transcoder '" + bolInternalTranscoder.ToString() + "', External Transcoder '" + bolExternalTranscoder.ToString() + "'", 0xff, "log.txt");
+        if (strLocation != null)
+        {
+            if (strLocation == "")
+            {
+                Common.WriteLog("MCMLInterface.PlayControl.GetVideo - Folder Is Empty, Returning -4.", 0xff, "log.txt");
+                intErrorType = -4;
+                strErrorMessage = Common.LocalizationString(0x5a1b, "", false).Replace("%1", strLocation);
+                return null;
+            }
+            if (strLocation.EndsWith(@"\"))
+            {
+                strLocation = strLocation.TrimEnd(new char[] { '\\' });
+            }
+            try
+            {
+                if (Directory.Exists(strLocation))
+                {
+                    if (bolInternalTranscoder)
+                    {
+                        Common.WriteLog("MCMLInterface.PlayControl.GetVideo - Internal transcoding is enabled, checking for files marked for direct playback, to ensure they are first priority", 0xff, "log.txt");
+                        ArrayList list = Common.GetConfigurationFolderCollection(@"SOFTWARE\My Movies\Transcoding\DirectPlayExtentions", "CurrentUser", "Extention");
+                        string[] files = Directory.GetFiles(strLocation);
+                        Array.Sort<string>(files);
+                        foreach (string str2 in files)
+                        {
+                            IEnumerator enumerator;
+                            string str4 = "";
+                            try
+                            {
+                                str4 = Path.GetExtension(str2).ToLower();
+                            }
+                            catch (Exception exception1)
+                            {
+                                ProjectData.SetProjectError(exception1);
+                                Exception exception = exception1;
+                                ProjectData.ClearProjectError();
+                            }
+                            try
+                            {
+                                enumerator = list.GetEnumerator();
+                                while (enumerator.MoveNext())
+                                {
+                                    string str3 = Conversions.ToString(enumerator.Current);
+                                    if (str4 == str3.ToLower())
+                                    {
+                                        Common.WriteLog("MCMLInterface.PlayControl.GetVideo - The file extention '" + str4 + "' was marked for direct playback, returning file", 0xff, "log.txt");
+                                        return str2;
+                                    }
+                                }
+                            }
+                            finally
+                            {
+                                if (enumerator is IDisposable)
+                                {
+                                    (enumerator as IDisposable).Dispose();
+                                }
+                            }
+                            Common.WriteLog("MCMLInterface.PlayControl.GetVideo - The file extention '" + str4 + "' was not marked for direct playback", 0xff, "log.txt");
+                        }
+                        Common.WriteLog("MCMLInterface.PlayControl.GetVideo - There were no files in the folder that is marked for direct playback", 0xff, "log.txt");
+                    }
+                    if ((bolExtender & !bolInternalTranscoder) & !bolExternalTranscoder)
+                    {
+                        Common.WriteLog("MCMLInterface.PlayControl.GetVideo - Playback unit is an extender, and neither internal transcoding or external transcoding is enabled", 0xff, "log.txt");
+                        Common.WriteLog("MCMLInterface.PlayControl.GetVideo - Checking for user created playlist files", 0xff, "log.txt");
+                        string[] array = Directory.GetFiles(strLocation);
+                        Array.Sort<string>(array);
+                        foreach (string str5 in array)
+                        {
+                            string str9 = "";
+                            try
+                            {
+                                str9 = Path.GetExtension(str5).ToLower();
+                            }
+                            catch (Exception exception10)
+                            {
+                                ProjectData.SetProjectError(exception10);
+                                Exception exception2 = exception10;
+                                ProjectData.ClearProjectError();
+                            }
+                            if ((str9 == ".m3u") | ((str9 == ".wpl") & (Path.GetFileName(str5) != "mymovies.wpl")))
+                            {
+                                return str5;
+                            }
+                        }
+                        string format = "<?wpl version=\"1.0\"?><smil><head><title>{0}</title></head><body><seq>{1}</seq></body></smil>";
+                        string str7 = "<media src=\"{0}\"/>";
+                        int num = 0;
+                        string str6 = "";
+                        foreach (string str5 in array)
+                        {
+                            string strExtention = "";
+                            try
+                            {
+                                strExtention = Path.GetExtension(str5).ToLower();
+                            }
+                            catch (Exception exception11)
+                            {
+                                ProjectData.SetProjectError(exception11);
+                                Exception exception3 = exception11;
+                                ProjectData.ClearProjectError();
+                            }
+                            if (Common.GetPerceivedType(strExtention).ToLower() == "video")
+                            {
+                                num++;
+                                str6 = str6 + string.Format(str7, str5);
+                            }
+                        }
+                        if (num > 1)
+                        {
+                            Common.WriteLog("MCMLInterface.PlayControl.GetVideo - There were more than one video file in the folder. Creating a playlist", 0xff, "log.txt");
+                            str5 = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + @"\My Movies\Temp\" + Guid.NewGuid().ToString() + ".wpl";
+                            StreamWriter writer = new StreamWriter(str5);
+                            writer.Write(format, "My Movies Playlist", str6);
+                            writer.Close();
+                            File.SetAttributes(str5, FileAttributes.Hidden);
+                            return str5;
+                        }
+                        Common.WriteLog("MCMLInterface.PlayControl.GetVideo - There were either one or no video files in the folder", 0xff, "log.txt");
+                        foreach (string str5 in array)
+                        {
+                            string str11 = "";
+                            try
+                            {
+                                str11 = Path.GetExtension(str5).ToLower();
+                            }
+                            catch (Exception exception12)
+                            {
+                                ProjectData.SetProjectError(exception12);
+                                Exception exception4 = exception12;
+                                ProjectData.ClearProjectError();
+                            }
+                            if (((str11 == ".dvr-ms") | (str11 == ".dvr")) | (str11 == ".wtv"))
+                            {
+                                Common.WriteLog("MCMLInterface.PlayControl.GetVideo - Found a recorded TV file, returning it for playback", 0xff, "log.txt");
+                                return str5;
+                            }
+                            if (Common.GetPerceivedType(str11).ToLower() == "video")
+                            {
+                                Common.WriteLog("MCMLInterface.PlayControl.GetVideo - Found a file marked as video file in Windows", 0xff, "log.txt");
+                                return str5;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Common.WriteLog("MCMLInterface.PlayControl.GetVideo - Playback unit is console, or internal transcode or external transcoder is enabled", 0xff, "log.txt");
+                        if ((Directory.Exists(strLocation + @"\HVDVD_TS") & File.Exists(strLocation + @"\ADV_OBJ\VPLST000.XPL")) & !bolInternalTranscoder)
+                        {
+                            Common.WriteLog("MCMLInterface.PlayControl.GetVideo - HD-DVD file structure detected.", 0xff, "log.txt");
+                            Common.WriteLog("MCMLInterface.PlayControl.GetVideo - Returning '" + strLocation + @"\HVDVD_TS'.", 0xff, "log.txt");
+                            return (strLocation + @"\HVDVD_TS");
+                        }
+                        if (Directory.Exists(strLocation + @"\BDMV") & !bolInternalTranscoder)
+                        {
+                            Common.WriteLog("MCMLInterface.PlayControl.GetVideo - Blu-ray file structure detected.", 0xff, "log.txt");
+                            Common.WriteLog("MCMLInterface.PlayControl.GetVideo - Returning '" + strLocation + @"\BDMV'.", 0xff, "log.txt");
+                            return (strLocation + @"\BDMV");
+                        }
+                        if (File.Exists(strLocation + @"\VIDEO_TS\VIDEO_TS.IFO") & !this.IsFileEmpty(strLocation + @"\VIDEO_TS\VIDEO_TS.IFO"))
+                        {
+                            Common.WriteLog("MCMLInterface.PlayControl.GetVideo - VIDEO_TS structure found, returning it.", 0xff, "log.txt");
+                            Common.WriteLog("MCMLInterface.PlayControl.GetVideo - Returning '" + strLocation + @"\VIDEO_TS'.", 0xff, "log.txt");
+                            return (strLocation + @"\VIDEO_TS");
+                        }
+                        if ((strLocation.ToUpper().EndsWith("VIDEO_TS") & File.Exists(strLocation + @"\VIDEO_TS.IFO")) & !this.IsFileEmpty(strLocation + @"\VIDEO_TS.IFO"))
+                        {
+                            Common.WriteLog("MCMLInterface.PlayControl.GetVideo - VIDEO_TS structure found, but without proper placement. Returning it anyways", 0xff, "log.txt");
+                            Common.WriteLog("MCMLInterface.PlayControl.GetVideo - Returning '" + strLocation + "'.", 0xff, "log.txt");
+                            return strLocation;
+                        }
+                        if (File.Exists(strLocation + @"\VIDEO_TS.IFO") & !this.IsFileEmpty(strLocation + @"\VIDEO_TS.IFO"))
+                        {
+                            Common.WriteLog("MCMLInterface.PlayControl.GetVideo - VIDEO_TS.IFO file is not in VIDEO_TS directory, -6", 0xff, "log.txt");
+                            intErrorType = -6;
+                            strErrorMessage = Common.LocalizationString(0x5a1a, "", false);
+                            return null;
+                        }
+                        string[] strArray3 = Directory.GetFiles(strLocation);
+                        Array.Sort<string>(strArray3);
+                        if (!bolInternalTranscoder & !bolExternalTranscoder)
+                        {
+                            Common.WriteLog("MCMLInterface.PlayControl.GetVideo - Checking for user created playlist files", 0xff, "log.txt");
+                            foreach (string str12 in strArray3)
+                            {
+                                string str16 = "";
+                                try
+                                {
+                                    str16 = Path.GetExtension(str12).ToLower();
+                                }
+                                catch (Exception exception13)
+                                {
+                                    ProjectData.SetProjectError(exception13);
+                                    Exception exception5 = exception13;
+                                    ProjectData.ClearProjectError();
+                                }
+                                if ((str16 == ".m3u") | ((str16 == ".wpl") & (Path.GetFileName(str12) != "mymovies.wpl")))
+                                {
+                                    Common.WriteLog("MCMLInterface.PlayControl.GetVideo - Returning '" + str12 + "'.", 0xff, "log.txt");
+                                    return str12;
+                                }
+                            }
+                            string str15 = "<?wpl version=\"1.0\"?><smil><head><title>{0}</title></head><body><seq>{1}</seq></body></smil>";
+                            string str14 = "<media src=\"{0}\"/>";
+                            int num2 = 0;
+                            string str13 = "";
+                            foreach (string str12 in strArray3)
+                            {
+                                string str17 = "";
+                                try
+                                {
+                                    str17 = Path.GetExtension(str12).ToLower();
+                                }
+                                catch (Exception exception14)
+                                {
+                                    ProjectData.SetProjectError(exception14);
+                                    Exception exception6 = exception14;
+                                    ProjectData.ClearProjectError();
+                                }
+                                if (Common.GetPerceivedType(str17).ToLower() == "video")
+                                {
+                                    num2++;
+                                    str13 = str13 + string.Format(str14, str12);
+                                }
+                            }
+                            if (num2 > 1)
+                            {
+                                str12 = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + @"\My Movies\Temp\" + Guid.NewGuid().ToString() + ".wpl";
+                                StreamWriter writer2 = new StreamWriter(str12);
+                                writer2.Write(str15, "My Movies Playlist", str13);
+                                writer2.Close();
+                                File.SetAttributes(str12, FileAttributes.Hidden);
+                                Common.WriteLog("MCMLInterface.PlayControl.GetVideo - Returning '" + str12 + "'.", 0xff, "log.txt");
+                                return str12;
+                            }
+                        }
+                        else
+                        {
+                            Common.WriteLog("MCMLInterface.PlayControl.GetVideo - Bypassing check for user created playlist files, as internal or external transcoding is enabled, and transcoders can't handle playlist files", 0xff, "log.txt");
+                        }
+                        Common.WriteLog("MCMLInterface.PlayControl.GetVideo - Checking for image files", 0xff, "log.txt");
+                        foreach (string str12 in strArray3)
+                        {
+                            string str18 = "";
+                            try
+                            {
+                                str18 = Path.GetExtension(str12).ToLower();
+                            }
+                            catch (Exception exception15)
+                            {
+                                ProjectData.SetProjectError(exception15);
+                                Exception exception7 = exception15;
+                                ProjectData.ClearProjectError();
+                            }
+                            if (((((((((((str18 == ".img") | (str18 == ".cue")) | (str18 == ".iso")) | (str18 == ".bwt")) | (str18 == ".cdi")) | (str18 == ".b5t")) | (str18 == ".ccd")) | (str18 == ".mds")) | (str18 == ".nrg")) | (str18 == ".pdi")) | (str18 == ".dvd"))
+                            {
+                                Common.WriteLog("MCMLInterface.PlayControl.GetVideo - Returning '" + str18 + "'.", 0xff, "log.txt");
+                                return str12;
+                            }
+                        }
+                        Common.WriteLog("MCMLInterface.PlayControl.GetVideo - Checking for video files", 0xff, "log.txt");
+                        foreach (string str12 in strArray3)
+                        {
+                            string str19 = "";
+                            try
+                            {
+                                str19 = Path.GetExtension(str12).ToLower();
+                            }
+                            catch (Exception exception16)
+                            {
+                                ProjectData.SetProjectError(exception16);
+                                Exception exception8 = exception16;
+                                ProjectData.ClearProjectError();
+                            }
+                            if (((str19 == ".dvr-ms") | (str19 == ".dvr")) | (str19 == ".wtv"))
+                            {
+                                Common.WriteLog("MCMLInterface.PlayControl.GetVideo - Returning '" + str12 + "'.", 0xff, "log.txt");
+                                return str12;
+                            }
+                            if (Common.GetPerceivedType(str19).ToLower() == "video")
+                            {
+                                Common.WriteLog("MCMLInterface.PlayControl.GetVideo - Returning '" + str12 + "'.", 0xff, "log.txt");
+                                return str12;
+                            }
+                            Common.WriteLog("MCMLInterface.PlayControl.GetVideo - The file '" + str12 + "' with the extention '" + str19 + "' is not registred as a perceivedType as video.", 0xff, "log.txt");
+                        }
+                    }
+                    Common.WriteLog("MCMLInterface.PlayControl.GetVideo - Returning Nothing.", 0xff, "log.txt");
+                    return null;
+                }
+                if (File.Exists(strLocation))
+                {
+                    return strLocation;
+                }
+                Common.WriteLog("MCMLInterface.PlayControl.GetVideo - Directory Missing or Not Accessible Occured, -2", 0xff, "log.txt");
+                intErrorType = -2;
+                strErrorMessage = Common.LocalizationString(0x278f, "", false).Replace("%1", strLocation);
+                return null;
+            }
+            catch (Exception exception17)
+            {
+                ProjectData.SetProjectError(exception17);
+                Exception exception9 = exception17;
+                Common.WriteLog("MCMLInterface.PlayControl.GetVideo - Error Occured, Returning -3: '" + exception9.Message + exception9.StackTrace + "'", 0xff, "log.txt");
+                string str = "-3|" + Common.EscapeJavaScript(Common.LocalizationString(0x2790, "", false)) + " " + exception9.Message;
+                ProjectData.ClearProjectError();
+                return str;
+                intErrorType = -3;
+                strErrorMessage = Common.LocalizationString(0x2790, "", false) + " " + exception9.Message;
+                str = null;
+                ProjectData.ClearProjectError();
+                return str;
+                ProjectData.ClearProjectError();
+            }
+            return "";
+        }
+        Common.WriteLog("MCMLInterface.PlayControl.GetVideo - Folder Is Nothing, Returning -5.", 0xff, "log.txt");
+        intErrorType = -5;
+        strErrorMessage = Common.LocalizationString(0x5a1c, "", false);
+        return null;
+    }
+
+    public bool GoToFullScreen()
+    {
+        MediaExperience mediaExperience = AddInHost.Current.MediaCenterEnvironment.MediaExperience;
+        if (mediaExperience != null)
+        {
+            bool flag;
+            try
+            {
+                mediaExperience.GoToFullScreen();
+                return true;
+            }
+            catch (Exception exception1)
+            {
+                ProjectData.SetProjectError(exception1);
+                Exception exception = exception1;
+                flag = false;
+                ProjectData.ClearProjectError();
+                return flag;
+                ProjectData.ClearProjectError();
+            }
+            return flag;
+        }
+        return false;
+    }
+
+    internal string HighDefinitionFilePlayerPath()
+    {
+        Common.WriteLog("MCML.PlayControl.HighDefinitionFilePlayerPath", 0xff, "log.txt");
+        RegistryKey key2 = null;
+        if (key2 == null)
+        {
+            key2 = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\ArcSoft\TotalMedia Theatre 3\3.0");
+        }
+        if (key2 == null)
+        {
+            key2 = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Wow6432Node\ArcSoft\TotalMedia Theatre 3\3.0");
+        }
+        if (key2 != null)
+        {
+            string path = key2.GetValue("AppPath", null).ToString();
+            if ((path != null) && Directory.Exists(path))
+            {
+                Common.WriteLog("MCML.PlayControl.HighDefinitionFilePlayerPath - Returning '" + path + @"\uMCEDVDPlayer.exe'", 0xff, "log.txt");
+                return (path + @"\uMCEDVDPlayer.exe");
+            }
+        }
+        RegistryKey key = null;
+        if (key == null)
+        {
+            key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\ArcSoft\TotalMedia Theatre\2.0");
+        }
+        if (key == null)
+        {
+            key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Wow6432Node\ArcSoft\TotalMedia Theatre\2.0");
+        }
+        if (key == null)
+        {
+            key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\ArcSoft\TotalMedia Theatre\2.1");
+        }
+        if (key == null)
+        {
+            key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Wow6432Node\ArcSoft\TotalMedia Theatre\2.1");
+        }
+        if (key == null)
+        {
+            key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\ArcSoft\TotalMedia Theatre\2.2");
+        }
+        if (key == null)
+        {
+            key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Wow6432Node\ArcSoft\TotalMedia Theatre\2.2");
+        }
+        if (key == null)
+        {
+            key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\ArcSoft\TotalMedia Theatre\2.2");
+        }
+        if (key == null)
+        {
+            key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Wow6432Node\ArcSoft\TotalMedia Theatre\2.2");
+        }
+        if (key != null)
+        {
+            string str3 = key.GetValue("AppPath", null).ToString();
+            if ((str3 != null) && Directory.Exists(str3))
+            {
+                Common.WriteLog("MCML.PlayControl.HighDefinitionFilePlayerPath - Returning '" + str3 + @"\uMCEDVDPlayer.exe'", 0xff, "log.txt");
+                return (str3 + @"\uMCEDVDPlayer.exe");
+            }
+        }
+        return null;
+    }
+
+    internal string ImageMounter()
+    {
+        if (Common.VirtualCloneDrive_Installed())
+        {
+            return "VirtualCloneDrive";
+        }
+        if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) + @"\DAEMON Tools Lite\daemon.exe"))
+        {
+            return "DaemonTools";
+        }
+        return null;
+    }
+
+    private bool IsFileEmpty(string strFile)
+    {
+        bool flag;
+        if (File.Exists(strFile))
+        {
+            FileInfo info = new FileInfo(strFile);
+            flag = info.Length == 0L;
+        }
+        return flag;
+    }
+
+    [DllImport("MyMoviesC.dll")]
+    private static extern bool isoExtractFilesToFolder(string iso, string target);
+    [DllImport("kernel32")]
+    public static extern int LoadLibrary(string librayName);
+    internal bool LoadRS232ChangerDisc(string strChangerName, string strSlot)
+    {
+        bool flag;
+        MediaCenterEnvironment mediaCenterEnvironment = AddInHost.Current.MediaCenterEnvironment;
+        try
+        {
+            if (this.hshRS232ChangerHandlers.Count == 0)
+            {
+                this.LoadRS232ChangerHandlers();
+            }
+            RegistryKey key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\My Movies\DVD Changers\" + strChangerName);
+            if (key != null)
+            {
+                string str = key.GetValue("Type", "").ToString();
+                object objectValue = RuntimeHelpers.GetObjectValue(this.hshRS232ChangerHandlers[str]);
+                if (objectValue != null)
+                {
+                    object[] arguments = new object[] { strChangerName, strSlot };
+                    bool[] copyBack = new bool[] { true, true };
+                    if (copyBack[0])
+                    {
+                        strChangerName = (string)Conversions.ChangeType(RuntimeHelpers.GetObjectValue(arguments[0]), typeof(string));
+                    }
+                    if (copyBack[1])
+                    {
+                        strSlot = (string)Conversions.ChangeType(RuntimeHelpers.GetObjectValue(arguments[1]), typeof(string));
+                    }
+                    if (Conversions.ToInteger(NewLateBinding.LateGet(objectValue, null, "LoadDisc", arguments, null, null, copyBack)) == 0)
+                    {
+                        int num3;
+                        return true;
+                        int num2 = 1;
+                        do
+                        {
+                            Thread.Sleep(0x3e8);
+                            num2++;
+                            num3 = 0x19;
+                        }
+                        while (num2 <= num3);
+                        Application.Current.DisplayWaitCursor = false;
+                        return flag;
+                    }
+                    Application.Current.DisplayWaitCursor = false;
+                    mediaCenterEnvironment.Dialog(Conversions.ToString(NewLateBinding.LateGet(objectValue, null, "LastError", new object[0], null, null, null)), Common.LocalizationString(0xc3ca, "", false), DialogButtons.Ok, 0, true);
+                    return false;
+                }
+                Application.Current.DisplayWaitCursor = false;
+                mediaCenterEnvironment.Dialog(Common.LocalizationString(0x2954, "", false), Common.LocalizationString(0xc3ca, "", false), DialogButtons.Ok, 0, true);
+                return false;
+            }
+            Application.Current.DisplayWaitCursor = false;
+            mediaCenterEnvironment.Dialog(Common.LocalizationString(0x2955, "", false), Common.LocalizationString(0xc3ca, "", false), DialogButtons.Ok, 0, true);
+            return false;
+        }
+        catch (Exception exception1)
+        {
+            ProjectData.SetProjectError(exception1);
+            Exception exception = exception1;
+            Application.Current.DisplayWaitCursor = false;
+            mediaCenterEnvironment.Dialog(string.Format(Common.LocalizationString(0xc3cb, "", false), exception.Message), Common.LocalizationString(0xc3ca, "", false), DialogButtons.Ok, 0, true);
+            flag = false;
+            ProjectData.ClearProjectError();
+            return flag;
+            ProjectData.ClearProjectError();
+        }
+        return flag;
+    }
+
+    private void LoadRS232ChangerHandlers()
+    {
+        Common.WriteLog("MCML.PlayControl.LoadRS232ChangerHandlers - Loading DVD Changer Handlers", 0xff, "log.txt");
+        foreach (string str in Directory.GetFiles(Common.GetInstallPath() + @"Modules\DVD Changer", "*.dll"))
+        {
+            Type[] exportedTypes = Assembly.LoadFrom(str).GetExportedTypes();
+            Common.WriteLog("MCML.PlayControl.LoadRS232ChangerHandlers - Number of classes found for this handler is '" + Conversions.ToString(exportedTypes.Length) + "'", 0xff, "log.txt");
+            int num3 = exportedTypes.Length - 1;
+            for (int i = 0; i <= num3; i++)
+            {
+                Common.WriteLog("MCML.PlayControl.LoadRS232ChangerHandlers - Found class, checking constructor.", 0xff, "log.txt");
+                ConstructorInfo constructor = exportedTypes[i].GetConstructor(Type.EmptyTypes);
+                if (constructor != null)
+                {
+                    Common.WriteLog("Constructor found, adding handler", 0xff, "log.txt");
+                    object objectValue = RuntimeHelpers.GetObjectValue(constructor.Invoke(Type.EmptyTypes));
+                    try
+                    {
+                        string key = Conversions.ToString(NewLateBinding.LateGet(objectValue, null, "HandlerName", new object[0], null, null, null));
+                        Common.WriteLog("MCML.PlayControl.LoadRS232ChangerHandlers - Trying to add handler: " + key, 0xff, "log.txt");
+                        this.hshRS232ChangerHandlers.Add(key, RuntimeHelpers.GetObjectValue(objectValue));
+                    }
+                    catch (Exception exception1)
+                    {
+                        ProjectData.SetProjectError(exception1);
+                        Exception exception = exception1;
+                        Common.WriteLog("MCML.PlayControl.LoadRS232ChangerHandlers - Adding failed.", 0xff, "log.txt");
+                        ProjectData.ClearProjectError();
+                    }
+                }
+                else
+                {
+                    Common.WriteLog("MCML.PlayControl.LoadRS232ChangerHandlers - No constructur found for this handler", 0xff, "log.txt");
+                }
+            }
+        }
+    }
+
+    internal void MountImage(string strImage)
+    {
+        string format = null;
+        string str2 = null;
+        string str3 = null;
+        if (Common.VirtualCloneDrive_Installed())
+        {
+            RegistryKey key = null;
+            if (key == null)
+            {
+                key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Elaborate Bytes\VirtualCloneDrive", false);
+            }
+            if (key == null)
+            {
+                key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Wow6432Node\Elaborate Bytes\VirtualCloneDrive", false);
+            }
+            str3 = key.GetValue("Install_Dir").ToString() + @"\VCDMount.exe";
+            format = "\"{0}\"";
+            str2 = "/u";
+        }
+        else if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) + @"\DAEMON Tools Lite\daemon.exe"))
+        {
+            str3 = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) + @"\DAEMON Tools Lite\daemon.exe";
+            format = "-mount 0,\"{0}\"";
+            str2 = "-unmount 0";
+        }
+        if (str3 != null)
+        {
+            ProcessStartInfo startInfo = new ProcessStartInfo();
+            startInfo.FileName = str3;
+            startInfo.Arguments = str2;
+            startInfo.UseShellExecute = false;
+            startInfo.CreateNoWindow = true;
+            try
+            {
+                Process.Start(startInfo).WaitForExit();
+            }
+            catch (Exception exception1)
+            {
+                ProjectData.SetProjectError(exception1);
+                Exception innerException = exception1;
+                throw new Exception("Could not start ImageMounter", innerException);
+                ProjectData.ClearProjectError();
+            }
+            Thread.Sleep(0xbb8);
+            startInfo = new ProcessStartInfo();
+            startInfo.FileName = str3;
+            startInfo.Arguments = string.Format(format, strImage);
+            startInfo.UseShellExecute = false;
+            startInfo.CreateNoWindow = true;
+            try
+            {
+                Process.Start(startInfo);
+            }
+            catch (Exception exception3)
+            {
+                ProjectData.SetProjectError(exception3);
+                Exception exception2 = exception3;
+                throw new Exception("Could not start ImageMounter", exception2);
+                ProjectData.ClearProjectError();
+            }
+        }
+    }
+
+    private bool PlayerInstalled(XmlNode nodExternalPlayer)
+    {
+        string path = null;
+        IEnumerator enumerator;
+        IEnumerator enumerator2;
+        try
+        {
+            enumerator = nodExternalPlayer.SelectNodes("Location/Path").GetEnumerator();
+            while (enumerator.MoveNext())
+            {
+                XmlNode current = (XmlNode)enumerator.Current;
+                string innerText = current.InnerText.Replace("[PROGRAMFILES]", Environment.GetEnvironmentVariable("ProgramFiles(x86)"));
+                if (File.Exists(innerText))
+                {
+                    path = innerText;
+                }
+                else
+                {
+                    innerText = current.InnerText;
+                    if (Environment.GetEnvironmentVariable("ProgramFiles").EndsWith(" (x86)"))
+                    {
+                        innerText = innerText.Replace("[PROGRAMFILES]", Environment.GetEnvironmentVariable("ProgramFiles").Substring(0, Environment.GetEnvironmentVariable("ProgramFiles").LastIndexOf("(") - 1));
+                    }
+                    else
+                    {
+                        innerText = innerText.Replace("[PROGRAMFILES]", Environment.GetEnvironmentVariable("ProgramFiles"));
+                    }
+                    if (File.Exists(innerText))
+                    {
+                        path = innerText;
+                    }
+                }
+            }
+        }
+        finally
+        {
+            if (enumerator is IDisposable)
+            {
+                (enumerator as IDisposable).Dispose();
+            }
+        }
+        try
+        {
+            enumerator2 = nodExternalPlayer.SelectNodes("Location/RegistryKey").GetEnumerator();
+            while (enumerator2.MoveNext())
+            {
+                XmlNode node = (XmlNode)enumerator2.Current;
+                if (path == null)
+                {
+                    RegistryKey key;
+                    string str3 = Common.GetNodeAttribute(node, "Type", "HKLM");
+                    string str4 = str3;
+                    if (str4 == "HKLM")
+                    {
+                        key = Registry.LocalMachine.OpenSubKey(node.InnerText, false);
+                    }
+                    else if (str4 == "HKCU")
+                    {
+                        key = Registry.CurrentUser.OpenSubKey(node.InnerText, false);
+                    }
+                    else if (str4 == "HKCR")
+                    {
+                        key = Registry.ClassesRoot.OpenSubKey(node.InnerText, false);
+                    }
+                    else if (str4 == "HKCC")
+                    {
+                        key = Registry.CurrentConfig.OpenSubKey(node.InnerText, false);
+                    }
+                    else
+                    {
+                        key = null;
+                    }
+                    if (key != null)
+                    {
+                        path = Conversions.ToString(key.GetValue(Common.GetNodeAttribute(node, "Value", "-"), ""));
+                        path = path + Common.GetNodeAttribute(node, "Append", "");
+                    }
+                }
+            }
+        }
+        finally
+        {
+            if (enumerator2 is IDisposable)
+            {
+                (enumerator2 as IDisposable).Dispose();
+            }
+        }
+        return ((path != null) && File.Exists(path));
+    }
+
+    internal bool PlayHighDefinitionFilePath(string strPlayPath)
+    {
+        RegistryKey key = null;
+        string g = null;
+        string str2 = null;
+        if (strPlayPath.EndsWith("BDMV"))
+        {
+            key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Media Center\Extensibility\Categories\AutoPlay\Blu-ray", false);
+        }
+        else if (strPlayPath.EndsWith("HVDVD_TS"))
+        {
+            key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Media Center\Extensibility\Categories\AutoPlay\HD DVD", false);
+            strPlayPath = strPlayPath.Substring(0, strPlayPath.Length - 9) + @"\";
+        }
+        if (key != null)
+        {
+            Common.WriteLog("MCML.Launch.Launch." + Thread.CurrentThread.Name + " - AutoPlay key found", 0xff, "log.txt");
+            long num = 0L;
+            foreach (string str3 in key.GetSubKeyNames())
+            {
+                Common.WriteLog("MCML.Launch.Launch." + Thread.CurrentThread.Name + " - Key '" + str3 + "' found", 0xff, "log.txt");
+                RegistryKey key2 = key.OpenSubKey(str3, false);
+                if (key2 != null)
+                {
+                    Common.WriteLog("MCML.Launch.Launch." + Thread.CurrentThread.Name + " - AutoPlayKey found", 0xff, "log.txt");
+                    if (Conversions.ToLong(key2.GetValue("TimeStamp", 1)) > num)
+                    {
+                        Common.WriteLog("MCML.Launch.Launch." + Thread.CurrentThread.Name + " - TimeStamp is never", 0xff, "log.txt");
+                        num = Conversions.ToLong(key2.GetValue("TimeStamp", 1));
+                        g = key2.GetValue("AppId").ToString();
+                        str2 = str3;
+                        Common.WriteLog("MCML.Launch.Launch." + Thread.CurrentThread.Name + " - AppId '" + g + "', EntryPoint '" + str2 + "'", 0xff, "log.txt");
+                    }
+                    else
+                    {
+                        Common.WriteLog("MCML.Launch.Launch." + Thread.CurrentThread.Name + " - TimeStamp is not never", 0xff, "log.txt");
+                    }
+                }
+                else
+                {
+                    Common.WriteLog("MCML.Launch.Launch." + Thread.CurrentThread.Name + " - AutoPlayKey key not found", 0xff, "log.txt");
+                }
+            }
+        }
+        else
+        {
+            Common.WriteLog("MCML.Launch.Launch." + Thread.CurrentThread.Name + " - AutoPlay key not found", 0xff, "log.txt");
+        }
+        MediaCenterEnvironment mediaCenterEnvironment = AddInHost.Current.MediaCenterEnvironment;
+        if ((g != null) & (str2 != null))
+        {
+            Guid appId = new Guid(g);
+            Guid entryPointId = new Guid(str2);
+            mediaCenterEnvironment.LaunchEntryPoint(appId, entryPointId, new object[] { strPlayPath });
+            return true;
+        }
+        return false;
+    }
+
+    internal void PlayMedia(string strMedia, MovieDatabaseItem objMovieDatabaseItem, bool bolForceInternal)
+    {
+        string str9;
+        string str15;
+        string str22;
+        bool flag8;
+        int num3;
+        string str25;
+        string str28;
+        string str29;
+        string str31;
+        ArrayList list3;
+        bool flag10;
+        bool flag11;
+        string str32;
+        string str34;
+        string str35;
+        string str36;
+        string str37;
+        string str38;
+        IEnumerator enumerator5;
+        IEnumerator enumerator7;
+        IEnumerator enumerator11;
+        Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - '" + strMedia + "'.", 0xff, "log.txt");
+        MediaCenterEnvironment mediaCenterEnvironment = AddInHost.Current.MediaCenterEnvironment;
+        bool flag = false;
+        if (this.IsExtender)
+        {
+            Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Playback unit is a Media Center Extender. Forcing internal playback", 0xff, "log.txt");
+            bolForceInternal = true;
+            flag = Conversions.ToString(Common.GetUserConfiguration("PlaybackMethod", "", "Supported", null)) == "Transcode";
+        }
+        if (strMedia.ToUpper().EndsWith("HVDVD_TS") | strMedia.ToUpper().EndsWith("BDMV"))
+        {
+            string str = "";
+            if (strMedia.ToUpper().EndsWith("BDMV"))
+            {
+                if (Common.GetUserConfiguration("BluRayFileStructure", "ExternalPlayers", null, null) == null)
+                {
+                    XmlDocument document = new XmlDocument();
+                    document.Load(Common.GetInstallPath() + "ExternalPlayers.xml");
+                    XmlDocument document2 = new XmlDocument();
+                    try
+                    {
+                        document2.Load(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + @"\My Movies\FileStorage\User Customization\ExternalPlayers.xml");
+                    }
+                    catch (Exception exception1)
+                    {
+                        ProjectData.SetProjectError(exception1);
+                        Exception exception = exception1;
+                        ProjectData.ClearProjectError();
+                    }
+                    if (document2.DocumentElement != null)
+                    {
+                        IEnumerator enumerator;
+                        try
+                        {
+                            enumerator = document2.SelectNodes("ExternalPlayers/ExternalPlayer").GetEnumerator();
+                            while (enumerator.MoveNext())
+                            {
+                                XmlNode current = (XmlNode)enumerator.Current;
+                                if (this.GetPlayerCapability(current, "BluRayFileStructure") && this.PlayerInstalled(current))
+                                {
+                                    str = Common.GetNodeAttribute(current, "Name", "-");
+                                }
+                            }
+                        }
+                        finally
+                        {
+                            if (enumerator is IDisposable)
+                            {
+                                (enumerator as IDisposable).Dispose();
+                            }
+                        }
+                    }
+                    if (str == "")
+                    {
+                        IEnumerator enumerator2;
+                        try
+                        {
+                            enumerator2 = document.SelectNodes("ExternalPlayers/ExternalPlayer").GetEnumerator();
+                            while (enumerator2.MoveNext())
+                            {
+                                XmlNode nodExternalPlayer = (XmlNode)enumerator2.Current;
+                                if (this.GetPlayerCapability(nodExternalPlayer, "BluRayFileStructure") && this.PlayerInstalled(nodExternalPlayer))
+                                {
+                                    str = Common.GetNodeAttribute(nodExternalPlayer, "Name", "-");
+                                }
+                            }
+                        }
+                        finally
+                        {
+                            if (enumerator2 is IDisposable)
+                            {
+                                (enumerator2 as IDisposable).Dispose();
+                            }
+                        }
+                    }
+                }
+                str = Conversions.ToString(Common.GetUserConfiguration("BluRayFileStructure", "ExternalPlayers", "", null));
+            }
+            else if (strMedia.ToUpper().EndsWith("HVDVD_TS"))
+            {
+                if (Common.GetUserConfiguration("BluRayFileStructure", "ExternalPlayers", null, null) == null)
+                {
+                    XmlDocument document3 = new XmlDocument();
+                    document3.Load(Common.GetInstallPath() + "ExternalPlayers.xml");
+                    XmlDocument document4 = new XmlDocument();
+                    try
+                    {
+                        document4.Load(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + @"\My Movies\FileStorage\User Customization\ExternalPlayers.xml");
+                    }
+                    catch (Exception exception16)
+                    {
+                        ProjectData.SetProjectError(exception16);
+                        Exception exception2 = exception16;
+                        ProjectData.ClearProjectError();
+                    }
+                    if (document4.DocumentElement != null)
+                    {
+                        IEnumerator enumerator3;
+                        try
+                        {
+                            enumerator3 = document4.SelectNodes("ExternalPlayers/ExternalPlayer").GetEnumerator();
+                            while (enumerator3.MoveNext())
+                            {
+                                XmlNode node3 = (XmlNode)enumerator3.Current;
+                                if (this.GetPlayerCapability(node3, "HDDVDFileStructure") && this.PlayerInstalled(node3))
+                                {
+                                    str = Common.GetNodeAttribute(node3, "Name", "-");
+                                }
+                            }
+                        }
+                        finally
+                        {
+                            if (enumerator3 is IDisposable)
+                            {
+                                (enumerator3 as IDisposable).Dispose();
+                            }
+                        }
+                    }
+                    if (str == "")
+                    {
+                        IEnumerator enumerator4;
+                        try
+                        {
+                            enumerator4 = document3.SelectNodes("ExternalPlayers/ExternalPlayer").GetEnumerator();
+                            while (enumerator4.MoveNext())
+                            {
+                                XmlNode node4 = (XmlNode)enumerator4.Current;
+                                if (this.GetPlayerCapability(node4, "HDDVDFileStructure") && this.PlayerInstalled(node4))
+                                {
+                                    str = Common.GetNodeAttribute(node4, "Name", "-");
+                                }
+                            }
+                        }
+                        finally
+                        {
+                            if (enumerator4 is IDisposable)
+                            {
+                                (enumerator4 as IDisposable).Dispose();
+                            }
+                        }
+                    }
+                }
+                strMedia = strMedia.Substring(0, strMedia.Length - 9) + @"\";
+                str = Conversions.ToString(Common.GetUserConfiguration("HDDVDFileStructure", "ExternalPlayers", "", null));
+            }
+            if (str != "")
+            {
+                Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Stopping current playback", 0xff, "log.txt");
+                this.Stop();
+                ProcessStartInfo startInfo = new ProcessStartInfo();
+                startInfo.FileName = Common.GetInstallPath() + "My Movies External Player Launcher.exe";
+                startInfo.Arguments = "/player " + str + " /path \"" + strMedia + "\"";
+                startInfo.WindowStyle = ProcessWindowStyle.Maximized;
+                try
+                {
+                    Process process = Process.Start(startInfo);
+                    if (objMovieDatabaseItem != null)
+                    {
+                        objMovieDatabaseItem.MarkWatched();
+                    }
+                    Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Started external player launcher", 0xff, "log.txt");
+                }
+                catch (Exception exception17)
+                {
+                    ProjectData.SetProjectError(exception17);
+                    Exception exception3 = exception17;
+                    Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Start external player launcher failed '" + exception3.Message + "'", 0xff, "log.txt");
+                    ProjectData.ClearProjectError();
+                }
+            }
+            else
+            {
+                mediaCenterEnvironment.Dialog(Common.LocalizationString(0xc3c7, "", false), Common.LocalizationString(0xc3c6, "", false), DialogButtons.Ok, 0, true);
+            }
+            goto Label_298D;
+        }
+        if (!strMedia.ToUpper().EndsWith("VIDEO_TS"))
+        {
+            IEnumerator enumerator9;
+            string str21 = "";
+            try
+            {
+                str21 = Path.GetExtension(strMedia).ToLower();
+            }
+            catch (Exception exception23)
+            {
+                ProjectData.SetProjectError(exception23);
+                Exception exception9 = exception23;
+                ProjectData.ClearProjectError();
+            }
+            Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - File extention for media is '" + strMedia + "'", 0xff, "log.txt");
+            if (!(((((((((((str21 == ".img") | (str21 == ".cue")) | (str21 == ".iso")) | (str21 == ".bwt")) | (str21 == ".cdi")) | (str21 == ".b5t")) | (str21 == ".ccd")) | (str21 == ".mds")) | (str21 == ".nrg")) | (str21 == ".pdi")) | (str21 == ".dvd")))
+            {
+                string str40 = "";
+                if (((str21 == ".dvr-ms") | (str21 == ".dvr")) | (str21 == ".wtv"))
+                {
+                    Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Media is a recorded tv file", 0xff, "log.txt");
+                    str40 = Conversions.ToString(Common.GetUserConfiguration("RecordedTV", "ExternalPlayers", "", null));
+                }
+                else
+                {
+                    IEnumerator enumerator13;
+                    Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Media is an standard media file", 0xff, "log.txt");
+                    ArrayList list5 = new ArrayList();
+                    list5 = Common.GetConfigurationFolderCollection(@"SOFTWARE\My Movies\ExternalPlayers\FileTypes", "CurrentUser", "Extention");
+                    Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Checking if extention should be handled with specific external player", 0xff, "log.txt");
+                    try
+                    {
+                        enumerator13 = list5.GetEnumerator();
+                        while (enumerator13.MoveNext())
+                        {
+                            string str41 = Conversions.ToString(enumerator13.Current);
+                            string str42 = str41.Split(new char[] { '|' })[0];
+                            if (str42.ToLower() == str21.ToLower())
+                            {
+                                Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Extention '" + str42 + "' is the same as the media '" + str21 + "'", 0xff, "log.txt");
+                                str40 = str41.Split(new char[] { '|' })[1];
+                                Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - External player set to '" + str40 + "'", 0xff, "log.txt");
+                            }
+                            else
+                            {
+                                Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Extention '" + str42 + "' is not the same as the media '" + str21 + "'", 0xff, "log.txt");
+                            }
+                        }
+                    }
+                    finally
+                    {
+                        if (enumerator13 is IDisposable)
+                        {
+                            (enumerator13 as IDisposable).Dispose();
+                        }
+                    }
+                    if (str40 == "")
+                    {
+                        Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - External player not set for specific file type, defaulting to standard external player", 0xff, "log.txt");
+                        str40 = Conversions.ToString(Common.GetUserConfiguration("Files", "ExternalPlayers", "", null));
+                    }
+                }
+                if ((str40 == "") | bolForceInternal)
+                {
+                    Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - File type playback is configured for Windows Media Center", 0xff, "log.txt");
+                    string str43 = strMedia.Replace(@"\", "/");
+                    this.Stop();
+                    mediaCenterEnvironment.PlayMedia(MediaType.Video, str43, false);
+                    Application.Current.PlayControl.GoToFullScreen();
+                    if (objMovieDatabaseItem != null)
+                    {
+                        objMovieDatabaseItem.MarkWatched();
+                    }
+                }
+                else
+                {
+                    Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - File type playback is configured for external player", 0xff, "log.txt");
+                    Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Stopping current playback", 0xff, "log.txt");
+                    this.Stop();
+                    ProcessStartInfo info3 = new ProcessStartInfo();
+                    info3.FileName = Common.GetInstallPath() + "My Movies External Player Launcher.exe";
+                    info3.Arguments = "/player " + str40 + " /path \"" + strMedia + "\"";
+                    info3.WindowStyle = ProcessWindowStyle.Maximized;
+                    try
+                    {
+                        Process process3 = Process.Start(info3);
+                        if (objMovieDatabaseItem != null)
+                        {
+                            objMovieDatabaseItem.MarkWatched();
+                        }
+                        Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Started external player launcher", 0xff, "log.txt");
+                    }
+                    catch (Exception exception29)
+                    {
+                        ProjectData.SetProjectError(exception29);
+                        Exception exception15 = exception29;
+                        Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Start external player launcher failed '" + exception15.Message + "'", 0xff, "log.txt");
+                        ProjectData.ClearProjectError();
+                    }
+                }
+                goto Label_298D;
+            }
+            if (!flag)
+            {
+                Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Media is an image file", 0xff, "log.txt");
+                if (Application.Current.PlayControl.ImageMounter() != null)
+                {
+                    int num8;
+                    Application.Current.PlayControl.MountImage(strMedia);
+                    if (objMovieDatabaseItem != null)
+                    {
+                        objMovieDatabaseItem.MarkWatched();
+                    }
+                    int num4 = 1;
+                    do
+                    {
+                        Thread.Sleep(0x3e8);
+                        num4++;
+                        num8 = 0x19;
+                    }
+                    while (num4 <= num8);
+                }
+                else
+                {
+                    mediaCenterEnvironment.Dialog(Common.LocalizationString(0xc3c9, "", false), Common.LocalizationString(0xc3c8, "", false), DialogButtons.Ok, 0, true);
+                }
+                goto Label_298D;
+            }
+            Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Disc image received for transcoding", 0xff, "log.txt");
+            Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Determining the image type", 0xff, "log.txt");
+            string str23 = null;
+            str22 = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + @"\My Movies\Temp\" + Guid.NewGuid().ToString();
+            Directory.CreateDirectory(str22);
+            Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Attempting to extract needed files from image '" + strMedia + "' to '" + str22 + "'", 0xff, "log.txt");
+            try
+            {
+                LoadLibrary(Common.GetInstallPath() + "MyMoviesC.dll");
+                LoadLibrary(Common.GetInstallPath() + @"X64Dll\MyMoviesC.dll");
+                if (isoExtractFilesToFolder(strMedia, str22))
+                {
+                    Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Files extracted.", 0xff, "log.txt");
+                    foreach (string str24 in Directory.GetFiles(str22))
+                    {
+                        Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Extracted file '" + str24 + "'.", 0xff, "log.txt");
+                    }
+                    if (File.Exists(str22 + @"\VIDEO_TS.IFO"))
+                    {
+                        Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - VIDEO_TS.IFO existed in directory, ISO file is a DVD.", 0xff, "log.txt");
+                        str23 = "DVD";
+                    }
+                    else if (File.Exists(str22 + @"\VTKF000.AACS") | File.Exists(str22 + @"\VTKF.AACS"))
+                    {
+                        Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - A HD DVD file existed, the ISO is a HD DVD.", 0xff, "log.txt");
+                        str23 = "HD DVD";
+                    }
+                    else if (File.Exists(str22 + @"\DISCID.DAT") | File.Exists(str22 + @"\Unit_Key_RO.inf"))
+                    {
+                        Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - A Blu-ray file existed, the ISO is a Blu-ray.", 0xff, "log.txt");
+                        str23 = "Blu-ray";
+                    }
+                    else
+                    {
+                        Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - VIDEO_TS.IFO file did not exist, and HD DVD or Blu-ray files did not exist either, the ISO does not contain known information.", 0xff, "log.txt");
+                    }
+                }
+                else
+                {
+                    Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Files could not be extracted.", 0xff, "log.txt");
+                }
+            }
+            catch (Exception exception24)
+            {
+                ProjectData.SetProjectError(exception24);
+                Exception exception10 = exception24;
+                Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - The image file could not be extracted '" + exception10.Message + exception10.StackTrace + "'", 0xff, "log.txt");
+                ProjectData.ClearProjectError();
+            }
+            if (!((str23 == null) | (str23 == "DVD")))
+            {
+                switch (str23)
+                {
+                    case "Blu-ray":
+                        mediaCenterEnvironment.Dialog(Common.LocalizationString(0xc4fa, "", false), Common.LocalizationString(0xc4f9, "", false), DialogButtons.Ok, 0, true);
+                        break;
+
+                    case "HD DVD":
+                        mediaCenterEnvironment.Dialog(Common.LocalizationString(0xc4fb, "", false), Common.LocalizationString(0xc4f9, "", false), DialogButtons.Ok, 0, true);
+                        break;
+                }
+                goto Label_298D;
+            }
+            Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Disc image should be transcoded", 0xff, "log.txt");
+            Application.Current.DisplayWaitCursor = true;
+            Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + @"\My Movies\Transcode");
+            this.Stop();
+            Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Cancelling existing transcode, if any", 0xff, "log.txt");
+            Application.Current.Transcoder.Cancel();
+            Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Checking for existing files that should be deleted", 0xff, "log.txt");
+            foreach (string str26 in Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + @"\My Movies\Transcode"))
+            {
+                Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - File found '" + Path.GetFileName(str26) + "'", 0xff, "log.txt");
+                if (Path.GetFileName(str26).StartsWith(Environment.UserName + "-"))
+                {
+                    Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - File was created for current user", 0xff, "log.txt");
+                    try
+                    {
+                        File.Delete(str26);
+                        Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - File deleted", 0xff, "log.txt");
+                    }
+                    catch (Exception exception25)
+                    {
+                        ProjectData.SetProjectError(exception25);
+                        Exception exception11 = exception25;
+                        Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - File could not be deleted '" + exception11.Message + "'", 0xff, "log.txt");
+                        ProjectData.ClearProjectError();
+                    }
+                }
+                else
+                {
+                    Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - File was created for different user, leaving it", 0xff, "log.txt");
+                }
+            }
+            str25 = "";
+            str29 = "";
+            str31 = "";
+            flag8 = false;
+            Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Detecting 'Main Movie' IFO file and Title set", 0xff, "log.txt");
+            num3 = DVD.GetMainMovieTitle(str22);
+            str28 = DVD.GetMainMovieIFOFile(str22);
+            Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - 'Main Movie' IFO file is '" + str28 + "', 'Main Movie' Title set is '" + num3.ToString() + "'.", 0xff, "log.txt");
+            if (str28 == null)
+            {
+                Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - 'Main Movie' could not be detected, ignoring audio and subtitle settings.", 0xff, "log.txt");
+                goto Label_20E5;
+            }
+            Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Checking for audio and subtitle settings.", 0xff, "log.txt");
+            flag10 = false;
+            flag11 = false;
+            string str33 = Conversions.ToString(Common.GetUserConfiguration("PrimaryAudio", "Transcoding", "en", null));
+            str35 = Conversions.ToString(Common.GetUserConfiguration("SecondaryAudio", "Transcoding", "en", null));
+            str34 = Conversions.ToString(Common.GetUserConfiguration("PrimarySubtitle", "Transcoding", "en", null));
+            str36 = Conversions.ToString(Common.GetUserConfiguration("SecondarySubtitle", "Transcoding", "en", null));
+            str37 = Conversions.ToString(Common.GetUserConfiguration("DisplaySubtitles", "Transcoding", "Never", null));
+            Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Primary Audio detected to '" + str33 + "'", 0xff, "log.txt");
+            Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Secondary Audio detected to '" + str35 + "'", 0xff, "log.txt");
+            Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Primary Subtitle detected to '" + str34 + "'", 0xff, "log.txt");
+            Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Secondary Subtitle detected to '" + str36 + "'", 0xff, "log.txt");
+            Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Subtitle display detected to '" + str37 + "'", 0xff, "log.txt");
+            str31 = DVD.VideoFormat(str22 + @"\" + str28);
+            Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Video Format read from DVD '" + str37 + "'", 0xff, "log.txt");
+            Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Reading Audio Tracks", 0xff, "log.txt");
+            list3 = new ArrayList();
+            try
+            {
+                list3 = DVD.AudioTrackLanguages(str22 + @"\" + str28);
+            }
+            catch (Exception exception26)
+            {
+                ProjectData.SetProjectError(exception26);
+                Exception exception12 = exception26;
+                Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Exception when reading audio tracks '" + exception12.Message + "'. The process will continue, and let the encoder select audio track.", 0xff, "log.txt");
+                ProjectData.ClearProjectError();
+            }
+            try
+            {
+                enumerator9 = list3.GetEnumerator();
+                while (enumerator9.MoveNext())
+                {
+                    str32 = Conversions.ToString(enumerator9.Current);
+                    if (str32 == str33)
+                    {
+                        str25 = str32;
+                        flag10 = true;
+                        goto Label_1D65;
+                    }
+                }
+            }
+            finally
+            {
+                if (enumerator9 is IDisposable)
+                {
+                    (enumerator9 as IDisposable).Dispose();
+                }
+            }
+            goto Label_1D65;
+        }
+        if (!flag)
+        {
+            Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - DVD File Structure playback is configured for direct playback", 0xff, "log.txt");
+            string str17 = Conversions.ToString(Common.GetUserConfiguration("DVDFileStructure", "ExternalPlayers", "", null));
+            if ((str17 == "") | bolForceInternal)
+            {
+                Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - DVD File Structure playback is configured for Windows Media Center", 0xff, "log.txt");
+                bool flag7 = false;
+                if ((Environment.OSVersion.Version.Major >= 6) & (Environment.OSVersion.Version.Minor >= 1))
+                {
+                    Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Playback unit is Windows 7", 0xff, "log.txt");
+                    flag7 = true;
+                }
+                string str20 = "";
+                if (Conversions.ToString(Common.GetUserConfiguration("DVDPlayType", "PlayControl", "Menu", null)) == "Movie")
+                {
+                    Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - DVD PlayType is configured to 'Movie'.", 0xff, "log.txt");
+                    Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Getting main movie title.", 0xff, "log.txt");
+                    int num2 = DVD.GetMainMovieTitle(strMedia);
+                    Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Main movie title is '" + num2.ToString() + "'.", 0xff, "log.txt");
+                    if (num2 > 0)
+                    {
+                        str20 = "?" + num2.ToString();
+                    }
+                }
+                if (flag7 & (str20 != ""))
+                {
+                    mediaCenterEnvironment.Dialog(Common.LocalizationString(0xc4f8, "", false), Common.LocalizationString(0xc4f7, "", false), DialogButtons.Ok, 0, true);
+                    str20 = "";
+                }
+                string str18 = "DVD://";
+                if (strMedia.StartsWith(@"\\"))
+                {
+                    Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Playback path is from UNC path", 0xff, "log.txt");
+                    strMedia = strMedia.Remove(0, 2);
+                    if (flag7)
+                    {
+                        Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Playback unit is Windows 7, getting UNC prefix from registry, defaulting to bypass Windows 7 DVD:// bug", 0xff, "log.txt");
+                        str18 = Conversions.ToString(Common.GetUserConfiguration("Windows7UNCDVDPrefix", "", "DVD:////", null));
+                    }
+                }
+                else
+                {
+                    Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Playback path is from local drive", 0xff, "log.txt");
+                }
+                string str19 = str18 + strMedia.Replace(@"\", "/") + str20;
+                Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - DVD, Path: '" + str19 + "'.", 0xff, "log.txt");
+                this.Stop();
+                mediaCenterEnvironment.PlayMedia(MediaType.Dvd, str19, false);
+                Application.Current.PlayControl.GoToFullScreen();
+                if (objMovieDatabaseItem != null)
+                {
+                    objMovieDatabaseItem.MarkWatched();
+                }
+            }
+            else
+            {
+                Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - DVD File Structure playback is configured for external player", 0xff, "log.txt");
+                Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Stopping current playback", 0xff, "log.txt");
+                this.Stop();
+                ProcessStartInfo info2 = new ProcessStartInfo();
+                info2.FileName = Common.GetInstallPath() + "My Movies External Player Launcher.exe";
+                info2.Arguments = "/player " + str17 + " /path \"" + strMedia + "\"";
+                info2.WindowStyle = ProcessWindowStyle.Maximized;
+                try
+                {
+                    Process process2 = Process.Start(info2);
+                    if (objMovieDatabaseItem != null)
+                    {
+                        objMovieDatabaseItem.MarkWatched();
+                    }
+                    Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Started external player launcher", 0xff, "log.txt");
+                }
+                catch (Exception exception22)
+                {
+                    ProjectData.SetProjectError(exception22);
+                    Exception exception8 = exception22;
+                    Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Start external player launcher failed '" + exception8.Message + "'", 0xff, "log.txt");
+                    ProjectData.ClearProjectError();
+                }
+            }
+            goto Label_298D;
+        }
+        Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - DVD File Structure playback is configured to be transcoded", 0xff, "log.txt");
+        Application.Current.DisplayWaitCursor = true;
+        Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + @"\My Movies\Transcode");
+        this.Stop();
+        Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Cancelling existing transcode, if any", 0xff, "log.txt");
+        Application.Current.Transcoder.Cancel();
+        Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Checking for existing files that should be deleted", 0xff, "log.txt");
+        foreach (string str3 in Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + @"\My Movies\Transcode"))
+        {
+            Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - File found '" + Path.GetFileName(str3) + "'", 0xff, "log.txt");
+            if (Path.GetFileName(str3).StartsWith(Environment.UserName + "-"))
+            {
+                Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - File was created for current user", 0xff, "log.txt");
+                try
+                {
+                    File.Delete(str3);
+                    Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - File deleted", 0xff, "log.txt");
+                }
+                catch (Exception exception18)
+                {
+                    ProjectData.SetProjectError(exception18);
+                    Exception exception4 = exception18;
+                    Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - File could not be deleted '" + exception4.Message + "'", 0xff, "log.txt");
+                    ProjectData.ClearProjectError();
+                }
+            }
+            else
+            {
+                Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - File was created for different user, leaving it", 0xff, "log.txt");
+            }
+        }
+        string str2 = "";
+        string str6 = "";
+        string str8 = "";
+        bool flag2 = false;
+        Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Detecting 'Main Movie' IFO file and Title set", 0xff, "log.txt");
+        int mainMovieTitle = DVD.GetMainMovieTitle(strMedia);
+        string mainMovieIFOFile = DVD.GetMainMovieIFOFile(strMedia);
+        Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - 'Main Movie' IFO file is '" + mainMovieIFOFile + "', 'Main Movie' Title set is '" + mainMovieTitle.ToString() + "'.", 0xff, "log.txt");
+        if (mainMovieIFOFile == null)
+        {
+            Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - 'Main Movie' could not be detected, ignoring audio and subtitle settings.", 0xff, "log.txt");
+            goto Label_0DFB;
+        }
+        Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Checking for audio and subtitle settings.", 0xff, "log.txt");
+        bool flag4 = false;
+        bool flag5 = false;
+        string str10 = Conversions.ToString(Common.GetUserConfiguration("PrimaryAudio", "Transcoding", "en", null));
+        string str12 = Conversions.ToString(Common.GetUserConfiguration("SecondaryAudio", "Transcoding", "en", null));
+        string str11 = Conversions.ToString(Common.GetUserConfiguration("PrimarySubtitle", "Transcoding", "en", null));
+        string str13 = Conversions.ToString(Common.GetUserConfiguration("SecondarySubtitle", "Transcoding", "en", null));
+        string str14 = Conversions.ToString(Common.GetUserConfiguration("DisplaySubtitles", "Transcoding", "Never", null));
+        Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Primary Audio detected to '" + str10 + "'", 0xff, "log.txt");
+        Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Secondary Audio detected to '" + str12 + "'", 0xff, "log.txt");
+        Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Primary Subtitle detected to '" + str11 + "'", 0xff, "log.txt");
+        Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Secondary Subtitle detected to '" + str13 + "'", 0xff, "log.txt");
+        Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Subtitle display detected to '" + str14 + "'", 0xff, "log.txt");
+        str8 = DVD.VideoFormat(strMedia + @"\" + mainMovieIFOFile);
+        Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Video Format read from DVD '" + str14 + "'", 0xff, "log.txt");
+        Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Reading Audio Tracks", 0xff, "log.txt");
+        ArrayList list = new ArrayList();
+        try
+        {
+            list = DVD.AudioTrackLanguages(strMedia + @"\" + mainMovieIFOFile);
+        }
+        catch (Exception exception19)
+        {
+            ProjectData.SetProjectError(exception19);
+            Exception exception5 = exception19;
+            Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Exception when reading audio tracks '" + exception5.Message + "'. The process will continue, and let the encoder select audio track.", 0xff, "log.txt");
+            ProjectData.ClearProjectError();
+        }
+        try
+        {
+            enumerator5 = list.GetEnumerator();
+            while (enumerator5.MoveNext())
+            {
+                str9 = Conversions.ToString(enumerator5.Current);
+                if (str9 == str10)
+                {
+                    str2 = str9;
+                    flag4 = true;
+                    goto Label_0A7D;
+                }
+            }
+        }
+        finally
+        {
+            if (enumerator5 is IDisposable)
+            {
+                (enumerator5 as IDisposable).Dispose();
+            }
+        }
+    Label_0A7D:
+        if (str2 == "")
+        {
+            IEnumerator enumerator6;
+            try
+            {
+                enumerator6 = list.GetEnumerator();
+                while (enumerator6.MoveNext())
+                {
+                    str9 = Conversions.ToString(enumerator6.Current);
+                    if (str9 == str12)
+                    {
+                        str2 = str9;
+                        flag5 = true;
+                        goto Label_0AFE;
+                    }
+                }
+            }
+            finally
+            {
+                if (enumerator6 is IDisposable)
+                {
+                    (enumerator6 as IDisposable).Dispose();
+                }
+            }
+        }
+    Label_0AFE:
+        if (str14 == "Never")
+        {
+            Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Subtitles configured to never be present", 0xff, "log.txt");
+            goto Label_0DFB;
+        }
+        Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Subtitles configured to be present in some situations", 0xff, "log.txt");
+        bool flag6 = false;
+        if ((str14 == "NoPrimaryAudio") & !flag4)
+        {
+            Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Subtitles configured to be present if primary audio is not found, which is the case", 0xff, "log.txt");
+            flag6 = true;
+        }
+        else if (((str14 == "NoSecondaryAudio") & !flag4) & !flag5)
+        {
+            Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Subtitles configured to be present if primary and secondary audio is not found, which is the case", 0xff, "log.txt");
+            flag6 = true;
+        }
+        else if (str14 == "Always")
+        {
+            Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Subtitles configured to always be present", 0xff, "log.txt");
+            flag6 = true;
+        }
+        else if (str14 == "ForcedOnly")
+        {
+            Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Subtitles set to be present if forced subtitles exists", 0xff, "log.txt");
+            flag6 = true;
+        }
+        if (!flag6)
+        {
+            goto Label_0D63;
+        }
+        Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Reading Subtitle Tracks", 0xff, "log.txt");
+        ArrayList list2 = new ArrayList();
+        try
+        {
+            list2 = DVD.SubtitleLanguages(strMedia + @"\" + mainMovieIFOFile);
+        }
+        catch (Exception exception20)
+        {
+            ProjectData.SetProjectError(exception20);
+            Exception exception6 = exception20;
+            Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Exception when reading subtitle tracks '" + exception6.Message + "'. The process will continue, and not include a subtitle.", 0xff, "log.txt");
+            ProjectData.ClearProjectError();
+        }
+        try
+        {
+            enumerator7 = list2.GetEnumerator();
+            while (enumerator7.MoveNext())
+            {
+                str15 = Conversions.ToString(enumerator7.Current);
+                if (str15 == str11)
+                {
+                    str6 = str15;
+                    goto Label_0CE4;
+                }
+            }
+        }
+        finally
+        {
+            if (enumerator7 is IDisposable)
+            {
+                (enumerator7 as IDisposable).Dispose();
+            }
+        }
+    Label_0CE4:
+        if (str6 == "")
+        {
+            IEnumerator enumerator8;
+            try
+            {
+                enumerator8 = list2.GetEnumerator();
+                while (enumerator8.MoveNext())
+                {
+                    str15 = Conversions.ToString(enumerator8.Current);
+                    if (str15 == str13)
+                    {
+                        str6 = str15;
+                        goto Label_0D63;
+                    }
+                }
+            }
+            finally
+            {
+                if (enumerator8 is IDisposable)
+                {
+                    (enumerator8 as IDisposable).Dispose();
+                }
+            }
+        }
+    Label_0D63:
+        if ((str14 == "ForcedOnly") && (str6 != ""))
+        {
+            try
+            {
+                if (DVD.ContainsForcedSubPicture(strMedia))
+                {
+                    flag2 = true;
+                }
+                else
+                {
+                    str6 = "";
+                }
+            }
+            catch (Exception exception21)
+            {
+                ProjectData.SetProjectError(exception21);
+                Exception exception7 = exception21;
+                str6 = "";
+                ProjectData.ClearProjectError();
+            }
+        }
+    Label_0DFB:
+        Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Audio Selected '" + str2 + "'.", 0xff, "log.txt");
+        Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Subtitle Selected '" + str6 + "'.", 0xff, "log.txt");
+        Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Video Format Detected '" + str8 + "'.", 0xff, "log.txt");
+        Application.Current.Transcoder.AudioLanguage = str2;
+        Application.Current.Transcoder.SubtitleLanguage = str6;
+        Application.Current.Transcoder.VideoFormat = str8;
+        Application.Current.Transcoder.ForcedSubtitlesOnly = flag2;
+        Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Setting filename based on path, audio and subtitle language", 0xff, "log.txt");
+        string str4 = Environment.UserName + "-" + Common.SecureFileName(strMedia, "_", false) + "_" + str2 + "_" + str6 + ".mpg";
+        Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Filename set to '" + str4 + "'", 0xff, "log.txt");
+        string media = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + @"\My Movies\Transcode\" + str4;
+        Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Transcode file path '" + media + "'", 0xff, "log.txt");
+        Application.Current.Transcoder.InputDirectory = strMedia;
+        Application.Current.Transcoder.OutputFile = media;
+        if (mainMovieTitle > 0)
+        {
+            Application.Current.Transcoder.Title = mainMovieTitle;
+        }
+        else
+        {
+            Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Since 'Main Movie' was not detected, we set the Title set to 1, as this is the most likely to be main movie.", 0xff, "log.txt");
+            Application.Current.Transcoder.Title = 1;
+        }
+        Application.Current.Transcoder.EncoderPath = Common.GetInstallPath() + "mencoder.exe";
+        Application.Current.Transcoder.Start();
+        DateTime now = DateTime.Now;
+        bool flag3 = false;
+        while ((Application.Current.Transcoder.SecondsDone < 30) & !flag3)
+        {
+            Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Transcoding is '" + Conversions.ToString(Application.Current.Transcoder.SecondsDone) + "' seconds done", 0xff, "log.txt");
+            if (DateAndTime.DateDiff(DateInterval.Second, now, DateAndTime.Now, FirstDayOfWeek.Sunday, FirstWeekOfYear.Jan1) > 60L)
+            {
+                Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Transcoding have now been for more than 60 seconds. Time out.", 0xff, "log.txt");
+                flag3 = true;
+            }
+            Thread.Sleep(250);
+        }
+        if (!flag3)
+        {
+            Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Transcoding have hit 30 seconds. Starting playback", 0xff, "log.txt");
+            string str16 = strMedia.Replace(@"\", "/");
+            mediaCenterEnvironment.PlayMedia(MediaType.Video, media, false);
+            Application.Current.PlayControl.GoToFullScreen();
+            if (objMovieDatabaseItem != null)
+            {
+                objMovieDatabaseItem.MarkWatched();
+            }
+            Application.Current.DisplayWaitCursor = false;
+        }
+        else
+        {
+            Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Transcoding did not hit 30 seconds within one minute. Notifying the user", 0xff, "log.txt");
+            Application.Current.Transcoder.Cancel();
+            Application.Current.DisplayWaitCursor = false;
+            mediaCenterEnvironment.Dialog(Common.LocalizationString(0xc4e3, "", false), Common.LocalizationString(0xc4e2, "", false), DialogButtons.Ok, 0, true);
+        }
+        goto Label_298D;
+    Label_1D65:
+        if (str25 == "")
+        {
+            IEnumerator enumerator10;
+            try
+            {
+                enumerator10 = list3.GetEnumerator();
+                while (enumerator10.MoveNext())
+                {
+                    str32 = Conversions.ToString(enumerator10.Current);
+                    if (str32 == str35)
+                    {
+                        str25 = str32;
+                        flag11 = true;
+                        goto Label_1DE6;
+                    }
+                }
+            }
+            finally
+            {
+                if (enumerator10 is IDisposable)
+                {
+                    (enumerator10 as IDisposable).Dispose();
+                }
+            }
+        }
+    Label_1DE6:
+        if (str37 == "Never")
+        {
+            Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Subtitles configured to never be present", 0xff, "log.txt");
+            goto Label_20E5;
+        }
+        Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Subtitles configured to be present in some situations", 0xff, "log.txt");
+        bool flag12 = false;
+        if ((str37 == "NoPrimaryAudio") & !flag10)
+        {
+            Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Subtitles configured to be present if primary audio is not found, which is the case", 0xff, "log.txt");
+            flag12 = true;
+        }
+        else if (((str37 == "NoSecondaryAudio") & !flag10) & !flag11)
+        {
+            Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Subtitles configured to be present if primary and secondary audio is not found, which is the case", 0xff, "log.txt");
+            flag12 = true;
+        }
+        else if (str37 == "Always")
+        {
+            Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Subtitles configured to always be present", 0xff, "log.txt");
+            flag12 = true;
+        }
+        else if (str37 == "ForcedOnly")
+        {
+            Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Subtitles set to be present if forced subtitles exists", 0xff, "log.txt");
+            flag12 = true;
+        }
+        if (!flag12)
+        {
+            goto Label_204C;
+        }
+        Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Reading Subtitle Tracks", 0xff, "log.txt");
+        ArrayList list4 = new ArrayList();
+        try
+        {
+            list4 = DVD.SubtitleLanguages(str22 + @"\" + str28);
+        }
+        catch (Exception exception27)
+        {
+            ProjectData.SetProjectError(exception27);
+            Exception exception13 = exception27;
+            Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Exception when reading subtitle tracks '" + exception13.Message + "'. The process will continue, and not include a subtitle.", 0xff, "log.txt");
+            ProjectData.ClearProjectError();
+        }
+        try
+        {
+            enumerator11 = list4.GetEnumerator();
+            while (enumerator11.MoveNext())
+            {
+                str38 = Conversions.ToString(enumerator11.Current);
+                if (str38 == str34)
+                {
+                    str29 = str38;
+                    goto Label_1FCD;
+                }
+            }
+        }
+        finally
+        {
+            if (enumerator11 is IDisposable)
+            {
+                (enumerator11 as IDisposable).Dispose();
+            }
+        }
+    Label_1FCD:
+        if (str29 == "")
+        {
+            IEnumerator enumerator12;
+            try
+            {
+                enumerator12 = list4.GetEnumerator();
+                while (enumerator12.MoveNext())
+                {
+                    str38 = Conversions.ToString(enumerator12.Current);
+                    if (str38 == str36)
+                    {
+                        str29 = str38;
+                        goto Label_204C;
+                    }
+                }
+            }
+            finally
+            {
+                if (enumerator12 is IDisposable)
+                {
+                    (enumerator12 as IDisposable).Dispose();
+                }
+            }
+        }
+    Label_204C:
+        if ((str37 == "ForcedOnly") && (str29 != ""))
+        {
+            try
+            {
+                if (DVD.ContainsForcedSubPicture(str22))
+                {
+                    flag8 = true;
+                }
+                else
+                {
+                    str29 = "";
+                }
+            }
+            catch (Exception exception28)
+            {
+                ProjectData.SetProjectError(exception28);
+                Exception exception14 = exception28;
+                str29 = "";
+                ProjectData.ClearProjectError();
+            }
+        }
+    Label_20E5:
+        Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Audio Selected '" + str25 + "'.", 0xff, "log.txt");
+        Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Subtitle Selected '" + str29 + "'.", 0xff, "log.txt");
+        Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Video Format Detected '" + str31 + "'.", 0xff, "log.txt");
+        Application.Current.Transcoder.AudioLanguage = str25;
+        Application.Current.Transcoder.SubtitleLanguage = str29;
+        Application.Current.Transcoder.VideoFormat = str31;
+        Application.Current.Transcoder.ForcedSubtitlesOnly = flag8;
+        Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Setting filename based on path, audio and subtitle language", 0xff, "log.txt");
+        string str27 = Environment.UserName + "-" + Common.SecureFileName(strMedia, "_", false) + "_" + str25 + "_" + str29 + ".mpg";
+        Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Filename set to '" + str27 + "'", 0xff, "log.txt");
+        string str30 = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + @"\My Movies\Transcode\" + str27;
+        Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Transcode file path '" + str30 + "'", 0xff, "log.txt");
+        Application.Current.Transcoder.InputDirectory = strMedia;
+        Application.Current.Transcoder.OutputFile = str30;
+        if (num3 > 0)
+        {
+            Application.Current.Transcoder.Title = num3;
+        }
+        else
+        {
+            Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Since 'Main Movie' was not detected, we set the Title set to 1, as this is the most likely to be main movie.", 0xff, "log.txt");
+            Application.Current.Transcoder.Title = 1;
+        }
+        Application.Current.Transcoder.EncoderPath = Common.GetInstallPath() + "mencoder.exe";
+        Application.Current.Transcoder.Start();
+        DateTime time2 = DateTime.Now;
+        bool flag9 = false;
+        while ((Application.Current.Transcoder.SecondsDone < 30) & !flag9)
+        {
+            Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Transcoding is '" + Conversions.ToString(Application.Current.Transcoder.SecondsDone) + "' seconds done", 0xff, "log.txt");
+            if (DateAndTime.DateDiff(DateInterval.Second, time2, DateAndTime.Now, FirstDayOfWeek.Sunday, FirstWeekOfYear.Jan1) > 60L)
+            {
+                Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Transcoding have now been for more than 60 seconds. Time out.", 0xff, "log.txt");
+                flag9 = true;
+            }
+            Thread.Sleep(250);
+        }
+        if (!flag9)
+        {
+            Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Transcoding have hit 30 seconds. Starting playback", 0xff, "log.txt");
+            string str39 = strMedia.Replace(@"\", "/");
+            mediaCenterEnvironment.PlayMedia(MediaType.Video, str30, false);
+            Application.Current.PlayControl.GoToFullScreen();
+            if (objMovieDatabaseItem != null)
+            {
+                objMovieDatabaseItem.MarkWatched();
+            }
+            Application.Current.DisplayWaitCursor = false;
+        }
+        else
+        {
+            Common.WriteLog("MCML.MovieDatabaseItem.PlayMedia - Transcoding did not hit 30 seconds within one minute. Notifying the user", 0xff, "log.txt");
+            Application.Current.Transcoder.Cancel();
+            Application.Current.DisplayWaitCursor = false;
+            mediaCenterEnvironment.Dialog(Common.LocalizationString(0xc4e3, "", false), Common.LocalizationString(0xc4e2, "", false), DialogButtons.Ok, 0, true);
+        }
+    Label_298D:
+        Application.Current.DisplayWaitCursor = false;
+    }
+
+    public bool PlayMediaChangerDisc(int intChanger, int intSlot, string strDiscIdCheck)
+    {
+        Common.WriteLog("MCML.PlayControl.PlayMediaChangerDisc - Changer: '" + Conversions.ToString(intChanger) + "', Slot: '" + Conversions.ToString(intSlot) + "', DiscId: '" + strDiscIdCheck + "'", 0xff, "log.txt");
+        MediaCenterEnvironment mediaCenterEnvironment = AddInHost.Current.MediaCenterEnvironment;
+        if (mediaCenterEnvironment.MediaChangers.Count > intChanger)
+        {
+            MediaChanger changer = mediaCenterEnvironment.MediaChangers[intChanger];
+            if (!changer.IsLocked)
+            {
+                DiscData data;
+                if (intSlot > 0)
+                {
+                    data = changer.GetSlotDiscData()[intSlot - 1];
+                }
+                else
+                {
+                    data = changer.GetDriveDiscData()[0];
+                }
+                if (data.DiscType == DiscType.MovieDvd)
+                {
+                    if (data.DiscId.Replace("|", "-").ToUpper() == strDiscIdCheck.ToUpper())
+                    {
+                        bool flag;
+                        if (intSlot >= 0)
+                        {
+                            Common.WriteLog("AddIn.ThreadMediaChanger_PlayDisc.PlayDisc - Unloading Current Disc", 0xff, "log.txt");
+                            if (changer.GetDriveDiscData()[0].DiscType != DiscType.Empty)
+                            {
+                                try
+                                {
+                                    changer.UnloadDisc(0);
+                                }
+                                catch (Exception exception1)
+                                {
+                                    ProjectData.SetProjectError(exception1);
+                                    Exception exception = exception1;
+                                    Common.WriteLog("AddIn.ThreadMediaChanger_PlayDisc - UnloadDisc exception: '" + exception.Message + "'", 0xff, "log.txt");
+                                    ProjectData.ClearProjectError();
+                                }
+                            }
+                            Common.WriteLog("AddIn.ThreadMediaChanger_PlayDisc.PlayDisc - Loading Disc", 0xff, "log.txt");
+                            changer.LoadDisc(intSlot - 1, 0);
+                            Common.WriteLog("AddIn.ThreadMediaChanger_PlayDisc.PlayDisc - Disc Loaded Into Drive: " + changer.GetDriveDiscData()[0].DrivePath, 0xff, "log.txt");
+                        }
+                        else
+                        {
+                            Common.WriteLog("AddIn.ThreadMediaChanger_PlayDisc.PlayDisc - Disc already in drive: " + data.DrivePath, 0xff, "log.txt");
+                        }
+                        try
+                        {
+                            string media = "DVD://" + changer.GetDriveDiscData()[0].DrivePath + "/VIDEO_TS/";
+                            Common.WriteLog("AddIn.ThreadMediaChanger_PlayDisc.PlayDisc - Playing '" + media + "'", 0xff, "log.txt");
+                            this.Stop();
+                            mediaCenterEnvironment.PlayMedia(MediaType.Dvd, media, false);
+                            Common.WriteLog("AddIn.ThreadMediaChanger_PlayDisc.PlayDisc - Opening full screen.", 0xff, "log.txt");
+                            mediaCenterEnvironment.MediaExperience.GoToFullScreen();
+                            Application.Current.DisplayWaitCursor = false;
+                        }
+                        catch (Exception exception3)
+                        {
+                            ProjectData.SetProjectError(exception3);
+                            Exception exception2 = exception3;
+                            Common.WriteLog("AddIn.ThreadMediaChanger_PlayDisc.PlayDisc - Failed: '" + exception2.Message + "'", 0xff, "log.txt");
+                            Application.Current.DisplayWaitCursor = false;
+                            ProjectData.ClearProjectError();
+                        }
+                        return flag;
+                    }
+                    Common.WriteLog("MCML.PlayControl.PlayMediaChangerDisc - The disc id is wrong, disc id is '" + data.DiscId.Replace("|", "-").ToUpper() + "', expected '" + strDiscIdCheck.ToUpper() + "'.", 0xff, "log.txt");
+                    Application.Current.DisplayWaitCursor = false;
+                    mediaCenterEnvironment.Dialog(Common.LocalizationString(0x575d, "", false), Common.LocalizationString(0xc3ca, "", false), DialogButtons.Ok, 0, true);
+                    return false;
+                }
+                Common.WriteLog("MCML.PlayControl.PlayMediaChangerDisc - The disc is '" + data.DiscType.ToString() + "'.", 0xff, "log.txt");
+                Application.Current.DisplayWaitCursor = false;
+                mediaCenterEnvironment.Dialog(Common.LocalizationString(0x5759, "", false), Common.LocalizationString(0xc3ca, "", false), DialogButtons.Ok, 0, true);
+                return false;
+            }
+            Application.Current.DisplayWaitCursor = false;
+            mediaCenterEnvironment.Dialog(Common.LocalizationString(0x575a, "", false), Common.LocalizationString(0xc3ca, "", false), DialogButtons.Ok, 0, true);
+            return false;
+        }
+        Application.Current.DisplayWaitCursor = false;
+        mediaCenterEnvironment.Dialog(Common.LocalizationString(0x575b, "", false), Common.LocalizationString(0xc3ca, "", false), DialogButtons.Ok, 0, true);
+        return false;
+    }
+
+    public void Stop()
+    {
+        MediaExperience mediaExperience = AddInHost.Current.MediaCenterEnvironment.MediaExperience;
+        if (mediaExperience != null)
+        {
+            mediaExperience.Transport.PlayRate = 0f;
+        }
+    }
+
+    // Properties
+    public bool IsExtender
+    {
+        get
+        {
+            MediaCenterEnvironment mediaCenterEnvironment = AddInHost.Current.MediaCenterEnvironment;
+            try
+            {
+                if (!mediaCenterEnvironment.Capabilities.ContainsKey("console") & mediaCenterEnvironment.Capabilities.ContainsKey("video"))
+                {
+                    return true;
+                }
+            }
+            catch (Exception exception1)
+            {
+                ProjectData.SetProjectError(exception1);
+                Exception exception = exception1;
+                Common.WriteLog("MCML.PlayControl.IsExtender - There was a problem checking if the device is an extender '" + exception.Message + "', returning false.", 0xff, "log.txt");
+                bool flag = false;
+                ProjectData.ClearProjectError();
+                return flag;
+                ProjectData.ClearProjectError();
+            }
+            return false;
+        }
+    }
+
+    public bool IsRemoteDesktop
+    {
+        get
+        {
+            MediaCenterEnvironment mediaCenterEnvironment = AddInHost.Current.MediaCenterEnvironment;
+            try
+            {
+                if (mediaCenterEnvironment.Capabilities.ContainsKey("console") & !mediaCenterEnvironment.Capabilities.ContainsKey("video"))
+                {
+                    return true;
+                }
+            }
+            catch (Exception exception1)
+            {
+                ProjectData.SetProjectError(exception1);
+                Exception exception = exception1;
+                Common.WriteLog("MCML.PlayControl.IsRemoteDesktop - There was a problem checking if the device is a remote desktop '" + exception.Message + "', returning false.", 0xff, "log.txt");
+                bool flag = false;
+                ProjectData.ClearProjectError();
+                return flag;
+                ProjectData.ClearProjectError();
+            }
+            return false;
+        }
+    }
+
+    public bool IsVideoAllowed
+    {
+        get
+        {
+            MediaCenterEnvironment mediaCenterEnvironment = AddInHost.Current.MediaCenterEnvironment;
+            try
+            {
+                if (mediaCenterEnvironment.Capabilities.ContainsKey("video"))
+                {
+                    return true;
+                }
+            }
+            catch (Exception exception1)
+            {
+                ProjectData.SetProjectError(exception1);
+                Exception exception = exception1;
+                Common.WriteLog("MCML.PlayControl.IsVideoAllowed - There was a problem checking if video is allowed '" + exception.Message + "', returning false.", 0xff, "log.txt");
+                bool flag = false;
+                ProjectData.ClearProjectError();
+                return flag;
+                ProjectData.ClearProjectError();
+            }
+            return false;
+        }
+    }
+}
