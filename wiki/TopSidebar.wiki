@@ -6,4 +6,4 @@
   * [Compiling]
   * [InstallSQLServerManually]
  * Trouble Shooting
-  * [InstallationProblems]
+  * [InstallationProblems Installation Problems]
