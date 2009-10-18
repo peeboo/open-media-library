@@ -5,5 +5,5 @@
   * [ConfiguringWindowsFirewall]
   * [Compiling]
   * [InstallSQLServerManually]
- * Troubleshooting
+ * Trouble Shooting
   * [InstallationProblems]
