@@ -337,15 +337,15 @@ namespace Library
             OMLApplication.DebugLine("[OMLApplication] Startup({0}) {1}", context, IsExtender ? "Extender" : "Native");
             // DISABLE THIS UNTIL ITS READY -- DJShultz 01/13/2009
 
-            if (!IsExtender) {
-                OperatingSystem os = Environment.OSVersion;
-                if (os.Version.Major >= 6 && os.Version.Minor >= 1)
-                    Properties.Settings.Default.IsWindows7 = true;
-                else
-                    Properties.Settings.Default.IsWindows7 = false;
+            //if (!IsExtender) {
+            OperatingSystem os = Environment.OSVersion;
+            if (os.Version.Major >= 6 && os.Version.Minor >= 1)
+                Properties.Settings.Default.IsWindows7 = true;
+            else
+                Properties.Settings.Default.IsWindows7 = false;
 
-                Properties.Settings.Default.Save();
-            }
+            Properties.Settings.Default.Save();
+            //}
             //should we update?
             if (OMLSettings.EnableAutomaticUpdates)
             {
@@ -359,7 +359,11 @@ namespace Library
             #region v3POC
 
             SetPrimaryBackgroundImage();
-
+            //this.MediaCenterEnvironment.Dialog(
+            //            string.Format("Loading MC UI"),
+            //            "TEST", DialogButtons.Ok, 5, false);
+            //this.GoToWizard(new List<OMLEngine.TitleFilter>(), "Movies");
+            //return;
             switch (context)
             {
                 case "Settings":
@@ -482,6 +486,21 @@ namespace Library
 #endif
 
         }
+
+        //private void GoToWizard(List<OMLEngine.TitleFilter> filters, string name)
+        //{
+        //    OMLProperties properties = new OMLProperties();
+        //    properties.Add("Application", this);
+        //    properties.Add("I18n", I18n.Instance);
+        //    //v3 main gallery
+        //    Library.Code.V3.WizardGalleryPage gallery = new Library.Code.V3.WizardGalleryPage(filters, name);
+        //    //description
+        //    gallery.Description = name;
+        //    Command CommandContextPopOverlay = new Command();
+        //    properties.Add("CommandContextPopOverlay", CommandContextPopOverlay);
+        //    properties.Add("Page", gallery);
+        //    _session.GoToPage(@"resx://Library/Library.Resources/V3_WizardGalleryPage", properties);
+        //}
 
         private void GoHome(List<OMLEngine.TitleFilter> filters, string name)
         {
@@ -671,7 +690,8 @@ namespace Library
         // properties
         public bool IsExtender
         {
-            get { return _isExtender; }
+            get { return _isExtender;
+            }
         }
 
         public string NowPlayingMovieName
