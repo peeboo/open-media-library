@@ -98,16 +98,17 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GetSchemaVersion]') AND type in (N'FN', N'IF', N'TF', N'FS', N'FT'))
-BEGIN
-execute dbo.sp_executesql @statement = N'
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GetSchemaVersion]') AND type in (N'FN', N'IF', N'TF', N'FS', N'FT'))
+DROP FUNCTION [dbo].[GetSchemaVersion]
+GO
 
-CREATE FUNCTION [dbo].[GetSchemaVersion]()
-RETURNS varchar(10)
-AS
-BEGIN
-	RETURN ''1.5''
-END
-' 
-END
+execute dbo.sp_executesql @statement = N' 
+  
+CREATE FUNCTION [dbo].[GetSchemaVersion]() 
+RETURNS varchar(10) 
+AS 
+BEGIN 
+        RETURN ''1.5'' 
+END 
+'  
 GO
