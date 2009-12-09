@@ -4358,5 +4358,10 @@ namespace OMLDatabaseEditor
 
             TitleCollectionManager.SaveTitleUpdates();
         }
+
+        private void lvTitles_ScrollUp(object sender, EventArgs e)
+        {
+            lvTitles.Invalidate();
+        }
     }
 }
