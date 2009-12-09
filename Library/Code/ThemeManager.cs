@@ -2225,8 +2225,8 @@ namespace Library
         public static extern bool DestroyMenu(HMENU hmenu);
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         public static extern bool DestroyWindow(HWND hwnd);
-        [DllImport("kernel32.dll", SetLastError = true)]
-        public static extern unsafe bool DeviceIoControl(SafeFileHandle hDevice, uint dwIoControlCode, void* lpInBuffer, int nInBufferSize, void* lpOutBuffer, int nOutBufferSize, int* lpBytesReturned, IntPtr lpOverlapped);
+        //[DllImport("kernel32.dll", SetLastError = true)]
+        //public static extern unsafe bool DeviceIoControl(SafeFileHandle hDevice, uint dwIoControlCode, void* lpInBuffer, int nInBufferSize, void* lpOutBuffer, int nOutBufferSize, int* lpBytesReturned, IntPtr lpOverlapped);
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         public static extern IntPtr DispatchMessage(ref MSG msg);
         [DllImport("user32.dll")]
@@ -2670,8 +2670,8 @@ namespace Library
         [DllImport("user32.dll", EntryPoint = "LoadStringW", CharSet = CharSet.Unicode)]
         public static extern int LoadString(HINSTANCE hInstance, uint uID, [Out] StringBuilder lpBuffer, int nBufferMax);
         [DllImport("user32.dll", EntryPoint = "LoadStringW", CharSet = CharSet.Unicode)]
-        public static extern unsafe int LoadStringFast(HINSTANCE hInstance, uint uID, IntPtr* lppBuffer, int nBufferMax);
-        [DllImport("kernel32.dll")]
+        //public static extern unsafe int LoadStringFast(HINSTANCE hInstance, uint uID, IntPtr* lppBuffer, int nBufferMax);
+        //[DllImport("kernel32.dll")]
         public static extern IntPtr LockResource(IntPtr i);
         [DllImport("advapi32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         public static extern IntPtr LockServiceDatabase(SafeServiceHandle hSCManager);
@@ -3125,47 +3125,47 @@ namespace Library
             Max
         }
 
-        [StructLayout(LayoutKind.Sequential)]
-        public struct COPYDATASTRUCT
-        {
-            public IntPtr dwData;
-            public int cbData;
-            public IntPtr lpData;
-            public static Win32Api.COPYDATASTRUCT Empty
-            {
-                get
-                {
-                    return new Win32Api.COPYDATASTRUCT { dwData = IntPtr.Zero, cbData = 0, lpData = IntPtr.Zero };
-                }
-            }
-            public bool IsEmpty()
-            {
-                return (((IntPtr.Zero == this.dwData) && (this.cbData == 0)) && (IntPtr.Zero == this.lpData));
-            }
+        //[StructLayout(LayoutKind.Sequential)]
+        //public struct COPYDATASTRUCT
+        //{
+        //    public IntPtr dwData;
+        //    public int cbData;
+        //    public IntPtr lpData;
+        //    public static Win32Api.COPYDATASTRUCT Empty
+        //    {
+        //        get
+        //        {
+        //            return new Win32Api.COPYDATASTRUCT { dwData = IntPtr.Zero, cbData = 0, lpData = IntPtr.Zero };
+        //        }
+        //    }
+        //    public bool IsEmpty()
+        //    {
+        //        return (((IntPtr.Zero == this.dwData) && (this.cbData == 0)) && (IntPtr.Zero == this.lpData));
+        //    }
 
-            public unsafe byte[] GetData()
-            {
-                if ((this.cbData <= 0) || (IntPtr.Zero == this.lpData))
-                {
-                    return null;
-                }
-                byte[] buffer = null;
-                try
-                {
-                    byte* lpData = (byte*)this.lpData;
-                    buffer = new byte[this.cbData];
-                    for (int i = 0; i < this.cbData; i++)
-                    {
-                        buffer[i] = lpData[i];
-                    }
-                }
-                catch (OutOfMemoryException)
-                {
-                    buffer = null;
-                }
-                return buffer;
-            }
-        }
+        //    public unsafe byte[] GetData()
+        //    {
+        //        if ((this.cbData <= 0) || (IntPtr.Zero == this.lpData))
+        //        {
+        //            return null;
+        //        }
+        //        byte[] buffer = null;
+        //        try
+        //        {
+        //            byte* lpData = (byte*)this.lpData;
+        //            buffer = new byte[this.cbData];
+        //            for (int i = 0; i < this.cbData; i++)
+        //            {
+        //                buffer[i] = lpData[i];
+        //            }
+        //        }
+        //        catch (OutOfMemoryException)
+        //        {
+        //            buffer = null;
+        //        }
+        //        return buffer;
+        //    }
+        //}
 
         public delegate uint CopyProgressRoutine(long TotalSize, long TotalBytes, long streamsize, long streambytes, uint stream, uint reason, IntPtr srcHandle, IntPtr destHandle, IntPtr data);
 
