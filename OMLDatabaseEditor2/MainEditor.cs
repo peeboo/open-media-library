@@ -811,7 +811,7 @@ namespace OMLDatabaseEditor
                                 if (coverArtOnly)
                                 {
                                     title.FrontCoverPath = searchresult.FrontCoverPath;
-                                    title.FrontCoverPath = searchresult.BackCoverPath;
+                                    title.BackCoverPath = searchresult.BackCoverPath;
                                 }
                                 else
                                 {
