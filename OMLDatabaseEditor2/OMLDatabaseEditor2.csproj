@@ -165,6 +165,9 @@
     <Compile Include="Controls\BioDataEditor.Designer.cs">
       <DependentUpon>BioDataEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\OMLListView.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Controls\PersonEditorFrm.cs">
       <SubType>Form</SubType>
     </Compile>

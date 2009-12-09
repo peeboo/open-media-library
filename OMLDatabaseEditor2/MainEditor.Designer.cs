@@ -115,7 +115,7 @@ namespace OMLDatabaseEditor
             this.navBarControl1 = new DevExpress.XtraNavBar.NavBarControl();
             this.groupTitles = new DevExpress.XtraNavBar.NavBarGroup();
             this.navBarGroupControlContainer7 = new DevExpress.XtraNavBar.NavBarGroupControlContainer();
-            this.lvTitles = new System.Windows.Forms.ListView();
+            this.lvTitles = new OMLDatabaseEditor.Controls.OMLListView();
             this.columnTitleID = new System.Windows.Forms.ColumnHeader();
             this.ListViewImages = new System.Windows.Forms.ImageList(this.components);
             this.SortControl = new DevExpress.XtraEditors.PanelControl();
@@ -990,12 +990,13 @@ namespace OMLDatabaseEditor
             this.lvTitles.Resize += new System.EventHandler(this.lvTitles_Resize);
             this.lvTitles.MouseClick += new System.Windows.Forms.MouseEventHandler(this.lvTitles_MouseClick);
             this.lvTitles.DrawItem += new System.Windows.Forms.DrawListViewItemEventHandler(this.lvTitles_DrawItem);
+            this.lvTitles.DragOver += new System.Windows.Forms.DragEventHandler(this.lvTitles_DragOver);
             this.lvTitles.SelectedIndexChanged += new System.EventHandler(this.lvTitles_SelectedIndexChanged);
             this.lvTitles.DragDrop += new System.Windows.Forms.DragEventHandler(this.lvTitles_DragDrop);
             this.lvTitles.MouseMove += new System.Windows.Forms.MouseEventHandler(this.lvTitles_MouseMove);
             this.lvTitles.DragEnter += new System.Windows.Forms.DragEventHandler(this.lvTitles_DragEnter);
             this.lvTitles.DragLeave += new System.EventHandler(this.lvTitles_DragLeave);
-            this.lvTitles.DragOver += new System.Windows.Forms.DragEventHandler(this.lvTitles_DragOver);
+            this.lvTitles.ScrollUp += new System.EventHandler(this.lvTitles_ScrollUp);
             // 
             // columnTitleID
             // 
@@ -1285,7 +1286,7 @@ namespace OMLDatabaseEditor
         private System.Windows.Forms.ToolStripMenuItem miCreateTVEpisode;
         private System.Windows.Forms.ColumnHeader columnTitleID;
         private System.Windows.Forms.ImageList ListViewImages;
-        private System.Windows.Forms.ListView lvTitles;
+        private OMLDatabaseEditor.Controls.OMLListView lvTitles;
         private System.Windows.Forms.ToolStripMenuItem databaseToolsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem alwaysShowTitleListToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
