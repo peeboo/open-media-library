@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Collections;
 
-using OMLEngine;
-
 // Step 1: Make sure that you add OMLEngine and OMLSDK to your References
 // Step 2: Make sure you add "using OMLENgine;" and "using OMSDK;" to your plugin code
 // Step 3: Create a class that impelments interface IOMLMetadataPlugin
@@ -29,7 +27,6 @@ using OMLEngine;
 
 namespace OMLSDK
 {
-
     public enum MetadataPluginCapabilities : int
     {
         SupportsBackDrops = 0x0001,
@@ -71,11 +68,11 @@ namespace OMLSDK
         // these methods are to be called after the 2 methods above
 
         // get the best match
-        Title GetBestMatch();
+        OMLSDKTitle GetBestMatch();
 
         // or choose among all the titles
-        Title[] GetAvailableTitles();    // could be just summaries
-        Title GetTitle(int index);      // get the actual Title
+        OMLSDKTitle[] GetAvailableTitles();    // could be just summaries
+        OMLSDKTitle GetTitle(int index);      // get the actual Title
 
         // ultimately this should use the generic base type option
         //List<OMLMetadataOptionBase> GetOptions();
