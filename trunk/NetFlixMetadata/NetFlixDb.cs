@@ -1,7 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
-using OMLEngine;
+
 using OMLSDK;
 using System.IO;
 using System.Net;
@@ -15,14 +16,14 @@ namespace NetFlixMetadata
 {
     public class NetFlixDbResult
     {
-        public Title Title { get; set; }
+        public OMLSDKTitle Title { get; set; }
         public int Id { get; set; }
         public string ImageUrl { get; set; }
         public string ImageUrlThumb { get; set; }
 
         public NetFlixDbResult()
         {
-            Title = new Title();
+            Title = new OMLSDKTitle();
         }
     }
 
@@ -91,23 +92,23 @@ namespace NetFlixMetadata
             return (results != null && results.Count != 0);
         }
 
-        public Title GetBestMatch()
+        public OMLSDKTitle GetBestMatch()
         {
             return (results != null && results.Count != 0)
                 ? GetMovieDetails(results[0].Id)
                 : null;
         }
 
-        public Title[] GetAvailableTitles()
+        public OMLSDKTitle[] GetAvailableTitles()
         {
-            Title[] titles = new Title[results.Count];
+            OMLSDKTitle[] titles = new OMLSDKTitle[results.Count];
             for (int x = 0; x < results.Count; x++)
                 titles[x] = results[x].Title;
 
             return titles;
         }
 
-        public Title GetTitle(int index)
+        public OMLSDKTitle GetTitle(int index)
         {
             return GetMovieDetails(results[index].Id);
         }
@@ -185,7 +186,7 @@ namespace NetFlixMetadata
                     switch (reader.Name)
                     {
                         case "id":
-                            try { result.Id =int.Parse( OMLEngine.RegexUtils.FindFirstSubstring(GetElementValue(reader), "[0-9]+$", true)); }
+                            try { result.Id =int.Parse( FindFirstSubstring(GetElementValue(reader), "[0-9]+$", true)); }
                             catch { }
                             break;
 
@@ -249,7 +250,7 @@ namespace NetFlixMetadata
                                         string[] dirs = Regex.Split(directors, ":::");
                                         for (int i = 0; i < dirs.Length; i++)
                                         {
-                                            result.Title.AddDirector(new Person(dirs[i]));
+                                            result.Title.AddDirector(new OMLSDKPerson(dirs[i]));
                                         }
                                     }
                                     catch {  }
@@ -374,7 +375,7 @@ namespace NetFlixMetadata
             }
             return foundVal;
         }
-        private Title GetMovieDetails(int movieId)
+        private OMLSDKTitle GetMovieDetails(int movieId)
         {
             // load up all the titles with images
             foreach (NetFlixDbResult title in results)
@@ -488,7 +489,7 @@ namespace NetFlixMetadata
             return returnValue;
         }
 
-        private void DownloadImage(Title title, string imageUrl)
+        private void DownloadImage(OMLSDKTitle title, string imageUrl)
         {
             if (!string.IsNullOrEmpty(imageUrl))
             {
@@ -522,8 +523,54 @@ namespace NetFlixMetadata
             return false;
         }
         public bool SearchForTVDrillDown(int id, string EpisodeName, int? SeriesNo, int? EpisodeNo, int maxResults)
-         {
+        {
             return false;
         }
+
+
+
+        public static Match[] FindSubstrings(string source, string matchPattern, bool findAllUnique)
+        {
+            SortedList uniqueMatches = new SortedList();
+            Match[] retArray = null;
+
+            Regex RE = new Regex(matchPattern, RegexOptions.Multiline);
+            MatchCollection theMatches = RE.Matches(source);
+
+            if (findAllUnique)
+            {
+                for (int counter = 0; counter < theMatches.Count; counter++)
+                {
+                    if (!uniqueMatches.ContainsKey(theMatches[counter].Value))
+                    {
+                        uniqueMatches.Add(theMatches[counter].Value,
+                                          theMatches[counter]);
+                    }
+                }
+
+                retArray = new Match[uniqueMatches.Count];
+                uniqueMatches.Values.CopyTo(retArray, 0);
+            }
+            else
+            {
+                retArray = new Match[theMatches.Count];
+                theMatches.CopyTo(retArray, 0);
+            }
+
+            return (retArray);
+        }
+
+
+        public static string FindFirstSubstring(string source, string matchPattern, bool findAllUnique)
+        {
+            Match[] matches = FindSubstrings(source, matchPattern, findAllUnique);
+
+            if (matches.Length > 0)
+            {
+                return matches[0].ToString();
+            }
+
+            return "";
+        } 
     }
 }
