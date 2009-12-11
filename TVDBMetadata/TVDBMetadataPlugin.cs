@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using OMLEngine;        // need this for OML Title class
 using OMLSDK;           // need this for the IOMLMetadataPlugin
 using System.IO;
 using System.Net;
@@ -13,7 +12,7 @@ namespace TVDBMetadata
 {
     public class TheTVDBDbResult
     {
-        public Title Title { get; set; }
+        public OMLSDKTitle Title { get; set; }
         public int SeasonNo { get; set; }
         public int EpisodeNo { get; set; }
         public int NameMatchConfidence { get; set; }
@@ -23,7 +22,7 @@ namespace TVDBMetadata
 
         public TheTVDBDbResult()
         {
-            Title = new Title();
+            Title = new OMLSDKTitle();
         }
     }
 
@@ -108,7 +107,7 @@ namespace TVDBMetadata
         // these methods are to be called after the 2 methods above
 
         // get the best match
-        public Title GetBestMatch()
+        public OMLSDKTitle GetBestMatch()
         {
             if (results != null)
             {
@@ -122,16 +121,16 @@ namespace TVDBMetadata
 
 
         // or choose among all the titles
-        public Title[] GetAvailableTitles()
+        public OMLSDKTitle[] GetAvailableTitles()
         {
-            Title[] titles = new Title[results.Count];
+            OMLSDKTitle[] titles = new OMLSDKTitle[results.Count];
             for (int x = 0; x < results.Count; x++)
                 titles[x] = results[x].Title;
 
             return titles;
         }
 
-        public Title GetTitle(int index)
+        public OMLSDKTitle GetTitle(int index)
         {
             // Check if image has been downloaded
             if (string.Compare(results[index].Title.FrontCoverPath.Substring(0, 4), "http", true) == 0)
@@ -256,7 +255,7 @@ namespace TVDBMetadata
         /// Downloads the image for the results url and sets it to the internal title object
         /// </summary>
         /// <param name="result"></param>
-        private void DownloadImage(Title title, string imageUrl)
+        private void DownloadImage(OMLSDKTitle title, string imageUrl)
         {
             if (!string.IsNullOrEmpty(imageUrl))
             {
@@ -660,7 +659,7 @@ namespace TVDBMetadata
                                                 {
                                                     if (!string.IsNullOrEmpty(directorstr))
                                                     {
-                                                        Person director = new Person(directorstr);
+                                                        OMLSDKPerson director = new OMLSDKPerson(directorstr);
                                                         result.Title.AddDirector(director);
                                                     }
                                                 }
