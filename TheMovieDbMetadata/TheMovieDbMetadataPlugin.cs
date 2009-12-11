@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using OMLEngine;        // need this for OML Title class
 using OMLSDK;           // need this for the IOMLMetadataPlugin
 using System.IO;
 using System.Net;
@@ -12,14 +11,14 @@ namespace TheMovieDbMetadata
 {
     public class TheMovieDbResult
     {
-        public Title Title { get; set; }
+        public OMLSDKTitle Title { get; set; }
         public int Id { get; set; }
         public string ImageUrl { get; set; }
         public string ImageUrlThumb { get; set; }
 
         public TheMovieDbResult()
         {
-            Title = new Title();
+            Title = new OMLSDKTitle();
         }
     }
 
@@ -66,7 +65,7 @@ namespace TheMovieDbMetadata
         // these methods are to be called after the 2 methods above
 
         // get the best match
-        public Title GetBestMatch()
+        public OMLSDKTitle GetBestMatch()
         {
             if (results != null)
             {
@@ -80,16 +79,16 @@ namespace TheMovieDbMetadata
         }
 
         // or choose among all the titles
-        public Title[] GetAvailableTitles()
+        public OMLSDKTitle[] GetAvailableTitles()
         {
-            Title[] titles = new Title[results.Count];
+            OMLSDKTitle[] titles = new OMLSDKTitle[results.Count];
             for (int x = 0; x < results.Count; x++)
                 titles[x] = results[x].Title;
 
             return titles;
         }
 
-        public Title GetTitle(int index)
+        public OMLSDKTitle GetTitle(int index)
         {
             return GetMovieDetails(results[index].Id);
         }
@@ -227,17 +226,17 @@ namespace TheMovieDbMetadata
                                             break;
 
                                         case "director":
-                                            result.Title.AddDirector(new Person(GetElementValue(reader)));
+                                            result.Title.AddDirector(new OMLSDKPerson(GetElementValue(reader)));
                                             break;
 
                                         case "author":
                                         case "screenplay":
                                         case "story":
-                                            result.Title.AddWriter(new Person(GetElementValue(reader)));
+                                            result.Title.AddWriter(new OMLSDKPerson(GetElementValue(reader)));
                                             break;                                        
 
                                         case "producer":
-                                            result.Title.AddProducer(new Person(GetElementValue(reader)));
+                                            result.Title.AddProducer(new OMLSDKPerson(GetElementValue(reader)));
                                             break;                                        
 
                                         case "original_music_composer":
@@ -278,7 +277,7 @@ namespace TheMovieDbMetadata
             return (notMovie) ? null : result;
         }
 
-        private Title GetMovieDetails(int movieId)
+        private OMLSDKTitle GetMovieDetails(int movieId)
         {
             UriBuilder uri = new UriBuilder(API_URL_INFO);
             uri.Query = "api_key=" + API_KEY + "&id=" + movieId.ToString();
@@ -421,7 +420,7 @@ namespace TheMovieDbMetadata
         /// Downloads the image for the results url and sets it to the internal title object
         /// </summary>
         /// <param name="result"></param>
-        private void DownloadImage(Title title, string imageUrl)
+        private void DownloadImage(OMLSDKTitle title, string imageUrl)
         {
             if (!string.IsNullOrEmpty(imageUrl))
             {                
