@@ -57,7 +57,7 @@ namespace OMLSDK
                     // Requires a search drilldown
                     metadata.PluginDLL.SearchForTVDrillDown(1, EpisodeName, SeasonNo, EpisodeNo, 1);
                 }
-                title = metadata.PluginDLL.GetBestMatch();
+                title = MetadataSearchUtilities.ConvertOMLSDKTitleToTitle(metadata.PluginDLL.GetBestMatch());
                 if (title != null)
                 {
                     Utilities.DebugLine("[OMLSDK] Found episode " + title.Name + " using plugin " + metadata.DataProviderName);
@@ -68,7 +68,7 @@ namespace OMLSDK
                 if ((metadata.DataProviderCapabilities & MetadataPluginCapabilities.SupportsMovieSearch) != 0)
                 {
                     metadata.PluginDLL.SearchForMovie(titleNameSearch, 1);
-                    title = metadata.PluginDLL.GetBestMatch();
+                    title = MetadataSearchUtilities.ConvertOMLSDKTitleToTitle(metadata.PluginDLL.GetBestMatch());
                     if (title != null)
                     {
                         Utilities.DebugLine("[OMLSDK] Found movie " + title.Name + " using plugin " + metadata.DataProviderName);
@@ -290,6 +290,7 @@ namespace OMLSDK
         }
 
 
+
         private void ApplyGenreMappings(Title title, bool removeUnknownGenres)
         {
             List<String> genreList = new List<String>();
@@ -354,4 +355,148 @@ namespace OMLSDK
             }
         }
     }
+
+    public static class MetadataSearchUtilities
+    {
+        private static string CopyString(string s)
+        {
+            if (string.IsNullOrEmpty(s))
+                return "";
+            else
+                return s;
+        }
+
+        public static Title ConvertOMLSDKTitleToTitle(OMLSDKTitle omlsdktitle)
+        {
+            Title _title = new Title();
+
+            if (omlsdktitle != null)
+            {
+                _title.Name = CopyString(omlsdktitle.Name);
+                _title.OriginalName = CopyString(omlsdktitle.OriginalName);
+                _title.SortName = CopyString(omlsdktitle.SortName);
+                _title.Synopsis = CopyString(omlsdktitle.Synopsis);
+                _title.ProductionYear = omlsdktitle.ProductionYear;
+                _title.ReleaseDate = omlsdktitle.ReleaseDate;
+                _title.Runtime = omlsdktitle.Runtime;
+                _title.Studio = CopyString(omlsdktitle.Studio);
+                _title.UPC = CopyString(omlsdktitle.UPC);
+
+                _title.EpisodeNumber = omlsdktitle.EpisodeNumber;
+                _title.SeasonNumber = omlsdktitle.SeasonNumber;
+
+                _title.AspectRatio = CopyString(omlsdktitle.AspectRatio);
+                _title.VideoDetails = CopyString(omlsdktitle.VideoDetails);
+                _title.VideoResolution = CopyString(omlsdktitle.VideoResolution);
+                _title.VideoStandard = CopyString(omlsdktitle.VideoStandard);
+
+                _title.FrontCoverPath = CopyString(omlsdktitle.FrontCoverPath);
+                _title.BackCoverPath = CopyString(omlsdktitle.BackCoverPath);
+
+                _title.CountryOfOrigin = CopyString(omlsdktitle.CountryOfOrigin);
+
+                _title.ExtraFeatures = omlsdktitle.ExtraFeatures;
+
+                _title.MetadataSourceID = CopyString(omlsdktitle.MetadataSourceID);
+                _title.MetadataSourceName = CopyString(omlsdktitle.MetadataSourceName);
+
+                _title.OfficialWebsiteURL = CopyString(omlsdktitle.OfficialWebsiteURL);
+                _title.ParentalRating = CopyString(omlsdktitle.ParentalRating);
+                _title.ParentalRatingReason = CopyString(omlsdktitle.ParentalRatingReason);
+
+                if (omlsdktitle.FanArtPaths != null)
+                {
+                    foreach (string path in omlsdktitle.FanArtPaths)
+                    {
+                        _title.AddFanArtImage(path);
+                    }
+                }
+
+                if (omlsdktitle.Genres != null)
+                {
+                    foreach (string genre in omlsdktitle.Genres)
+                    {
+                        _title.AddGenre(genre);
+                    }
+                }
+
+
+                if (omlsdktitle.Tags != null)
+                {
+                    foreach (string tag in omlsdktitle.Tags)
+                    {
+                        _title.AddTag(tag);
+                    }
+                }
+
+                if (omlsdktitle.ActingRoles != null)
+                {
+                    foreach (OMLSDKRole role in omlsdktitle.ActingRoles)
+                    {
+                        _title.AddActingRole(role.PersonName, role.RoleName);
+                    }
+                }
+
+                if (omlsdktitle.Directors != null)
+                {
+                    foreach (OMLSDKPerson person in omlsdktitle.Directors)
+                    {
+                        _title.AddDirector(ConvertOMLSDKPersonToPerson(person));
+                    }
+                }
+
+                if (omlsdktitle.NonActingRoles != null)
+                {
+                    foreach (OMLSDKRole role in omlsdktitle.NonActingRoles)
+                    {
+                        _title.AddNonActingRole(role.PersonName, role.RoleName);
+                    }
+                }
+
+                if (omlsdktitle.Producers != null)
+                {
+                    foreach (OMLSDKPerson person in omlsdktitle.Producers)
+                    {
+                        _title.AddProducer(ConvertOMLSDKPersonToPerson(person));
+                    }
+                }
+
+                if (omlsdktitle.Writers != null)
+                {
+                    foreach (OMLSDKPerson person in omlsdktitle.Writers)
+                    {
+                        _title.AddWriter(ConvertOMLSDKPersonToPerson(person));
+                    }
+                }
+            }
+
+            return _title;
+        }
+
+
+        public static Title[] ConvertOMLSDKTitlesToTitles(OMLSDKTitle [] omlsdktitles)
+        {
+            List<Title> titles = new List<Title>();
+
+            foreach (OMLSDKTitle omlsdktitle in omlsdktitles)
+            {
+                if (omlsdktitle != null)
+                {
+                    titles.Add(ConvertOMLSDKTitleToTitle(omlsdktitle));
+                }
+            }
+            return titles.ToArray();
+        }
+
+        private static Person ConvertOMLSDKPersonToPerson(OMLSDKPerson person)
+        {
+            Person newperson = new Person();
+            newperson.BirthDate = person.BirthDate;
+            newperson.full_name = person.full_name;
+            newperson.PhotoPath = person.PhotoPath;
+            newperson.sex = (Sex)person.sex;
+            return newperson;
+        }
+    }
+
 }
