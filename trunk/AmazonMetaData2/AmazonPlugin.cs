@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.ServiceModel;
 using AmazonMetaData2.Amazon.ECS;
 
-using OMLEngine;        // need this for OML Title class
 using OMLSDK;           // need this for the IOMLMetadataPlugin
 
 namespace AmazonMetaData2
@@ -77,7 +76,7 @@ namespace AmazonMetaData2
             return settings;
         }
 
-        private void DownloadImage(Title title, string imageUrl)
+        private void DownloadImage(OMLSDKTitle title, string imageUrl)
         {
             if (!string.IsNullOrEmpty(imageUrl))
             {
@@ -95,7 +94,7 @@ namespace AmazonMetaData2
             }
         }
 
-        public Title GetTitle(int index)
+        public OMLSDKTitle GetTitle(int index)
         {
             if (_searchResult != null & _searchResult.DVDList != null)
             {
@@ -121,7 +120,7 @@ namespace AmazonMetaData2
             }
         }
 
-        public Title[] GetAvailableTitles()
+        public OMLSDKTitle[] GetAvailableTitles()
         {
             if (_searchResult != null)
                 return _searchResult.DVDList;
@@ -129,7 +128,7 @@ namespace AmazonMetaData2
                 return null;
         }
 
-        public Title GetBestMatch()
+        public OMLSDKTitle GetBestMatch()
         {
             return GetTitle(0);
         }
@@ -176,7 +175,7 @@ namespace AmazonMetaData2
                     if (amazonItems != null)
                     {
                         // convert Amazon Items to generic collection of DVDs
-                        Title[] searchResults = new Title[itemsToProcess];
+                        OMLSDKTitle[] searchResults = new OMLSDKTitle[itemsToProcess];
 
 
                         for (int i = 0; i < itemsToProcess; i++)

@@ -1,19 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using OMLEngine;
 using System.Text.RegularExpressions;
 using AmazonMetaData2.Amazon.ECS;
+using OMLSDK;  
 
 namespace AmazonMetaData2
 {
     class AmazonToOML
     {
-        public static Title TitleFromAmazonItem(Item amazonItem)
+        public static OMLSDKTitle TitleFromAmazonItem(Item amazonItem)
         {
             try
             {
-                Title t = new Title();
+                OMLSDKTitle t = new OMLSDKTitle();
 
                 t.Name = amazonItem.ItemAttributes.Title;
                 if (!String.IsNullOrEmpty(amazonItem.ASIN.ToString())) t.UPC = amazonItem.ASIN.ToString();
@@ -31,7 +31,7 @@ namespace AmazonMetaData2
                 {
                     foreach (string director in amazonItem.ItemAttributes.Director)
                     {
-                        t.AddDirector(new Person(director));
+                        t.AddDirector(new OMLSDKPerson(director));
                     }
                 }
 
