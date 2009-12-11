@@ -23,10 +23,10 @@ namespace OMLTestSuite
             if (!tvd.SearchForTVSeries(show, episode, seasonno, episodeno, OMLEngine.Settings.OMLSettings.MetadataLookupResultsQty, false))
             {
                 Console.WriteLine("We found the show. Episode list below.");
-                 
-                OMLEngine.Title[] titles = tvd.GetAvailableTitles();
+
+                OMLSDK.OMLSDKTitle[] titles = tvd.GetAvailableTitles();
                 Console.WriteLine("Title count " + titles.Count());
-                foreach (OMLEngine.Title t in titles)
+                foreach (OMLSDK.OMLSDKTitle t in titles)
                 {
                     Console.WriteLine(t.Name);
                 }
@@ -35,9 +35,9 @@ namespace OMLTestSuite
             {
                 Console.WriteLine("We didn't find an exact match on the show, matches below.");
 
-                OMLEngine.Title[] titles = tvd.GetAvailableTitles();
+                OMLSDK.OMLSDKTitle[] titles = tvd.GetAvailableTitles();
                 Console.WriteLine("Title count " + titles.Count());
-                foreach (OMLEngine.Title t in titles)
+                foreach (OMLSDK.OMLSDKTitle t in titles)
                 {
                     Console.WriteLine(t.Name);
                 }
@@ -53,7 +53,7 @@ namespace OMLTestSuite
 
                 titles = tvd.GetAvailableTitles();
                 Console.WriteLine("Title count " + titles.Count());
-                foreach (OMLEngine.Title t in titles)
+                foreach (OMLSDK.OMLSDKTitle t in titles)
                 {
                     Console.WriteLine(t.Name);
                 }
