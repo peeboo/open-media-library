@@ -7,7 +7,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.XPath;
-using OMLEngine;
 using OMLSDK;
 
 namespace DVDProfilerPlugin
@@ -101,7 +100,7 @@ namespace DVDProfilerPlugin
 
         private void HandleDvd(XPathNavigator dvdNavigator)
         {
-            Title title = LoadTitle(dvdNavigator, true);
+            OMLSDKTitle title = LoadTitle(dvdNavigator, true);
             GetImagesForNewTitle(title);
             if (ValidateTitle(title))
             {
@@ -111,10 +110,10 @@ namespace DVDProfilerPlugin
             else Trace.WriteLine("Error saving row");
         }
 
-        public Title LoadTitle(XPathNavigator dvdNavigator, bool lookForDiskInfo)
+        public OMLSDKTitle LoadTitle(XPathNavigator dvdNavigator, bool lookForDiskInfo)
         {
-            Title title = new Title();
-            VideoFormat videoFormat = VideoFormat.DVD;
+            OMLSDKTitle title = new OMLSDKTitle();
+            OMLSDKVideoFormat videoFormat = OMLSDKVideoFormat.DVD;
             string notes = string.Empty;
             var discs = new Dictionary<string, string>(); // The key is on the form "1a", "10b", etc - the value is the description
 
@@ -214,7 +213,7 @@ namespace DVDProfilerPlugin
             return title;
         }
 
-        private void ReadFilmReview(Title title, XPathNavigator reviewNavigator)
+        private void ReadFilmReview(OMLSDKTitle title, XPathNavigator reviewNavigator)
         {
             switch (reviewNavigator.GetAttribute("Film", String.Empty))
             {
@@ -248,7 +247,7 @@ namespace DVDProfilerPlugin
 
 
         // Collection/DVD/Actors/*
-        private void HandleActors(Title title, XPathNavigator actorsNavigator)
+        private void HandleActors(OMLSDKTitle title, XPathNavigator actorsNavigator)
         {
             foreach (XPathNavigator actorNavigator in actorsNavigator.SelectChildren("Actor", string.Empty))
             {
@@ -262,7 +261,7 @@ namespace DVDProfilerPlugin
         }
 
         // Collection/DVD/Credits/*
-        private void HandleCredits(Title title, XPathNavigator creditsNavigator)
+        private void HandleCredits(OMLSDKTitle title, XPathNavigator creditsNavigator)
         {
             List<string> writersAlreadyAdded = new List<string>();
             List<string> producersAlreadyAdded = new List<string>();
@@ -270,7 +269,7 @@ namespace DVDProfilerPlugin
             foreach (XPathNavigator creditNavigator in creditsNavigator.SelectChildren("Credit", string.Empty))
             {
                 string creditType = creditNavigator.GetAttribute("CreditType", string.Empty);
-                Person person = new Person(ReadFullName(creditNavigator));
+                OMLSDKPerson person = new OMLSDKPerson(ReadFullName(creditNavigator));
                 switch (creditType)
                 {
                     case "Direction":                        
@@ -288,7 +287,7 @@ namespace DVDProfilerPlugin
 
 
         // Collection/DVD/Audio/*
-        private void HandleAudio(Title title, XPathNavigator audioTracksNavigator)
+        private void HandleAudio(OMLSDKTitle title, XPathNavigator audioTracksNavigator)
         {
             foreach (XPathNavigator audioTrackNavigator in audioTracksNavigator.SelectChildren("AudioTrack", string.Empty))
             {
@@ -316,7 +315,7 @@ namespace DVDProfilerPlugin
         }
 
         // Collection/DVD/Format/*
-        private void HandleFormat(Title title, XPathNavigator formatNavigator)
+        private void HandleFormat(OMLSDKTitle title, XPathNavigator formatNavigator)
         {
             foreach (XPathNavigator formatChildElementNavigator in formatNavigator.SelectChildren(XPathNodeType.Element))
             {
@@ -341,7 +340,7 @@ namespace DVDProfilerPlugin
         }
 
         // Collection/DVD/MediaTypes/*
-        private VideoFormat HandleMediaTypes(XPathNavigator mediaTypesNavigator)
+        private OMLSDKVideoFormat HandleMediaTypes(XPathNavigator mediaTypesNavigator)
         {
             XPathNavigator selectedMedia = mediaTypesNavigator.SelectSingleNode("*[.='True']");
             if (selectedMedia != null)
@@ -349,16 +348,16 @@ namespace DVDProfilerPlugin
                 switch (selectedMedia.Name)
                 {
                     case "HDDVD":
-                        return VideoFormat.HDDVD;
+                        return OMLSDKVideoFormat.HDDVD;
                     case "BluRay":
-                        return VideoFormat.BLURAY;
+                        return OMLSDKVideoFormat.BLURAY;
                 }
             }
-            return VideoFormat.DVD;
+            return OMLSDKVideoFormat.DVD;
         }
 
         // Collection/DVD/PurchaseInfo/*
-        private void HandlePurchaseInfo(Title title, XPathNavigator dvdElement)
+        private void HandlePurchaseInfo(OMLSDKTitle title, XPathNavigator dvdElement)
         {
             XPathNavigator purchaseDateNavigator = dvdElement.SelectSingleNode("PurchaseDate");
             if (purchaseDateNavigator != null)
@@ -425,7 +424,7 @@ namespace DVDProfilerPlugin
         /// <summary>
         /// Merges the information from the Notes field with the DVD Profiler Disc data to create the Disk entries for the title
         /// </summary>
-        private void MergeDiscInfo(Title title, VideoFormat dvdProfilerVideoFormat, Dictionary<string, string> discs, string notes)
+        private void MergeDiscInfo(OMLSDKTitle title, OMLSDKVideoFormat dvdProfilerVideoFormat, Dictionary<string, string> discs, string notes)
         {
             if (string.IsNullOrEmpty(notes)) return;
 
@@ -449,7 +448,7 @@ namespace DVDProfilerPlugin
                     else description = "Disc " + discKey;
                 }
                 string path = m.Groups["path"].Value;
-                VideoFormat discVideoFormat = GetFormatFromExtension(Path.GetExtension(path), dvdProfilerVideoFormat);
+                OMLSDKVideoFormat discVideoFormat = GetFormatFromExtension(Path.GetExtension(path), dvdProfilerVideoFormat);
 
                 if (!string.IsNullOrEmpty(path))
                 {
@@ -460,12 +459,12 @@ namespace DVDProfilerPlugin
                     }
                 }
 
-                title.AddDisk(new Disk(description, path, discVideoFormat));
+                title.AddDisk(new OMLSDKDisk(description, path, discVideoFormat));
                 lastDiskNumber++;
             }
         }
 
-        private void ApplyTags(Title title, XPathNavigator dvdNavigator)
+        private void ApplyTags(OMLSDKTitle title, XPathNavigator dvdNavigator)
         {
             foreach (TagDefinition tagDefinition in tagDefinitions)
             {
@@ -476,14 +475,14 @@ namespace DVDProfilerPlugin
         }
 
 
-        private static VideoFormat GetFormatFromExtension(string extension, VideoFormat defaultFormat)
+        private static OMLSDKVideoFormat GetFormatFromExtension(string extension, OMLSDKVideoFormat defaultFormat)
         {
             if (string.IsNullOrEmpty(extension)) return defaultFormat;
             extension = extension.TrimStart('.').ToLowerInvariant();
 
-            foreach (VideoFormat format in Enum.GetValues(typeof(VideoFormat)))
+            foreach (OMLSDKVideoFormat format in Enum.GetValues(typeof(OMLSDKVideoFormat)))
             {
-                if (Enum.GetName(typeof(VideoFormat), format).ToLowerInvariant() == extension)
+                if (Enum.GetName(typeof(OMLSDKVideoFormat), format).ToLowerInvariant() == extension)
                 {
                     return format;
                 }
@@ -491,7 +490,7 @@ namespace DVDProfilerPlugin
             return defaultFormat;
         }
 
-        public void GetImagesForNewTitle(Title newTitle)
+        public void GetImagesForNewTitle(OMLSDKTitle newTitle)
         {
             string id = newTitle.MetadataSourceID;
             if (!string.IsNullOrEmpty(id))
@@ -530,7 +529,7 @@ namespace DVDProfilerPlugin
                 }
                 else
                 {
-                    string path = Path.Combine(FileSystemWalker.PluginsDirectory, "DVDProfilerSettings.xml");
+                    string path = Path.Combine(SDKUtilities.PluginsDirectory, "DVDProfilerSettings.xml");
                     if (File.Exists(path))
                     {
                         disposeReader = true;
@@ -555,12 +554,12 @@ namespace DVDProfilerPlugin
                                 string tagXPath = dvdProfilerSettings.GetAttribute("xpath");
                                 if (string.IsNullOrEmpty(tagName) && string.IsNullOrEmpty(tagExcludedName))
                                 {
-                                    Utilities.DebugLine("[DVDProfilerImporter] Tag setting missing name");
+                                    SDKUtilities.DebugLine("[DVDProfilerImporter] Tag setting missing name");
                                     AddError("Tag missing name or excludeName attribute in DVDProfilerSettings.xml");
                                 }
                                 if (string.IsNullOrEmpty(tagXPath))
                                 {
-                                    Utilities.DebugLine("[DVDProfilerImporter] Tag setting missing xpath");
+                                    SDKUtilities.DebugLine("[DVDProfilerImporter] Tag setting missing xpath");
                                     AddError("Tag missing xpath attribute in DVDProfilerSettings.xml");
                                 }
                                 if (!string.IsNullOrEmpty(tagXPath))
@@ -590,7 +589,7 @@ namespace DVDProfilerPlugin
             }
             catch (Exception e)
             {
-                Utilities.DebugLine("[DVDProfilerImporter] Unable to open DVDProfilerSettings.xml file: {0}",
+                SDKUtilities.DebugLine("[DVDProfilerImporter] Unable to open DVDProfilerSettings.xml file: {0}",
                                     e.Message);
                 initializationErrors.Add(e);
             }
