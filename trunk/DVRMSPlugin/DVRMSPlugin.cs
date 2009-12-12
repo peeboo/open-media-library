@@ -2,8 +2,6 @@ using System;
 using System.Collections;
 using System.Diagnostics;
 using System.IO;
-
-using OMLEngine;
 using OMLSDK;
 
 using Toub.MediaCenter.Dvrms.Metadata;
@@ -101,7 +99,7 @@ namespace DVRMSPlugin
 
         public override void ProcessFile(string file)
         {
-            Title newTitle = new Title();
+            OMLSDKTitle newTitle = new OMLSDKTitle();
             String fPath = Path.GetDirectoryName(file);
             newTitle.Name = Path.GetFileNameWithoutExtension(file);
             IDictionary meta;
@@ -121,10 +119,10 @@ namespace DVRMSPlugin
                         }
                         newTitle.ImporterSource = @"DVRMSImporter";
                         newTitle.MetadataSourceName = @"DVR-MS";
-                        Disk disk = new Disk();
+                        OMLSDKDisk disk = new OMLSDKDisk();
                         string ext = Path.GetExtension(file).Substring(1).Replace(@"-", @"");
-                        disk.Format = (VideoFormat)Enum.Parse(typeof(VideoFormat), ext, true);
-                        Utilities.DebugLine("[DVRMSPlugin] Adding file: " + Path.GetFullPath(file));
+                        disk.Format = (OMLSDKVideoFormat)Enum.Parse(typeof(OMLSDKVideoFormat), ext, true);
+                        SDKUtilities.DebugLine("[DVRMSPlugin] Adding file: " + Path.GetFullPath(file));
                         disk.Path = Path.GetFullPath(file);
                         disk.Name = @"Disk 1";
                         newTitle.AddDisk(disk);
@@ -138,13 +136,13 @@ namespace DVRMSPlugin
                         string cover = fPath + @"\" + Path.GetFileNameWithoutExtension(file) + @".jpg";
                         if (File.Exists(cover))
                         {
-                            Utilities.DebugLine("[DVRMSPlugin] Setting CoverArt: " + Path.GetFullPath(cover));
+                            SDKUtilities.DebugLine("[DVRMSPlugin] Setting CoverArt: " + Path.GetFullPath(cover));
                             newTitle.FrontCoverPath = Path.GetFullPath(cover);
                             //newTitle.FrontCoverPath = cover;
                         }
                         else
                         {
-                            Utilities.DebugLine("[DVRMSPlugin] No coverart found");
+                            SDKUtilities.DebugLine("[DVRMSPlugin] No coverart found");
                         }
                         break;
                     case DvrmsMetadataEditor.MediaOriginalBroadcastDateTime:
@@ -200,7 +198,7 @@ namespace DVRMSPlugin
                             if (!String.IsNullOrEmpty(dirs[0]))
                             {
                                 string nm = dirs[0];
-                                newTitle.AddDirector(new Person(nm));
+                                newTitle.AddDirector(new OMLSDKPerson(nm));
                             }
                         }
 
@@ -221,23 +219,23 @@ namespace DVRMSPlugin
                         newTitle.Name = Path.GetFileNameWithoutExtension(file);
                         newTitle.ImporterSource = @"DVRMSImporter";
                         newTitle.MetadataSourceName = @"DVR-MS";
-                        Disk disk = new Disk();
+                        OMLSDKDisk disk = new OMLSDKDisk();
                         disk.Name = @"Disk 1";
                         disk.Path = file;
                         //newTitle.FileLocation = file;
                         string ext = Path.GetExtension(file).Substring(1).Replace(@"-", @"");
                         //newTitle.VideoFormat = (VideoFormat)Enum.Parse(typeof(VideoFormat), ext, true);
-                        disk.Format = (VideoFormat)Enum.Parse(typeof(VideoFormat), ext, true);
+                        disk.Format = (OMLSDKVideoFormat)Enum.Parse(typeof(OMLSDKVideoFormat), ext, true);
                         newTitle.AddDisk(disk);
                         string cover = fPath + @"\" + Path.GetFileNameWithoutExtension(file) + @".jpg";
                         if (File.Exists(Path.GetFullPath(cover)))
                         {
-                            Utilities.DebugLine("[DVRMSPlugin] Setting CoverArt: " + Path.GetFullPath(cover));
+                            SDKUtilities.DebugLine("[DVRMSPlugin] Setting CoverArt: " + Path.GetFullPath(cover));
                             newTitle.FrontCoverPath = cover;
                         }
                         else
                         {
-                            Utilities.DebugLine("[DVRMSPlugin] No coverart found");
+                            SDKUtilities.DebugLine("[DVRMSPlugin] No coverart found");
                         }
                     }
                     if (String.IsNullOrEmpty(newTitle.AspectRatio))
