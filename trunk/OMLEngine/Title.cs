@@ -923,7 +923,7 @@ namespace OMLEngine
         public DateTime ReleaseDate
         {
             get { return _title.ReleaseDate ?? DateTime.MinValue; }
-            set { _title.ReleaseDate = value; }
+            set { if (value.Year > 1900) _title.ReleaseDate = value; }
         }
 
         /// <summary>
@@ -932,7 +932,7 @@ namespace OMLEngine
         public DateTime DateAdded
         {
             get { return _title.DateAdded ?? DateTime.MinValue; }
-            set { _title.DateAdded = value; }
+            set { if (value.Year > 1900) _title.DateAdded = value; }
         }
 
         /// <summary>
