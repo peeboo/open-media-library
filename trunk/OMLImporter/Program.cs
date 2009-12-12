@@ -278,7 +278,7 @@ namespace OMLImporter
             {
                 Utilities.DebugLine("[OMLImporter] Titles loaded, beginning Import process");
                 //TitleCollection tc = new TitleCollection();
-                IList<Title> titles = plugin.GetTitles();
+                IList<Title> titles = OMLSDK.SDKUtilities.ConvertOMLSDKTitlesToTitles(plugin.GetTitles());
                 Utilities.DebugLine("[OMLImporter] " + titles.Count + " titles found in input file");
                 Console.WriteLine("Found " + titles.Count + " titles");
 
