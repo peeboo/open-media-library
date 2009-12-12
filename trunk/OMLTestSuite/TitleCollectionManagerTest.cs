@@ -31,14 +31,14 @@ namespace OMLTestSuite
             Console.WriteLine("Running dvd profiler importer");
             DVDProfilerImporter importer = new DVDProfilerImporter();
             importer.DoWork(new[] { @"..\..\..\Sample Files\DVDProfiler - Large.xml" });
-            IList<Title> titles = importer.GetTitles();
+            IList<OMLSDKTitle> titles = importer.GetTitles();
 
             Console.WriteLine("Adding items to the db");
             DateTime start = DateTime.Now;
-            foreach (Title title in titles)
+            foreach (OMLSDKTitle title in titles)
             {                
                 // save the title - this also generates it an id
-                TitleCollectionManager.AddTitle(title);
+                TitleCollectionManager.AddTitle(OMLSDK.SDKUtilities.ConvertOMLSDKTitleToTitle(title));
             }
 
             // save all the image updates
