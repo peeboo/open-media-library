@@ -8,6 +8,7 @@ using NUnit.Framework;
 using DVDProfilerPlugin;
 using System.Linq;
 using System.Text.RegularExpressions;
+using OMLSDK;
 
 namespace OMLTestSuite
 {
@@ -15,14 +16,14 @@ namespace OMLTestSuite
     public class DVDProfilerTest : TestBase
     {
 
-        private static IList<Title> defaultTitles; // Caches default titles loaded from DVDProfilerUnitTest.xml
+        private static IList<OMLSDKTitle> defaultTitles; // Caches default titles loaded from DVDProfilerUnitTest.xml
         private const string defaultSettings = "<settings><tag name='Online' excludedName='Offline' xpath=\"Notes[contains(.,'filepath')]\"/></settings>";
 
 
         [Test]
         public void TEST_SPACING_IS_CORRECT_FOR_ACTOR_NAMES()
         {
-            Title title = LoadTitle("1");
+            OMLSDKTitle title = LoadTitle("1");
             var expectedNames = new List<string>
                                              {
                                                  "First1 Middle1 Last1",
@@ -40,7 +41,7 @@ namespace OMLTestSuite
         [Test]
         public void TEST_ROLES_ARE_CORRECT_FOR_ACTORS()
         {
-            Title title = LoadTitle("1");
+            OMLSDKTitle title = LoadTitle("1");
             // Test single role and dual credit
             var expectedRoles = new Dictionary<string, string>
                                     {
@@ -58,7 +59,7 @@ namespace OMLTestSuite
         [Test]
         public void TEST_NAMES_AND_EAN()
         {
-            Title title = LoadTitle("1");
+            OMLSDKTitle title = LoadTitle("1");
             Assert.AreEqual("Title 1", title.Name, "Name incorrect");
             Assert.AreEqual("Sort title 1", title.SortName, "Sort name incorrect");
             Assert.AreEqual("Original title 1", title.OriginalName, "Original name incorrect");
@@ -71,7 +72,7 @@ namespace OMLTestSuite
         [Test]
         public void TEST_RATINGS()
         {
-            Title title = LoadTitle("1");
+            OMLSDKTitle title = LoadTitle("1");
             Assert.AreEqual("R", title.ParentalRating, "Parental rating incorrect");
             Assert.AreEqual("Rating details 1", title.ParentalRatingReason, "Parental rating reason incorrect");
             Assert.AreEqual(70, title.UserStarRating, "User star rating incorrect"); // Could use a more extensive test
@@ -81,7 +82,7 @@ namespace OMLTestSuite
         public void TEST_CREWCREDITS()
         {
             // The name parsing is done by the same code as used for the cast credit, so spacing etc is not rechecked here
-            Title title = LoadTitle("1");
+            OMLSDKTitle title = LoadTitle("1");
             Assert.AreEqual(2, title.Directors.Count, "Incorrect number of director credits");
             Assert.AreEqual(2, title.Writers.Count, "Incorrect number of writer credits");
             Assert.AreEqual(2, title.Producers.Count, "Incorrect number of producer credits");
@@ -97,7 +98,7 @@ namespace OMLTestSuite
         [Test]
         public void TEST_STUDIO_AND_COUNTRY()
         {
-            Title title = LoadTitle("1");
+            OMLSDKTitle title = LoadTitle("1");
             Assert.AreEqual("Studio 1", title.Studio, "Studio is incorrect.");
             Assert.AreEqual("Country 1", title.CountryOfOrigin, "Country of origin is incorrect.");
         }
@@ -105,7 +106,7 @@ namespace OMLTestSuite
         [Test]
         public void TEST_GENRES()
         {
-            Title title = LoadTitle("1");
+            OMLSDKTitle title = LoadTitle("1");
             Assert.AreEqual(2, title.Genres.Count, "Number of genres incorrect ");
             Assert.AreEqual("Genre 1", title.Genres[0], "First genre is incorrect");
             Assert.AreEqual("Genre 2", title.Genres[1], "Second genre is incorrect");
@@ -114,7 +115,7 @@ namespace OMLTestSuite
         [Test]
         public void TEST_SUBTITLES()
         {
-            Title title = LoadTitle("1");
+            OMLSDKTitle title = LoadTitle("1");
             Assert.AreEqual(2, title.Subtitles.Count, "Number of subtitles incorrect ");
             Assert.AreEqual("Subtitle 1", title.Subtitles[0], "First subtitle is incorrect");
             Assert.AreEqual("Subtitle 2", title.Subtitles[1], "Second subtitle is incorrect");
@@ -123,7 +124,7 @@ namespace OMLTestSuite
         [Test]
         public void TEST_AUDIO_TRACKS()
         {
-            Title title = LoadTitle("1");
+            OMLSDKTitle title = LoadTitle("1");
             Assert.AreEqual(2, title.AudioTracks.Count, "Number of audio tracks incorrect ");
             Assert.AreEqual("English (Dolby Digital Surround EX)", title.AudioTracks[0], "First audio track is incorrect");
             Assert.AreEqual("Commentary (Dolby Digital Mono)", title.AudioTracks[1], "Second audio track is incorrect");
@@ -133,7 +134,7 @@ namespace OMLTestSuite
         [Test]
         public void TEST_DATES()
         {
-            Title title = LoadTitle("1");
+            OMLSDKTitle title = LoadTitle("1");
             Assert.AreEqual(new DateTime(1991, 01, 01), title.ReleaseDate, "Release date is incorrect");
 
             Assert.AreEqual(new DateTime(2001, 08, 21), title.DateAdded, "Date entered is incorrect");
@@ -145,7 +146,7 @@ namespace OMLTestSuite
         [Test]
         public void TEST_RUNNINGTIME()
         {
-            Title title = LoadTitle("1");
+            OMLSDKTitle title = LoadTitle("1");
             Assert.AreEqual(42, title.Runtime, "Running time is incorrect");
         }
 
@@ -153,7 +154,7 @@ namespace OMLTestSuite
         [Test]
         public void TEST_SYNOPSIS()
         {
-            Title title = LoadTitle("1");
+            OMLSDKTitle title = LoadTitle("1");
 
             Regex formattingRegex = new Regex(@"\</?(b|i)\>", RegexOptions.CultureInvariant | RegexOptions.IgnoreCase);
             Assert.IsFalse(formattingRegex.IsMatch(title.Synopsis), "Formatting (italic or bold) has not been removed");
@@ -168,9 +169,9 @@ namespace OMLTestSuite
         [Test]
         public void TEST_VIDEO()
         {
-            Title title = LoadTitle("1");
+            OMLSDKTitle title = LoadTitle("1");
             Assert.AreEqual("NTSC", title.VideoStandard, "Video standard for DVD one is incorrect");
-            Assert.AreEqual(VideoFormat.MKV, title.VideoFormat, "Video Format for DVD one is incorrect"); // Set to the format of the first disc assuming it's the primary
+            Assert.AreEqual(OMLSDKVideoFormat.MKV, title.VideoFormat, "Video Format for DVD one is incorrect"); // Set to the format of the first disc assuming it's the primary
             Assert.AreEqual("2.35", title.AspectRatio, "Aspect ratio for DVD one is incorrect");
 
             title = LoadTitle("2");
@@ -182,7 +183,7 @@ namespace OMLTestSuite
         [Test]
         public void TEST_DISCS()
         {
-            Title title = LoadTitle("1");
+            OMLSDKTitle title = LoadTitle("1");
             Assert.AreEqual(3, title.Disks.Count, "The number of disks is incorrect");
             
             Assert.AreEqual(VideoFormat.MKV, title.Disks[0].Format, "Video format for disk 1a is incorrect");
@@ -204,7 +205,7 @@ namespace OMLTestSuite
         [Test]
         public void TEST_DEFAULT_DISC_NAMES()
         {
-            Title title = LoadTitle("3");
+            OMLSDKTitle title = LoadTitle("3");
             Assert.AreEqual(2, title.Disks.Count, "Incorrect number of discs found");
             Assert.AreEqual("Disc 1a", title.Disks[0].Name, "The first disc name incorrect");
             Assert.AreEqual("Disc 2a", title.Disks[1].Name, "The second disc name incorrect");
@@ -213,7 +214,7 @@ namespace OMLTestSuite
         [Test]
         public void TEST_TAGS()
         {
-            Title title = LoadTitle("1");
+            OMLSDKTitle title = LoadTitle("1");
             Assert.AreEqual(1, title.Tags.Count, "One tag expected in title '1'");
             Assert.AreEqual("Online", title.Tags[0], "Expected the 'Online' tag set on title '1'");
 
@@ -223,11 +224,11 @@ namespace OMLTestSuite
 
         }
 
-        private static Title LoadTitle(string id)
+        private static OMLSDKTitle LoadTitle(string id)
         {
             if (string.IsNullOrEmpty(id)) throw new ArgumentNullException("id");
 
-            Title result = null;
+            OMLSDKTitle result = null;
 
             if (defaultTitles == null)
             {
@@ -247,7 +248,7 @@ namespace OMLTestSuite
                 
             }
 
-            foreach (Title title in defaultTitles)
+            foreach (OMLSDKTitle title in defaultTitles)
             {
                 if (title.MetadataSourceID == id)
                 {

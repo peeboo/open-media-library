@@ -46,11 +46,11 @@ namespace OMLTestSuite
             MyMoviesImporter importer = new MyMoviesImporter();
             importer.ProcessFile(@"..\..\..\Sample Files\mymovies-multiple-avi-files-bug.xml");
 
-            IList<Title> titles = importer.GetTitles();
+            IList<OMLSDKTitle> titles = importer.GetTitles();
 
             Assert.AreEqual(1, titles.Count);
 
-            Title t = titles[0];
+            OMLSDKTitle t = titles[0];
             Assert.AreEqual("f7262c3b-f1a3-4128-a026-c7abdbbd6e51", t.MetadataSourceID);
             Assert.AreEqual("Beatles Anthology, The", t.Name);
             Assert.AreEqual("1.33:1", t.AspectRatio);
@@ -78,7 +78,7 @@ namespace OMLTestSuite
             Assert.AreEqual("Nudity, hahaha", t.ParentalRatingReason);
             Assert.AreEqual("NTSC", t.VideoStandard);
             Assert.AreEqual(1, t.Directors.Count);
-            Assert.AreEqual("Geoff Wonfor", ((Person)t.Directors[0]).full_name);
+            Assert.AreEqual("Geoff Wonfor", ((OMLSDKPerson)t.Directors[0]).full_name);
         }
 
         [Test]
@@ -87,10 +87,10 @@ namespace OMLTestSuite
             MyMoviesImporter importer = new MyMoviesImporter();
             importer.ProcessFile(@"..\..\..\Sample Files\MyMoviesTestFiles\MissingDiscsSection\mymovies.xml");
 
-            IList<Title> titles = importer.GetTitles();
+            IList<OMLSDKTitle> titles = importer.GetTitles();
 
             Assert.AreEqual(1, titles.Count);
-            Title title = titles[0];
+            OMLSDKTitle title = titles[0];
 
             Assert.AreEqual(1, title.Disks.Count);
             Assert.AreEqual(@"Bear.wmv", Path.GetFileName(title.Disks[0].Path));
@@ -102,10 +102,10 @@ namespace OMLTestSuite
             MyMoviesImporter importer = new MyMoviesImporter();
             importer.ProcessFile(@"..\..\..\Sample Files\MyMoviesTestFiles\MissingDiscsSection-MultipleFiles\mymovies.xml");
 
-            IList<Title> titles = importer.GetTitles();
+            IList<OMLSDKTitle> titles = importer.GetTitles();
 
             Assert.AreEqual(1, titles.Count);
-            Title title = titles[0];
+            OMLSDKTitle title = titles[0];
 
             Assert.AreEqual(3, title.Disks.Count);
             Assert.AreEqual(@"Bear.wmv", Path.GetFileName(title.Disks[0].Path));
@@ -119,7 +119,7 @@ namespace OMLTestSuite
             MyMoviesImporter importer = new MyMoviesImporter();
             importer.ProcessDir(@"..\..\..\Sample Files\MyMoviesTestFiles\TestNestedDirectory");
 
-            IList<Title> titles = importer.GetTitles();
+            IList<OMLSDKTitle> titles = importer.GetTitles();
             Assert.AreEqual(8, titles.Count);
         }
 
@@ -129,7 +129,7 @@ namespace OMLTestSuite
             MyMoviesImporter importer = new MyMoviesImporter();
             importer.ProcessDir(@"..\..\..\Sample Files\MyMoviesTestFiles\TestNestedDirectory\dir1");
 
-            IList<Title> titles = importer.GetTitles();
+            IList<OMLSDKTitle> titles = importer.GetTitles();
             Assert.AreEqual(4, titles.Count);
 
             Assert.IsNotNull(titles[0].FrontCoverPath);
@@ -144,10 +144,10 @@ namespace OMLTestSuite
             MyMoviesImporter importer = new MyMoviesImporter();
             importer.ProcessFile(@"..\..\..\Sample Files\MyMoviesTestFiles\DVR-MS\mymovies.xml");
 
-            IList<Title> titles = importer.GetTitles();
+            IList<OMLSDKTitle> titles = importer.GetTitles();
 
             Assert.AreEqual(1, titles.Count);
-            Title t = titles[0];
+            OMLSDKTitle t = titles[0];
             Assert.AreEqual(1, t.Disks.Count);
             Assert.IsNotEmpty(t.Disks[0].Path);
         }
@@ -158,10 +158,10 @@ namespace OMLTestSuite
             MyMoviesImporter importer = new MyMoviesImporter();
             importer.ProcessDir(@"..\..\..\Sample Files\MyMoviesTestFiles\ParseFailureFileFrom-saxnix");
 
-            IList<Title> titles = importer.GetTitles();
+            IList<OMLSDKTitle> titles = importer.GetTitles();
 
             Assert.AreEqual(1, titles.Count);
-            Title t = titles[0];
+            OMLSDKTitle t = titles[0];
             Assert.AreEqual(1, t.Disks.Count);
         }
 
@@ -171,7 +171,7 @@ namespace OMLTestSuite
             MyMoviesImporter importer = new MyMoviesImporter();
             importer.ProcessDir(@"..\..\..\Sample Files\MyMoviesTestFiles\MultiDisk Issues");
 
-            IList<Title> titles = importer.GetTitles();
+            IList<OMLSDKTitle> titles = importer.GetTitles();
 
             Assert.AreEqual(1, titles.Count);
         }

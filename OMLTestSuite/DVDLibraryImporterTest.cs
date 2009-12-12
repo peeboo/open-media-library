@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using System.Xml;
 using OMLEngine;
+using OMLSDK;
 using NUnit.Framework;
 using VMCDVDLibraryPlugin;
 
@@ -19,7 +20,7 @@ namespace OMLTestSuite
             DVDLibraryImporter importer = new DVDLibraryImporter();
             importer.DoWork(new string[] { @"..\..\..\sample files\vmcdvdlibraryimporterfiles\" });
 
-            IList<Title> titles = importer.GetTitles();
+            IList<OMLSDKTitle> titles = importer.GetTitles();
         }
     }
 }
