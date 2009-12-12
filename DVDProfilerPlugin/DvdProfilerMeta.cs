@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml;
-using OMLEngine;        // need this for OML Title class
-using OMLEngine.FileSystem;
 using OMLSDK;           // need this for the IOMLMetadataPlugin
 using System.IO;
 using System.Xml.Linq;
@@ -19,7 +17,7 @@ namespace DVDProfilerPlugin
         private Dictionary<string, string> dvdsById;
         private Dictionary<string, string> dvdsBySortName;
         XPathDocument document;
-        private Title foundTitle = null;
+        private OMLSDKTitle foundTitle = null;
 
         public List<string> GetBackDropUrlsForTitle()
         {
@@ -84,7 +82,7 @@ namespace DVDProfilerPlugin
 
                             if (name != null && id != null && sortName != null)
                             {
-                                name = CleanString(FileHelper.GetFolderNameString(name));
+                                name = CleanString(SDKUtilities.GetFolderNameString(name));
 
                                 if (dvdsByName.ContainsKey(name))
                                 {
@@ -93,7 +91,7 @@ namespace DVDProfilerPlugin
 
                                 dvdsByName.Add(name, id);
 
-                                sortName = CleanString(FileHelper.GetFolderNameString(sortName));
+                                sortName = CleanString(SDKUtilities.GetFolderNameString(sortName));
 
                                 if (dvdsBySortName.ContainsKey(sortName))
                                 {
@@ -179,7 +177,7 @@ namespace DVDProfilerPlugin
                 }
             }
 
-            IEnumerable<string> unusedPossibleIds = TitleCollectionManager.GetUniqueMetaIds(possibleIds, this.PluginName);
+            IEnumerable<string> unusedPossibleIds = SDKUtilities.GetUniqueMetaIds(possibleIds, this.PluginName);
 
             foreach (string possibleId in unusedPossibleIds)
             {               
@@ -219,18 +217,18 @@ namespace DVDProfilerPlugin
         // these methods are to be called after the 2 methods above
 
         // get the best match
-        public Title GetBestMatch()
+        public OMLSDKTitle GetBestMatch()
         {
             return foundTitle;            
         }
 
         // or choose among all the titles
-        public Title[] GetAvailableTitles()
+        public OMLSDKTitle[] GetAvailableTitles()
         {
             throw new NotImplementedException();
         }
 
-        public Title GetTitle(int index)
+        public OMLSDKTitle GetTitle(int index)
         {
             throw new NotImplementedException();
         }
