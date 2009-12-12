@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using OMLEngine;        // need this for OML Title class
 using OMLSDK;
 using System.Data;           // need this for the IOMLMetadataPlugin
 
@@ -102,10 +101,10 @@ namespace DVDProfilerMetaData
                                   where dvd.Field<String>("Title").ToLowerInvariant().Contains(movieName)
                                   select dvd).ToList<DataRow>();
 
-            List<Title> dvdList = new List<Title>();
+            List<OMLSDKTitle> dvdList = new List<OMLSDKTitle>();
             foreach (DataRow dr in dvds)
             {
-                Title t = new Title();
+                OMLSDKTitle t = new OMLSDKTitle();
                 t.Name = (String)dr["Title"];
 
                 t.ParentalRating = (String)dr["Rating"];
@@ -164,15 +163,15 @@ namespace DVDProfilerMetaData
                         String fullName = String.Format(@"{0} {1}", credit["FirstName"], credit["LastName"]);
                         if (CreditType == "Direction")
                         {
-                            t.AddDirector(new Person(fullName));
+                            t.AddDirector(new OMLSDKPerson(fullName));
                         }
                         else if (CreditType == "Writing")
                         {
-                            t.AddWriter(new Person(fullName));
+                            t.AddWriter(new OMLSDKPerson(fullName));
                         }
                         else if (CreditType == "Production")
                         {
-                            t.AddProducer(new Person(fullName));
+                            t.AddProducer(new OMLSDKPerson(fullName));
                         }
                     }
                 }
@@ -195,7 +194,7 @@ namespace DVDProfilerMetaData
             return rslt;
         }
 
-        public Title GetBestMatch()
+        public OMLSDKTitle GetBestMatch()
         {
             if (_searchResult != null & _searchResult.Count > 0)
             {
@@ -208,12 +207,12 @@ namespace DVDProfilerMetaData
             }
         }
 
-        public Title[] GetAvailableTitles()
+        public OMLSDKTitle[] GetAvailableTitles()
         {
             return _searchResult.DVDList.ToArray();
         }
 
-        public Title GetTitle(int index)
+        public OMLSDKTitle GetTitle(int index)
         {
             return _searchResult.DVDList[index];
         }
@@ -273,7 +272,7 @@ namespace DVDProfilerMetaData
     public class DVDProfilerSearchResult
     {
         // constructor
-        public DVDProfilerSearchResult(List<Title> dvdList, int totalPages, int totalItems)
+        public DVDProfilerSearchResult(List<OMLSDKTitle> dvdList, int totalPages, int totalItems)
         {
             m_DVDList = dvdList;
             m_TotalPages = totalPages;
@@ -282,14 +281,14 @@ namespace DVDProfilerMetaData
 
         public int Count { get { return m_DVDList.Count(); } }
         // public properties
-        public List<Title> DVDList { get { return m_DVDList; } }
+        public List<OMLSDKTitle> DVDList { get { return m_DVDList; } }
         public int TotalPages { get { return m_TotalPages; } }
         public int TotalItems { get { return m_TotalItems; } }
 
         // private data
         private int m_TotalItems;
         private int m_TotalPages;
-        List<Title> m_DVDList;
+        List<OMLSDKTitle> m_DVDList;
     }
 
 }
