@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using OMLEngine;
 
 namespace OMLSDK
 {
     public interface IOMLPlugin
     {
-        IList<Title> GetTitles();
-        Title newTitle();
-        void AddTitle(Title newTitle);
-        bool ValidateTitle(Title title_to_validate);
+        IList<OMLSDKTitle> GetTitles();
+        OMLSDKTitle newTitle();
+        void AddTitle(OMLSDKTitle newTitle);
+        bool ValidateTitle(OMLSDKTitle title_to_validate);
         bool IsSupportedFormat(string file_extension);
         bool Load(string filename);
         void DoWork(string[] thework);

@@ -4,16 +4,15 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 
-using OMLEngine;
 
 namespace OMLSDK
 {
     public class OMLPlugin : IOMLPlugin
     {
-        List<Title> titles;
+        List<OMLSDKTitle> titles;
         private int totalRowsAdded = 0;        
         public static string MyMoviesXslTransform =
-            Path.Combine(FileSystemWalker.PluginsDirectory, @"MyMoviesToOML.xsl");
+            Path.Combine(SDKUtilities.PluginsDirectory, @"MyMoviesToOML.xsl");
         List<string> errors;
 
         public enum PluginTypes { ImportPlugin, MetadataPlugin };
@@ -199,7 +198,7 @@ namespace OMLSDK
             if (dlgRslt == DialogResult.OK)
             {
                 string sPath = string.Empty;
-                Utilities.DebugLine("[OMLPlugin] " + String.Format(@"[OMLImporter] Valid file found ({0})", ofDiag.FileName));
+                SDKUtilities.DebugLine("[OMLPlugin] " + String.Format(@"[OMLImporter] Valid file found ({0})", ofDiag.FileName));
                 if (this.MultiSelect)
                 {
                     sPath = Path.GetDirectoryName(ofDiag.FileNames[0]);
@@ -450,7 +449,7 @@ namespace OMLSDK
         /// 
         /// </summary>
         /// <returns></returns>
-        public IList<Title> GetTitles()
+        public IList<OMLSDKTitle> GetTitles()
         {
             titles.Sort();
             return titles;
@@ -461,7 +460,7 @@ namespace OMLSDK
         /// </summary>
         public OMLPlugin()
         {
-            titles = new List<Title>();
+            titles = new List<OMLSDKTitle>();
             errors = new List<string>();
         }
 
@@ -469,26 +468,26 @@ namespace OMLSDK
         /// 
         /// </summary>
         /// <returns></returns>
-        public Title newTitle()
+        public OMLSDKTitle newTitle()
         {
-            return new Title();
+            return new OMLSDKTitle();
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="newTitle"></param>
-        public void AddTitle(Title newTitle)
+        public void AddTitle(OMLSDKTitle newTitle)
         {
             if (string.IsNullOrEmpty(newTitle.AspectRatio))
             {
-                Utilities.DebugLine("[OMLPlugin] Setting AspectRatio for Title: " + newTitle.Name);
+                SDKUtilities.DebugLine("[OMLPlugin] Setting AspectRatio for Title: " + newTitle.Name);
                 //SetAspectRatio(newTitle);
             }
 
             if (newTitle.DateAdded.CompareTo(new DateTime(0001, 1, 1)) == 0)
             {
-                Utilities.DebugLine("[OMLPlugin] Setting Date Added for title: " + newTitle.Name);
+                SDKUtilities.DebugLine("[OMLPlugin] Setting Date Added for title: " + newTitle.Name);
                 newTitle.DateAdded = DateTime.Now;
             }
 
@@ -504,7 +503,7 @@ namespace OMLSDK
         /// </summary>
         /// <param name="title_to_validate"></param>
         /// <returns></returns>
-        public bool ValidateTitle(Title title_to_validate) { return true; }
+        public bool ValidateTitle(OMLSDKTitle title_to_validate) { return true; }
 
         /// <summary>
         /// 
@@ -513,7 +512,7 @@ namespace OMLSDK
         /// <returns></returns>
         public bool IsSupportedFormat(string file_extension)
         {
-            string[] formats = Enum.GetNames(typeof(VideoFormat));
+            string[] formats = Enum.GetNames(typeof(OMLSDKVideoFormat));
             foreach (string format in formats)
             {
                 if (file_extension.ToUpper().CompareTo(format.ToUpper()) == 0)

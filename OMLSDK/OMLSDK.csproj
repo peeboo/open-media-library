@@ -48,6 +48,7 @@
     <Compile Include="IOMLMetaData.cs" />
     <Compile Include="IOMLPlugin.cs" />
     <Compile Include="OMLPlugin.cs" />
+    <Compile Include="OMLSDKDisk.cs" />
     <Compile Include="OMLSDKTitle.cs" />
     <Compile Include="PluginServices.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -56,13 +57,8 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="SDKUtilities.cs" />
     <Compile Include="TitleMetadataManagement.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\OMLEngine\OMLEngine.csproj">
-      <Project>{047E39DC-BB9E-42CD-9AB2-CFA4D4387F6C}</Project>
-      <Name>OMLEngine</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="library.snk" />
@@ -70,6 +66,12 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\OMLEngine\OMLEngine.csproj">
+      <Project>{047E39DC-BB9E-42CD-9AB2-CFA4D4387F6C}</Project>
+      <Name>OMLEngine</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
