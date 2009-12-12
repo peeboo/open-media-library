@@ -3,7 +3,7 @@ using System.Data;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
-using OMLEngine;
+
 using OMLSDK;
 using System.IO;
 using System.Diagnostics;
@@ -49,7 +49,7 @@ namespace MovieCollectorzPlugin
             XmlNodeList nodeList = xDoc.SelectNodes("//movielist/movie");
             foreach (XmlNode movieNode in nodeList)
             {
-                Title newTitle = new Title();
+                OMLSDKTitle newTitle = new OMLSDKTitle();
                 XPathNavigator nav = movieNode.CreateNavigator();
 
                 newTitle.MetadataSourceID = GetChildNodesValue(nav, "id");
@@ -188,10 +188,10 @@ namespace MovieCollectorzPlugin
                                     switch (role.ToLower())
                                     {
                                         case "director":
-                                            newTitle.AddDirector(new Person(name));
+                                            newTitle.AddDirector(new OMLSDKPerson(name));
                                             break;
                                         case "writer":
-                                            newTitle.AddWriter(new Person(name));
+                                            newTitle.AddWriter(new OMLSDKPerson(name));
                                             break;
                                         default:
                                             break;
@@ -283,8 +283,8 @@ namespace MovieCollectorzPlugin
                                                 {
                                                     if (IsSupportedFormat(ext))
                                                     {
-                                                        Disk disk = new Disk();
-                                                        disk.Format = (VideoFormat)Enum.Parse(typeof(VideoFormat), ext, true);
+                                                        OMLSDKDisk disk = new OMLSDKDisk();
+                                                        disk.Format = (OMLSDKVideoFormat)Enum.Parse(typeof(OMLSDKVideoFormat), ext, true);
                                                         disk.Path = path;
                                                         disk.Name = GetChildNodesValue(localNav, "description");
                                                         newTitle.AddDisk(disk);
@@ -294,7 +294,7 @@ namespace MovieCollectorzPlugin
                                         }
                                         catch (Exception ex)
                                         {
-                                            Utilities.DebugLine("MovieCollectorzPlugin: {0}", ex);
+                                            SDKUtilities.DebugLine("MovieCollectorzPlugin: {0}", ex);
                                         }
                                     }
                                 }
@@ -312,11 +312,11 @@ namespace MovieCollectorzPlugin
                     }
                     catch (Exception e)
                     {
-                        Utilities.DebugLine("[MovieCollectorzPlugin] Error adding row: " + e.Message);
+                        SDKUtilities.DebugLine("[MovieCollectorzPlugin] Error adding row: " + e.Message);
                     }
                 }
                 else
-                    Utilities.DebugLine("[MovieCollectorzPlugin] Error saving row");
+                    SDKUtilities.DebugLine("[MovieCollectorzPlugin] Error saving row");
             }
         }
 
