@@ -105,7 +105,7 @@ namespace OMLSDK
 
                 _title.MetadataSourceID = CopyString(omlsdktitle.MetadataSourceID);
                 _title.MetadataSourceName = CopyString(omlsdktitle.MetadataSourceName);
-                _title.ImporterSource = omlsdktitle.ImporterSource;
+                _title.ImporterSource = CopyString(omlsdktitle.ImporterSource);
 
                 _title.OfficialWebsiteURL = CopyString(omlsdktitle.OfficialWebsiteURL);
                 _title.ParentalRating = CopyString(omlsdktitle.ParentalRating);

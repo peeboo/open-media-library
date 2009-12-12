@@ -7,7 +7,7 @@ using System.IO;
 
 namespace OMLSDK
 {
-    public class OMLSDKTitle
+    public class OMLSDKTitle : IComparable
     {
         public OMLSDKTitle()
         {
@@ -320,6 +320,15 @@ namespace OMLSDK
             }
         }
         #endregion
+
+
+        public int CompareTo(object other)
+        {
+            OMLSDKTitle otherT = other as OMLSDKTitle;
+            if (otherT == null)
+                return -1;
+            return Name.CompareTo(otherT.Name);
+        }
 
 
         public override string ToString()
