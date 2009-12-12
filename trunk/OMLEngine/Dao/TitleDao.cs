@@ -285,7 +285,10 @@ namespace OMLEngine.Dao
             // add the new ones
             foreach (string add in added)
             {
-                AddActorToTitle(title, add, null, role);
+                if (!string.IsNullOrEmpty(add))
+                {
+                    AddActorToTitle(title, add, null, role);
+                }
             }
         }
 
