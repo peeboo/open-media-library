@@ -63,8 +63,8 @@ namespace OMLDatabaseEditor
                             provider.PluginDLL.Initialize(provider.DataProviderName, new Dictionary<string, string>());
 
                             provider.PluginDLL.SearchForMovie(_title.Name, OMLEngine.Settings.OMLSettings.MetadataLookupResultsQty);
-                            
-                            Title title = provider.PluginDLL.GetBestMatch();
+
+                            Title title = OMLSDK.SDKUtilities.ConvertOMLSDKTitleToTitle(provider.PluginDLL.GetBestMatch());
                             if (title != null)
                             {
                                 AddResult(provider, _propertyInfo.GetValue(title, null), pluginForProperty);
@@ -91,7 +91,7 @@ namespace OMLDatabaseEditor
             // Add context menu of other search results
             ContextMenu menu = new ContextMenu();
             menu.Tag = plugin;
-            Title[] matches = plugin.PluginDLL.GetAvailableTitles();
+            Title[] matches = OMLSDK.SDKUtilities.ConvertOMLSDKTitlesToTitles(plugin.PluginDLL.GetAvailableTitles());
             for (int i = 0; i < matches.Length; i++)
             {
                 MenuItem item = new MenuItem(matches[i].Name, new EventHandler(otherTitle_Click));
@@ -169,7 +169,7 @@ namespace OMLDatabaseEditor
             MenuItem item = sender as MenuItem;
             ContextMenu menu = item.Parent as ContextMenu;
             MetaDataPluginDescriptor plugin = ((MetaDataPluginDescriptor)menu.Tag);
-            Title selectedTitle = plugin.PluginDLL.GetTitle((int)item.Tag);
+            Title selectedTitle = OMLSDK.SDKUtilities.ConvertOMLSDKTitleToTitle(plugin.PluginDLL.GetTitle((int)item.Tag));
             for (int i = 0; i < tblData.Controls.Count; i++)
             {
                 Control ctrl = tblData.Controls[i];

@@ -57,7 +57,7 @@ namespace OMLDatabaseEditor
             try
             {
                 Utilities.DebugLine("[OMLImporter] Titles loaded, beginning Import process");
-                IList<Title> titles = plugin.GetTitles();
+                IList<Title> titles = OMLSDK.SDKUtilities.ConvertOMLSDKTitlesToTitles(plugin.GetTitles());
                 Utilities.DebugLine("[OMLImporter] " + titles.Count + " titles found in input file");
 
                 int totalNumberOfTitles = 0;

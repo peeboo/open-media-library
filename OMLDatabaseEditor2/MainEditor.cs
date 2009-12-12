@@ -803,7 +803,7 @@ namespace OMLDatabaseEditor
                         if (result == DialogResult.OK)
                         {
                             Cursor = Cursors.WaitCursor;
-                            Title searchresult = plugin.PluginDLL.GetTitle(searchResultForm.SelectedTitleIndex);
+                            Title searchresult = OMLSDK.SDKUtilities.ConvertOMLSDKTitleToTitle(plugin.PluginDLL.GetTitle(searchResultForm.SelectedTitleIndex));
                             title.MetadataSourceName = plugin.DataProviderName;
 
                             if (searchresult != null)

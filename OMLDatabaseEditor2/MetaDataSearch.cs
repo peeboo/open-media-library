@@ -134,7 +134,7 @@ namespace OMLDatabaseEditor
                     }
                 }
 
-                _titles = _plugin.PluginDLL.GetAvailableTitles();
+                _titles = OMLSDK.SDKUtilities.ConvertOMLSDKTitlesToTitles(_plugin.PluginDLL.GetAvailableTitles());
                 ShowResults();
             }
             catch (Exception ex)
@@ -307,7 +307,7 @@ namespace OMLDatabaseEditor
                             Cursor = Cursors.WaitCursor;
                             SearchDrillDownReq = _plugin.PluginDLL.SearchForTVDrillDown(grdTitles.SelectedRows[0].Index, teEpisodeName.Text, Convert.ToInt32(seSeasonNo.Value), Convert.ToInt32(seEpisodeNo.Value), OMLEngine.Settings.OMLSettings.MetadataLookupResultsQty);
                             TVShowFound = true;
-                            _titles = _plugin.PluginDLL.GetAvailableTitles();
+                            _titles = OMLSDK.SDKUtilities.ConvertOMLSDKTitlesToTitles(_plugin.PluginDLL.GetAvailableTitles());
                             ShowResults();
                             Cursor = Cursors.Default;
                         }
@@ -355,7 +355,7 @@ namespace OMLDatabaseEditor
                             Cursor = Cursors.WaitCursor;
                             //SearchDrillDownReq = _plugin.PluginDLL.SearchForTVDrillDown(grdTitles.SelectedRows[0].Index, teEpisodeName.Text, Convert.ToInt32(seSeasonNo.Value), Convert.ToInt32(seEpisodeNo.Value), OMLEngine.Settings.OMLSettings.MetadataLookupResultsQty);
                             SearchDrillDownReq = _plugin.PluginDLL.SearchForTVDrillDown(0, teEpisodeName.Text, Convert.ToInt32(seSeasonNo.Value), Convert.ToInt32(seEpisodeNo.Value), OMLEngine.Settings.OMLSettings.MetadataLookupResultsQty);
-                            _titles = _plugin.PluginDLL.GetAvailableTitles();
+                            _titles = OMLSDK.SDKUtilities.ConvertOMLSDKTitlesToTitles(_plugin.PluginDLL.GetAvailableTitles());
                             ShowResults();
                             Cursor = Cursors.Default;
                             //}
