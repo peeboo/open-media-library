@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Xml;
-
-using OMLEngine;
 using OMLSDK;
 
 namespace VMCDVDLibraryPlugin
@@ -23,7 +21,7 @@ namespace VMCDVDLibraryPlugin
         public DVDLibraryImporter()
             : base()
         {
-            Utilities.DebugLine("[DVDLibraryImporter] created");
+            SDKUtilities.DebugLine("[DVDLibraryImporter] created");
         }
 
         public override bool IsSingleFileImporter()
@@ -98,12 +96,12 @@ namespace VMCDVDLibraryPlugin
  
                 foreach (string currentFolder in dirList)
                 {
-                    Utilities.DebugLine("DVDImporter: folder " + currentFolder);
+                    SDKUtilities.DebugLine("DVDImporter: folder " + currentFolder);
                     if (currentFolder.ToUpperInvariant().Contains("fanart".ToUpperInvariant()))
-                        Utilities.DebugLine("[DVDImporter] Skipping fanart directory");
+                        SDKUtilities.DebugLine("[DVDImporter] Skipping fanart directory");
                     else
                     {
-                        Title dvd = GetDVDMetaData(currentFolder);
+                        OMLSDKTitle dvd = GetDVDMetaData(currentFolder);
                         string[] fileNames = null;
                         try
                         {
@@ -122,11 +120,11 @@ namespace VMCDVDLibraryPlugin
                                 foreach (string video in fileNames)
                                 {
                                     string extension = Path.GetExtension(video).ToUpper();
-                                    if (Enum.IsDefined(typeof(VideoFormat), extension.ToUpperInvariant()))
+                                    if (Enum.IsDefined(typeof(OMLSDKVideoFormat), extension.ToUpperInvariant()))
                                     {
-                                        foreach (VideoFormat format in Enum.GetValues(typeof(VideoFormat)))
+                                        foreach (OMLSDKVideoFormat format in Enum.GetValues(typeof(OMLSDKVideoFormat)))
                                         {
-                                            if (Enum.GetName(typeof(VideoFormat), format).ToLowerInvariant() == extension)
+                                            if (Enum.GetName(typeof(OMLSDKVideoFormat), format).ToLowerInvariant() == extension)
                                             {
                                                 dvd.AddTrailer(video);
                                             }
@@ -142,7 +140,7 @@ namespace VMCDVDLibraryPlugin
                             {
                                 if (OMLEngine.Settings.OMLSettings.TreatFoldersAsTitles)
                                 {
-                                    Title newVideo = new Title();
+                                    OMLSDKTitle newVideo = new OMLSDKTitle();
 
                                     // Create the title name
                                     DirectoryInfo di = new DirectoryInfo(currentFolder);
@@ -168,18 +166,18 @@ namespace VMCDVDLibraryPlugin
                                             extension = extension.Replace("-", "");
 
 
-                                            if (Enum.IsDefined(typeof(VideoFormat), extension.ToUpperInvariant()))
+                                            if (Enum.IsDefined(typeof(OMLSDKVideoFormat), extension.ToUpperInvariant()))
                                             {
-                                                Disk disk = new Disk();
+                                                OMLSDKDisk disk = new OMLSDKDisk();
                                                 disk.Path = video;
-                                                disk.Format = (VideoFormat)Enum.Parse(typeof(VideoFormat), extension, true);
+                                                disk.Format = (OMLSDKVideoFormat)Enum.Parse(typeof(OMLSDKVideoFormat), extension, true);
                                                 disk.Name = string.Format("Disk {0}", diskNumber++);
                                                 newVideo.AddDisk(disk);
                                             }
                                         }
                                         catch (Exception ex)
                                         {
-                                            Utilities.DebugLine("[DVDLibraryImporter] Problem importing file " + video + " : " + ex.Message);
+                                            SDKUtilities.DebugLine("[DVDLibraryImporter] Problem importing file " + video + " : " + ex.Message);
                                         }
                                     }
 
@@ -202,14 +200,14 @@ namespace VMCDVDLibraryPlugin
                                             string extension = Path.GetExtension(video).ToUpper().Substring(1);
                                             extension = extension.Replace("-", "");
 
-                                            if (Enum.IsDefined(typeof(VideoFormat), extension.ToUpperInvariant()))
+                                            if (Enum.IsDefined(typeof(OMLSDKVideoFormat), extension.ToUpperInvariant()))
                                             {
                                                 // this isn't 100% safe since there are videoformats that don't map 1-1 to extensions                                    
-                                                VideoFormat videoFormat = (VideoFormat)Enum.Parse(typeof(VideoFormat), extension, true);
+                                                OMLSDKVideoFormat videoFormat = (OMLSDKVideoFormat)Enum.Parse(typeof(OMLSDKVideoFormat), extension, true);
 
-                                                Title newVideo = new Title();
+                                                OMLSDKTitle newVideo = new OMLSDKTitle();
                                                 newVideo.Name = GetSuggestedMovieName(Path.GetFileNameWithoutExtension(video));
-                                                Disk disk = new Disk();
+                                                OMLSDKDisk disk = new OMLSDKDisk();
                                                 disk.Path = video;
                                                 disk.Name = "Disk 1";
                                                 disk.Format = videoFormat;
@@ -235,7 +233,7 @@ namespace VMCDVDLibraryPlugin
                                         }
                                         catch (Exception ex)
                                         {
-                                            Utilities.DebugLine("[DVDLibraryImporter] Problem importing file " + video + " : " + ex.Message);
+                                            SDKUtilities.DebugLine("[DVDLibraryImporter] Problem importing file " + video + " : " + ex.Message);
                                         }
                                     }
                                 }
@@ -248,11 +246,11 @@ namespace VMCDVDLibraryPlugin
             }
             catch (Exception ex)
             {
-                Utilities.DebugLine("[DVDLibraryImporter] An error occured: " + ex.Message);
+                SDKUtilities.DebugLine("[DVDLibraryImporter] An error occured: " + ex.Message);
             }
         }
 
-        private Title GetDVDMetaData(string folderName)
+        private OMLSDKTitle GetDVDMetaData(string folderName)
         {
             try
             {
@@ -278,7 +276,7 @@ namespace VMCDVDLibraryPlugin
                     //        xmlFile = "";
                     //}
 
-                    Title t = null;
+                    OMLSDKTitle t = null;
                     // xmlFile contains the dvdid - then we need to lookup in the cache folder based on this id
                     if (xmlFile != "" && File.Exists(xmlFile))
                     {
@@ -290,7 +288,7 @@ namespace VMCDVDLibraryPlugin
                     if( t == null )
                     {
                         // for DVDs with no dvdid.xml add a stripped down title with just a suggested name
-                        t = new Title();
+                        t = new OMLSDKTitle();
                         t.Name = GetSuggestedMovieName(folderName);
 
                     }
@@ -302,28 +300,28 @@ namespace VMCDVDLibraryPlugin
                     }
 
                     t.ImporterSource = "VMCDVDLibraryPlugin";
-                    Disk disk = new Disk();
+                    OMLSDKDisk disk = new OMLSDKDisk();
                     disk.Name = "Disk 1";                    
 
                     switch (dirType)
                     {
                         case DirectoryType.BluRay:
-                            disk.Format = VideoFormat.BLURAY;
+                            disk.Format = OMLSDKVideoFormat.BLURAY;
                             disk.Path = folderName;
                             break;
 
                         case DirectoryType.HDDvd:
-                            disk.Format = VideoFormat.HDDVD;
+                            disk.Format = OMLSDKVideoFormat.HDDVD;
                             disk.Path = folderName;
                             break;
 
                         case DirectoryType.DVD_Flat:
-                            disk.Format = VideoFormat.DVD;
+                            disk.Format = OMLSDKVideoFormat.DVD;
                             disk.Path = folderName;
                             break;
 
                         case DirectoryType.DVD_Ripped:
-                            disk.Format = VideoFormat.DVD;
+                            disk.Format = OMLSDKVideoFormat.DVD;
                             disk.Path = folderName;
                             break;
                     }                    
@@ -335,15 +333,15 @@ namespace VMCDVDLibraryPlugin
             }
             catch (Exception ex)
             {
-                Utilities.DebugLine("[DVDLibraryImporter] An error occured: " + ex.Message);
+                SDKUtilities.DebugLine("[DVDLibraryImporter] An error occured: " + ex.Message);
             }
 
             return null;
         }
 
-        private Title ReadMetaData(string movieFolder, string dvdCacheXMLFile)
+        private OMLSDKTitle ReadMetaData(string movieFolder, string dvdCacheXMLFile)
         {
-            Title t = new Title();
+            OMLSDKTitle t = new OMLSDKTitle();
             try
             {
                 if (File.Exists(dvdCacheXMLFile))
@@ -381,7 +379,7 @@ namespace VMCDVDLibraryPlugin
                             string[] directors = directorList.Split(new char[] { ';', ',', '|' });
                             foreach (string director in directors)
                             {
-                                t.AddDirector(new Person(director.Trim()));
+                                t.AddDirector(new OMLSDKPerson(director.Trim()));
                             }
                         }
 
@@ -455,7 +453,7 @@ namespace VMCDVDLibraryPlugin
             }
             catch (Exception ex)
             {
-                Utilities.DebugLine("[DVDLibraryImporter] An error occured: " + ex.Message);
+                SDKUtilities.DebugLine("[DVDLibraryImporter] An error occured: " + ex.Message);
                 return null;
             }
 
@@ -504,7 +502,7 @@ namespace VMCDVDLibraryPlugin
             }
             catch (Exception ex)
             {
-                Utilities.DebugLine("[DVDLibraryImporter] An error occured: " + ex.Message);
+                SDKUtilities.DebugLine("[DVDLibraryImporter] An error occured: " + ex.Message);
             }
             return dvdid;
         }
@@ -559,7 +557,7 @@ namespace VMCDVDLibraryPlugin
             }
             catch (Exception ex)
             {
-                Utilities.DebugLine("[DVDLibraryImporter] An error occured: " + ex.Message);
+                SDKUtilities.DebugLine("[DVDLibraryImporter] An error occured: " + ex.Message);
                 // ignore any permission errors
             }
         }
@@ -592,7 +590,7 @@ namespace VMCDVDLibraryPlugin
             return DirectoryType.Normal;
         }
 
-        private void UpdateTitleFromOMLXML(Title t)
+        private void UpdateTitleFromOMLXML(OMLSDKTitle t)
         {
         }
     }
