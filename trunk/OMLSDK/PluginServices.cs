@@ -32,7 +32,7 @@ namespace OMLSDK
                 }
                 catch (Exception ex){
                     // Error loading DLL, we don't need to do anything special
-                    Utilities.DebugLine("[PluginService] Loading plugin {0} Caused an Exception {1}", strDLLs[intIndex], ex.Message);
+                    SDKUtilities.DebugLine("[PluginService] Loading plugin {0} Caused an Exception {1}", strDLLs[intIndex], ex.Message);
                 }
             }
             // Return all plugins found
@@ -138,6 +138,5 @@ namespace OMLSDK
                 plugins = null;
             }
         }
-
     }
 }

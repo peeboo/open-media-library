@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Collections;
 
-// Step 1: Make sure that you add OMLEngine and OMLSDK to your References
-// Step 2: Make sure you add "using OMLENgine;" and "using OMSDK;" to your plugin code
+// Step 1: Make sure that you add OMLSDK to your References
+// Step 2: Make sure you add "using OMLSDK;" to your plugin code
 // Step 3: Create a class that impelments interface IOMLMetadataPlugin
 // Step 4: Implement the following methods from IOMLMetadatapluing:
 //  Step 5: Implement PluginName property. This name is used in Menus
