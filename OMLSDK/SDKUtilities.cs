@@ -29,6 +29,23 @@ namespace OMLSDK
             }
         }
 
+         
+        public static string ThirdPartyData 
+        {
+            get
+            {
+                return FileSystemWalker.ThirdPartyData;
+            }
+        }
+
+         public static string LogDirectory 
+        {
+            get
+            {
+                return FileSystemWalker.LogDirectory;
+            }
+        }
+
 
         public static bool IsDVD(string fullPath)
         {
@@ -76,40 +93,40 @@ namespace OMLSDK
 
             if (omlsdktitle != null)
             {
-                _title.Name = CopyString(omlsdktitle.Name);
-                _title.OriginalName = CopyString(omlsdktitle.OriginalName);
-                _title.SortName = CopyString(omlsdktitle.SortName);
+                _title.NameTrimmed = CopyString(omlsdktitle.Name);
+                _title.OriginalNameTrimmed = CopyString(omlsdktitle.OriginalName);
+                _title.SortNameTrimmed = CopyString(omlsdktitle.SortName);
                 _title.Synopsis = CopyString(omlsdktitle.Synopsis);
                 _title.ProductionYear = omlsdktitle.ProductionYear;
                 _title.ReleaseDate = omlsdktitle.ReleaseDate;
                 _title.DateAdded = omlsdktitle.DateAdded;
                 _title.Runtime = omlsdktitle.Runtime;
-                _title.Studio = CopyString(omlsdktitle.Studio);
-                _title.UPC = CopyString(omlsdktitle.UPC);
+                _title.StudioTrimmed = CopyString(omlsdktitle.Studio);
+                _title.UPCTrimmed = CopyString(omlsdktitle.UPC);
                 _title.WatchedCount = omlsdktitle.WatchedCount;
                 _title.UserStarRating = omlsdktitle.UserStarRating;
 
                 _title.EpisodeNumber = omlsdktitle.EpisodeNumber;
                 _title.SeasonNumber = omlsdktitle.SeasonNumber;
 
-                _title.AspectRatio = CopyString(omlsdktitle.AspectRatio);
+                _title.AspectRatioTrimmed = CopyString(omlsdktitle.AspectRatio);
                 _title.VideoDetails = CopyString(omlsdktitle.VideoDetails);
-                _title.VideoResolution = CopyString(omlsdktitle.VideoResolution);
-                _title.VideoStandard = CopyString(omlsdktitle.VideoStandard);
+                _title.VideoResolutionTrimmed = CopyString(omlsdktitle.VideoResolution);
+                _title.VideoStandardTrimmed = CopyString(omlsdktitle.VideoStandard);
                 //_title.VideoFormat = (VideoFormat)Enum.Parse(typeof(VideoFormat), omlsdktitle.VideoFormat.ToString());
 
                 _title.FrontCoverPath = CopyString(omlsdktitle.FrontCoverPath);
                 _title.BackCoverPath = CopyString(omlsdktitle.BackCoverPath);
 
-                _title.CountryOfOrigin = CopyString(omlsdktitle.CountryOfOrigin);
+                _title.CountryOfOriginTrimmed = CopyString(omlsdktitle.CountryOfOrigin);
 
-                _title.MetadataSourceID = CopyString(omlsdktitle.MetadataSourceID);
-                _title.MetadataSourceName = CopyString(omlsdktitle.MetadataSourceName);
-                _title.ImporterSource = CopyString(omlsdktitle.ImporterSource);
+                _title.MetadataSourceIDTrimmed = CopyString(omlsdktitle.MetadataSourceID);
+                _title.MetadataSourceNameTrimmed = CopyString(omlsdktitle.MetadataSourceName);
+                _title.ImporterSourceTrimmed = CopyString(omlsdktitle.ImporterSource);
 
-                _title.OfficialWebsiteURL = CopyString(omlsdktitle.OfficialWebsiteURL);
-                _title.ParentalRating = CopyString(omlsdktitle.ParentalRating);
-                _title.ParentalRatingReason = CopyString(omlsdktitle.ParentalRatingReason);
+                _title.OfficialWebsiteURLTrimmed = CopyString(omlsdktitle.OfficialWebsiteURL);
+                _title.ParentalRatingTrimmed = CopyString(omlsdktitle.ParentalRating);
+                _title.ParentalRatingReasonTrimmed = CopyString(omlsdktitle.ParentalRatingReason);
 
 
                 #region Disks
