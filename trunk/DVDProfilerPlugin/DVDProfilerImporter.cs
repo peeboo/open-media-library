@@ -142,13 +142,33 @@ namespace DVDProfilerPlugin
                     case "CountryOfOrigin":
                         title.CountryOfOrigin = dvdElement.Value;
                         break;
-                    case "ProductionYear":
+                    /*case "ProductionYear":
                         // Set to January first in the appropriate year in lack of better...
                         int releaseYear;
                         if (TryReadItemInt(dvdElement, out releaseYear))
                         {
                             title.ReleaseDate = new DateTime(releaseYear, 1, 1);
                         }
+                        break;*/
+
+                    // Fix from DVDJunkie
+                    // http://www.ornskov.dk/forum/index.php?topic=1605.msg12171#msg12171
+                    case "ProductionYear":
+                        string ryear = dvdElement.Value;
+                        try
+                        {
+                            if (!string.IsNullOrEmpty(ryear)) title.ProductionYear = Convert.ToInt32(ryear);
+                        }
+                        catch (FormatException) { }
+                        break;
+                    case "Released":
+                        string rdate = dvdElement.Value;
+                        try
+                        {
+                            if (!string.IsNullOrEmpty(rdate)) title.ReleaseDate = DateTime.Parse(rdate);
+                        }
+                        catch (ArgumentException) { }
+                        catch (FormatException) { }
                         break;
                     case "RunningTime":
                         int runningTime;
