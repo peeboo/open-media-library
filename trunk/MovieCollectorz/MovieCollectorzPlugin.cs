@@ -81,13 +81,31 @@ namespace MovieCollectorzPlugin
                     nav.MoveToParent();
                 }
 
-                if (nav.MoveToChild("plot", ""))
+                /*if (nav.MoveToChild("plot", ""))
                 {
                     newTitle.Synopsis = nav.Value;
                     nav.MoveToParent();
+                }*/
+
+                // Fix from DVDJunkie
+                // http://www.ornskov.dk/forum/index.php?topic=1605.msg12171#msg12171
+                if (nav.MoveToChild("plot", ""))
+                {
+                    string plot = nav.Value;
+                    plot = plot.Replace("<B>", "");
+                    plot = plot.Replace("<b>", "");
+                    plot = plot.Replace("</B>", "");
+                    plot = plot.Replace("</b>", "");
+                    plot = plot.Replace("<I>", "");
+                    plot = plot.Replace("<i>", "");
+                    plot = plot.Replace("</I>", "");
+                    plot = plot.Replace("</i>", "");
+
+                    newTitle.Synopsis = plot;
+                    nav.MoveToParent();
                 }
 
-                if (nav.MoveToChild("releasedate", ""))
+                /*if (nav.MoveToChild("releasedate", ""))
                 {
                     XPathNavigator localNav = nav.CreateNavigator();
                     //XmlNode rdYear = nav.SelectSingleNode("year");
@@ -103,6 +121,35 @@ namespace MovieCollectorzPlugin
                     //    if (rd != null)
                     //        newTitle.ReleaseDate = rd;
                     //}
+                    nav.MoveToParent();
+                }*/
+
+                // Fix from DVDJunkie
+                // http://www.ornskov.dk/forum/index.php?topic=1605.msg12171#msg12171
+                //hwh 12-7-09
+                if (nav.MoveToChild("releasedate", ""))
+                {
+                    XPathNavigator localNav = nav.CreateNavigator();
+                    string rdate = GetChildNodesValue(localNav, "date");
+                    try
+                    {
+                        if (!string.IsNullOrEmpty(rdate)) newTitle.ProductionYear = Convert.ToInt32(rdate);
+                    }
+                    catch (FormatException) { }
+                    nav.MoveToParent();
+                }
+
+                //hwh 12-7-09
+                if (nav.MoveToChild("dvdreleasedate", ""))
+                {
+                    XPathNavigator localNav = nav.CreateNavigator();
+                    string rdate = GetChildNodesValue(localNav, "date");
+                    try
+                    {
+                        if (!string.IsNullOrEmpty(rdate)) newTitle.ReleaseDate = DateTime.Parse(rdate);
+                    }
+                    catch (ArgumentException) { }
+                    catch (FormatException) { }
                     nav.MoveToParent();
                 }
 
