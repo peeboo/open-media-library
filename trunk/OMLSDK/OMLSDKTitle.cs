@@ -376,11 +376,6 @@ namespace OMLSDK
 
     public class OMLSDKPerson
     {
-        private string _full_name;
-        private OMLSDKSex _sex;
-        private DateTime _birth_date;
-        private string _photo_path;
-
         /// <summary>
         /// Full name
         /// </summary>
@@ -415,9 +410,9 @@ namespace OMLSDK
         /// Constructor with first and last name
         /// </summary>
         /// <param name="full_name">string name</param>
-        public OMLSDKPerson(string full_name)
+        public OMLSDKPerson(string _full_name)
         {
-            _full_name = full_name;
+            full_name = _full_name;
         }
 
         public override string ToString()
