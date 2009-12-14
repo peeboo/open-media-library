@@ -933,7 +933,8 @@
       </Condition>
 
       <!-- Main title label -->
-      <Binding Target="[Title.Content]" Source="[Model.Pivots.Chosen!shell:IBrowsePivot.ContentLabel]"/>
+      <!--Binding Target="[Title.Content]" Source="[Model.Pivots.Chosen!shell:IBrowsePivot.ContentLabel]"/-->
+      <Binding Target="[Title.Content]" Source="[Page.Description]"/>
       <!-- Play the directional gallery switch animations on the contents -->
       <Condition Source="[NavigationDirection.Value]" SourceValue="right">
         <Actions>
