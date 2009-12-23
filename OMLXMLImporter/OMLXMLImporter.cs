@@ -102,7 +102,7 @@ namespace OMLXMLPlugin
                             if (filename.ToLower().EndsWith(@"oml.xml"))
                             {
                                 Utilities.DebugLine("[OMLXMLPlugin] oml.xml found, loading title");
-                                Title t = Title.CreateFromXML(filename);
+                                OMLSDKTitle t = OMLSDKTitle.CreateFromXML(filename);
                                 if (t != null)
                                     AddTitle(t);
                             }

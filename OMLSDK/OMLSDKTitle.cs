@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using System.Xml.XPath;
 
 
 namespace OMLSDK
@@ -336,6 +337,10 @@ namespace OMLSDK
             return "Title:" + this.Name; // +" (" + this.Id + ")";
         }
 
+        static public OMLSDKTitle CreateFromXML(string fileName)
+        {
+            throw new NotImplementedException("This is a stub");
+        }
         
     }
 
