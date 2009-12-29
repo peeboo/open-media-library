@@ -2669,9 +2669,9 @@ namespace Library
 
         [DllImport("user32.dll", EntryPoint = "LoadStringW", CharSet = CharSet.Unicode)]
         public static extern int LoadString(HINSTANCE hInstance, uint uID, [Out] StringBuilder lpBuffer, int nBufferMax);
-        [DllImport("user32.dll", EntryPoint = "LoadStringW", CharSet = CharSet.Unicode)]
+        //[DllImport("user32.dll", EntryPoint = "LoadStringW", CharSet = CharSet.Unicode)]
         //public static extern unsafe int LoadStringFast(HINSTANCE hInstance, uint uID, IntPtr* lppBuffer, int nBufferMax);
-        //[DllImport("kernel32.dll")]
+        [DllImport("kernel32.dll")]
         public static extern IntPtr LockResource(IntPtr i);
         [DllImport("advapi32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         public static extern IntPtr LockServiceDatabase(SafeServiceHandle hSCManager);
