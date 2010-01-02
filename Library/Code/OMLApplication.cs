@@ -442,7 +442,9 @@ namespace Library
                     }
                 case "TV":
                     {
-                        this.GoHome(new List<OMLEngine.TitleFilter>(), "TV");
+                        List<OMLEngine.TitleFilter> filters = new List<OMLEngine.TitleFilter>();
+                        filters.Add(new OMLEngine.TitleTypeFilter(OMLEngine.TitleTypes.TVShow));
+                        this.GoHome(filters, "TV");
                         return;
                     }
                 case "Movies":
