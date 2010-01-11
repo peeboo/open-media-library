@@ -226,10 +226,10 @@ namespace Library.Code.V3
         {
             this.IsBusy = true;
 
-            //    Microsoft.MediaCenter.UI.Application.DeferredInvoke(new Microsoft.MediaCenter.UI.DeferredHandler(this.loadBackground), null, new TimeSpan(1));
-        //}
-            //private void loadBackground(object options)
-        //{
+            Microsoft.MediaCenter.UI.Application.DeferredInvoke(new Microsoft.MediaCenter.UI.DeferredHandler(this.loadBackground), null, new TimeSpan(1));
+        }
+        private void loadBackground(object options)
+        {
             List<OMLEngine.TitleFilter> filters = new List<OMLEngine.TitleFilter>(m_filters);
 
             if (this.parentId.HasValue)
@@ -244,9 +244,14 @@ namespace Library.Code.V3
             }            
             
             filters.Add(new OMLEngine.TitleTypeFilter(OMLEngine.TitleTypes.AllFolders | OMLEngine.TitleTypes.AllMedia));
-            
-            titles = new List<OMLEngine.Title>(OMLEngine.TitleCollectionManager.GetFilteredTitles(filters));
 
+            //OMLApplication.Current.MediaCenterEnvironment.Dialog(
+            //            string.Format("Loading titles"),
+            //            "TEST", Microsoft.MediaCenter.DialogButtons.Ok, 5, false);
+            titles = new List<OMLEngine.Title>(OMLEngine.TitleCollectionManager.GetFilteredTitles(filters));
+            //OMLApplication.Current.MediaCenterEnvironment.Dialog(
+            //            string.Format("Done loading titles"),
+            //            "TEST", Microsoft.MediaCenter.DialogButtons.Ok, 5, false);
             ((VirtualList)this.m_listContent).Count = titles.Count;
 
             if (Properties.Settings.Default.GallerySelectedView == 0)
