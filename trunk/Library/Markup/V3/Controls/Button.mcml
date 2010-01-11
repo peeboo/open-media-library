@@ -373,69 +373,74 @@
     <Content>
       <Text Name="Label" Color="[Color]" Font="[Font]" Content="[Content]">
         <Animations>
-          <!-- Our animation will be a merger of a couple of different  -->
+          <!-- Take our unit-vector (0 to 1) position animation -->
+          <!-- and magnify it by the width of our text content. -->
+          <TransformByAttributeAnimation Attribute="Width"
+                                         Magnitude="1.0"
+                                         Filter="Position">
+            <ValueTransformer>
+              <MathTransformer Subtract="[AvailableSpace]"/>
+            </ValueTransformer>
+            <Source>
+
+              <!-- Our animation will be a merger of a couple of different  -->
           <!-- components.                                              -->
+          <!--animation4-->
           <MergeAnimation Name="FancyTextAnimation">
             <Sources>
 
               <!-- This is the first part of the animation, where the   -->
               <!-- text is totally still.  We don't want to have this   -->
               <!-- part time shifted like the rest.                     -->
-              <Animation>
+              <!--animation-->
+              <Animation Loop="-1" Type="Idle">
                 <Keyframes>
-                  <PositionKeyframe Time="0.0"/>
-                  <PositionKeyframe Time="0.5"/>
-
-                  <AlphaKeyframe Time="0.0" Value="1.0"/>
+                  <PositionKeyframe Time="0.00" RelativeTo="Final"/>
+                  <PositionKeyframe Time="0.50" RelativeTo="Final"/>
+                  <AlphaKeyframe Time="0.00" Value="1.0"/>
                 </Keyframes>
               </Animation>
 
-              <!-- Take our position animation and delay it by some     -->
-              <!-- fraction the text size.  This ensures that varying   -->
-              <!-- text lengths have a similar scroll speed.            -->
-              <TransformByAttributeAnimation Attribute="Width" Delay="0.0050">
-                <ValueTransformer>
-                  <MathTransformer Subtract="[AvailableSpace]"/>
-                </ValueTransformer>
-                <Source>
+              
+                  
+                      <!-- Take our position animation and delay it by some     -->
+                      <!-- fraction the text size.  This ensures that varying   -->
+                      <!-- text lengths have a similar scroll speed.            -->
+                      <!--animation3-->
+                      <TransformByAttributeAnimation Attribute="Width" Delay="0.0075">
+                        <ValueTransformer>
+                          <MathTransformer Subtract="[AvailableSpace]"/>
+                        </ValueTransformer>
+                        <Source>
 
-                  <!-- Take our unit-vector (0 to 1) position animation -->
-                  <!-- and magnify it by the width of our text content. -->
-                  <TransformByAttributeAnimation Attribute="Width"
-                                                 Magnitude="1.0"
-                                                 Filter="Position">
-                    <ValueTransformer>
-                      <MathTransformer Subtract="[AvailableSpace]"/>
-                    </ValueTransformer>
-                    <Source>
-
-                      <!-- The source animation is a position loop.     -->
+                          <!-- The source animation is a position loop.     -->
                       <!-- Note that it doesn't include the beginning   -->
                       <!-- keyframes, because we don't want them time   -->
                       <!-- shifted.                                     -->
+                      <!--animation2-->
                       <Animation Type="Idle" Loop="-1">
                         <Keyframes>
-                          <PositionKeyframe Time="0.80" Value="-1,0,0"/>
-                          <PositionKeyframe Time="1.70" Value="-1,0,0"/>
-                          <PositionKeyframe Time="1.75" Value="0,0,0"/>
-                          <PositionKeyframe Time="2.50" Value="0,0,0"/>
-
-                          <AlphaKeyframe Time="1.00" Value="1.0"/>
-                          <AlphaKeyframe Time="1.70" Value="0.0"/>
-                          <AlphaKeyframe Time="1.75" Value="0.0"/>
-                          <AlphaKeyframe Time="1.95" Value="1.0"/>
-                          <AlphaKeyframe Time="2.50" Value="1.0"/>
+                          <PositionKeyframe Time="0.80" Value="-1, 0, 0" RelativeTo="Final"/>
+                          <PositionKeyframe Time="1.20" Value="-1, 0, 0" RelativeTo="Final"/>
+                          <PositionKeyframe Time="1.25" RelativeTo="Final"/>
+                          <PositionKeyframe Time="2.50" RelativeTo="Final"/>
+                          <AlphaKeyframe Time="1.00" Value="1.0" RelativeTo="Absolute"/>
+                          <AlphaKeyframe Time="1.20" Value="0.0" RelativeTo="Absolute"/>
+                          <AlphaKeyframe Time="1.25" Value="0.0" RelativeTo="Absolute"/>
+                          <AlphaKeyframe Time="1.45" Value="1.0" RelativeTo="Absolute"/>
+                          <AlphaKeyframe Time="2.50" Value="1.0" RelativeTo="Absolute"/>
                         </Keyframes>
                       </Animation>
 
                     </Source>
                   </TransformByAttributeAnimation>
 
-                </Source>
-              </TransformByAttributeAnimation>
+                
 
             </Sources>
           </MergeAnimation>
+            </Source>
+          </TransformByAttributeAnimation>
         </Animations>
       </Text>
     </Content>

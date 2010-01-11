@@ -78,8 +78,7 @@ namespace Library.Code.V3
             format.SetMeasurableCharacterRanges(ranges);
             regions = graphics.MeasureCharacterRanges(text, font, rect, format);
             rect = regions[0].GetBounds(graphics);
-
-            return (int)(rect.Right + 1.0f);
+            return (int)(rect.Right + 20.0f);
         }
     }
 }

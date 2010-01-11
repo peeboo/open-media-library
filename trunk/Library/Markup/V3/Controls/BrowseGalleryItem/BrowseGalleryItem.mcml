@@ -691,6 +691,20 @@
                         <LayoutInput>
                           <AnchorLayoutInput Top="Parent, 0" Left="Parent, 0" />
                         </LayoutInput>
+                        <Animations>
+                          <Animation Type="ContentChangeHide">
+                            <Keyframes>
+                              <AlphaKeyframe Time="0.0" Value="1" Interpolation="Log"/>
+                              <AlphaKeyframe Time="0.6" Value="0" />
+                            </Keyframes>
+                          </Animation>
+                          <Animation Type="ContentChangeShow">
+                            <Keyframes>
+                              <AlphaKeyframe Time="0.0" Value="0" Interpolation="Exp"/>
+                              <AlphaKeyframe Time="0.7" Value="1" />
+                            </Keyframes>
+                          </Animation>
+                        </Animations>
                       </Graphic>
                       <!-- Customizable underlay view -->
                       <me:BaseGalleryItemOverlayContent Name="UnderlayContentHost" Model="[Model]" Visible="false" Source="null">
