@@ -148,7 +148,7 @@
             </Layout>
             <Children>
 
-              <pip:PIPArea Name="PIPArea" MaximumSize="861, 150" MinimumSize="861, 150" FocusArea="[FocusArea]"
+              <pip:PIPArea Name="PIPArea" MaximumSize="861, 200" MinimumSize="861, 200" FocusArea="[FocusArea]"
                           NavigationDirection="[NavigationDirection]" TransitionState="[TransitionState]">
                 <LayoutInput>
                   <AnchorLayoutInput Horizontal="Near" Vertical="Far" />

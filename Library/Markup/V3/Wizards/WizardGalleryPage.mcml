@@ -446,7 +446,7 @@
                 </Layout>
                 <Children>
                   <Text Content="This is a Test" Color="255, 151, 217, 255" Font="Segoe Media Center Semibold,30"/>
-                  <!--me:PIPArea Name="PIPArea" MaximumSize="861, 150" MinimumSize="861, 150" FocusArea="[FocusArea]"
+                  <!--me:PIPArea Name="PIPArea" MaximumSize="861, 200" MinimumSize="861, 200" FocusArea="[FocusArea]"
                               NavigationDirection="[NavigationDirection]" TransitionState="[TransitionState]">
                     <LayoutInput>
                       <AnchorLayoutInput Horizontal="Near" Vertical="Far" />
