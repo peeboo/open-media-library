@@ -63,8 +63,28 @@ namespace Library.Code.V3
         {
             get
             {
-                return new Image(this.PosterUrl);
+                if (!this.fetchedImage && this.PosterUrl != null)
+                {
+                    this.fetchedImage = true;
+                    Microsoft.MediaCenter.UI.Application.DeferredInvoke(new Microsoft.MediaCenter.UI.DeferredHandler(this.BeginStart), new TimeSpan(1));
+                    //Microsoft.MediaCenter.UI.Application.DeferredInvoke(BeginStart, null);
+                    return null;
+                }
+                else
+                {
+                    return posterImage;
+                }
+                //return new Image(this.PosterUrl);
             }
+        }
+
+        private bool fetchedImage;
+        private Image posterImage;
+
+        private void BeginStart(object host)
+        {
+            this.posterImage = new Image(this.PosterUrl);
+            FirePropertyChanged("DefaultImage");
         }
 
         /// <summary>
